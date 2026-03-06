@@ -1,0 +1,147 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- Packages and Setup ---
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm} % Core math packages
+\usepackage{geometry}                 % Page layout
+\usepackage{tikz-cd}                  % Essential for drawing chain complexes and exact sequences
+\usepackage{hyperref}                 % Clickable links in PDF
+
+\geometry{margin=1in}
+
+% --- Theorem Environments ---
+% Setting up standard environments for mathematical notes
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
+
+% --- Custom Macros ---
+% Creating shortcuts for frequently used math symbols
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\im}{\text{im}}
+\newcommand{\kerop}{\text{ker}}
+%\newcommand{\F}{\mathbb{F}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\cO}{\mathcal{O}}
+
+\title{\textbf{Lecture Notes: Homological Coding Theory} \\ \large Bridging classical block codes and de Rham cohomology}
+\author{Coding Theory \& Differential Geometry}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+	\begin{abstract}
+		We transition from viewing linear block codes as static geometric subspaces to dynamic algebraic sequences. By applying the intuition of de Rham cohomology from differential geometry, we explore how relaxing the exactness of coding sequences leads to the mathematical foundation of quantum error correction and topological codes.
+	\end{abstract}
+	
+	\section*{The Cohomological Exact Sequence of an AG Code}
+	
+	Let $\X$ be an algebraic curve over $\F_q$. Let $E = P_1 + \dots + P_n$ be the evaluation divisor and $D$ be a divisor such that $E \cap \text{supp}(D) = \emptyset$ and $\deg(D) < n$. 
+	
+	The short exact sequence of sheaves $0 \to \cO_{\X}(D - E) \to \cO_{\X}(D) \to \cO_E(D) \to 0$ induces a long exact sequence in cohomology. By mapping these cohomology groups to their coding theory equivalents, we recover the classical exact sequence of a linear block code:
+	
+	\[
+	\begin{tikzcd}[row sep=huge, column sep=large]
+		% Cohomology Sequence
+		0 \arrow[r] & 
+		H^0(\X, \cO(D-E)) \arrow[r] \arrow[d, equal] & 
+		H^0(\X, \cO(D)) \arrow[r, "ev"] \arrow[d, equal] & 
+		H^0(\X, \cO_E(D)) \arrow[r, "\delta"] \arrow[d, "\cong"] & 
+		H^1(\X, \cO(D-E)) \arrow[d, "\text{Serre Duality}"] \\
+		% Coding Theory Sequence
+		0 \arrow[r] & 
+		\{0\} \arrow[r] & 
+		\mathcal{L}(D) \arrow[r, "G"] & 
+		\F_q^n \arrow[r, "H"] & 
+		\Omega^1(E-D)^*
+	\end{tikzcd}
+	\]
+	
+	\vspace{1em}
+	\noindent \textbf{Interpretations:}
+	\begin{itemize}
+		\item \textbf{Injectivity:} Because $\deg(D) < n$, there are no non-zero global sections in $H^0(\X, \cO(D-E))$, meaning $ev$ is injective.
+		\item \textbf{The Code $\mathcal{C}$:} The code is $\text{im}(ev)$. By exactness, $\mathcal{C} = \ker(\delta)$.
+		\item \textbf{Dual Code \& Residues:} The parity-check map $H$ corresponds to the connecting homomorphism $\delta$. Via Serre Duality, checking parity is equivalent to evaluating the sum of residues of meromorphic differential forms.
+	\end{itemize}
+	
+	
+	\section{The Exact Sequence of Classical Coding}
+	
+	In classical coding theory, a linear block code $\C$ is defined by an injective generator matrix $G$ and a surjective parity-check matrix $H$. We can frame this as a sequence of vector spaces over the finite field $\F_q$ connected by linear maps:
+	
+	\[
+	\begin{tikzcd}
+		0 \arrow[r] & \F_q^k \arrow[r, "G"] & \F_q^n \arrow[r, "H"] & \F_q^{n-k} \arrow[r] & 0
+	\end{tikzcd}
+	\]
+	
+	For this to form a valid chain complex, the composition of consecutive maps must be zero. Since every valid codeword satisfies the parity checks, we have $H \circ G = 0$. Equivalently, the image of $G$ is contained within the kernel of $H$:
+	$$ \im(G) \subseteq \kerop(H) $$
+	
+	\begin{definition}
+		A chain complex is \textbf{exact} at a given node if the image of the incoming map perfectly equals the kernel of the outgoing map.
+	\end{definition}
+	
+	For a standard classical block code, this sequence is strictly exact at $\F_q^n$. The classical code $\C$ is precisely that overlap: $\C = \im(G) = \kerop(H)$. Because it is exact, the ``cohomology'' of this classical sequence is trivial.
+	
+	\section{The de Rham Intuition: Relaxing Exactness}
+	
+	To generalize this, we draw intuition from differential geometry. The de Rham cohomology studies the chain complex of differential forms $\Omega^i(M)$ on a smooth manifold $M$, connected by the exterior derivative $d$:
+	
+	\[
+	\begin{tikzcd}
+		0 \arrow[r] & \Omega^0(M) \arrow[r, "d_0"] & \Omega^1(M) \arrow[r, "d_1"] & \Omega^2(M) \arrow[r, "d_2"] & \cdots
+	\end{tikzcd}
+	\]
+	
+	The fundamental geometric property of the exterior derivative is that the boundary of a boundary is zero: $d_{i} \circ d_{i-1} = 0$. We classify forms as:
+	\begin{itemize}
+		\item \textbf{Closed forms:} $\kerop(d_i)$ (forms with no boundary).
+		\item \textbf{Exact forms:} $\im(d_{i-1})$ (forms that are themselves boundaries).
+	\end{itemize}
+	
+	While every exact form is closed, not every closed form is exact. The failure of this sequence to be exact measures the fundamental topological features (the ``holes'') of the manifold. We define the $i$-th de Rham Cohomology group as:
+	$$ H^i_{dR}(M) = \frac{\kerop(d_i)}{\im(d_{i-1})} $$
+	
+	\section{Topological Coding: Cohomology as Information}
+	
+	We can apply the de Rham intuition back to coding theory. What if we design a linear sequence over $\F_q$ that is a chain complex ($H \circ G = 0$) but is deliberately \emph{not} exact?
+	
+	Let us redefine our generator and parity maps as boundary operators $\partial_1$ and $\partial_2$:
+	\[
+	\begin{tikzcd}
+		C_0 \arrow[r, "\partial_1"] & C_1 \arrow[r, "\partial_2"] & C_2
+	\end{tikzcd}
+	\]
+	Suppose we construct these matrices such that $\im(\partial_1) \subsetneq \kerop(\partial_2)$. We can now define a non-trivial cohomology group for our code:
+	$$ H^1 = \frac{\kerop(\partial_2)}{\im(\partial_1)} $$
+	
+	This is the exact mathematical definition of a \textbf{Calderbank-Shor-Steane (CSS) Quantum Code}. 
+	\begin{itemize}
+		\item \textbf{Ambient Space ($C_1$):} The space of physical qubits.
+		\item \textbf{Closed Forms ($\kerop(\partial_2)$):} The syndrome-free states (the code space).
+		\item \textbf{Exact Forms ($\im(\partial_1)$):} Gauge transformations or stabilizer operations that do not alter the stored data.
+		\item \textbf{Cohomology Classes ($H^1$):} The \emph{Logical Qubits}. Two states encode the same logical information if they differ only by an exact form.
+	\end{itemize}
+	
+	\section{Future Research Directions}
+	
+	Viewing codes through the lens of homological algebra opens several advanced research avenues:
+	
+	\subsection{Hodge Theory over Finite Fields}
+	In de Rham cohomology, Hodge theory guarantees that every cohomology class has a unique ``harmonic'' representative, found via the discrete Laplacian $\Delta = \partial\partial^* + \partial^*\partial$. Defining an analog of this adjoint operator $\partial^*$ over $\F_q$ could yield canonical decoding algorithms, where finding the harmonic representative equates to finding the maximum likelihood message.
+	
+	\subsection{Quantum LDPC Codes}
+	By extending the chain complex to higher dimensions:
+	\[
+	\begin{tikzcd}
+		C_0 \arrow[r, "\partial_1"] & C_1 \arrow[r, "\partial_2"] & C_2 \arrow[r, "\partial_3"] & C_3 \arrow[r] & \cdots
+	\end{tikzcd}
+	\]
+	researchers construct Quantum Low-Density Parity-Check (qLDPC) codes. Operations like the tensor product of chain complexes (hypergraph products) are actively used to prove conjectures about locally testable codes.
+	
+\end{document}

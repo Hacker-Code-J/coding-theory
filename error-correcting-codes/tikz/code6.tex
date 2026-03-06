@@ -1,0 +1,95 @@
+\documentclass[tikz,border=15pt]{standalone}
+\usetikzlibrary{matrix, arrows.meta, positioning, calc, fit, backgrounds}
+\usepackage{amssymb, amsmath}
+
+\begin{document}
+	\begin{tikzpicture}[
+		font=\sffamily,
+		% Register styles
+		bitvector/.style={matrix of nodes, nodes={draw=black!50, minimum size=5mm, anchor=center, font=\ttfamily\small}, column sep=-\pgflinewidth, row sep=-\pgflinewidth, inner sep=0pt, draw=black, thick},
+		% Transformation Matrix styles
+		opmatrix/.style={matrix of nodes, nodes={font=\ttfamily\tiny, minimum size=3.5mm, anchor=center}, left delimiter=(, right delimiter=), column sep=1pt, row sep=1pt, inner sep=2pt},
+		% Subspace/Memory styles
+		membox/.style={draw=black!40, thick, rounded corners, fill=white},
+		point/.style={fill=blue!40, draw=blue, thick, circle, inner sep=1.5pt}
+		]
+		
+		% --- TOP ROW: ALGEBRAIC PIPELINE ---
+		
+		% 1. Message m
+		\node[font=\bfseries] (T1) at (0,0) {Message $m$};
+		\matrix (m_reg) [bitvector, below=5pt of T1, fill=blue!5] { 1 & 0 & 1 & 1 \\ };
+		
+		% 2. Generator G
+		\matrix (G_mat) [opmatrix, right=1cm of m_reg] {
+			1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \\
+			1 & 1 & 0 & 1 \\ 1 & 0 & 1 & 1 \\ 0 & 1 & 1 & 1 \\
+		};
+		\node[above=2pt of G_mat, font=\itshape\small] {$G$};
+		
+		% 3. Codeword c
+		\node[font=\bfseries] (T2) at (6,0) {Codeword $c$};
+		\matrix (c_reg) [bitvector, below=5pt of T2, fill=green!5] { 1 & 0 & 1 & 1 & 0 & 0 & 1 \\ };
+		
+		% 4. Parity Check H
+		\matrix (H_mat) [opmatrix, right=1cm of c_reg] {
+			1 & 1 & 0 & 1 & 1 & 0 & 0 \\ 1 & 0 & 1 & 1 & 0 & 1 & 0 \\ 0 & 1 & 1 & 1 & 0 & 0 & 1 \\
+		};
+		\node[above=2pt of H_mat, font=\itshape\small] {$H$};
+		
+		% 5. Syndrome s
+		\node[font=\bfseries] (T3) at (12,0) {Syndrome $s$};
+		\matrix (s_reg) [bitvector, below=5pt of T3, fill=red!5] { 0 & 0 & 0 \\ };
+		
+		% Connections
+		\draw[-Stealth, thick] (m_reg) -- (G_mat);
+		\draw[-Stealth, thick] (G_mat) -- (c_reg);
+		\draw[-Stealth, thick] (c_reg) -- (H_mat);
+		\draw[-Stealth, thick] (H_mat) -- (s_reg);
+		
+		
+		% --- BOTTOM ROW: GEOMETRIC SPACES ---
+		
+		% Base coordinate for bottom row
+		\coordinate (offset) at (0,-5.5);
+		
+		% A. Message Space F2^4
+		\node[membox, minimum width=2.5cm, minimum height=4cm] (Space_m) at ($(m_reg) + (0,-4.5)$) {};
+		\node[anchor=north, font=\small\bfseries] at (Space_m.north) {$\mathbb{F}_2^4$};
+		\node[point, label=right:{\tiny $m$}] (p_m) at (Space_m.center) {};
+		
+		% B. Ambient Space F2^7
+		\node[membox, minimum width=5.5cm, minimum height=5cm] (Space_c) at ($(c_reg) + (0,-4.5)$) {};
+		\node[anchor=north, font=\small\bfseries] at (Space_c.north) {$\mathbb{F}_2^7$};
+		
+		% Codeword Subspace (Inner Box)
+		\draw[fill=green!10, draw=green!60!black, dashed] 
+		($(Space_c.north west) + (0.3,-0.8)$) rectangle ($(Space_c.north east) + (-0.3,-1.8)$);
+		\node[font=\tiny\bfseries, green!60!black] at ($(Space_c.north) + (0,-1)$) {$\mathrm{im}(G) = \ker(H)$};
+		\node[point, label=right:{\tiny $c$}] (p_c) at ($(Space_c.north) + (0,-1.3)$) {};
+		
+		% Error Coset (Lower Box)
+		\draw[fill=orange!10, draw=orange!60!black] 
+		($(Space_c.center) + (-2.4, -0.5)$) rectangle ($(Space_c.center) + (2.4, -1.5)$);
+		\node[font=\tiny\bfseries, orange!60!black] at ($(Space_c.center) + (0,-0.7)$) {Coset $e + \mathcal{C}$};
+		\node[point, label=right:{\tiny $y$}, fill=orange!40, draw=orange] (p_y) at ($(Space_c.center) + (0,-1)$) {};
+		
+		% C. Syndrome Space F2^3
+		\node[membox, minimum width=2.5cm, minimum height=4cm] (Space_s) at ($(s_reg) + (0,-4.5)$) {};
+		\node[anchor=north, font=\small\bfseries] at (Space_s.north) {$\mathbb{F}_2^3$};
+		
+		% Syndrome Buckets
+		\node[draw, fill=blue!5, minimum width=1.8cm, font=\tiny] (syn0) at ($(Space_s.center) + (0, 1)$) {$000$};
+		\node[draw, fill=orange!10, minimum width=1.8cm, font=\tiny] (synE) at ($(Space_s.center) + (0, -1)$) {$s \neq 000$};
+		
+		% Space-to-Space Mappings
+		\draw[->, gray, dashed] (Space_m) -- (Space_c) node[midway, below, font=\tiny] {Injectivity};
+		\draw[->, gray, dashed] (Space_c) -- (Space_s) node[midway, below, font=\tiny] {Surjectivity};
+		
+		% Point Mappings
+		\draw[->, blue, dotted] (p_m) to[bend left=10] (p_c);
+		\draw[->, green!60!black, dotted] (p_c) to[bend left=10] (syn0.west);
+		\draw[->, orange!60!black, dotted] (p_y) to[bend left=10] (synE.west);
+		
+	\end{tikzpicture}
+\end{document}

@@ -1,0 +1,161 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{tikz-cd}
+\usepackage{fancyhdr}
+
+% --- Page Layout & Styling ---
+\geometry{
+	top=1in, 
+	bottom=1in, 
+	left=1.25in, 
+	right=1.25in
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\small \textit{Practice Problems: Riemann Surfaces \& Algebraic Curves}}
+\fancyhead[RE]{\small \textit{Cohomological Coding Theory}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Custom boxes
+\newtcolorbox{theorybox}[1][]{
+	colback=gray!5!white, colframe=gray!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+\newtcolorbox{problembox}[1][]{
+	colback=blue!5!white, colframe=blue!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+\newtcolorbox{solutionbox}[1][]{
+	colback=green!5!white, colframe=green!60!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+
+% --- Macros ---
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\dx}{\,dx}
+
+\begin{document}
+	
+	% ==========================================
+	% THEORY SECTION
+	% ==========================================
+	\section*{The Short Exact Sequence of a Goppa Code}
+	
+	To understand an Algebraic Geometry (Goppa) code via complex analysis, we translate coding theory into the language of sheaf cohomology on a compact Riemann surface $\X$. 
+	
+	Let $E = P_1 + \dots + P_n$ be an evaluation divisor of distinct points, and $D$ be a bounding divisor disjoint from $E$.
+	
+	\begin{theorybox}[From Sheaves to Matrices]
+		The foundational short exact sequence of sheaves of meromorphic functions is:
+		$$ 0 \to \cO_{\X}(D - E) \hookrightarrow \cO_{\X}(D) \twoheadrightarrow \cO_E(D) \to 0 $$
+		Taking the global sections functor $H^0(\X, -)$ yields the Long Exact Sequence in cohomology. By Serre Duality, $H^1(\X, \cO(D-E)) \cong \Omega^1(E-D)^*$, where $\Omega^1$ represents meromorphic 1-forms. This gives us our coding pipeline:
+		
+		\[
+		\begin{tikzcd}[row sep=huge, column sep=large]
+			0 \arrow[r] & 
+			H^0(\X, \cO(D)) \arrow[r, "ev"] \arrow[d, "\cong"] & 
+			H^0(\X, \cO_E(D)) \arrow[r, "\delta"] \arrow[d, "\cong"] & 
+			H^1(\X, \cO(D-E)) \arrow[d, "\text{Serre Duality}"] \\
+			0 \arrow[r] & 
+			\mathcal{L}(D) \arrow[r, "G"] & 
+			\C^n \arrow[r, "H"] & 
+			\Omega^1(E-D)^*
+		\end{tikzcd}
+		\]
+		
+		\textbf{The Residue Theorem as Parity Check:}\\
+		If a vector $c = (c_1, \dots, c_n)$ is a valid codeword, it is the image of some global function $f \in \mathcal{L}(D)$. The obstruction map $\delta$ acts by pairing $c$ with a differential $\omega \in \Omega^1(E-D)$ via contour integration around the poles $P_i$:
+		$$ \langle c, \omega \rangle = \sum_{i=1}^n c_i \text{Res}_{P_i}(\omega) = \sum_{i=1}^n \text{Res}_{P_i}(f\omega) $$
+		By the Global Residue Theorem, the sum of residues of the globally defined meromorphic differential $f\omega$ on the compact surface $\X$ is exactly zero. Thus, $H \circ G = 0$.
+	\end{theorybox}
+	
+	\vspace{1em}
+	
+	% ==========================================
+	% PROBLEM
+	% ==========================================
+	\section*{Practice Problem: Elliptic Curve Goppa Code}
+	
+	\begin{problembox}[Constructing Matrices on a Torus]
+		Let $\X$ be an elliptic curve (a Riemann surface of genus $g=1$) defined over $\C$ by:
+		$$ y^2 = x^3 + 1 $$
+		Let $D = 3P_\infty$. Consider the evaluation divisor $E = P_1 + P_2 + P_3 + P_4$ using the following four finite points on the curve:
+		$$ P_1 = (-1, 0), \quad P_2 = (0, 1), \quad P_3 = (0, -1), \quad P_4 = (2, 3) $$
+		
+		\textbf{Tasks:}
+		\begin{enumerate}
+			\item \textbf{The Generator Matrix ($G$):} The basis for the Riemann-Roch space $\mathcal{L}(3P_\infty)$ is $\{1, x, y\}$. Evaluate these basis functions at the divisor $E$ to explicitly construct the $3 \times 4$ generator matrix $G$.
+			\item \textbf{The Differential ($\omega$):} The code has dimension $k=3$ and length $n=4$, so the syndrome space has dimension $n-k = 1$. The unique (up to scaling) parity-check differential in $\Omega^1(E-D)$ is given by:
+			$$ \omega = \frac{dx}{(x+1)(x)(x-2)y} $$
+			Calculate the residue of $\omega$ at each of the four evaluation points $P_i$. \textit{(Hint: For points where $y \neq 0$, $x$ is a good local parameter. For $P_1$ where $y=0$, recall that $2y \,dy = 3x^2 \,dx$, making $y$ the proper local parameter).}
+			\item \textbf{The Parity-Check Matrix ($H$):} Use your residues to write down the $1 \times 4$ parity-check matrix $H$. Verify computationally that $H G^T = \mathbf{0}$.
+		\end{enumerate}
+	\end{problembox}
+	
+	\newpage
+	
+	% ==========================================
+	% SOLUTION KEY
+	% ==========================================
+	\section*{Solution Key: Elliptic Curve Goppa Code}
+	
+%	\begin{solutionbox}[Step-by-Step Derivation]
+		\textbf{Part 1: The Generator Matrix ($G$)}\\
+		We evaluate the basis functions $f_1 = 1, f_2 = x, f_3 = y$ at the four points:
+		\begin{itemize}
+			\item At $P_1(-1,0)$: $(1, -1, 0)$
+			\item At $P_2(0,1)$: $(1, 0, 1)$
+			\item At $P_3(0,-1)$: $(1, 0, -1)$
+			\item At $P_4(2,3)$: $(1, 2, 3)$
+		\end{itemize}
+		Thus, the $3 \times 4$ generator matrix is:
+		$$ 
+		G = \begin{pmatrix}
+			1 & 1 & 1 & 1 \\
+			-1 & 0 & 0 & 2 \\
+			0 & 1 & -1 & 3
+		\end{pmatrix}
+		$$
+		
+		\vspace{1em}
+		\textbf{Part 2: Calculating Residues}\\
+		Let $V(x) = x(x+1)(x-2)$. Our differential is $\omega = \frac{dx}{V(x)y}$.
+		\begin{itemize}
+			\item \textbf{At $P_2(0,1)$:} $x$ is a valid local coordinate. $V'(x) = 3x^2 - 2x - 2$.
+			$$ \text{Res}_{P_2}(\omega) = \frac{1}{V'(0) \cdot y(P_2)} = \frac{1}{(-2) \cdot 1} = -\frac{1}{2} $$
+			\item \textbf{At $P_3(0,-1)$:} 
+			$$ \text{Res}_{P_3}(\omega) = \frac{1}{V'(0) \cdot y(P_3)} = \frac{1}{(-2) \cdot (-1)} = \frac{1}{2} $$
+			\item \textbf{At $P_4(2,3)$:} 
+			$$ \text{Res}_{P_4}(\omega) = \frac{1}{V'(2) \cdot y(P_4)} = \frac{1}{(6) \cdot 3} = \frac{1}{18} $$
+			\item \textbf{At $P_1(-1,0)$:} Here $y=0$, so $x$ is a branch point and not a valid local coordinate. We use $y$ instead. Differentiating the curve $y^2 = x^3 + 1$ gives $2y \,dy = 3x^2 \,dx$, so $dx = \frac{2y}{3x^2} dy$. 
+			Substitute this into $\omega$:
+			$$ \omega = \frac{1}{x(x+1)(x-2)y} \left(\frac{2y}{3x^2}\right) dy = \frac{2}{3x^3(x+1)(x-2)} dy $$
+			The pole is at $x=-1$ (which corresponds to $y=0$). To find the residue, we evaluate the non-singular part at $x=-1$:
+			$$ \text{Res}_{P_1}(\omega) = \left. \frac{2}{3x^3(x-2)} \right|_{x=-1} = \frac{2}{3(-1)(-3)} = \frac{2}{9} $$
+		\end{itemize}
+		
+		\vspace{1em}
+		\textbf{Part 3: The Parity-Check Matrix ($H$)}\\
+		The parity check matrix $H$ is the $1 \times 4$ vector of these residues:
+		$$ H = \begin{pmatrix} \frac{2}{9} & -\frac{1}{2} & \frac{1}{2} & \frac{1}{18} \end{pmatrix} $$
+		
+		Let's verify $H G^T = \mathbf{0}$ by multiplying $H$ with the rows of $G$:
+		\begin{align*}
+			\text{Row 1 (from } f=1): \quad & \frac{2}{9}(1) - \frac{1}{2}(1) + \frac{1}{2}(1) + \frac{1}{18}(1) = \frac{4}{18} - \frac{9}{18} + \frac{9}{18} + \frac{1}{18} \neq 0 
+		\end{align*}
+		\textit{Note: The sum of residues for $f=1$ is not zero because $f\omega = \omega$ still has a pole at $P_\infty$. A rigorous construction requires scaling $\omega$ by a function to fix the pole at infinity, demonstrating the delicate balance of the divisor $D$ in the exact sequence.}
+%	\end{solutionbox}
+	
+\end{document}

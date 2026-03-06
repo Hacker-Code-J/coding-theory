@@ -1,0 +1,129 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{tikz-cd}
+\usepackage{fancyhdr}
+\usepackage{booktabs} % For professional tables
+
+% --- Page Layout & Styling ---
+\geometry{
+	top=1in, 
+	bottom=1in, 
+	left=1.25in, 
+	right=1.25in
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\small \textit{Lecture Notes: Homological Coding Theory}}
+\fancyhead[RE]{\small \textit{The de Rham Perspective}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Custom boxes
+\newtcolorbox{theorybox}[1][]{
+	colback=gray!5!white, colframe=gray!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+\newtcolorbox{examplebox}[1][]{
+	colback=blue!5!white, colframe=blue!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+
+% --- Macros ---
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\im}{\text{im}}
+\newcommand{\kerop}{\text{ker}}
+
+\begin{document}
+	
+	\begin{center}
+		{\Large \textbf{Geometricizing Codes: The de Rham Perspective}} \\[0.5em]
+		{\normalsize \textit{Translating Linear Algebra into Differential Geometry}}
+	\end{center}
+	\vspace{1em}
+	
+	\section*{1. The Translation Dictionary}
+	
+	To view a linear block code as a geometric object, we must translate the discrete finite-field mechanics of coding theory into the continuous differential geometry of manifolds. We map the sequence of vector spaces over $\F_q$ directly onto the de Rham complex of differential forms $\Omega^i(M)$ on a smooth manifold $M$.
+	
+	\begin{table}[h!]
+		\centering
+		\renewcommand{\arraystretch}{1.4}
+		\begin{tabular}{@{}ll@{}}
+			\toprule
+			\textbf{de Rham Cohomology} & \textbf{Linear Coding Theory} \\
+			\midrule
+			\textbf{0-forms} $\Omega^0(M)$ (Smooth functions) & \textbf{Message Space} $\F_q^k$ (Raw information) \\
+			\textbf{1-forms} $\Omega^1(M)$ (Vector fields/1-forms) & \textbf{Ambient Space} $\F_q^n$ (All possible words) \\
+			\textbf{2-forms} $\Omega^2(M)$ (Area forms) & \textbf{Syndrome Space} $\F_q^{n-k}$ (Parity violations) \\
+			\textbf{Exterior Derivative} $d_0: \Omega^0 \to \Omega^1$ & \textbf{Generator Matrix} $G: \F_q^k \to \F_q^n$ \\
+			\textbf{Exterior Derivative} $d_1: \Omega^1 \to \Omega^2$ & \textbf{Parity-Check Matrix} $H: \F_q^n \to \F_q^{n-k}$ \\
+			\textbf{Nilpotency} $d_1 \circ d_0 = 0$ ($d^2=0$) & \textbf{Orthogonality} $H G^T = \mathbf{0}$ \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\section*{2. Exactness and Classical Codes}
+	
+	We align the de Rham complex and the coding complex side-by-side:
+	
+	\[
+	\begin{tikzcd}[row sep=huge, column sep=large]
+		0 \arrow[r] & 
+		\Omega^0(M) \arrow[r, "d_0"] \arrow[d,leftrightarrow, dashed] & 
+		\Omega^1(M) \arrow[r, "d_1"] \arrow[d,leftrightarrow, dashed] & 
+		\Omega^2(M) \arrow[d,leftrightarrow, dashed] \\
+		0 \arrow[r] & 
+		\F_q^k \arrow[r, "G"] & 
+		\F_q^n \arrow[r, "H"] & 
+		\F_q^{n-k} 
+	\end{tikzcd}
+	\]
+	
+	\begin{theorybox}[Classical Codes are Topologically Trivial]
+		In a standard classical block code, the sequence is strictly \textbf{exact} at the ambient space: $\im(G) = \kerop(H)$. 
+		\begin{itemize}
+			\item $\kerop(H)$ represents the \textbf{closed 1-forms} (words with no parity violations; valid codewords).
+			\item $\im(G)$ represents the \textbf{exact 1-forms} (words generated from a raw message).
+		\end{itemize}
+		Because the sequence is exact, every closed form is exact. There are no topological ``holes.'' The cohomology group is trivial: $H^1_{dR} = \kerop(H) / \im(G) = 0$. The valid codewords are exactly the generated messages.
+	\end{theorybox}
+	
+	\section*{3. Topological Codes: Cohomology as Information}
+	
+	If we deliberately design a coding sequence that is a chain complex ($H \circ G = 0$) but is \textbf{not exact}, we create a Calderbank-Shor-Steane (CSS) Topological Quantum Code. By relaxing exactness, $\im(G) \subsetneq \kerop(H)$, and we create a non-trivial cohomology group:
+	$$ H^1 = \frac{\kerop(H)}{\im(G)} \neq 0 $$
+	
+	\begin{itemize}
+		\item \textbf{The Code Space ($\kerop(H)$):} The closed forms. Physically, these are quantum states satisfying all stabilizers.
+		\item \textbf{Gauge Transformations ($\im(G)$):} The exact forms. Local, trivial fluctuations that do not change stored data.
+		\item \textbf{Logical Information ($H^1$):} The true protected information is stored in the cohomology classes. Two codewords $c_1, c_2 \in \kerop(H)$ encode the exact same logical information if they differ only by an exact form ($c_1 - c_2 \in \im(G)$).
+	\end{itemize}
+	
+	\section*{4. Concrete Construction: The Toric Code}
+	
+	\begin{examplebox}[Matrix Operators from a 2D Manifold]
+		Let $X$ be a triangulation (or a square lattice) of a Torus, which is a 2D manifold. We define our vector spaces over $\F_2$ based on the simplices of the manifold:
+		\begin{itemize}
+			\item $C_0$: Vector space spanned by the \textbf{Vertices} ($V$).
+			\item $C_1$: Vector space spanned by the \textbf{Edges} ($E$).
+			\item $C_2$: Vector space spanned by the \textbf{Faces} ($F$).
+		\end{itemize}
+		We define the coboundary operators $d_0: C_0 \to C_1$ and $d_1: C_1 \to C_2$.
+		\begin{align*}
+			G &= d_0 \quad (\text{Maps a vertex to its adjacent edges}) \\
+			H &= d_1 \quad (\text{Maps an edge to its adjacent faces})
+		\end{align*}
+		Because the boundary of a boundary is zero, $d_1 \circ d_0 = 0$, guaranteeing $HG^T = \mathbf{0}$. The number of protected logical qubits $k_{logical}$ is given precisely by the Betti number of the manifold:
+		$$ k_{logical} = \dim H^1(X, \F_2) $$
+		For a Torus, the first Betti number is $b_1 = 2$. Thus, this geometric matrix construction perfectly encodes 2 logical qubits into the global topological ``holes'' of the lattice, protected against any local edge errors (exact forms).
+	\end{examplebox}
+	
+\end{document}

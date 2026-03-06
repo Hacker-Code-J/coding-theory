@@ -1,0 +1,97 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{tikz-cd}
+\usepackage{fancyhdr}
+
+% --- Page Layout & Styling ---
+\geometry{
+	top=1in, 
+	bottom=1in, 
+	left=1.25in, 
+	right=1.25in
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\small \textit{Lecture Notes: Linear Block Codes}}
+\fancyhead[RE]{\small \textit{A Coding Theoretical Interpretation of the SES}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Custom boxes
+\newtcolorbox{conceptbox}[1][]{
+	colback=blue!5!white, colframe=blue!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+\newtcolorbox{mathbox}[1][]{
+	colback=gray!5!white, colframe=gray!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+
+% --- Macros ---
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\im}{\text{im}}
+\newcommand{\kerop}{\text{ker}}
+
+\begin{document}
+	
+	\begin{center}
+		{\Large \textbf{The Physical Meaning of Exactness}} \\[0.5em]
+		{\normalsize \textit{A Coding Theoretical Interpretation of the Short Exact Sequence}}
+	\end{center}
+	\vspace{1em}
+	
+	While the Short Exact Sequence (SES) is an object of abstract homological algebra, in coding theory, it physically models the transmission of data across a noisy channel. The sequence is defined as:
+	
+	\[
+	\begin{tikzcd}[column sep=large]
+		0 \arrow[r] & \F_q^k \arrow[r, "G"] & \F_q^n \arrow[r, "H"] & \F_q^{n-k} \arrow[r] & 0
+	\end{tikzcd}
+	\]
+	
+	We analyze the coding-theoretical significance of exactness at each node in this sequence.
+	
+	\vspace{1em}
+	
+	\begin{conceptbox}[1. Left Exactness: Unambiguous Information]
+		\textbf{Mathematical Condition:} Exactness at $\F_q^k$ requires that $\kerop(G) = \{0\}$. Therefore, $G$ is strictly injective.
+		
+		\textbf{Coding Interpretation:} 
+		The space $\F_q^k$ represents the raw information source. If $G$ were not injective, there would exist distinct messages $m_1 \neq m_2$ such that $m_1 G = m_2 G$. If the receiver obtains this codeword, it would be fundamentally impossible to determine which message was sent. Exactness guarantees that redundancy is added without destroying the uniqueness of the information.
+	\end{conceptbox}
+	
+	\vspace{1em}
+	
+	\begin{conceptbox}[2. Middle Exactness: The Channel and Error Detection]
+		\textbf{Mathematical Condition:} Exactness at $\F_q^n$ requires that $\im(G) = \kerop(H)$.
+		
+		\textbf{Coding Interpretation:} 
+		The ambient space $\F_q^n$ represents the output of the noisy channel. A received word is defined as $y = c + e$, where $c \in \im(G)$ is the transmitted codeword and $e \in \F_q^n$ is the error vector.
+		
+		Because the sequence is exact, $H$ annihilates any valid codeword ($Hc^T = \mathbf{0}$). When the receiver applies the parity-check matrix to the received word, by linearity:
+		$$ s = Hy^T = H(c^T + e^T) = Hc^T + He^T = \mathbf{0} + He^T = He^T $$
+		Exactness strips away the message entirely, leaving a \textbf{syndrome} $s$ that depends exclusively on the channel noise. The condition $s = \mathbf{0}$ acts as the mathematical threshold for error detection.
+	\end{conceptbox}
+	
+	\vspace{1em}
+	
+	\begin{conceptbox}[3. Right Exactness: Cosets and Syndrome Decoding]
+		\textbf{Mathematical Condition:} Exactness at $\F_q^{n-k}$ requires that $\im(H) = \F_q^{n-k}$. Therefore, $H$ is surjective.
+		
+		\textbf{Coding Interpretation:} 
+		By the First Isomorphism Theorem, the surjectivity of $H$ implies:
+		$$ \F_q^n / \im(G) \cong \F_q^{n-k} $$
+		In coding theory, the quotient space $\F_q^n / \C$ defines the \textbf{Standard Array}. The space of all received words $\F_q^n$ is partitioned into exactly $q^{n-k}$ disjoint cosets. 
+		
+		Each coset takes the form $e + \C$, representing a specific class of error patterns. Right exactness ensures there is a perfect one-to-one correspondence between the $q^{n-k}$ possible hardware syndromes and these error cosets. This is the theoretical foundation of Syndrome Decoding: the receiver computes $s$, uses the isomorphism to identify the corresponding coset, and subtracts the minimum-weight error (the coset leader) to recover $c$.
+	\end{conceptbox}
+	
+\end{document}

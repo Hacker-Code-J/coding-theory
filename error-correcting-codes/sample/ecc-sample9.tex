@@ -1,0 +1,103 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{tikz-cd}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+
+% --- Page Layout & Styling ---
+\geometry{
+	top=1in, 
+	bottom=1in, 
+	left=1.25in, 
+	right=1.25in
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\small \textit{Lecture Notes: Advanced Coding Theory}}
+\fancyhead[RE]{\small \textit{Classification and Galois Cohomology}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Custom boxes
+\newtcolorbox{conceptbox}[1][]{
+	colback=blue!5!white, colframe=blue!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+\newtcolorbox{theorybox}[1][]{
+	colback=gray!5!white, colframe=gray!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+
+% --- Macros ---
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\Aut}{\text{Aut}}
+\newcommand{\Gal}{\text{Gal}}
+
+\begin{document}
+	
+	\begin{center}
+		{\Large \textbf{The Classification Problem and Galois Cohomology}} \\[0.5em]
+		{\normalsize \textit{Measuring the Twists of Equivalent Codes}}
+	\end{center}
+	\vspace{1em}
+	
+	A major problem in classical coding theory is \textbf{classification}: knowing when two seemingly different codes are actually the exact same code in disguise. To solve this, mathematicians use Galois Cohomology to rigorously classify all possible ``twists'' of a code over a finite field.
+	
+	\section*{1. The Definition of Equivalence}
+	
+	Two linear codes $C_1, C_2 \subseteq \F_q^n$ are not considered strictly identical unless their generator matrices are row-equivalent. However, they are \textbf{isometric} (or equivalent) if one can be transformed into the other simply by rearranging the transmission channel or scaling the symbols.
+	
+	\begin{conceptbox}[Monomial Equivalence]
+		Two codes are equivalent if there exists an $n \times n$ \textbf{monomial matrix} $M$ (a permutation matrix multiplied by a diagonal matrix of non-zero scalars) such that:
+		$$ C_2 = C_1 M $$
+		This means $C_1$ and $C_2$ have the exact same length, dimension, and minimum distance. They represent the same geometric subspace, just viewed through a different coordinate basis. 
+	\end{conceptbox}
+	
+	To classify codes, we must define the \textbf{Automorphism Group} $\Aut(C)$, which consists of all monomial matrices $M$ that map the code $C$ back onto itself ($CM = C$). The size and structure of $\Aut(C)$ dictate how symmetric the code is.
+	
+	\section*{2. The Principle of Galois Descent}
+	
+	Often, it is easy to classify codes over a large, algebraically closed field (or a large extension field $\F_{q^m}$), but very difficult to classify them over the smaller base field $\F_q$. 
+	
+	Suppose we have a code $C$ defined over $\F_{q^m}$. We want to know: \textit{How many distinct codes exist over the base field $\F_q$ that become equivalent to $C$ when we extend our scalars up to $\F_{q^m}$?}
+	
+	
+	
+	This is the problem of \textbf{Galois Descent}. We are looking for ``forms'' or ``twists'' of $C$. If two codes over $\F_q$ become isomorphic over $\F_{q^m}$, their difference is purely a structural twist governed by the Galois group $\Gal(\F_{q^m} / \F_q)$.
+	
+	\section*{3. The First Galois Cohomology Set ($H^1$)}
+	
+	\begin{theorybox}[Classifying the Twists]
+		Let $L/K$ be a Galois extension of fields (e.g., $\F_{q^m} / \F_q$). Let $C$ be a linear code over $K$, and let $\Aut(C_L)$ be its automorphism group over the extension field $L$.
+		
+		The Galois group $\Gamma = \Gal(L/K)$ acts continuously on $\Aut(C_L)$. We define a \textbf{1-cocycle} as a continuous map $c: \Gamma \to \Aut(C_L)$ satisfying the cocycle condition:
+		$$ c_{\sigma \tau} = c_\sigma \cdot \sigma(c_\tau) \quad \text{for all } \sigma, \tau \in \Gamma $$
+		
+		Two cocycles $c$ and $c'$ are cohomologous if there exists some $a \in \Aut(C_L)$ such that $c'_\sigma = a^{-1} c_\sigma \sigma(a)$. 
+		The set of equivalence classes of these cocycles forms the \textbf{First Galois Cohomology Set}, denoted:
+		$$ H^1(\Gal(L/K), \Aut(C_L)) $$
+	\end{theorybox}
+	
+	\section*{4. The Coding Theoretical Dictionary}
+	
+	What does this abstract cohomological set actually compute? It serves as a strict counting mechanism for classification.
+	
+	\begin{itemize}
+		\item \textbf{The Base Object ($C$):} A known, standard linear code over $\F_q$.
+		\item \textbf{The Automorphisms ($\Aut(C_L)$):} The symmetries of the code over the larger field. If the code is highly symmetric, it can be twisted in many ways. If it is rigid, it cannot be twisted.
+		\item \textbf{The Cocycle ($c_\sigma$):} A specific ``recipe'' for twisting the coordinate basis of the code as you descend from the extension field down to the base field.
+		\item \textbf{The Cohomology Set ($H^1$):} There is a rigorous bijection between the elements of $H^1(\Gal(L/K), \Aut(C_L))$ and the isomorphism classes of codes over $\F_q$ that become equivalent to $C$ over $L$.
+	\end{itemize}
+	
+	\textbf{Conclusion:} If $H^1$ contains 5 elements, it means there are exactly 5 distinct, non-equivalent codes over your hardware's base field $\F_q$ that all share the exact same geometric structure when viewed from the extension field. Cohomology guarantees you have found every possible classification without duplicates.
+	
+\end{document}

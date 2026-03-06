@@ -1,0 +1,119 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{tikz-cd}
+\usepackage{fancyhdr}
+
+% --- Page Layout & Styling ---
+\geometry{
+	top=1in, 
+	bottom=1in, 
+	left=1.25in, 
+	right=1.25in
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\small \textit{Lecture Notes: Homological Coding Theory}}
+\fancyhead[RE]{\small \textit{Concrete Example: Exact Sequences over $\F_2$}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Custom pedagogical boxes
+\newtcolorbox{examplebox}[1][]{
+	colback=blue!5!white, colframe=blue!75!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+\newtcolorbox{proofbox}[1][]{
+	colback=green!5!white, colframe=green!60!black,
+	fonttitle=\bfseries, title=#1, arc=3pt, boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+
+% --- Macros ---
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\im}{\text{im}}
+\newcommand{\kerop}{\text{ker}}
+
+\begin{document}
+	
+	\section*{Concrete Example: The $[7,4,3]$ Hamming Code}
+	
+	To understand how a Short Exact Sequence operates in practice, we look at the classical binary Hamming code over the finite field $\F_2$ (where arithmetic is modulo 2, or XOR). 
+	
+	\begin{examplebox}[The Matrix Operators]
+		We aim to encode 4 bits of raw information into 7 bits. The sequence of vector spaces is:
+		\[
+		\begin{tikzcd}[column sep=large]
+			0 \arrow[r] & \F_2^4 \arrow[r, "G"] & \F_2^7 \arrow[r, "H"] & \F_2^3 \arrow[r] & 0
+		\end{tikzcd}
+		\]
+		
+		We define our linear mappings using the $4 \times 7$ Generator matrix $G$ and the $3 \times 7$ Parity-Check matrix $H$. We write $G$ in systematic form ($G = [I_4 \mid P]$) and $H$ in its dual form ($H = [P^T \mid I_3]$):
+		
+		$$
+		G = \begin{bmatrix} 
+			1 & 0 & 0 & 0 & 1 & 1 & 0 \\ 
+			0 & 1 & 0 & 0 & 1 & 0 & 1 \\ 
+			0 & 0 & 1 & 0 & 0 & 1 & 1 \\ 
+			0 & 0 & 0 & 1 & 1 & 1 & 1 
+		\end{bmatrix},
+		\quad
+		H = \begin{bmatrix} 
+			1 & 1 & 0 & 1 & 1 & 0 & 0 \\ 
+			1 & 0 & 1 & 1 & 0 & 1 & 0 \\ 
+			0 & 1 & 1 & 1 & 0 & 0 & 1 
+		\end{bmatrix}
+		$$
+	\end{examplebox}
+	
+	\vspace{1em}
+	
+	\begin{proofbox}[Verifying the Exactness of the Sequence]
+		Let's trace a message through the sequence to prove it is exact at every node.
+		
+		\textbf{Step 1: Injective Encoding ($\kerop(G) = 0$)}\\
+		Let $m = \begin{bmatrix} 1 & 0 & 1 & 0 \end{bmatrix}$ be a raw message in $\F_2^4$. We encode it by computing $c = mG$:
+		$$ 
+		c = \begin{bmatrix} 1 & 0 & 1 & 0 \end{bmatrix} 
+		\begin{bmatrix} 
+			1 & 0 & 0 & 0 & 1 & 1 & 0 \\ 
+			0 & 1 & 0 & 0 & 1 & 0 & 1 \\ 
+			0 & 0 & 1 & 0 & 0 & 1 & 1 \\ 
+			0 & 0 & 0 & 1 & 1 & 1 & 1 
+		\end{bmatrix}
+		= \begin{bmatrix} 1 & 0 & 1 & 0 & 1 & 0 & 1 \end{bmatrix}
+		$$
+		Because the first $4 \times 4$ block of $G$ is the identity matrix $I_4$, $G$ has full row rank. Thus, $mG = \mathbf{0} \iff m = \mathbf{0}$. The map $G$ is strictly injective.
+		
+		\vspace{1em}
+		\textbf{Step 2: Exactness at the Center ($\im(G) = \kerop(H)$)}\\
+		To form a chain complex, the ``boundary of a boundary'' must be zero ($H \circ G = 0$). We take our encoded codeword $c \in \F_2^7$ and apply the boundary map $H$ by computing $Hc^T$:
+		$$ 
+		Hc^T = \begin{bmatrix} 
+			1 & 1 & 0 & 1 & 1 & 0 & 0 \\ 
+			1 & 0 & 1 & 1 & 0 & 1 & 0 \\ 
+			0 & 1 & 1 & 1 & 0 & 0 & 1 
+		\end{bmatrix} 
+		\begin{bmatrix} 1 \\ 0 \\ 1 \\ 0 \\ 1 \\ 0 \\ 1 \end{bmatrix}
+		$$
+		Calculating the rows modulo 2:
+		\begin{itemize}
+			\item Row 1: $1(1) + 1(0) + 0(1) + 1(0) + 1(1) + 0(0) + 0(1) = 1 + 1 \equiv 0 \pmod 2$
+			\item Row 2: $1(1) + 0(0) + 1(1) + 1(0) + 0(1) + 1(0) + 0(1) = 1 + 1 \equiv 0 \pmod 2$
+			\item Row 3: $0(1) + 1(0) + 1(1) + 1(0) + 0(1) + 0(0) + 1(1) = 1 + 1 \equiv 0 \pmod 2$
+		\end{itemize}
+		$$ Hc^T = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} = \mathbf{0} $$
+		Because $\dim(\im(G)) = 4$ and $\dim(\kerop(H)) = 7 - 3 = 4$, $\im(G)$ perfectly equals $\kerop(H)$. The sequence is exact.
+		
+		\vspace{1em}
+		\textbf{Step 3: Surjective Checking ($\im(H) = \F_2^3$)}\\
+		Because the last $3 \times 3$ block of $H$ is the identity matrix $I_3$, $H$ has full row rank. The image of $H$ spans the entire 3-dimensional syndrome space, allowing it to detect all $2^3 = 8$ possible syndrome states. Thus, $H$ is surjective.
+	\end{proofbox}
+	
+\end{document}

@@ -1,0 +1,195 @@
+\documentclass[11pt, a4paper, twoside]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{tikz-cd}
+\usepackage{fancyhdr}
+
+% --- Page Layout & Styling ---
+\geometry{
+	top=1in, 
+	bottom=1in, 
+	left=1.25in, 
+	right=1.25in
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\small \textit{Practice Problems: Riemann Surfaces \& Algebraic Curves}}
+\fancyhead[RE]{\small \textit{Cohomology \& Code Constructions}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+%% Custom box for problem statements
+%\newtcolorbox{problembox}[1][]{
+%	colback=blue!5!white,
+%	colframe=blue!75!black,
+%	fonttitle=\bfseries,
+%	title=#1,
+%	arc=3pt,
+%	boxrule=1pt,
+%	left=10pt, right=10pt, top=10pt, bottom=10pt
+%}
+
+% Custom box for problem statements (Blue)
+\newtcolorbox{problembox}[1][]{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	fonttitle=\bfseries,
+	title=#1,
+	arc=3pt,
+	boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+
+% Custom box for solutions (Green)
+\newtcolorbox{solutionbox}[1][]{
+	colback=green!5!white,
+	colframe=green!60!black,
+	fonttitle=\bfseries,
+	title=#1,
+	arc=3pt,
+	boxrule=1pt,
+	left=10pt, right=10pt, top=10pt, bottom=10pt
+}
+
+% --- Macros ---
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\dx}{\,dx}
+
+\begin{document}
+	
+	% ==========================================
+	% COVER PAGE
+	% ==========================================
+	\begin{titlepage}
+		\centering
+		\vspace*{2in}
+		
+		{\Huge \bfseries Riemann Surface \& \\ Algebraic Curve Theory \par}
+		\vspace{0.5in}
+		{\Large \textit{A Practice Notebook for Understanding Elliptic and Hyperelliptic Codes} \par}
+		
+		\vspace{1.5in}
+		
+		{\large \textbf{Topics Covered:} \par}
+		\vspace{0.2in}
+		\begin{itemize}
+			\item Divisors and the Riemann-Roch Theorem
+			\item Sheaf Cohomology and the Mittag-Leffler Problem
+			\item Meromorphic Differentials and Serre Duality
+			\item Construction of the Parity-Check Matrix via Residues
+		\end{itemize}
+		
+		\vfill
+		
+		{\large \today \par}
+	\end{titlepage}
+	
+	\newpage
+	
+	% ==========================================
+	% PROBLEM 1
+	% ==========================================
+	\section*{Problem 1: Differentials and the Parity-Check Matrix}
+	
+	\begin{problembox}[Constructing $\Omega^1(E-D)$ on a Hyperelliptic Curve]
+		Let $\X$ be a hyperelliptic curve of genus $g=2$ defined over $\C$ by the affine equation:
+		$$ y^2 = f(x) = x^5 - x $$
+		Let $P_\infty$ denote the single point at infinity. We define our bounding divisor as $D = 3P_\infty$. 
+		
+		We select $n=4$ distinct finite evaluation points $E = P_1 + P_2 + P_3 + P_4$, where $P_i = (x_i, y_i)$, such that $y_i \neq 0$.
+		
+		\vspace{0.5em}
+		\textbf{Tasks:}
+		\begin{enumerate}
+			\item \textbf{Holomorphic Basis:} Write down the explicit basis for the space of global holomorphic 1-forms, $\Omega^1(\X)$. Verify that the dimension agrees with the genus.
+			\item \textbf{Dimension of the Syndrome Space:} Using the Riemann-Roch theorem, calculate the dimension of the space of parity-check differentials, $\dim \Omega^1(E-D)$.
+			\item \textbf{Constructing the Differentials:} Find an explicit basis for the meromorphic differentials $\Omega^1(E-D)$. \textit{(Hint: Start with the holomorphic differentials and multiply by rational functions in $x$ and $y$ to introduce simple poles exactly at the points $P_i$, while ensuring the pole order at $P_\infty$ does not violate the condition imposed by $-D$.)}
+			\item \textbf{The Parity-Check Matrix:} Let $\omega_1, \dots, \omega_{n-k}$ be your basis from Part 3. Express the $(n-k) \times n$ parity-check matrix $H$ explicitly in terms of the residues $\text{Res}_{P_j}(\omega_i)$. Evaluate these residues using the local coordinate $t = x - x_j$.
+		\end{enumerate}
+	\end{problembox}
+	
+	\vspace{1.5em}
+	\noindent\textbf{Space for Calculations:}
+	
+	% The rest of the page is intentionally left blank for the student.
+	\newpage
+	
+	% ==========================================
+	% SOLUTION TO PROBLEM 1
+	% ==========================================
+	\section*{Solution Key: Problem 1}
+	
+	\begin{solutionbox}[Step-by-Step Solution: Hyperelliptic Differentials]
+		\textbf{Part 1: Holomorphic Basis}\\
+		For a hyperelliptic curve given by $y^2 = f(x)$ of degree $2g+1$, the basis for the space of global holomorphic 1-forms $\Omega^1(\X)$ is given by:
+		$$ \omega_i = \frac{x^i \,dx}{y} \quad \text{for } i = 0, 1, \dots, g-1 $$
+		Since our curve has genus $g=2$, the basis consists of exactly two differentials:
+		$$ \omega_0 = \frac{dx}{y}, \quad \omega_1 = \frac{x \,dx}{y} $$
+		This confirms $\dim \Omega^1(\X) = g = 2$.
+		
+		\vspace{1em}
+		\textbf{Part 2: Dimension of the Syndrome Space}\\
+		By the Riemann-Roch Theorem, the dimension of the code is $k = \deg(D) + 1 - g = 3 + 1 - 2 = 2$. 
+		Because the ambient space has dimension $n=4$, the syndrome space has dimension $n - k = 4 - 2 = 2$. 
+		Thus, we need to find exactly $2$ linearly independent meromorphic differentials for $\Omega^1(E-D)$.
+		
+		\vspace{1em}
+		\textbf{Part 3: Constructing the Differentials}\\
+		We need differentials with simple poles at the $n=4$ points of $E = \sum P_i$. Let $V(x) = \prod_{i=1}^4 (x - x_i)$ be the vanishing polynomial of the $x$-coordinates of our evaluation points. Dividing our holomorphic basis by $V(x)$ introduces the required poles. 
+		Let:
+		$$ \eta_0 = \frac{dx}{V(x)y} \quad \text{and} \quad \eta_1 = \frac{x \,dx}{V(x)y} $$
+		These forms have simple poles at each $P_i = (x_i, y_i)$. (A rigorous check at $P_\infty$ using the local parameter $t = x^{-1/2}$ verifies they do not violate the $-D = -3P_\infty$ pole constraint).
+		
+		\vspace{1em}
+		\textbf{Part 4: The Parity-Check Matrix}\\
+		The parity-check matrix $H$ is constructed by evaluating the residues of our basis $\eta_0, \eta_1$ at each point $P_j$. 
+		Using the local coordinate $t = x - x_j$, we find $dt = dx$. The residue of $\frac{x^i \,dx}{V(x)y}$ at $P_j$ is simply the evaluation of the non-singular part at $x = x_j$:
+		$$ \text{Res}_{P_j}(\eta_i) = \frac{x_j^i}{V'(x_j) y_j} $$
+		Therefore, the $2 \times 4$ parity-check matrix $H$ is:
+		$$ 
+		H = 
+		\begin{pmatrix}
+			\frac{1}{V'(x_1) y_1} & \frac{1}{V'(x_2) y_2} & \frac{1}{V'(x_3) y_3} & \frac{1}{V'(x_4) y_4} \\[8pt]
+			\frac{x_1}{V'(x_1) y_1} & \frac{x_2}{V'(x_2) y_2} & \frac{x_3}{V'(x_3) y_3} & \frac{x_4}{V'(x_4) y_4}
+		\end{pmatrix}
+		$$
+	\end{solutionbox}
+	
+	\newpage
+	
+	% ==========================================
+	% PROBLEM 2
+	% ==========================================
+	\section*{Problem 2: Elliptic Curves and Intersections}
+	
+%	\begin{problembox}[Divisors of Functions on a Torus ($g=1$)]
+		Let $\X$ be an elliptic curve defined by the Weierstrass equation:
+		$$ y^2 = x^3 + ax + b $$
+		This curve has genus $g=1$ and is topologically a Torus. The single point at infinity is denoted $\cO$ (which serves as the identity element for the curve's group law). 
+		
+		Let $D = 3\cO$.
+		
+		\vspace{0.5em}
+		\textbf{Tasks:}
+		\begin{enumerate}
+			\item \textbf{Riemann-Roch Dimension:} Calculate the dimension $k$ of the function space $\mathcal{L}(3\cO)$.
+			\item \textbf{Basis of Functions:} By examining the pole orders of $x$ and $y$ at the point $\cO$, prove that the set $\{1, x, y\}$ forms a basis for $\mathcal{L}(3\cO)$.
+			\item \textbf{Line Intersections:} Let $L(x,y) = \alpha x + \beta y + \gamma = 0$ be a straight line in the affine plane. Explain geometrically why the principal divisor of the function $f = \alpha x + \beta y + \gamma$ on the curve $\X$ takes the form:
+			$$ (f) = P + Q + R - 3\cO $$
+			where $P, Q, R$ are the three points of intersection between the line and the elliptic curve.
+			\item \textbf{The Group Law:} Use the result from Task 3 to briefly explain the geometric group law of the elliptic curve (i.e., why $P + Q + R = \cO$ in the group operation).
+		\end{enumerate}
+%	\end{problembox}
+	
+	\vspace{1.5em}
+	\noindent\textbf{Space for Calculations:}
+	
+\end{document}

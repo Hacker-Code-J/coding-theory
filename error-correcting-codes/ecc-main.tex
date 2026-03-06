@@ -1,0 +1,587 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\wt}{\mathrm{wt}}
+\newcommand{\ev}{\mathrm{ev}}
+\newcommand{\Res}{\mathrm{Res}}
+\newcommand{\Div}{\mathrm{Div}}
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\degdiv}{\mathrm{deg}}
+
+\title{Coding Theory for Mathematicians:\\
+	Sets, Linear Algebra, and Algebraic Geometry}
+\author{}
+\date{}
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+	
+	\section{Philosophy: codes as objects and morphisms}
+	A block code is a subset \(C \subseteq \Sigma^n\). For mathematicians, the most useful additional structures are:
+	\begin{itemize}
+		\item \(\Sigma=\F_q\) a finite field and \(C\) a \emph{linear subspace} of \(\F_q^n\).
+		\item \(C\) as an \emph{image} of an encoding morphism \(Enc:\Sigma^k\to \Sigma^n\).
+		\item \(C\) as a \emph{kernel} of linear equations (parity checks) \(H:\F_q^n\to \F_q^{n-k}\).
+		\item (AG viewpoint) \(C\) as an \emph{evaluation image} of functions/sections on a variety/curve.
+	\end{itemize}
+	
+	\section{Basic definitions (sets, functions, metric)}
+	\subsection{Codes and encoders}
+	\begin{definition}[Code]
+		A code \(C\) of block length \(n\) over alphabet \(\Sigma\) is a subset \(C\subseteq \Sigma^n\).
+		Elements are codewords.
+	\end{definition}
+	
+	\begin{definition}[Encoder]
+		An encoding map is a function \(Enc:\Sigma^k\to \Sigma^n\).
+		The code is the image \(C=\mathrm{im}(Enc)\).
+	\end{definition}
+	
+	\subsection{Errors and erasures}
+	During transmission, a codeword \(c\in C\) becomes \(\tilde c\in \Sigma^n\).
+	\begin{itemize}
+		\item \textbf{Erasure:} positions of corruption are known (symbol is ``?").
+		\item \textbf{Error:} positions are unknown (symbol may flip to another value).
+	\end{itemize}
+	
+	\subsection{Hamming distance}
+	\begin{definition}[Hamming distance]
+		For \(x,y\in \Sigma^n\),
+		\[
+		\Delta(x,y)=|\{i: x_i\neq y_i\}|.
+		\]
+	\end{definition}
+	
+	\begin{definition}[Minimum distance]
+		\[
+		d(C)=\min_{\substack{c,c'\in C\\c\neq c'}}\Delta(c,c').
+		\]
+	\end{definition}
+	
+	\begin{theorem}[Distance controls correction/detection]
+		A code of distance \(d\) can:
+		\begin{enumerate}[label=(\alph*)]
+			\item correct up to \(d-1\) erasures;
+			\item detect up to \(d-1\) errors;
+			\item correct up to \(\left\lfloor \frac{d-1}{2}\right\rfloor\) errors.
+		\end{enumerate}
+	\end{theorem}
+	
+	\begin{proof}[Proof idea]
+		Hamming balls of radius \(\lfloor(d-1)/2\rfloor\) around distinct codewords are disjoint.
+		Nearest-neighbor decoding is unambiguous inside a ball.
+	\end{proof}
+	
+	\section{Linear codes as subspaces, images, kernels}
+	From now on \(\Sigma=\F_q\).
+	
+	\subsection{Linear codes}
+	\begin{definition}[Linear code]
+		A linear \((n,k)_q\) code is a \(k\)-dimensional \(\F_q\)-subspace \(C\le \F_q^n\).
+	\end{definition}
+	
+	\begin{definition}[Generator matrix]
+		A generator matrix \(G\in \F_q^{k\times n}\) has row space \(C\).
+		Encoding is the linear map
+		\[
+		Enc:\F_q^k\to \F_q^n,\quad m\mapsto mG.
+		\]
+	\end{definition}
+	
+	\begin{definition}[Parity-check matrix]
+		A parity-check matrix \(H\in \F_q^{(n-k)\times n}\) satisfies
+		\[
+		C=\{c\in \F_q^n: Hc^\top=0\}=\ker(H).
+		\]
+	\end{definition}
+	
+	\subsection{Weight and distance in linear codes}
+	\begin{definition}[Hamming weight]
+		For \(x\in \F_q^n\), \(\wt(x)=|\{i: x_i\neq 0\}|\).
+	\end{definition}
+	
+	\begin{proposition}
+		For a linear code \(C\),
+		\[
+		d(C)=\min\{\wt(c): c\in C,\ c\neq 0\}.
+		\]
+	\end{proposition}
+	
+	\subsection{Syndromes}
+	\begin{definition}[Syndrome map]
+		Given \(H\), define \(s:\F_q^n\to \F_q^{n-k}\) by \(s(y)=Hy^\top\).
+		Then \(y\in C\iff s(y)=0\).
+	\end{definition}
+	
+	If \(y=c+e\) with \(c\in C\), then \(s(y)=He^\top\). So decoding often reduces to:
+	\[
+	\text{compute }s(y)\ \leadsto\ \text{infer error pattern }e.
+	\]
+	
+	\section{Classic examples: parity and Hamming codes}
+	\subsection{Single parity-check code}
+	\begin{example}[\((n,n-1,2)_2\) parity code]
+		Let \(C=\{x\in \F_2^n: x_1+\cdots+x_n=0\}\).
+		Then \(d=2\): detects 1 error, corrects 1 erasure.
+	\end{example}
+	
+	\subsection{The \((7,4,3)_2\) Hamming code}
+	\begin{example}[Hamming \((7,4,3)\)]
+		Let columns of \(H\in \F_2^{3\times 7}\) be all nonzero vectors in \(\F_2^3\):
+		\[
+		H=\begin{pmatrix}
+			1&0&1&0&1&0&1\\
+			0&1&1&0&0&1&1\\
+			0&0&0&1&1&1&1
+		\end{pmatrix}.
+		\]
+		Then \(C=\ker(H)\) has parameters \((7,4,3)_2\) and corrects 1 error.
+		Indeed, for a single-bit error \(e\) at position \(j\), \(s(y)=He^\top\) equals the \(j\)-th column of \(H\), identifying \(j\).
+	\end{example}
+	
+	\section{Bounds: Singleton and Hamming}
+	\subsection{Singleton bound}
+	\begin{theorem}[Singleton]
+		Any \((n,k,d)_q\) code satisfies \(d\le n-k+1\).
+	\end{theorem}
+	
+	\begin{proof}
+		Puncture (delete) \(d-1\) coordinates. Distinct codewords remain distinct, so
+		\(|C|\le q^{n-(d-1)}\), i.e. \(k\le n-d+1\).
+	\end{proof}
+	
+	Codes meeting Singleton with equality are \emph{MDS} (maximum distance separable).
+	
+	\subsection{Hamming bound}
+	Let \(V_q(n,e)=\sum_{i=0}^e \binom{n}{i}(q-1)^i\) be the Hamming ball volume.
+	
+	\begin{theorem}[Hamming bound]
+		If \(C\subseteq \F_q^n\) has distance \(d\) and \(e=\lfloor(d-1)/2\rfloor\), then
+		\[
+		|C|\cdot V_q(n,e)\le q^n.
+		\]
+	\end{theorem}
+	
+	\begin{example}[Hamming code is perfect]
+		For \((7,4,3)_2\), \(e=1\), \(V_2(7,1)=1+7=8\), so
+		\(|C|\le 2^7/8=16\) and \(k\le 4\). Equality holds; this is a perfect code.
+	\end{example}
+	
+	\section{Reed--Solomon codes: \(\PP^1\), evaluation, and MDS}
+	\subsection{Evaluation construction}
+	Fix distinct \(\alpha_1,\dots,\alpha_n\in \F_q\) with \(n\le q\).
+	Let \(V=\{f\in \F_q[x]:\deg f<k\}\) (dimension \(k\)).
+	Define
+	\[
+	\ev:V\to \F_q^n,\quad f\mapsto (f(\alpha_1),\dots,f(\alpha_n)).
+	\]
+	Its image is the Reed--Solomon code \(RS_{q}(n,k)\).
+	
+	\subsection{Distance}
+	\begin{theorem}[RS is MDS]
+		\(RS_q(n,k)\) has minimum distance \(d=n-k+1\).
+	\end{theorem}
+	\begin{proof}
+		If \(f\neq g\) with \(\deg(f-g)<k\), then \(f-g\) has \(\le k-1\) roots, so
+		\((f(\alpha_i))\) and \((g(\alpha_i))\) agree in at most \(k-1\) coordinates, hence differ in at least \(n-(k-1)\).
+	\end{proof}
+	
+	\subsection{AG translation: \(\PP^1\) and line bundles}
+	On \(\PP^1\), polynomials of degree \(\le k-1\) identify with global sections of \(\mathcal O_{\PP^1}(k-1)\).
+	Choosing evaluation points is choosing a divisor \(D=P_1+\cdots+P_n\) of rational points.
+	RS is the code \(C_L(D,G)\) with \(G=(k-1)\cdot \infty\) on \(\PP^1\).
+	
+	\section{Worked example: RS over \(\F_7\) and decoding (Berlekamp--Welch)}
+	We do a fully explicit encode + decode by algebra (no ``closest codeword'' black box).
+	
+	\subsection{Setup}
+	Take \(q=7\), \(n=6\), \(k=3\). Then \(d=n-k+1=4\), so we can correct
+	\(t=\lfloor(d-1)/2\rfloor=1\) error.
+	
+	Choose evaluation points \(\alpha_1,\dots,\alpha_6 = 1,2,3,4,5,6\in \F_7\).
+	Messages are polynomials \(f(x)=a+bx+cx^2\) in \(\F_7[x]\).
+	
+	\subsection{Encoding example}
+	Let
+	\[
+	f(x)=2+3x+x^2\in \F_7[x].
+	\]
+	Evaluate:
+	\[
+	\begin{array}{c|cccccc}
+		x & 1&2&3&4&5&6\\\hline
+		f(x) & 2+3+1=6 & 2+6+4=12\equiv 5 & 2+9+2=13\equiv 6 & 2+12+2=16\equiv 2 & 2+15+4=21\equiv 0 & 2+18+1=21\equiv 0
+	\end{array}
+	\]
+	So the codeword is
+	\[
+	c=(6,5,6,2,0,0)\in \F_7^6.
+	\]
+	
+	\subsection{One-error corruption}
+	Suppose position \(x=4\) is corrupted: \(2\mapsto 1\).
+	Received word:
+	\[
+	y=(6,5,6,1,0,0).
+	\]
+	
+	\subsection{Berlekamp--Welch decoding (for \(t=1\))}
+	We seek polynomials \(E(x)\) and \(N(x)\) such that:
+	\[
+	E(\alpha_i)\,y_i = N(\alpha_i)\quad \text{for }i=1,\dots,6,
+	\]
+	with degree constraints
+	\[
+	\deg E \le t=1,\qquad \deg N \le k-1+t = 3.
+	\]
+	If \(E\) vanishes at the error location, then \(N=E\cdot f\) and we recover \(f=N/E\).
+	
+	Write
+	\[
+	E(x)=x-\beta \quad (\beta \in \F_7),\qquad N(x)=u_0+u_1x+u_2x^2+u_3x^3.
+	\]
+	Then constraints become for each \(i\):
+	\[
+	(\alpha_i-\beta)\,y_i = u_0+u_1\alpha_i+u_2\alpha_i^2+u_3\alpha_i^3.
+	\]
+	This is a linear system in the unknowns \(\beta,u_0,u_1,u_2,u_3\), except \(\beta\) appears multiplicatively.
+	A common trick is to represent \(E(x)=e_0+e_1x\) with unknown coefficients and solve linearly.
+	
+	So set \(E(x)=e_0+e_1x\) (not both zero), and \(N(x)\) as above. Solve:
+	\[
+	(e_0+e_1\alpha_i)y_i = N(\alpha_i),\quad i=1,\dots,6.
+	\]
+	Unknowns: \(e_0,e_1,u_0,u_1,u_2,u_3\) (6 equations, 6 unknowns up to scaling of \(E,N\)).
+	One can normalize \(e_1=1\) (if \(e_1\neq 0\)), then solve.
+	
+	\medskip
+	\noindent\textbf{Claim (solution).} A solution is
+	\[
+	E(x)=x-4,\qquad N(x)=(x-4)\,(2+3x+x^2).
+	\]
+	Check quickly: if \(x\neq 4\), then \(E(x)\neq 0\) and \(y_i=f(\alpha_i)\), so equality holds.
+	At \(x=4\), \(E(4)=0\), so the constraint becomes \(0=N(4)\), which also holds.
+	
+	Compute \(N(x)\) in \(\F_7[x]\):
+	\[
+	(x-4)(x^2+3x+2)=x^3+3x^2+2x-4x^2-12x-8
+	= x^3 -x^2 -10x -8.
+	\]
+	Reduce mod 7:
+	\(-1\equiv 6\), \(-10\equiv -3\equiv 4\), \(-8\equiv -1\equiv 6\). Hence
+	\[
+	N(x)=x^3+6x^2+4x+6 \in \F_7[x].
+	\]
+	Then recover
+	\[
+	f(x)=\frac{N(x)}{E(x)}= \frac{x^3+6x^2+4x+6}{x-4} = x^2+3x+2,
+	\]
+	which matches the original polynomial (written in descending order).
+	Thus we decoded uniquely and corrected the error.
+	
+	\begin{remark}
+		Berlekamp--Welch is a purely algebraic decoding method: solve a linear system, then divide polynomials.
+		It exemplifies the ``functions evaluated at points'' ideology.
+	\end{remark}
+	
+	\section{Algebraic-geometry codes on curves}
+	\subsection{From \(\PP^1\) to curves}
+	Replace \(\PP^1\) by a smooth projective curve \(X/\F_q\) of genus \(g\).
+	Choose distinct rational points \(P_1,\dots,P_n \in X(\F_q)\). Let
+	\[
+	D=P_1+\cdots+P_n.
+	\]
+	Choose a divisor \(G\) with \(\supp(G)\cap \supp(D)=\varnothing\).
+	
+	\subsection{Riemann--Roch space}
+	\begin{definition}[Riemann--Roch space]
+		\[
+		L(G)=\{f\in \F_q(X)^\times : (f)+G\ge 0\}\cup\{0\}.
+		\]
+	\end{definition}
+	
+	\subsection{Evaluation code}
+	\begin{definition}[AG code \(C_L(D,G)\)]
+		Define
+		\[
+		C_L(D,G)=\{(f(P_1),\dots,f(P_n)) : f\in L(G)\}\subseteq \F_q^n.
+		\]
+	\end{definition}
+	
+	\subsection{Parameters from divisors (first estimates)}
+	\begin{theorem}[Basic parameter bounds]
+		Assume \(\degdiv(G)<n\). Then:
+		\[
+		k=\dim_{\F_q} C_L(D,G)=\ell(G)-\ell(G-D),
+		\]
+		and in particular (using \(\ell(G-D)=0\) when \(\degdiv(G)<n\) and \(G\) disjoint from \(D\) in many standard setups),
+		\[
+		k\ge \degdiv(G)+1-g,
+		\qquad
+		d \ge n-\degdiv(G).
+		\]
+	\end{theorem}
+	
+	\begin{remark}
+		Compare with RS on \(\PP^1\) where \(g=0\): one recovers the MDS behavior.
+		For \(g>0\), genus is the price: it weakens the dimension bound by \(g\).
+	\end{remark}
+	
+	\section{Duality and differentials: where ``forms'' really enter}
+	Let \(\Omega\) be the sheaf of differentials on \(X\).
+	There is a companion construction using differential forms, producing a code often denoted \(C_\Omega(D,G)\).
+	
+	\subsection{Residue pairing}
+	For suitable choices of \(G\), one has a canonical pairing between evaluations and residues:
+	\[
+	\langle (f(P_i)), (\Res_{P_i}\omega)\rangle = \sum_{i=1}^n f(P_i)\Res_{P_i}(\omega)\in \F_q,
+	\]
+	where \(\omega\) is a differential with controlled divisor.
+	
+	\begin{theorem}[Dual code description (standard AG-code duality)]
+		Under standard hypotheses,
+		\[
+		C_L(D,G)^\perp \cong C_\Omega(D,G),
+		\]
+		and parity checks may be realized by residue vectors \((\Res_{P_1}\omega,\dots,\Res_{P_n}\omega)\).
+	\end{theorem}
+	
+	\begin{remark}
+		This is the precise sense in which coding theory touches ``differential forms'':
+		the dual constraints (parity checks) can be expressed using global properties of differentials and residues
+		(global residue theorem, Riemann--Roch, Serre duality).
+	\end{remark}
+	
+	\section{Goppa codes: classical polynomial definition and AG interpretation}
+	There are several closely-related notions called ``Goppa codes'' in the literature; the most common in coding theory/crypto is the \emph{classical} (alternant) Goppa code.
+	
+	\subsection{Classical Goppa code (polynomial presentation)}
+	Fix:
+	\begin{itemize}
+		\item a field extension \(\F_{q^m}\),
+		\item a support set \(L=\{\alpha_1,\dots,\alpha_n\}\subseteq \F_{q^m}\) of distinct elements,
+		\item a polynomial \(g(x)\in \F_{q^m}[x]\) with \(g(\alpha_i)\neq 0\) for all \(i\).
+	\end{itemize}
+	
+	\begin{definition}[Classical Goppa code \(\Gamma(L,g)\)]
+		Define \(\Gamma(L,g)\subseteq \F_q^n\) by
+		\[
+		\Gamma(L,g)=\left\{c=(c_1,\dots,c_n)\in \F_q^n:
+		\sum_{i=1}^n \frac{c_i}{x-\alpha_i}\equiv 0 \pmod{g(x)} \right\},
+		\]
+		equivalently via a parity-check matrix built from evaluations of \(1/g(\alpha_i)\) and powers of \(\alpha_i\).
+	\end{definition}
+	
+	\begin{remark}
+		This condition is a ``rational function congruence'' that, after linearization, becomes parity-check equations over \(\F_q\).
+		These codes have strong distance guarantees and efficient decoding algorithms; they are central in code-based cryptography.
+	\end{remark}
+	
+	\subsection{AG interpretation (divisor language)}
+	Conceptually, the fractions \(\frac{1}{x-\alpha_i}\) and the modulus \(g(x)\) are about controlling poles/zeros of rational functions (and/or differentials) on a curve.
+	On \(\PP^1\), \(g(x)\) defines a divisor of zeros, and the support points \(\alpha_i\) define a divisor \(D\).
+	Goppa/alternant codes can be viewed as \emph{subfield subcodes} of certain AG codes on \(\PP^1\) (or closely related constructions),
+	explaining why they inherit strong algebraic structure while living over the smaller base field \(\F_q\).
+	
+	\section{A road map for further study}
+	\subsection{Combinatorics / information theory}
+	\begin{itemize}
+		\item Gilbert--Varshamov bound (existence of good codes).
+		\item Asymptotics: rate vs relative distance; entropy estimates of Hamming volumes.
+	\end{itemize}
+	
+	\subsection{Algebra / algorithms}
+	\begin{itemize}
+		\item Syndrome decoding, cosets, standard array.
+		\item BCH codes, minimal polynomials, cyclotomic cosets.
+		\item Berlekamp--Massey, Euclidean algorithm decoding, key equations.
+	\end{itemize}
+	
+	\subsection{Algebraic geometry}
+	\begin{itemize}
+		\item Riemann--Roch and explicit curves with many \(\F_q\)-points.
+		\item Serre duality and the dual AG code via differentials/residues.
+		\item Towers of curves and asymptotically good AG codes.
+	\end{itemize}
+	
+	\section*{Exercises (selected)}
+	\begin{enumerate}
+		\item Prove the distance statements for the parity-check code and the Hamming \((7,4,3)\) code.
+		\item For RS over \(\F_7\) with \(n=6,k=3\), pick a different message polynomial and simulate 1-error decoding via Berlekamp--Welch.
+		\item Prove Singleton bound and show RS meets it.
+		\item On \(\PP^1\), interpret RS as \(C_L(D,G)\) with \(G=(k-1)\cdot\infty\). Compute \(\ell(G)\) directly.
+		\item Read a proof of AG duality \(C_L(D,G)^\perp \cong C_\Omega(D,G)\) and identify where residues enter.
+	\end{enumerate}
+	
+\end{document}
+
+%\documentclass[11pt]{article}
+%\usepackage{amsmath, amssymb, amsthm}
+%\usepackage{geometry}
+%\usepackage{hyperref}
+%\usepackage{xcolor}
+%
+%\geometry{a4paper, margin=1in}
+%
+%\title{\textbf{Lecture Notes: Coding Theory Fundamentals and The Hamming Bound}}
+%\author{Based on Lectures by Mary Wootters}
+%\date{}
+%
+%\newtheorem{definition}{Definition}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{example}{Example}
+%
+%\begin{document}
+%	
+%	\maketitle
+%	
+%	\section{Introduction to Coding Theory}
+%	The foundation of coding theory begins with the formal definition of a code. 
+%	
+%	\begin{definition}[Code]
+%		A code $C$ of block length $n$ over an alphabet $\Sigma$ is a subset of $\Sigma^n$. 
+%		\begin{itemize}
+%			\item $n$ is a positive integer (the block length or simply length).
+%			\item $\Sigma$ is a finite set (e.g., $\{0, 1\}$).
+%			\item The elements $c \in C$ are called \textbf{codewords}.
+%		\end{itemize}
+%	\end{definition}
+%	
+%	When $\Sigma = \{0, 1\}$, the code is referred to as a \textbf{binary code}.
+%	
+%	\begin{example}
+%		Consider a trivial code over the English alphabet $\Sigma = \{A, B, C, \dots, Z\}$ with block length $n=10$:
+%		$C = \{\text{HELLO WORLD}, \text{BRUNCH TIME}, \text{ALL THE TIME}\}$
+%		While perfectly valid, this is not particularly interesting for correcting errors.
+%	\end{example}
+%	
+%	\section{Encoding Maps and Error Types}
+%	To connect this to the communication scenario (Alice sending a message to Bob), we introduce an encoding map. Suppose we have a message $x \in \Sigma^k$ of length $k$. The encoding map $Enc$ maps this message to a codeword $c \in \Sigma^n$. The code $C$ is simply the image of this encoding map.
+%	
+%	During transmission, the codeword $c$ might get corrupted into $\tilde{c}$. There are two primary types of corruption:
+%	\begin{itemize}
+%		\item \textbf{Erasure}: A symbol is lost or unreadable. We know \textit{which} position is corrupted, but not its original value.
+%		\item \textbf{Error}: A symbol is flipped to an incorrect value. We do \textit{not} know which position was altered.
+%	\end{itemize}
+%	
+%	\begin{example}[Correcting 1 Erasure / Detecting 1 Error]
+%		Consider the encoding map $Enc: \{0,1\}^3 \to \{0,1\}^4$ defined by adding a parity bit:
+%		\[ Enc(x_1, x_2, x_3) = (x_1, x_2, x_3, x_1 + x_2 + x_3 \pmod 2) \]
+%		If Bob receives $\tilde{c} = (0, \text{?}, 0, 1)$, he can deduce the missing bit must be $1$ because the bits must sum to $0 \pmod 2$. Thus, the code corrects 1 erasure. If Bob receives $\tilde{c} = (0,0,0,1)$, he knows an error occurred because the parity check fails, but he cannot pinpoint which bit was flipped. Thus, it detects (but cannot correct) 1 error.
+%	\end{example}
+%	
+%	\begin{example}[Correcting 1 Error]
+%		A more robust binary code of block length 7 uses overlapping parity checks. The encoding maps 4 message bits to 7 codeword bits, where the 3 extra parity bits correspond to combinations of the message bits. If at most one bit is flipped during transmission, checking which parity constraints fail allows Bob to uniquely identify and correct the exact erroneous bit.
+%	\end{example}
+%	
+%	\section{Hamming Distance}
+%	To formalize the error-correcting capabilities of a code, we use a distance metric.
+%	
+%	\begin{definition}[Hamming Distance]
+%		The Hamming distance between two vectors $x, y \in \Sigma^n$, denoted $\Delta(x, y)$, is the number of positions in which they differ:
+%		\[ \Delta(x, y) = \sum_{i=1}^n \mathbb{I}(x_i \neq y_i) \]
+%		where $\mathbb{I}$ is the indicator function.
+%	\end{definition}
+%	
+%	\begin{definition}[Relative Hamming Distance]
+%		The relative Hamming distance $\delta(x, y)$ is the normalized Hamming distance:
+%		\[ \delta(x, y) = \frac{\Delta(x, y)}{n} \]
+%	\end{definition}
+%	
+%	\begin{definition}[Minimum Distance of a Code]
+%		The minimum distance $d$ of a code $C \subseteq \Sigma^n$ is the smallest Hamming distance between any two distinct codewords:
+%		\[ d = \min_{\substack{c, c' \in C \\ c \neq c'}} \Delta(c, c') \]
+%	\end{definition}
+%	
+%	\subsection{Error Correction Theorem}
+%	The minimum distance determines the robustness of the code.
+%	
+%	\begin{theorem}
+%		A code with minimum distance $d$ can:
+%		\begin{enumerate}
+%			\item Correct up to $d - 1$ erasures.
+%			\item Detect up to $d - 1$ errors.
+%			\item Correct up to $\lfloor \frac{d-1}{2} \rfloor$ errors.
+%		\end{enumerate}
+%	\end{theorem}
+%	
+%	\textbf{Proof Sketch (Geometric Intuition):} Imagine drawing a "Hamming ball" of radius $\lfloor \frac{d-1}{2} \rfloor$ around every codeword. Because the minimum distance between any two codewords is $d$, these balls are strictly disjoint. If a codeword $c$ suffers at most $\lfloor \frac{d-1}{2} \rfloor$ errors, the corrupted word $\tilde{c}$ is guaranteed to land exclusively in the ball surrounding $c$. Thus, the algorithm "return the closest codeword" will unambiguously decode back to $c$.
+%	
+%	\section{Parameters of a Code}
+%	When analyzing codes, we evaluate their efficiency alongside their error-correcting strength.
+%	
+%	\begin{definition}[Message Length and Rate]
+%		\begin{itemize}
+%			\item \textbf{Message Length ($k$)}: The equivalent number of unencoded information symbols. It is defined as:
+%			\[ k = \log_{|\Sigma|}(|C|) \]
+%			\item \textbf{Rate ($R$)}: The ratio of message length to block length, measuring the lack of overhead.
+%			\[ R = \frac{k}{n} = \frac{\log_{|\Sigma|}(|C|)}{n} \]
+%		\end{itemize}
+%	\end{definition}
+%	A rate $R$ close to $1$ implies very little overhead (highly efficient), while a rate close to $0$ implies massive overhead.
+%	
+%	\textbf{Standard Notation:} A code with block length $n$, message length $k$, minimum distance $d$, over an alphabet of size $q = |\Sigma|$, is referred to as an \textbf{$(n, k, d)_q$ code}.
+%	
+%	\section{The Hamming Bound}
+%	The ultimate goal of coding theory is to construct codes that maximize the rate $R$ for a given minimum distance $d$. The \textbf{Hamming Bound} establishes a theoretical limitation on how good this trade-off can be.
+%	
+%	\subsection{Hamming Balls and Volume}
+%	\begin{definition}[Hamming Ball]
+%		The Hamming ball in $\Sigma^n$ of radius $e$ about a point $x \in \Sigma^n$ is the set of all points $y \in \Sigma^n$ such that $\Delta(x, y) \le e$.
+%	\end{definition}
+%	
+%	The \textbf{volume} (number of elements) of a $q$-ary Hamming ball of radius $e$ in dimension $n$ is independent of the center $x$ and is given by the formula:
+%	\[ \text{Vol}_q(e, n) = \sum_{i=0}^{e} \binom{n}{i} (q-1)^i \]
+%	This sums the vectors of weight $0$ (the center), weight $1$, up to weight $e$.
+%	
+%	\subsection{Deriving the Hamming Bound}
+%	Recall the geometric intuition: for a code $C$ with minimum distance $d$, the Hamming balls of radius $e = \lfloor \frac{d-1}{2} \rfloor$ around each codeword must be strictly disjoint. Furthermore, all these disjoint balls must fit within the total space $\Sigma^n$, which has a total volume of $q^n$.
+%	
+%	Thus, the total volume of all the disjoint balls cannot exceed the volume of the entire space:
+%	\[ |C| \cdot \text{Vol}_q\left(\lfloor \frac{d-1}{2} \rfloor, n\right) \le q^n \]
+%	
+%	Taking the base-$q$ logarithm of both sides:
+%	\[ \log_q(|C|) + \log_q\left(\text{Vol}_q\left(\lfloor \frac{d-1}{2} \rfloor, n\right)\right) \le n \]
+%	
+%	Since $\log_q(|C|) = k$ (the message length) and the rate $R = \frac{k}{n}$, we can rearrange this to bound the rate:
+%	\[ R \le 1 - \frac{\log_q\left(\text{Vol}_q\left(\lfloor \frac{d-1}{2} \rfloor, n\right)\right)}{n} \]
+%	This fundamental inequality is known as the \textbf{Hamming Bound}.
+%	
+%	\subsection{Tightness of the Hamming Bound}
+%	A code is said to be \textbf{tight} with respect to the Hamming bound if it perfectly achieves this theoretical maximum (i.e., the disjoint Hamming balls exactly pack the entire space $\Sigma^n$ with no leftover points).
+%	
+%	\begin{example}[The $(7,4,3)_2$ Hamming Code]
+%		Let's apply the Hamming bound to the binary code from our earlier example with $n=7, k=4, d=3,$ and $q=2$. 
+%		
+%		First, we calculate the volume of a Hamming ball of radius $e = \lfloor \frac{3-1}{2} \rfloor = 1$:
+%		\[ \text{Vol}_2(1, 7) = \binom{7}{0}(1)^0 + \binom{7}{1}(1)^1 = 1 + 7 = 8 \]
+%		
+%		According to the Hamming Bound, the rate cannot exceed:
+%		\[ R \le 1 - \frac{\log_2(8)}{7} = 1 - \frac{3}{7} = \frac{4}{7} \]
+%		
+%		Because the actual rate of this code is exactly $R = \frac{k}{n} = \frac{4}{7}$, this code achieves the best possible trade-off between rate and distance for these parameters! Codes that achieve this exact equality are called \textbf{perfect codes}.
+%	\end{example}
+%	
+%	\section{Conclusion and Open Problems}
+%	The Hamming bound provides a powerful upper limit on code efficiency. While the $(7,4,3)_2$ Hamming code perfectly packs the space and achieves this bound, an ongoing question in coding theory is whether we can generalize this construction or find other codes that are similarly optimal in their rate-distance trade-off.
+%	
+%\end{document}
