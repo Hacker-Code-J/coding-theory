@@ -1,0 +1,805 @@
+%\documentclass[tikz,border=20pt]{standalone}
+%\usepackage{amsmath, amssymb}
+%\usetikzlibrary{positioning, arrows.meta, shadows, shapes.geometric, backgrounds, fit}
+%
+%\begin{document}
+%	\begin{tikzpicture}[
+%		>=Stealth,
+%		node distance=2cm and 1cm,
+%		% Styles
+%		conceptBox/.style={draw=#1!80!black, fill=#1!10, very thick, rounded corners=8pt, inner sep=12pt, drop shadow={opacity=0.1}, align=center},
+%		mathText/.style={font=\large},
+%		bridgeBox/.style={draw=purple!80, fill=purple!5, thick, rectangle, rounded corners=5pt, inner sep=10pt, align=center},
+%		equivArrow/.style={<->, double, double distance=2pt, thick, color=#1!80!black},
+%		implyArrow/.style={->, very thick, color=#1!80!black}
+%		]
+%		
+%		% =========================================================
+%		% TOP: THE GOAL
+%		% =========================================================
+%		\node[conceptBox=gray, font=\Large\bfseries] (theorem) {
+%			Theorem: $A$ is Invertible $\iff$ Columns $v_1, \dots, v_m$ are Linearly Independent
+%		};
+%		
+%		% =========================================================
+%		% MIDDLE: THE CORE IDENTITY (The Bridge)
+%		% =========================================================
+%		\node[bridgeBox, below=1.5cm of theorem] (identity) {
+%			\textbf{The Core Bridge: Matrix-Vector Multiplication as a Linear Combination} \\[1em]
+%			$Ax = 
+%			\begin{pmatrix}
+%				| & | & & | \\
+%				v_1 & v_2 & \cdots & v_m \\
+%				| & | & & |
+%			\end{pmatrix}
+%			\begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_m \end{pmatrix}
+%			= \textcolor{purple!80!black}{x_1v_1 + x_2v_2 + \cdots + x_mv_m}$
+%		};
+%		
+%		% =========================================================
+%		% LEFT SIDE: LINEAR INDEPENDENCE
+%		% =========================================================
+%		\node[conceptBox=orange, below left=1.5cm and -2cm of identity] (linIndep) {
+%			\textbf{Linear Independence} \\[0.5em]
+%			$x_1v_1 + \cdots + x_mv_m = 0$ \\
+%			$\Downarrow$ \\
+%			$x_1 = \cdots = x_m = 0$
+%		};
+%		
+%		% =========================================================
+%		% RIGHT SIDE: KERNEL / INVERTIBILITY
+%		% =========================================================
+%		\node[conceptBox=teal, below right=1.5cm and -2cm of identity] (kernel) {
+%			\textbf{Trivial Kernel} ($\ker(A) = \{0\}$) \\[0.5em]
+%			$Ax = 0$ \\
+%			$\Downarrow$ \\
+%			$x = 0$
+%		};
+%		
+%		% =========================================================
+%		% BOTTOM: THE CONCLUSION / EQUIVALENCE
+%		% =========================================================
+%		\node[conceptBox=blue, below=5cm of identity] (conclusion) {
+%			Since $Ax$ \textit{is} $x_1v_1 + \cdots + x_mv_m$, the two conditions above are algebraically identical. \\[0.5em]
+%			\textbf{Therefore: Linear Independence $\iff \ker(A)=\{0\} \iff A$ is Invertible}
+%		};
+%		
+%		% =========================================================
+%		% ARROWS AND CONNECTIONS
+%		% =========================================================
+%		% Connect Identity to the branches
+%		\draw[implyArrow=orange, dashed] (identity.south west) -- (linIndep.north) 
+%		node[midway, left=5pt, font=\small\bfseries, align=right] {Substitute \\ into definition};
+%		\draw[implyArrow=teal, dashed] (identity.south east) -- (kernel.north) 
+%		node[midway, right=5pt, font=\small\bfseries, align=left] {Substitute \\ into definition};
+%		
+%		% Connect branches to conclusion
+%		\draw[equivArrow=orange] (linIndep.south) -- (conclusion.north west);
+%		\draw[equivArrow=teal] (kernel.south) -- (conclusion.north east);
+%		
+%		% Equivalence between the two sides
+%		\draw[equivArrow=purple] (linIndep.east) -- (kernel.west) 
+%		node[midway, fill=white, inner sep=4pt, font=\bfseries\small] {Logically Equivalent};
+%		
+%	\end{tikzpicture}
+%\end{document}
+
+%\documentclass[tikz,border=20pt]{standalone}
+%\usepackage{amsmath, amssymb}
+%\usetikzlibrary{calc, positioning, arrows.meta, shadows, shapes.geometric}
+%
+%\begin{document}
+%	\begin{tikzpicture}[
+%		>=Stealth,
+%		% Font Styles
+%		titleStyle/.style={font=\sffamily\bfseries\Large, color=darkgray},
+%		% Grid and Vector Styles
+%		gridLine/.style={thin, gray!40},
+%		axisLine/.style={thick, black!70, ->},
+%		vecE1/.style={->, ultra thick, blue!80},
+%		vecE2/.style={->, ultra thick, red!80},
+%		vecX/.style={->, ultra thick, purple},
+%		% Box Styles
+%		infoBox/.style={draw=black!50, fill=white, rounded corners=4pt, inner sep=8pt, font=\small, align=center, drop shadow={opacity=0.1}}
+%		]
+%		
+%		% ==============================================================================
+%		% 1. INPUT SPACE (Domain)
+%		% ==============================================================================
+%		\begin{scope}[shift={(0,0)}]
+%			\node[font=\bfseries\large, color=darkgray] at (0, 3.5) {Input Space (Domain)};
+%			
+%			% Draw Standard Grid
+%			\draw[gridLine, step=1] (-2.9,-2.9) grid (2.9,2.9);
+%			\draw[axisLine] (-3,0) -- (3,0) node[right] {$x_1$};
+%			\draw[axisLine] (0,-3) -- (0,3) node[above] {$x_2$};
+%			
+%			% Standard Basis Vectors
+%			\draw[vecE1] (0,0) -- (1,0) node[midway, below=2pt, font=\bfseries] {$e_1$};
+%			\draw[vecE2] (0,0) -- (0,1) node[midway, left=2pt, font=\bfseries] {$e_2$};
+%			
+%			% Highlight the origin
+%			\fill[black] (0,0) circle (2pt) node[below left=-1pt] {$\mathbf{0}$};
+%			
+%			% Highlight the Kernel line for Case 2 (y=x)
+%			\draw[dashed, ultra thick, teal] (-2.5,-2.5) -- (2.5,2.5);
+%			\node[teal, fill=white, inner sep=1pt, font=\scriptsize\bfseries] at (-1.5, -1.5) {Kernel for Case 2};
+%		\end{scope}
+%		
+%		% ==============================================================================
+%		% 2. CASE 1: L.I. COLUMNS (Invertible)
+%		% ==============================================================================
+%		\begin{scope}[shift={(8, 4)}]
+%			\node[font=\bfseries\large, color=darkgray] at (0, 3.5) {Case 1: Columns are Linearly Independent};
+%			
+%			% Draw Skewed Grid using coordinate transformation
+%			% Matrix A = [2  0.5; 0.5  1.5]
+%			\begin{scope}[cm={2, 0.5, 0.5, 1.5, (0,0)}]
+%				\draw[gridLine, cyan!40, step=1] (-1.9,-1.9) grid (1.9,1.9);
+%			\end{scope}
+%			
+%			% Standard Axes
+%			\draw[axisLine, opacity=0.3] (-3,0) -- (3,0);
+%			\draw[axisLine, opacity=0.3] (0,-3) -- (0,3);
+%			
+%			% Transformed Basis Vectors (Columns of A)
+%			\draw[vecE1] (0,0) -- (2, 0.5) node[right=-2pt, font=\bfseries] {$v_1 = Ae_1$};
+%			\draw[vecE2] (0,0) -- (0.5, 1.5) node[above=-2pt, font=\bfseries] {$v_2 = Ae_2$};
+%			
+%			% Highlight the origin
+%			\fill[black] (0,0) circle (2pt);
+%			
+%			\node[infoBox, text width=5cm] at (0, -3.2) {
+%				\textbf{Full Dimension Preserved} \\
+%				Grid spans the entire plane. \\
+%				$\ker(A) = \{0\}$ \\
+%				(Only the origin maps to the origin) \\
+%				\textcolor{blue!80!black}{\textbf{$\implies A$ is Invertible}}
+%			};
+%		\end{scope}
+%		
+%		% ==============================================================================
+%		% 3. CASE 2: L.D. COLUMNS (Not Invertible)
+%		% ==============================================================================
+%		\begin{scope}[shift={(8, -4)}]
+%			\node[font=\bfseries\large, color=darkgray] at (0, 3.5) {Case 2: Columns are Linearly Dependent};
+%			
+%			% Draw Collapsed Grid
+%			% Matrix A = [1.5 -1.5; 1 -1] -> Maps everything to the line spanned by (1.5, 1)
+%			\begin{scope}[cm={1.5, 1, -1.5, -1, (0,0)}]
+%				% We draw a few lines of the grid, they will all overlap onto one single line!
+%				\draw[gridLine, orange!60, step=1] (-2,-2) grid (2,2);
+%			\end{scope}
+%			
+%			% Standard Axes
+%			\draw[axisLine, opacity=0.3] (-3,0) -- (3,0);
+%			\draw[axisLine, opacity=0.3] (0,-3) -- (0,3);
+%			
+%			% Transformed Basis Vectors (Columns of A are collinear)
+%			\draw[vecE1] (0,0) -- (1.5, 1) node[right, font=\bfseries] {$v_1$};
+%			\draw[vecE2] (0,0) -- (-1.5, -1) node[left, font=\bfseries] {$v_2$};
+%			
+%			% Origin
+%			\fill[black] (0,0) circle (2pt);
+%			
+%			% Show that the kernel mapping to zero
+%			\draw[->, teal, ultra thick, dashed, bend right=20] (-5, 1.5) to node[midway, below, font=\scriptsize\bfseries] {Entire line maps to $0$} (-0.2, -0.2);
+%			
+%			\node[infoBox, text width=5cm] at (0, -3.2) {
+%				\textbf{Space Collapses} \\
+%				Grid squashes into a 1D line. \\
+%				$\ker(A) \neq \{0\}$ \\
+%				(The dashed teal line squashes to $0$) \\
+%				\textcolor{red!80!black}{\textbf{$\implies A$ is Not Invertible}}
+%			};
+%		\end{scope}
+%		
+%		% ==============================================================================
+%		% MAPPING ARROWS BETWEEN SPACES
+%		% ==============================================================================
+%		\draw[->, ultra thick, gray, shorten >=2pt, shorten <=2pt] (3.5, 1) to[out=45, in=180] node[midway, above, font=\bfseries] {$T_A(x)$} (4.5, 4);
+%		\draw[->, ultra thick, gray, shorten >=2pt, shorten <=2pt] (3.5, -1) to[out=-45, in=180] node[midway, below, font=\bfseries] {$T_A(x)$} (4.5, -4);
+%		
+%	\end{tikzpicture}
+%\end{document}
+
+%\documentclass[tikz,border=20pt]{standalone}
+%\usepackage{amsmath, amssymb}
+%\usetikzlibrary{matrix, positioning, shapes.geometric, arrows.meta, shadows}
+%
+%\begin{document}
+%	\begin{tikzpicture}[
+%		>=Stealth,
+%		node distance=1.5cm and 1cm,
+%		% Font and Text Styles
+%		titleStyle/.style={font=\sffamily\bfseries\Large, color=gray},
+%		subTitleStyle/.style={font=\sffamily\bfseries\large, color=gray},
+%		% Box Styles
+%		boxStyle/.style={draw=#1!70, fill=#1!5, thick, rounded corners=6pt, inner sep=12pt, drop shadow={opacity=0.1}, align=center, text width=6.5cm},
+%		coreBoxStyle/.style={draw=purple!70, fill=purple!5, thick, rounded corners=8pt, inner sep=15pt, drop shadow={opacity=0.15}, align=center, text width=10cm},
+%		sharedConceptStyle/.style={draw=darkgray!60, fill=darkgray!5, ultra thick, rectangle, rounded corners=5pt, inner sep=18pt, drop shadow={opacity=0.2}, font=\LARGE\bfseries, align=center},
+%		conclusionStyle/.style={draw=yellow!80, fill=yellow!20, ultra thick, ellipse, inner sep=15pt, drop shadow={opacity=0.2}, font=\Large\bfseries, align=center},
+%		% Arrow Styles
+%		equivArrow/.style={<->, double, double distance=2pt, ultra thick, shorten >=4pt, shorten <=4pt},
+%		orangeArrow/.style={equivArrow, color=orange!80!black},
+%		tealArrow/.style={equivArrow, color=teal!80!black},
+%		bridgeArrow/.style={->, thick, dashed, color=purple, shorten >=2pt, shorten <=2pt}
+%		]
+%		
+%		% ==============================================================================
+%		% TOP: PROPOSITION SETUP
+%		% ==============================================================================
+%		\node[titleStyle] (mainTitle) at (0, 7) {Logical Equivalences: $A \in \mathbb{F}_q^{m \times m}$};
+%		
+%		% Matrix A and vectors definition
+%		\node (A_def) at (0, 4.5) {
+%			$\text{Proposition: } A = 
+%			\begin{pmatrix} | & | & & | \\ v_1 & v_2 & \cdots & v_m \\ | & | & & | \end{pmatrix}, 
+%			\quad v_1, \dots, v_m \in \mathbb{F}_q^m$
+%		};
+%		
+%		% ==============================================================================
+%		% STEP 1: THE CORE BRIDGE (Purple)
+%		% ==============================================================================
+%		\node[coreBoxStyle, below=0.8cm of A_def] (step1) {
+%			\textbf{STEP 1: The Linear Map $T_A: x \mapsto Ax$} \\
+%			Establish the identity linking matrix structure to linear combinations:\\[1ex]
+%			$Ax = 
+%			\begin{pmatrix} v_1 & \cdots & v_m \end{pmatrix} 
+%			\begin{pmatrix} x_1 \\ \vdots \\ x_m \end{pmatrix} 
+%			= \textcolor{purple!90!black}{x_1v_1 + \dots + x_mv_m}$
+%		};
+%		
+%		% ==============================================================================
+%		% MIDDLE: PARALLEL TRACKS
+%		% ==============================================================================
+%		
+%		% --- Left Track: Linear Independence (Orange) ---
+%		\node[boxStyle=orange, below left=1.8cm and -1.5cm of step1] (L_Indep) {
+%			\textbf{Track A: Linear Independence} \\
+%			The columns $\{v_i\}$ are \\ Linearly Independent.
+%		};
+%		
+%		\node[boxStyle=orange, below=1.2cm of L_Indep] (L_Indep_Meaning) {
+%			\textbf{Meaning:}\\
+%			If $x_1v_1 + \dots + x_mv_m = 0$, \\
+%			then it forces $x_1 = \dots = x_m = 0$.
+%		};
+%		
+%		% --- Right Track: Invertibility (Teal) ---
+%		\node[boxStyle=teal, below right=1.8cm and -1.5cm of step1] (Invertible) {
+%			\textbf{Track B: Invertibility} \\
+%			The matrix $A$ is \\ Invertible.
+%		};
+%		
+%		\node[boxStyle=teal, below=1.2cm of Invertible] (Isomorphism) {
+%			\textbf{Meaning:}\\
+%			The linear map $T_A$ is an isomorphism \\
+%			(bijective map).
+%		};
+%		
+%		% ==============================================================================
+%		% BOTTOM: CONVERGENCE (Shared Concept)
+%		% ==============================================================================
+%		\node[sharedConceptStyle, below=5.5cm of step1] (Ker0) {
+%			$\ker(A) = \{0\}$
+%		};
+%		
+%		% Nodes defining the shared concept for each track
+%		\node[boxStyle=orange, below=1.2cm of L_Indep_Meaning, text width=5cm] (L_Indep_Ker) {
+%			$Ax = 0 \implies x = 0$
+%		};
+%		
+%		\node[boxStyle=teal, below=1.2cm of Isomorphism, text width=5cm] (Invertible_Ker) {
+%			$Ax = 0 \iff x = 0$
+%		};
+%		
+%		% ==============================================================================
+%		% FINAL CONCLUSION
+%		% ==============================================================================
+%		\node[conclusionStyle, below=1.2cm of Ker0] (Conclusion) {
+%			Columns are L.I. $\iff$ A is Invertible
+%		};
+%		
+%		% ==============================================================================
+%		% ARROWS & CONNECTIONS
+%		% ==============================================================================
+%		
+%		% Parallel tracks equivalences (Double Arrows)
+%		\draw[orangeArrow] (L_Indep) -- (L_Indep_Meaning);
+%		\draw[orangeArrow] (L_Indep_Meaning) -- (L_Indep_Ker);
+%		
+%		\draw[tealArrow] (Invertible) -- (Isomorphism);
+%		\draw[tealArrow] (Isomorphism) -- (Invertible_Ker);
+%		
+%		% Convergence to shared concept
+%		\draw[<->, double, double distance=2pt, ultra thick, color=orange!80!black] (L_Indep_Ker) -- (Ker0);
+%		\draw[<->, double, double distance=2pt, ultra thick, color=teal!80!black] (Invertible_Ker) -- (Ker0);
+%		
+%		% Core Bridge dashed arrows showing how it enables the proof
+%		\draw[bridgeArrow] (step1.west) to[out=210, in=60] (L_Indep.north);
+%		\draw[bridgeArrow] (step1.east) to[out=-30, in=120] (Invertible.north);
+%		\draw[bridgeArrow, ultra thick] (step1) -- (Ker0) node[midway, fill=white, inner sep=3pt, font=\small\bfseries] {Links both sides via $\ker(A)=\{0\}$};
+%		
+%		% Final Conclusion Arrow
+%		\draw[equivArrow, gray] (Ker0) -- (Conclusion) node[midway, left=5pt, font=\small, gray] {Both mean same thing};
+%		
+%	\end{tikzpicture}
+%\end{document}
+
+%\documentclass[tikz,border=20pt]{standalone}
+%\usepackage{amsmath, amssymb}
+%\usetikzlibrary{shapes.geometric, positioning, arrows.meta, shadows, fit, backgrounds}
+%
+%\begin{document}
+%	\begin{tikzpicture}[
+%		>=Stealth,
+%		% General Styles
+%		titleStyle/.style={font=\sffamily\bfseries\Large, color=darkgray},
+%		subtitleStyle/.style={font=\sffamily\bfseries\large, color=white},
+%		box/.style={rounded corners=5pt, inner sep=10pt, drop shadow={opacity=0.1}, align=center},
+%		% Perspective Specific Styles
+%		operatorColor/.style={draw=blue!80, fill=blue!5},
+%		matrixColor/.style={draw=orange!80, fill=orange!5},
+%		bridgeColor/.style={draw=purple!80, fill=purple!5, text=purple!90!black},
+%		% Math elements
+%		space/.style={ellipse, draw=blue!60, fill=blue!10, minimum width=2.5cm, minimum height=3.5cm},
+%		point/.style={circle, fill=black, inner sep=1.5pt},
+%		connectionArrow/.style={<->, ultra thick, dashed, color=purple!80}
+%		]
+%		
+%		% ==============================================================================
+%		% TITLE & THE CORE BRIDGE (Center)
+%		% ==============================================================================
+%		\node[titleStyle] (mainTitle) at (0, 5.5) {The Duality of the Proof: Operator vs. Matrix};
+%		
+%		\node[box, bridgeColor, thick, text width=8cm] (bridge) at (0, 3.5) {
+%			\textbf{The Fundamental Bridge} \\
+%			Evaluating the linear map is identical to \\ taking a linear combination of the matrix columns: \\[1ex]
+%			$T_A(x) = Ax = \sum_{i=1}^m x_i v_i$
+%		};
+%		
+%		% ==============================================================================
+%		% LEFT PANEL: LINEAR OPERATOR VIEW (Geometry / Mappings)
+%		% ==============================================================================
+%		% Background Panel
+%		\node[box, operatorColor, minimum width=6.5cm, minimum height=7.5cm] (opPanel) at (-4, -2) {};
+%		\node[fill=blue!80, text=white, font=\bfseries, rounded corners=3pt, inner sep=5pt] at ([yshift=-15pt]opPanel.north) {Linear Operator View ($T_A$)};
+%		
+%		% Vector Spaces
+%		\node[space, label=below:{\small Domain $\mathbb{F}_q^m$}] (domain) at (-5.5, -2) {};
+%		\node[space, label=below:{\small Codomain $\mathbb{F}_q^m$}] (codomain) at (-2.5, -2) {};
+%		
+%		% Mapping Arrows
+%		\draw[->, thick, blue!80!black] (-5.5, -0.2) to[out=30, in=150] node[midway, above, font=\small\bfseries] {$T_A$ (Isomorphism)} (-2.5, -0.2);
+%		
+%		% The Kernel Logic (0 maps to 0)
+%		\node[point, label=left:{$0$}] (0dom) at (-5.5, -2.5) {};
+%		\node[point, label=right:{$0$}] (0cod) at (-2.5, -2.5) {};
+%		\draw[->, ultra thick, blue!80!black] (0dom) -- (0cod) node[midway, below=2pt, font=\scriptsize] {Maps to};
+%		
+%		% Operator Conclusion Box
+%		\node[box, fill=white, draw=blue!40, text width=5cm, font=\small] (opLogic) at (-4, -4.5) {
+%			\textbf{Invertibility condition:} \\
+%			$T_A$ is an isomorphism \\
+%			$\iff \ker(T_A) = \{0\}$ \\
+%			(Only the zero vector maps to zero)
+%		};
+%		
+%		% ==============================================================================
+%		% RIGHT PANEL: MATRIX VIEW (Algebra / Columns)
+%		% ==============================================================================
+%		% Background Panel
+%		\node[box, matrixColor, minimum width=6.5cm, minimum height=7.5cm] (matPanel) at (4, -2) {};
+%		\node[fill=orange!80, text=white, font=\bfseries, rounded corners=3pt, inner sep=5pt] at ([yshift=-15pt]matPanel.north) {Matrix View ($A$)};
+%		
+%		% The Matrix-Vector Equation
+%		\node[font=\small, align=center] (matEq) at (4, -1) {
+%			$Ax = 
+%			\begin{pmatrix}
+%				| & & | \\
+%				v_1 & \cdots & v_m \\
+%				| & & |
+%			\end{pmatrix}
+%			\begin{pmatrix} x_1 \\ \vdots \\ x_m \end{pmatrix}
+%			= 0$
+%		};
+%		
+%		% The Linear Combination Expansion
+%		\node[font=\small, align=center, below=0.5cm of matEq] (linComb) {
+%			$\Downarrow$ \\
+%			$x_1v_1 + x_2v_2 + \dots + x_mv_m = 0$
+%		};
+%		
+%		% Matrix Conclusion Box
+%		\node[box, fill=white, draw=orange!40, text width=5cm, font=\small] (matLogic) at (4, -4.5) {
+%			\textbf{Linear Independence condition:} \\
+%			The equation above requires \\
+%			$x_1 = x_2 = \dots = x_m = 0$ \\
+%			which means the vector $x = 0$.
+%		};
+%		
+%		% ==============================================================================
+%		% BOTTOM: THE UNIFYING CONCLUSION
+%		% ==============================================================================
+%		% Connect the two logic boxes to the final conclusion
+%		\node[box, fill=gray!10, draw=gray!60, ultra thick, text width=10cm, font=\large] (final) at (0, -7.5) {
+%			\textbf{Conclusion} \\[1ex]
+%			Setting $T_A(x) = 0$ is algebraically identical to setting $Ax = 0$. Both require $x = 0$. \\[1ex]
+%			\textcolor{blue!80!black}{\textbf{A is Invertible}} $\iff$ \textcolor{orange!80!black}{\textbf{Columns are Linearly Independent}}
+%		};
+%		
+%		% Connecting Arrows from the Panels to the Conclusion
+%		\draw[->, thick, blue!80] (opLogic.south) |- ([yshift=10pt]final.north west) -- (final.north west);
+%		\draw[->, thick, orange!80] (matLogic.south) |- ([yshift=10pt]final.north east) -- (final.north east);
+%		
+%		% Connecting the central bridge to the panels
+%		\draw[->, thick, purple, dashed] (bridge.south west) to[out=200, in=90] (opPanel.north);
+%		\draw[->, thick, purple, dashed] (bridge.south east) to[out=-20, in=90] (matPanel.north);
+%		
+%	\end{tikzpicture}
+%\end{document}
+
+%\documentclass[tikz,border=20pt]{standalone}
+%\usepackage{amsmath, amssymb}
+%\usetikzlibrary{positioning, arrows.meta, shadows, shapes.geometric, decorations.markings, fit, backgrounds, calc}
+%
+%\begin{document}
+%	\begin{tikzpicture}[
+%		>=Stealth,
+%		% --------------------------------------------------------------------------
+%		% STYLES
+%		% --------------------------------------------------------------------------
+%		% Title & Text Styles
+%		titleStyle/.style={font=\sffamily\bfseries\Large, color=darkgray},
+%		layerLabel/.style={font=\sffamily\bfseries\large, align=center},
+%		% Dynamic Flow Styles (Animated arrows along the path)
+%		forwardFlow/.style={
+%			ultra thick, color=blue!80!black,
+%			postaction={decorate, decoration={
+%					markings, mark=between positions 0.2 and 0.9 step 0.25 with {\arrow[scale=1.2]{Stealth}}
+%			}}
+%		},
+%		engineFlow/.style={
+%			ultra thick, color=orange!80!black,
+%			postaction={decorate, decoration={
+%					markings, mark=between positions 0.3 and 1 step 0.35 with {\arrow[scale=1]{Stealth}}
+%			}}
+%		},
+%		reverseLogicFlow/.style={
+%			ultra thick, dashed, color=purple,
+%			postaction={decorate, decoration={
+%					markings, mark=between positions 0.15 and 0.9 step 0.25 with {\arrow[scale=1.2]{Stealth[reversed]}}
+%			}}
+%		},
+%		% Nodes & Spaces
+%		vectorSpace/.style={ellipse, draw=cyan!60, fill=cyan!5, thick, minimum width=3.5cm, minimum height=4.5cm, drop shadow={opacity=0.1}},
+%		point/.style={circle, fill=black, inner sep=1.5pt},
+%		engineBox/.style={draw=orange!80, fill=orange!5, thick, rounded corners=8pt, inner sep=15pt, drop shadow={opacity=0.15}},
+%		mathNode/.style={draw=gray!40, fill=white, rounded corners=4pt, inner sep=6pt, font=\small, drop shadow={opacity=0.1}}
+%		]
+%		
+%		% ==============================================================================
+%		% TOP LAYER: LINEAR OPERATOR PERSPECTIVE (Geometric / Abstract)
+%		% ==============================================================================
+%		\node[layerLabel, text=cyan!80!black] at (0, 4.5) {LAYER 1: Linear Operator Perspective ($T_A$)};
+%		
+%		% Vector Spaces
+%		\node[vectorSpace, label=above:{\textbf{Domain: $\mathbb{F}_q^m$}}] (domain) at (-5, 2) {};
+%		\node[vectorSpace, label=above:{\textbf{Codomain: $\mathbb{F}_q^m$}}] (codomain) at (5, 2) {};
+%		
+%		% Vectors in the Spaces
+%		\node[point, label=left:{\Large $x$}] (x_top) at (-4, 2) {};
+%		\node[point, label=right:{\Large $T_A(x)$}] (Tx_top) at (4, 2) {};
+%		
+%		% Forward Mapping (Operator Bridge)
+%		\draw[forwardFlow] (x_top) to[out=30, in=150] node[midway, above, font=\bfseries] {Abstract Mapping (Isomorphism)} (Tx_top);
+%		
+%		% ==============================================================================
+%		% BOTTOM LAYER: MATRIX PERSPECTIVE (Computational / Algebraic)
+%		% ==============================================================================
+%		\node[layerLabel, text=orange!80!black] at (0, -1) {LAYER 2: Matrix Engine Perspective ($A$)};
+%		
+%		% The Matrix Engine Box
+%		\node[engineBox, minimum width=11cm, minimum height=3.5cm] (engine) at (0, -3.5) {};
+%		
+%		% Mechanics inside the Engine
+%		\node[mathNode, text width=2.5cm, align=center] (decompose) at (-3.5, -3.5) {
+%			\textbf{1. Decompose}\\
+%			$x \to \begin{pmatrix} x_1 \\ \vdots \\ x_m \end{pmatrix}$
+%		};
+%		
+%		\node[mathNode, text width=2.5cm, align=center] (scale) at (0, -3.5) {
+%			\textbf{2. Scale Columns}\\
+%			$x_1 v_1$ \\ $\vdots$ \\ $x_m v_m$
+%		};
+%		
+%		\node[mathNode, text width=2.8cm, align=center, fill=orange!10, draw=orange!80] (sum) at (3.5, -3.5) {
+%			\textbf{3. Linear Comb.}\\
+%			$Ax = \sum_{i=1}^m x_i v_i$
+%		};
+%		
+%		% Internal Engine Flow
+%		\draw[engineFlow] (decompose) -- (scale);
+%		\draw[engineFlow] (scale) -- (sum);
+%		
+%		% Vertical Connectors (Bridging the layers)
+%		\draw[->, thick, gray, dashed] (x_top) -- (decompose.north) node[midway, left, font=\footnotesize\bfseries] {Input drops\\into engine};
+%		\draw[->, thick, gray, dashed] (sum.north) -- (Tx_top) node[midway, right, font=\footnotesize\bfseries] {Output rises\\to codomain};
+%		
+%		% ==============================================================================
+%		% THE PROOF DYNAMIC: THE KERNEL TEST (Reverse Flow)
+%		% ==============================================================================
+%		% 1. Set the target (Output = 0)
+%		\node[draw=purple!80, fill=purple!10, very thick, rectangle, rounded corners=5pt, inner sep=8pt, right=1.5cm of Tx_top, drop shadow={opacity=0.2}, text width=2.5cm, align=center] (test) {
+%			\textbf{Kernel Test:}\\[1ex] Set output to \\ \textbf{$T_A(x) = Ax = 0$}
+%		};
+%		\draw[->, ultra thick, purple] (test.west) -- (Tx_top.east);
+%		
+%		% 2. Reverse Flow through Operator Layer
+%		\node[mathNode, draw=purple!80, text=purple!90!black, above=0.8cm of domain, text width=3cm, align=center] (opLogic) {
+%			If $T_A$ is an isomorphism, $\ker(T_A) = \{0\}$.
+%		};
+%		\draw[reverseLogicFlow] (Tx_top) to[out=-150, in=-30] node[midway, below, font=\small\bfseries, text=purple] {Trace back preimage} (x_top);
+%		\draw[->, purple, thick, dotted] (x_top.north) -- (opLogic.south);
+%		
+%		% 3. Reverse Flow through Matrix Layer
+%		\node[mathNode, draw=purple!80, text=purple!90!black, below=0.5cm of sum, text width=4cm, align=center] (matLogic) {
+%			If $\{v_i\}$ are \textbf{Linearly Independent}, \\ $\sum x_i v_i = 0 \implies x_i = 0$.
+%		};
+%		\draw[->, purple, thick, dotted] (sum.south) -- (matLogic.north);
+%		
+%		\draw[reverseLogicFlow] (sum.south west) to[out=-160, in=-20] node[midway, below, font=\small\bfseries, text=purple] {Forces all weights $x_i = 0$} (decompose.south east);
+%		
+%		% 4. Convergence at the Input
+%		\node[draw=red!80, fill=red!10, very thick, rectangle, rounded corners=5pt, inner sep=8pt, left=1.5cm of x_top, drop shadow={opacity=0.2}, text width=2.5cm, align=center] (result) {
+%			\textbf{Result:}\\[1ex] Input must be \\ \textbf{$x = 0$}
+%		};
+%		\draw[->, ultra thick, purple] (x_top.west) -- (result.east);
+%		
+%		% ==============================================================================
+%		% CONCLUSION BOX
+%		% ==============================================================================
+%		\node[draw=darkgray, fill=gray!10, very thick, rectangle, rounded corners=8pt, inner sep=12pt, below=2cm of engine, font=\Large\bfseries, drop shadow={opacity=0.2}, align=center] (conclusion) {
+%			Conclusion: Both layers prove the exact same dynamic constraint. \\[1ex]
+%			\textcolor{cyan!80!black}{$A$ is an Invertible Isomorphism} $\iff \ker(A)=\{0\} \iff$ \textcolor{orange!80!black}{Columns are Linearly Independent}
+%		};
+%		
+%	\end{tikzpicture}
+%\end{document}
+
+%\documentclass[tikz,border=25pt]{standalone}
+%\usepackage{amsmath, amssymb}
+%\usetikzlibrary{positioning, arrows.meta, shapes.geometric, shadows, calc}
+%
+%\begin{document}
+%	\begin{tikzpicture}[
+%		>=Stealth,
+%		% --------------------------------------------------------------------------
+%		% STYLES
+%		% --------------------------------------------------------------------------
+%		% Text & Headers
+%		header/.style={font=\sffamily\bfseries\LARGE, align=center, color=darkgray},
+%		subHeader/.style={font=\sffamily\bfseries\Large, align=center, color=#1!80!black},
+%		% Boxes
+%		logicBox/.style={draw=gray!50, fill=white, thick, rounded corners=6pt, inner sep=12pt, align=center, drop shadow={opacity=0.1}, text width=4.5cm},
+%		bridgeBox/.style={draw=purple!80, fill=purple!5, ultra thick, rounded corners=6pt, inner sep=10pt, align=center, drop shadow={opacity=0.15}, text width=3.2cm},
+%		conclusionBox/.style={draw=yellow!80!black, fill=yellow!15, ultra thick, rounded corners=10pt, inner sep=15pt, align=center, drop shadow={opacity=0.2}, text width=12cm, font=\large},
+%		% Lines & Arrows
+%		bridgeArrow/.style={<->, double, double distance=1.5pt, ultra thick, color=purple!80, shorten >=4pt, shorten <=4pt},
+%		vertArrow/.style={<->, thick, color=#1, shorten >=4pt, shorten <=4pt},
+%		axisLine/.style={->, thin, gray!50},
+%		vec/.style={->, thick, color=#1}
+%		]
+%		
+%		% ==============================================================================
+%		% OVERARCHING TITLE
+%		% ==============================================================================
+%		% FIXED: Replaced unescaped '&' with 'and' to solve the compilation error
+%		\node[header] (title) at (0, 7.5) {Structural Duality: Invertibility \textbf{and} Linear Independence};
+%		
+%		% ==============================================================================
+%		% LEFT PANEL: LINEAR OPERATOR VIEW (Cyan)
+%		% ==============================================================================
+%		\node[subHeader=cyan] (opTitle) at (-5.5, 5.5) {Linear Operator View\\$T_A : \mathbb{F}_q^m \to \mathbb{F}_q^m$};
+%		
+%		\node[logicBox, draw=cyan!80, fill=cyan!2] (opIso) at (-5.5, 3.5) {
+%			$T_A$ is an \textbf{Isomorphism}\\(Bijective Mapping)
+%		};
+%		\node[logicBox, draw=cyan!80, fill=cyan!2] (opKer) at (-5.5, 0) {
+%			Trivial Kernel:\\$\ker(T_A) = \{0\}$
+%		};
+%		\draw[vertArrow=cyan!80!black] (opIso) -- (opKer) node[midway, right, font=\footnotesize\bfseries] {Rank-Nullity};
+%		
+%		% Geometric Visual: Mapping between spaces
+%		\begin{scope}[shift={(-7.5, -3.5)}, scale=0.7]
+%			\draw[ellipse, draw=cyan!80, fill=cyan!5, thick, minimum width=2.5cm, minimum height=3.5cm] (0,0) node[above=1.4cm, font=\scriptsize\bfseries, cyan!80!black] {Domain};
+%			\fill[black] (0,0) circle (2.5pt) node[below=2pt, font=\scriptsize] {$0$};
+%		\end{scope}
+%		\begin{scope}[shift={(-3.5, -3.5)}, scale=0.7]
+%			\draw[ellipse, draw=cyan!80, fill=cyan!5, thick, minimum width=2.5cm, minimum height=3.5cm] (0,0) node[above=1.4cm, font=\scriptsize\bfseries, cyan!80!black] {Codomain};
+%			\fill[black] (0,0) circle (2.5pt) node[below=2pt, font=\scriptsize] {$0$};
+%		\end{scope}
+%		\draw[->, ultra thick, cyan!80!black] (-6.3, -3.5) -- (-4.7, -3.5) node[midway, above, font=\small\bfseries] {$T_A$};
+%		\node[align=center, font=\footnotesize, text=cyan!80!black] at (-5.5, -5.5) {Only $0 \mapsto 0$\\Space does not collapse};
+%		
+%		% ==============================================================================
+%		% RIGHT PANEL: MATRIX ALGEBRA VIEW (Orange)
+%		% ==============================================================================
+%		\node[subHeader=orange] (matTitle) at (5.5, 5.5) {Matrix Algebra View\\$A = [v_1 \dots v_m]$};
+%		
+%		\node[logicBox, draw=orange!80, fill=orange!2] (matInv) at (5.5, 3.5) {
+%			Matrix $A$ is \textbf{Invertible}\\(Exists $A^{-1}$)
+%		};
+%		\node[logicBox, draw=orange!80, fill=orange!2] (matInd) at (5.5, 0) {
+%			Columns are \textbf{Linearly Indep.}\\$\sum x_i v_i = 0 \implies x = 0$
+%		};
+%		\draw[vertArrow=orange!80!black] (matInv) -- (matInd) node[midway, left, font=\footnotesize\bfseries] {Definition};
+%		
+%		% Geometric Visual: Vectors spanning the coordinate grid
+%		\begin{scope}[shift={(5.5, -3.5)}, scale=1.3]
+%			\draw[axisLine] (-1.5,0) -- (1.5,0);
+%			\draw[axisLine] (0,-1.5) -- (0,1.5);
+%			\draw[vec=orange!80!black] (0,0) -- (1.1, 0.4) node[right, font=\tiny\bfseries] {$v_1$};
+%			\draw[vec=orange!80!black] (0,0) -- (0.3, 1.2) node[above, font=\tiny\bfseries] {$v_2$};
+%			\draw[vec=orange!80!black] (0,0) -- (-0.9, -0.7) node[left, font=\tiny\bfseries] {$v_m$};
+%			\fill[black] (0,0) circle (1.5pt);
+%		\end{scope}
+%		\node[align=center, font=\footnotesize, text=orange!80!black] at (5.5, -5.5) {Columns span the space\\No redundant vectors};
+%		
+%		% ==============================================================================
+%		% CENTER: THE UNIFYING BRIDGE (Purple)
+%		% ==============================================================================
+%		\node[bridgeBox] (bridgeTop) at (0, 3.5) {
+%			\textbf{Same Mapping}\\[1ex]
+%			$T_A(x) \equiv Ax$
+%		};
+%		\draw[bridgeArrow] (opIso.east) -- (bridgeTop.west);
+%		\draw[bridgeArrow] (bridgeTop.east) -- (matInv.west);
+%		
+%		\node[bridgeBox] (bridgeBot) at (0, 0) {
+%			\textbf{Core Equation}\\[1ex]
+%			$Ax \equiv \sum_{i=1}^m x_i v_i$
+%		};
+%		\draw[bridgeArrow] (opKer.east) -- (bridgeBot.west);
+%		\draw[bridgeArrow] (bridgeBot.east) -- (matInd.west);
+%		
+%		% Vertical link between the bridges
+%		\draw[<->, dashed, ultra thick, purple] (bridgeTop) -- (bridgeBot) node[midway, fill=white, inner sep=2pt, font=\scriptsize\bfseries, text=purple!90!black] {Evaluate};
+%		
+%		% ==============================================================================
+%		% BOTTOM CONCLUSION
+%		% ==============================================================================
+%		\node[conclusionBox] (conclusion) at (0, -7.5) {
+%			Because evaluating $T_A(x)$ is algebraically identical to $\sum x_i v_i$:\\[1.5ex]
+%			\textcolor{cyan!80!black}{\textbf{$\ker(T_A)=\{0\}$}} \quad physically forces \quad \textcolor{orange!80!black}{\textbf{$\sum x_i v_i = 0 \implies x_i = 0$}}\\[1ex]
+%			\small Therefore: $A$ is Invertible $\iff$ Columns are Linearly Independent.
+%		};
+%		
+%		% Connecting lines from geometric visuals down to the conclusion
+%		\draw[->, thick, dashed, gray] (-5.5, -6) |- (conclusion.west);
+%		\draw[->, thick, dashed, gray] (5.5, -6) |- (conclusion.east);
+%		
+%	\end{tikzpicture}
+%\end{document}
+
+\documentclass[tikz,border=25pt]{standalone}
+\usepackage{amsmath, amssymb}
+\usetikzlibrary{positioning, arrows.meta, shadows, shapes.geometric, fit, backgrounds}
+
+\begin{document}
+	\begin{tikzpicture}[
+		>=Stealth,
+		% --------------------------------------------------------------------------
+		% STYLES
+		% --------------------------------------------------------------------------
+		% Text
+		mainTitle/.style={font=\sffamily\bfseries\LARGE, color=darkgray, align=center},
+		subTitle/.style={font=\sffamily\bfseries\Large, color=white, align=center},
+		% Boxes & Panels
+		panelBg/.style={rounded corners=10pt, inner sep=20pt, drop shadow={opacity=0.1}},
+		mathBox/.style={draw=gray!50, fill=white, rounded corners=5pt, inner sep=8pt, font=\large, drop shadow={opacity=0.1}, align=center},
+		% Vectors & Sets
+		setEllipse/.style={ellipse, draw=#1!60, fill=#1!5, thick, minimum width=3cm, minimum height=5cm},
+		vecNode/.style={draw=#1!80, fill=#1!10, thick, rectangle, rounded corners=3pt, inner sep=4pt, font=\small\ttfamily},
+		% Arrows
+		mapArrow/.style={->, thick, color=gray!80, shorten >=2pt, shorten <=2pt},
+		kernelArrow/.style={->, ultra thick, color=purple, shorten >=2pt, shorten <=2pt}
+		]
+		
+		% ==============================================================================
+		% TITLE
+		% ==============================================================================
+%		\node[mainTitle] (title) at (0, 7) {Concrete Exhaustive Proof over $\mathbb{F}_2$ \\ \normalsize Vector Space $\mathbb{F}_2^2 = \left\{ \binom{0}{0}, \binom{1}{0}, \binom{0}{1}, \binom{1}{1} \right\}$};
+		
+		% ==============================================================================
+		% LEFT PANEL: LINEARLY INDEPENDENT (Invertible)
+		% ==============================================================================
+		\begin{scope}[shift={(-5.5, 0)}]
+			% Background Panel
+			\node[panelBg, fill=cyan!10, minimum width=9cm, minimum height=11cm] (bgLeft) at (0,0) {};
+%			\node[fill=cyan!80!black, rounded corners=4pt, inner sep=6pt] at ([yshift=-15pt]bgLeft.north) {\subTitle Case 1: Columns are Linearly Independent};
+			
+			% Matrix Setup
+			\node[mathBox] (matLeft) at (0, 3.5) {
+				$A = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$ \\[1ex]
+				\small Columns $v_1=\binom{1}{0}, v_2=\binom{1}{1}$
+			};
+			
+			% Vector Spaces
+			\node[setEllipse=blue, label=below:{\small Domain $\mathbb{F}_2^2$}] (domL) at (-2.5, -1) {};
+			\node[setEllipse=teal, label=below:{\small Codomain $\mathbb{F}_2^2$}] (codL) at (2.5, -1) {};
+			
+			% Vectors in Domain
+			\node[vecNode=blue] (x00L) at (-2.5, 0.5) {0\\0};
+			\node[vecNode=blue] (x10L) at (-2.5, -0.5) {1\\0};
+			\node[vecNode=blue] (x01L) at (-2.5, -1.5) {0\\1};
+			\node[vecNode=blue] (x11L) at (-2.5, -2.5) {1\\1};
+			
+			% Vectors in Codomain
+			\node[vecNode=teal] (y00L) at (2.5, 0.5) {0\\0};
+			\node[vecNode=teal] (y10L) at (2.5, -0.5) {1\\0};
+			\node[vecNode=teal] (y11L) at (2.5, -1.5) {1\\1};
+			\node[vecNode=teal] (y01L) at (2.5, -2.5) {0\\1};
+			
+			% Mappings (A * x)
+			\draw[kernelArrow] (x00L) -- (y00L) node[midway, above, font=\scriptsize] {$\ker(A)=\{0\}$};
+			\draw[mapArrow] (x10L) -- (y10L);
+			\draw[mapArrow] (x01L) -- (y11L);
+			\draw[mapArrow] (x11L) -- (y01L);
+			
+			% Conclusion
+			\node[mathBox, text width=7.5cm, font=\small, draw=cyan!60] at (0, -4.5) {
+				\textbf{Perfect 1-to-1 Mapping (Isomorphism)} \\
+				$1v_1 + 1v_2 = \binom{1}{0} + \binom{1}{1} = \binom{0}{1} \neq \binom{0}{0}$. \\
+				Because the columns are independent, no combination cancels out. Only $\binom{0}{0} \mapsto \binom{0}{0}$.
+			};
+		\end{scope}
+		
+		% ==============================================================================
+		% RIGHT PANEL: LINEARLY DEPENDENT (Not Invertible)
+		% ==============================================================================
+		\begin{scope}[shift={(5.5, 0)}]
+			% Background Panel
+			\node[panelBg, fill=orange!10, minimum width=9cm, minimum height=11cm] (bgRight) at (0,0) {};
+%			\node[fill=orange!80!black, rounded corners=4pt, inner sep=6pt] at ([yshift=-15pt]bgRight.north) {\subTitle Case 2: Columns are Linearly Dependent};
+			
+			% Matrix Setup
+			\node[mathBox] (matRight) at (0, 3.5) {
+				$B = \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}$ \\[1ex]
+				\small Columns $v_1=\binom{1}{1}, v_2=\binom{1}{1}$
+			};
+			
+			% Vector Spaces
+			\node[setEllipse=blue, label=below:{\small Domain $\mathbb{F}_2^2$}] (domR) at (-2.5, -1) {};
+			\node[setEllipse=red, label=below:{\small Codomain $\mathbb{F}_2^2$}] (codR) at (2.5, -1) {};
+			
+			% Vectors in Domain
+			\node[vecNode=blue] (x00R) at (-2.5, 0.5) {0\\0};
+			\node[vecNode=blue] (x10R) at (-2.5, -0.5) {1\\0};
+			\node[vecNode=blue] (x01R) at (-2.5, -1.5) {0\\1};
+			\node[vecNode=blue] (x11R) at (-2.5, -2.5) {1\\1};
+			
+			% Vectors in Codomain (Notice the collapse!)
+			\node[vecNode=red, draw=purple, ultra thick] (y00R) at (2.5, -0.5) {0\\0};
+			\node[vecNode=red] (y11R) at (2.5, -1.5) {1\\1};
+			
+			% Mappings (B * x)
+			\draw[kernelArrow] (x00R) -- (y00R.north west);
+			\draw[mapArrow] (x10R) -- (y11R.north west);
+			\draw[mapArrow] (x01R) -- (y11R.south west);
+			
+			% The crucial collision! 1+1 = 0 in F_2
+			\draw[kernelArrow, dashed] (x11R) -- (y00R.south west) node[midway, below right, font=\scriptsize, align=center] {$1v_1 + 1v_2 = 0$\\Collision!};
+			
+			% Conclusion
+			\node[mathBox, text width=7.5cm, font=\small, draw=orange!60] at (0, -4.5) {
+				\textbf{Mapping Collapses (Not Invertible)} \\
+				Because $v_1 = v_2$, their sum cancels out in $\mathbb{F}_2$: \\
+				$1v_1 + 1v_2 = \binom{1}{1} + \binom{1}{1} = \binom{1+1}{1+1} = \binom{0}{0}$. \\
+				This creates a non-zero vector $x=\binom{1}{1}$ in the kernel!
+			};
+		\end{scope}
+		
+	\end{tikzpicture}
+\end{document}

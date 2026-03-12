@@ -1,0 +1,240 @@
+%\documentclass[tikz,border=20pt]{standalone}
+%\usepackage{amsmath, amssymb}
+%\usetikzlibrary{matrix, positioning, decorations.pathreplacing, shadings, shadows, arrows.meta, calc}
+%
+%\begin{document}
+%	\begin{tikzpicture}[
+%		>=Stealth,
+%		node distance=1.5cm,
+%		% Define distinctive colors
+%		colorMatrixBg/.style={cyan!10, draw=cyan!60, thick},
+%		colorFlattenBg/.style={purple!15, draw=purple!60, thick},
+%		colorChoicesBg/.style={orange!20, draw=orange!70, thick},
+%		colorFinalBg/.style={yellow!25, draw=yellow!80, thick, drop shadow},
+%		% Modern styles for nodes
+%		entryNode/.style={draw, minimum size=1.8em, inner sep=0pt, font=\small},
+%		choiceButton/.style={circle, minimum size=2.5em, colorChoicesBg, font=\bfseries\large, drop shadow={opacity=0.2}},
+%		resultPlaque/.style={rectangle, rounded corners=8pt, colorFinalBg, inner sep=15pt, align=center},
+%		labelStyle/.style={font=\sffamily\bfseries\color{darkgray}, align=center},
+%		arrowFlow/.style={->, thick, shorten >=2pt, shorten <=2pt},
+%		% Corrected brace style (swaps points to avoid mirror)
+%		revbrace/.style={decorate, decoration={brace, amplitude=8pt, raise=6pt}}
+%		]
+%		
+%		% ==============================================================================
+%		% PHASE 1: THE INPUT MATRIX (Cyan)
+%		% ==============================================================================
+%		\node[labelStyle] (title1) {$A \in \mathbb{F}_q^{m \times n}$};
+%		
+%%		\matrix (M) [matrix of math nodes, below=0.5cm of title1,
+%%		left delimiter=(, right delimiter=),
+%%		nodes={entryNode, fill=cyan!5},
+%%		column sep=0.5em, row sep=0.5em,
+%%		%fill=cyan!2, 
+%%		%draw=cyan!40, 
+%%		rounded corners=3pt, 
+%%		inner sep=10pt
+%%		%, drop shadow={opacity=0.1}
+%%		] {
+%%			a_{11} & a_{12} & \cdots & a_{1n} \\
+%%			a_{21} & a_{22} & \cdots & a_{2n} \\
+%%			a & a & a & a \\
+%%			a_{m1} & a_{m2} & \cdots & a_{mn} \\
+%%		};
+%%		\matrix (M) [matrix of math nodes, below=0.5cm of title1,
+%%		left delimiter=(, right delimiter=),
+%%		column sep=0.5em, row sep=0.5em,
+%%		fill=cyan!2, draw=cyan!40, rounded corners=3pt, inner sep=10pt, drop shadow={opacity=0.1}] {
+%%			|[entryNode, fill=cyan!5]| a_{11} & |[entryNode, fill=cyan!5]| a_{12} & |[dotsNode]| \cdots & |[entryNode, fill=cyan!5]| a_{1n} \\
+%%			|[entryNode, fill=cyan!5]| a_{21} & |[entryNode, fill=cyan!5]| a_{22} & |[dotsNode]| \cdots & |[entryNode, fill=cyan!5]| a_{2n} \\
+%%			|[dotsNode]| \vdots               & |[dotsNode]| \vdots               & |[dotsNode]| \ddots & |[dotsNode]| \vdots               \\
+%%			|[entryNode, fill=cyan!5]| a_{m1} & |[entryNode, fill=cyan!5]| a_{m2} & |[dotsNode]| \cdots & |[entryNode, fill=cyan!5]| a_{mn} \\
+%%		};
+%		
+%%		% Row/Col Highlight and Dimensions
+%%		% Reverse coordinate order to flip braces instead of using 'mirror'
+%%		\draw [revbrace, cyan!80] (M-1-4.north east) -- (M-1-1.north west) node [midway, above=12pt, font=\small\bfseries] {$n$ Entries per Row};
+%%		\draw [revbrace, cyan!80] (M-4-1.south west) -- (M-1-1.north west) node [midway, left=12pt, font=\small\bfseries] {$m$ Rows};
+%%		
+%%		% Highlight specific entry link (e.g., a_12)
+%%		\node[entryNode, fill=purple!30, draw=purple!80, thick] (highlightEntryM) at (M-1-2) {$a_{12}$};
+%%		
+%%		% ==============================================================================
+%%		% PHASE 2: FLATTENING / INDEPENDENT ENTRIES (Purple Transition)
+%%		% ==============================================================================
+%%		\node[labelStyle, below=1.2cm of M, color=purple] (title2) {STEP 2: Map to $mn$ Independent Choices};
+%%		
+%%		% Flow arrows from matrix to flattening list
+%%		\draw[arrowFlow, purple!80, dashed, curved arrow/.style={to path={(\tikztostart) .. controls ++(1,-1) and ++(-1,1) .. (\tikztotarget)}}]
+%%		(M.south west) to[out=-90, in=90] ([xshift=-1cm]title2.north);
+%%		\draw[arrowFlow, purple!80, dashed]
+%%		(M.south east) to[out=-90, in=90] ([xshift=1cm]title2.north);
+%%		
+%%		% The Flattened List
+%%		\matrix (Flattened) [matrix of math nodes, below=0.3cm of title2,
+%%		nodes={entryNode, fill=purple!10, rounded corners=2pt},
+%%		column sep=0.4em, inner sep=8pt, rounded corners=5pt,
+%%		colorFlattenBg, drop shadow={opacity=0.1}] {
+%%			a_{11} & a_{12} & \cdots & a_{1n} & a_{21} & \cdots & a_{mn} \\
+%%		};
+%%		
+%%		% Track the highlighted entry
+%%		\node[entryNode, fill=purple!30, draw=purple!80, thick, rounded corners=2pt] (highlightEntryF) at (Flattened-1-2) {$a_{12}$};
+%%		\draw[->, purple, thick, shorten >=1pt, shorten <=1pt] (highlightEntryM) -- (highlightEntryF);
+%%		
+%%		% ==============================================================================
+%%		% PHASE 3: APPLYING FIELD SIZE (Orange)
+%%		% ==============================================================================
+%%		\node[labelStyle, below=1.2cm of Flattened, color=orange!80!black] (title3) {STEP 3: Each Entry has $|\mathbb{F}_q|$ Possibilities};
+%%		
+%%		\draw[arrowFlow, orange!80] (title2.south) -- (title3.north);
+%%		
+%%		% The Choice Nodes (q's)
+%%		\node[choiceButton, below=0.3cm of title3] (q1) {$q$};
+%%		\node[right=1.2cm of q1] (dots1) {$\cdots$};
+%%		\node[right=1.2cm of dots1] (qm) {$q$};
+%%		\node[left=1.2cm of q1] (dots2) {$\cdots$};
+%%		\node[left=1.2cm of dots2] (qmn) {$q$};
+%%		
+%%		% Map from entries to choices
+%%		\draw[->, dashed, orange, thick] (Flattened-1-1.south) -- (qmn.north) node[midway, left, font=\scriptsize, text=orange!80!black] {choose};
+%%		\draw[->, dashed, orange, thick] (highlightEntryF.south) -- (q1.north) node[midway, right, font=\scriptsize, text=purple] {choose};
+%%		\draw[->, dashed, orange, thick] (Flattened-1-7.south) -- (qm.north) node[midway, right, font=\scriptsize, text=orange!80!black] {choose};
+%%		
+%%		% Label describing 'q' choice
+%%		\node[right=1.5cm of Flattened-1-7, align=left, font=\scriptsize, text=orange!80!black] (chooseDesc) {Choices are independent:\\any $a_{ij} \in \{f_1, f_2, \dots, f_q\}$};
+%%		\draw[->, thin, orange!50] (chooseDesc.west) -- ([xshift=10pt]Flattened-1-7.east);
+%%		
+%%		% ==============================================================================
+%%		% PHASE 4: THE RESULT (Gold Plaque)
+%%		% ==============================================================================
+%%		% Reverse brace order to put on bottom
+%%		\draw [revbrace, orange!70, thick, decoration={brace, amplitude=12pt}] ([xshift=10pt]qm.south east) -- ([xshift=-10pt]qmn.south west)
+%%		node [midway, below=25pt, labelStyle, color=teal, font=\bfseries\large] (prodRule) {Product Rule Application};
+%%		
+%%		\node[resultPlaque, below=0.8cm of prodRule] (conclusion) {
+%%			\LARGE \textbf{Total Possible Matrices:} \\
+%%			\vspace{0.2cm}
+%%			\begin{minipage}{0.8\linewidth}
+%%				\centering
+%%				\color{orange!60!black}
+%%				$\underbrace{q \times q \times \dots \times q}_{mn \text{ factors}}$ = \Huge \textcolor{black}{$q^{mn}$} \\[0.3cm]
+%%				\large \textbf{Result:} \fbox{\large $\bigl|\mathbb{F}_q^{m\times n}\bigr| = q^{mn}$} \hspace{0.5cm} \fbox{\large $\bigl|\mathbb{F}_q^{m\times m}\bigr| = q^{m^2}$}
+%%			\end{minipage}
+%%		};
+%	\end{tikzpicture}
+%\end{document}
+
+\documentclass[tikz,border=20pt]{standalone}
+\usepackage{amsmath, amssymb}
+\usetikzlibrary{matrix, positioning, decorations.pathreplacing, shadings, shadows, arrows.meta, calc}
+
+\begin{document}
+	\begin{tikzpicture}[
+		>=Stealth,
+		node distance=1.5cm,
+		% Define distinctive colors
+		colorMatrixBg/.style={cyan!10, draw=cyan!60, thick},
+		colorFlattenBg/.style={purple!15, draw=purple!60, thick},
+		colorChoicesBg/.style={orange!20, draw=orange!70, thick},
+		colorFinalBg/.style={yellow!25, draw=yellow!80, thick, drop shadow},
+		% Modern styles for nodes
+		entryNode/.style={draw, minimum size=2.2em, inner sep=0pt, font=\small, anchor=center, rounded corners=2pt},
+		dotsNode/.style={minimum size=2.2em, inner sep=0pt, anchor=center, draw=none, fill=none},
+		choiceButton/.style={circle, minimum size=2.5em, colorChoicesBg, font=\bfseries\large, drop shadow={opacity=0.2}},
+		resultPlaque/.style={rectangle, rounded corners=8pt, colorFinalBg, inner sep=15pt, align=center},
+		labelStyle/.style={font=\sffamily\bfseries\color{darkgray}, align=center},
+		arrowFlow/.style={->, thick, shorten >=2pt, shorten <=2pt},
+		% Corrected brace style
+		revbrace/.style={decorate, decoration={brace, amplitude=8pt, raise=6pt}}
+		]
+		
+		% ==============================================================================
+		% PHASE 1: THE INPUT MATRIX (Cyan)
+		% ==============================================================================
+		\node[labelStyle] (title1) {$A \in \mathbb{F}_q^{m \times n}$};
+		
+		% FIX: Replaced \matrix with \node[matrix] and added ampersand replacement
+		\node (M) [matrix of math nodes, ampersand replacement=\&, right=1.5cm of title1,
+		left delimiter=(, right delimiter=),
+		column sep=0.5em, row sep=0.5em,
+		%fill=cyan!2, 
+		%draw=cyan!40, 
+		%rounded corners=3pt, inner sep=10pt, drop shadow={opacity=0.1}
+		] {
+			|[entryNode, fill=cyan!5, draw=cyan!40]| a_{11} \& |[entryNode, fill=cyan!5, draw=cyan!40]| a_{12} \& |[dotsNode]| \cdots \& |[entryNode, fill=cyan!5, draw=cyan!40]| a_{1n} \\
+			|[entryNode, fill=cyan!5, draw=cyan!40]| a_{21} \& |[entryNode, fill=cyan!5, draw=cyan!40]| a_{22} \& |[dotsNode]| \cdots \& |[entryNode, fill=cyan!5, draw=cyan!40]| a_{2n} \\
+			|[dotsNode]| \vdots               \& |[dotsNode]| \vdots               \& |[dotsNode]| \ddots \& |[dotsNode]| \vdots               \\
+			|[entryNode, fill=cyan!5, draw=cyan!40]| a_{m1} \& |[entryNode, fill=cyan!5, draw=cyan!40]| a_{m2} \& |[dotsNode]| \cdots \& |[entryNode, fill=cyan!5, draw=cyan!40]| a_{mn} \\
+		};
+		
+		% Row/Col Highlight and Dimensions
+		\draw [revbrace, cyan!80] (M-1-1.north west) -- (M-1-4.north east) node [midway, above=12pt, font=\small\bfseries] {$n$};
+		\draw [revbrace, cyan!80] ([xshift=-10pt]M-4-1.south west) -- ([xshift=-10pt]M-1-1.north west) node [midway, left=12pt, font=\small\bfseries] {$m$};
+		
+		% Highlight specific entry link
+		\node[entryNode, fill=purple!30, draw=purple!80, thick] (highlightEntryM) at (M-1-1) {$a_{11}$};
+		
+		% ==============================================================================
+		% PHASE 2: FLATTENING / INDEPENDENT ENTRIES (Purple Transition)
+		% ==============================================================================
+		\node[labelStyle, below=.5cm of M, color=purple] (title2) {$mn$ Independent Choices};
+		
+%		% Flow arrows from matrix to flattening list
+%		\draw[arrowFlow, purple!80, dashed]
+%		(M.south west) to[out=-90, in=90] ([xshift=-1cm]title2.north);
+%		\draw[arrowFlow, purple!80, dashed]
+%		(M.south east) to[out=-90, in=90] ([xshift=1cm]title2.north);
+		
+		% FIX: Replaced \matrix with \node[matrix] and used \& 
+		\node (Flattened) [matrix of math nodes, ampersand replacement=\&, below=0.3cm of title2,
+		column sep=0.4em, inner sep=8pt, rounded corners=5pt,
+		fill=purple!15, draw=purple!60, thick
+%		colorFlattenBg
+		%, drop shadow={opacity=0.1}
+		] {
+			|[entryNode, fill=purple!10]| a_{11} \& |[entryNode, fill=purple!10]| a_{12} \& |[dotsNode]| \cdots \& |[entryNode, fill=purple!10]| a_{1n} \& |[entryNode, fill=purple!10]| a_{21} \& |[dotsNode]| \cdots \& |[entryNode, fill=purple!10]| a_{mn} \\
+		};
+		
+		% Track the highlighted entry
+		\node[entryNode, fill=purple!30, draw=purple!80, thick] (highlightEntryF) at (Flattened-1-1) {$a_{12}$};
+		\draw[->, purple, thick, shorten >=1pt, shorten <=1pt, bend angle=45] (highlightEntryM.west) -| (highlightEntryF.north);
+		
+		% ==============================================================================
+		% PHASE 3: APPLYING FIELD SIZE (Orange)
+		% ==============================================================================
+		\node[labelStyle, below=1.2cm of Flattened, color=orange!80!black] (title3) {STEP 3: Each Entry has $|\mathbb{F}_q|$ Possibilities};
+		
+		\draw[arrowFlow, orange!80] (title2.south) -- (title3.north);
+		
+		% The Choice Nodes (q's)
+		\node[choiceButton, below=0.3cm of title3] (q1) {$q$};
+		\node[right=1.2cm of q1] (dots1) {$\cdots$};
+		\node[right=1.2cm of dots1] (qm) {$q$};
+		\node[left=1.2cm of q1] (dots2) {$\cdots$};
+		\node[left=1.2cm of dots2] (qmn) {$q$};
+		
+		% Map from entries to choices
+		\draw[->, dashed, orange, thick] (Flattened-1-1.south) -- (qmn.north) node[midway, left, font=\scriptsize, text=orange!80!black] {choose};
+		\draw[->, dashed, orange, thick] (highlightEntryF.south) -- (q1.north) node[midway, right, font=\scriptsize, text=purple] {choose};
+		\draw[->, dashed, orange, thick] (Flattened-1-7.south) -- (qm.north) node[midway, right, font=\scriptsize, text=orange!80!black] {choose};
+		
+%		% Label describing 'q' choice
+%		\node[right=1.5cm of Flattened-1-7, align=left, font=\scriptsize, text=orange!80!black] (chooseDesc) {Choices are independent:\\any $a_{ij} \in \mathbb{F}_q$};
+%		\draw[->, thin, orange!50] (chooseDesc.west) -- ([xshift=10pt]Flattened-1-7.east);
+%		
+%		% ==============================================================================
+%		% PHASE 4: THE RESULT (Gold Plaque)
+%		% ==============================================================================
+%		\draw [revbrace, orange!70, thick, decoration={brace, amplitude=12pt}] ([xshift=10pt]qm.south east) -- ([xshift=-10pt]qmn.south west)
+%		node [midway, below=25pt, labelStyle, color=teal, font=\bfseries\large] (prodRule) {Product Rule Application};
+%		
+%		\node[resultPlaque, below=0.8cm of prodRule] (conclusion) {
+%			\LARGE \textbf{Total Possible Matrices:} \\[0.2cm]
+%			\color{orange!60!black}
+%			$\underbrace{q \times q \times \dots \times q}_{mn \text{ factors}} =$ {\Huge \textcolor{black}{$q^{mn}$}} \\[0.4cm]
+%			\large \textbf{Result:} \fbox{\large $\bigl|\mathbb{F}_q^{m\times n}\bigr| = q^{mn}$} \hspace{0.5cm} \fbox{\large $\bigl|\mathbb{F}_q^{m\times m}\bigr| = q^{m^2}$}
+%		};
+%		
+	\end{tikzpicture}
+\end{document}
