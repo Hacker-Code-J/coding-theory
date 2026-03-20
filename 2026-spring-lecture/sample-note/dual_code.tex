@@ -1,0 +1,1072 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{bm}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+\usepackage{tikz-cd}
+
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\Cp}{\mathcal{C}^{\perp}}
+\newcommand{\Cstar}{\mathcal{C}^{*}}
+\newcommand{\ann}{^{\circ}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Ker}{\operatorname{Ker}}
+\newcommand{\im}{\operatorname{Im}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\Null}{\operatorname{Null}}
+\newcommand{\Row}{\operatorname{Row}}
+\newcommand{\wt}{\operatorname{wt}}
+\newcommand{\id}{\operatorname{id}}
+
+\title{Lecture Notes on Dual Codes, Dual Spaces, Orthogonal Complements, and Quotient Interpretations}
+\author{}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{Introduction}
+	
+	These notes explain the relation among the following notions:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item the dual space \(V^* = \Hom(V,\F)\),
+		\item the orthogonal complement \(W^\perp\) of a subspace \(W \subseteq V\),
+		\item the dual code \(\C^\perp\) of a linear code \(\C \subseteq \F_q^n\),
+		\item the quotient spaces \(V/W^\perp\), \(\F_q^n/\C^\perp\), and \(\F_q^n/\C\),
+		\item the coding-theoretic meaning of generator matrices, parity-check matrices, and syndromes.
+	\end{itemize}
+	
+	A central theme is that coding theory is linear algebra over a finite field. Many constructions in coding theory are best understood as special cases of standard constructions from bilinear algebra.
+	
+	\section{Dual Spaces in Linear Algebra}
+	
+	\begin{definition}
+		Let \(V\) be a vector space over a field \(\F\). The \emph{dual space} of \(V\) is
+		\[
+		V^* := \Hom(V,\F),
+		\]
+		the vector space of all linear maps \(f : V \to \F\).
+	\end{definition}
+	
+	Thus an element of \(V^*\) is not a vector in \(V\), but a linear functional on \(V\).
+	
+	\begin{example}
+		If \(V=\F^k\), then every \(f\in V^*\) is of the form
+		\[
+		f(x_1,\dots,x_k)=a_1x_1+\cdots+a_kx_k
+		\]
+		for unique \(a_1,\dots,a_k\in\F\). Hence \(V^*\cong \F^k\), but this is an isomorphism of vector spaces, not equality as sets.
+	\end{example}
+	
+	\begin{theorem}
+		If \(V\) is finite-dimensional, then
+		\[
+		\dim V^*=\dim V.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Choose a basis \(e_1,\dots,e_n\) of \(V\). Define \(e_1^*,\dots,e_n^*\in V^*\) by
+		\[
+		e_i^*(e_j)=\delta_{ij}.
+		\]
+		Then \(e_1^*,\dots,e_n^*\) form a basis of \(V^*\).
+	\end{proof}
+	
+	\section{Bilinear Forms and Orthogonal Complements}
+	
+	\begin{definition}
+		A \emph{bilinear form} on a vector space \(V\) is a map
+		\[
+		B:V\times V\to \F
+		\]
+		that is linear in each variable.
+	\end{definition}
+	
+	Often we write
+	\[
+	\ip{x}{y}=B(x,y).
+	\]
+	
+	\begin{definition}
+		Let \(W\subseteq V\) be a subspace. The \emph{orthogonal complement} of \(W\) with respect to \(B\) is
+		\[
+		W^\perp := \{v\in V:\ip{w}{v}=0 \text{ for all } w\in W\}.
+		\]
+	\end{definition}
+	
+	\begin{proposition}
+		\(W^\perp\) is a subspace of \(V\).
+	\end{proposition}
+	
+	\begin{proof}
+		If \(v_1,v_2\in W^\perp\) and \(a,b\in\F\), then for all \(w\in W\),
+		\[
+		\ip{w}{av_1+bv_2}=a\ip{w}{v_1}+b\ip{w}{v_2}=0.
+		\]
+		Hence \(av_1+bv_2\in W^\perp\).
+	\end{proof}
+	
+	\begin{definition}
+		A bilinear form \(B\) is \emph{nondegenerate} if
+		\[
+		\ip{x}{v}=0 \text{ for all } x\in V
+		\quad\Longrightarrow\quad
+		v=0.
+		\]
+	\end{definition}
+	
+	\begin{remark}
+		For \(V=\F_q^n\), the standard bilinear form is
+		\[
+		\ip{x}{y}=x_1y_1+\cdots+x_ny_n.
+		\]
+		This is nondegenerate.
+	\end{remark}
+	
+	\section{From a Bilinear Form to the Dual Space}
+	
+	Suppose \(V\) has a bilinear form \(B\). Then every vector \(v\in V\) defines a linear functional
+	\[
+	\varphi_v : V \to \F,\qquad \varphi_v(x)=\ip{x}{v}.
+	\]
+	This gives a linear map
+	\[
+	\Phi:V\to V^*,\qquad v\mapsto \varphi_v.
+	\]
+	
+	\begin{proposition}
+		If \(B\) is nondegenerate and \(V\) is finite-dimensional, then \(\Phi\) is an isomorphism.
+	\end{proposition}
+	
+	\begin{proof}
+		Nondegeneracy implies \(\Ker(\Phi)=\{0\}\), so \(\Phi\) is injective. Since \(\dim V=\dim V^*\), \(\Phi\) is an isomorphism.
+	\end{proof}
+	
+	\begin{remark}
+		This is the precise sense in which an inner product or nondegenerate bilinear form identifies \(V\) with \(V^*\).
+	\end{remark}
+	
+	\section{Annihilators and Orthogonal Complements}
+	
+	\begin{definition}
+		Let \(W\subseteq V\) be a subspace. Its \emph{annihilator} is
+		\[
+		W^\circ := \{f\in V^*: f(w)=0 \text{ for all } w\in W\}.
+		\]
+	\end{definition}
+	
+	This is the dual-space object naturally attached to a subspace \(W\).
+	
+	\begin{proposition}
+		Under the isomorphism \(V\cong V^*\) induced by a nondegenerate bilinear form,
+		\[
+		W^\perp \quad\text{corresponds to}\quad W^\circ.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		A vector \(v\in V\) corresponds to the functional \(\varphi_v(x)=\ip{x}{v}\). This functional lies in \(W^\circ\) exactly when
+		\[
+		\varphi_v(w)=\ip{w}{v}=0 \quad \text{for all } w\in W,
+		\]
+		that is, exactly when \(v\in W^\perp\).
+	\end{proof}
+	
+	Thus the orthogonal complement is the concrete realization inside \(V\) of the annihilator inside \(V^*\).
+	
+	\section{The Isomorphism \(V/W^\perp \cong W^*\)}
+	
+	Let \(W\subseteq V\) be a subspace, and assume \(V\) carries a nondegenerate bilinear form.
+	
+	Define
+	\[
+	\Psi:V\to W^*,\qquad \Psi(v)(w)=\ip{w}{v}.
+	\]
+	
+	\begin{theorem}
+		The map \(\Psi\) is linear and
+		\[
+		\Ker(\Psi)=W^\perp.
+		\]
+		Hence
+		\[
+		V/W^\perp \cong W^*.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Linearity is immediate. Now
+		\[
+		v\in \Ker(\Psi)
+		\iff \Psi(v)=0
+		\iff \Psi(v)(w)=0 \text{ for all } w\in W
+		\]
+		\[
+		\iff \ip{w}{v}=0 \text{ for all } w\in W
+		\iff v\in W^\perp.
+		\]
+		By the First Isomorphism Theorem,
+		\[
+		V/\Ker(\Psi)\cong \im(\Psi).
+		\]
+		Since every functional on \(W\) arises from pairing with some vector in \(V\), the image is \(W^*\). Therefore
+		\[
+		V/W^\perp\cong W^*.
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This theorem is one of the main bridges from linear algebra to coding theory.
+	\end{remark}
+	
+	\section{Linear Codes and Dual Codes}
+	
+	\begin{definition}
+		A \emph{linear code} of length \(n\) over \(\F_q\) is a subspace
+		\[
+		\C \subseteq \F_q^n.
+		\]
+		If \(\dim \C = k\), we say \(\C\) is an \([n,k]\)-code.
+	\end{definition}
+	
+	\begin{definition}
+		The \emph{dual code} of \(\C\) is
+		\[
+		\Cp := \{v\in \F_q^n : \ip{c}{v}=0 \text{ for all } c\in \C\}.
+		\]
+	\end{definition}
+	
+	\begin{remark}
+		This is exactly the orthogonal complement of \(\C\) in \(\F_q^n\). The phrase ``dual code'' is coding-theoretic terminology for the orthogonal complement.
+	\end{remark}
+	
+	\begin{theorem}
+		For any linear code \(\C\subseteq \F_q^n\),
+		\[
+		\dim \C + \dim \Cp = n.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		This is the standard dimension formula for orthogonal complements under a nondegenerate bilinear form.
+	\end{proof}
+	
+	\begin{remark}
+		Over \(\mathbb{R}\) with a positive definite inner product, one always has
+		\[
+		V = W \oplus W^\perp.
+		\]
+		Over finite fields, the bilinear form is nondegenerate but need not be positive definite. Hence it is possible that
+		\[
+		\C \cap \Cp \neq \{0\}.
+		\]
+		So one must distinguish between \(\C+\Cp\) and \(\C\oplus\Cp\).
+	\end{remark}
+	
+	\section{Why Coding Theory Calls \(\C^\perp\) the Dual Code}
+	
+	The term \emph{dual} is related to the passage from \(V\) to \(V^*\), but \(\Cp\) is not literally the same as \(\C^*\).
+	
+	\subsection{The distinction}
+	
+	\begin{itemize}[leftmargin=2em]
+		\item \(\Cp\subseteq \F_q^n\) is a subspace of the ambient space.
+		\item \(\C^*=\Hom(\C,\F_q)\) is the dual space of the code itself.
+	\end{itemize}
+	
+	These are different objects.
+	
+	\subsection{The relation}
+	
+	The code \(\Cp\) corresponds to the annihilator \(\C^\circ\subseteq (\F_q^n)^*\). Because the standard bilinear form identifies \(\F_q^n\cong(\F_q^n)^*\), the annihilator appears concretely as a subspace of \(\F_q^n\), namely \(\Cp\).
+	
+	Thus the name ``dual code'' is justified because \(\Cp\) is the orthogonal-complement version of the annihilator of \(\C\).
+	
+	\section{Generator Matrices and Parity-Check Matrices}
+	
+	\begin{definition}
+		A \emph{generator matrix} for an \([n,k]\)-code \(\C\) is a \(k\times n\) matrix \(G\) whose rows form a basis of \(\C\). Then
+		\[
+		\C = \{uG : u\in \F_q^k\}.
+		\]
+	\end{definition}
+	
+	\begin{definition}
+		A \emph{parity-check matrix} for \(\C\) is a matrix \(H\) whose rows form a basis of \(\Cp\). Then
+		\[
+		c\in \C \iff Hc^T=0.
+		\]
+	\end{definition}
+	
+	\begin{proof}[Reason]
+		Since the rows of \(H\) span \(\Cp\), the equation \(Hc^T=0\) exactly says that \(c\) is orthogonal to every vector in \(\Cp\), that is,
+		\[
+		c\in (\Cp)^\perp.
+		\]
+		Because the standard form on \(\F_q^n\) is nondegenerate,
+		\[
+		(\Cp)^\perp=\C.
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		So \(G\) describes the code by generators, while \(H\) describes the code by linear constraints.
+	\end{remark}
+	
+	\section{The Dual Space \(\C^*\)}
+	
+	\begin{definition}
+		The dual space of the code \(\C\) is
+		\[
+		\C^*:=\Hom(\C,\F_q).
+		\]
+	\end{definition}
+	
+	An element \(f\in \C^*\) is a linear functional on codewords:
+	\[
+	f:\C\to \F_q.
+	\]
+	
+	If \(\dim \C=k\), then \(\dim \C^*=k\).
+	
+	\subsection{How a vector in \(\F_q^n\) produces an element of \(\C^*\)}
+	
+	Given \(v\in \F_q^n\), define
+	\[
+	f_v:\C\to \F_q,\qquad f_v(c)=\ip{c}{v}.
+	\]
+	This is a linear functional on \(\C\), so \(f_v\in \C^*\).
+	
+	Define
+	\[
+	\Phi:\F_q^n\to \C^*,\qquad \Phi(v)=f_v.
+	\]
+	
+	\begin{theorem}
+		\[
+		\Ker(\Phi)=\Cp.
+		\]
+		Hence
+		\[
+		\F_q^n/\Cp \cong \C^*.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		By definition,
+		\[
+		v\in \Ker(\Phi)
+		\iff \Phi(v)=0
+		\iff f_v(c)=0 \text{ for all } c\in \C
+		\]
+		\[
+		\iff \ip{c}{v}=0 \text{ for all } c\in \C
+		\iff v\in \Cp.
+		\]
+		Now apply the First Isomorphism Theorem.
+	\end{proof}
+	
+	\subsection{Interpretation}
+	
+	The quotient \(\F_q^n/\Cp\) identifies two ambient vectors \(v,v'\) exactly when they induce the same linear functional on \(\C\). Thus:
+	
+	\[
+	v+\Cp
+	\quad\leftrightarrow\quad
+	\big(c\mapsto \ip{c}{v}\big).
+	\]
+	
+	So \(\F_q^n/\Cp\) is the space of distinct linear observations of codewords coming from the ambient dot product.
+	
+	\section{The Dual Space \((\C^\perp)^*\)}
+	
+	Similarly, define
+	\[
+	(\Cp)^* := \Hom(\Cp,\F_q).
+	\]
+	Its elements are linear functionals on the dual code.
+	
+	Given \(y\in \F_q^n\), define
+	\[
+	g_y:\Cp\to \F_q,\qquad g_y(h)=\ip{h}{y}.
+	\]
+	This gives a linear map
+	\[
+	\Theta:\F_q^n\to (\Cp)^*,\qquad \Theta(y)=g_y.
+	\]
+	
+	\begin{theorem}
+		\[
+		\Ker(\Theta)=\C.
+		\]
+		Hence
+		\[
+		\F_q^n/\C \cong (\Cp)^*.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		We have
+		\[
+		y\in \Ker(\Theta)
+		\iff \ip{h}{y}=0 \text{ for all } h\in \Cp
+		\iff y\in (\Cp)^\perp.
+		\]
+		Since the form is nondegenerate,
+		\[
+		(\Cp)^\perp=\C.
+		\]
+		Therefore \(\Ker(\Theta)=\C\), and the result follows by the First Isomorphism Theorem.
+	\end{proof}
+	
+	\subsection{Interpretation}
+	
+	The quotient \(\F_q^n/\C\) identifies two ambient words \(y,y'\) exactly when they behave the same against all parity checks \(h\in\Cp\). So
+	\[
+	y+\C
+	\quad\leftrightarrow\quad
+	\big(h\mapsto \ip{h}{y}\big).
+	\]
+	
+	This is the quotient that naturally appears in syndrome decoding.
+	
+	\section{Syndrome Decoding and the Quotient \(\F_q^n/\C\)}
+	
+	Let \(H\) be a parity-check matrix of \(\C\). For a received word \(y\in \F_q^n\), its \emph{syndrome} is
+	\[
+	s(y):=Hy^T.
+	\]
+	
+	\begin{proposition}
+		Two words \(y,y'\in \F_q^n\) have the same syndrome if and only if they lie in the same coset of \(\C\), that is,
+		\[
+		Hy^T=Hy'^T
+		\iff y-y'\in \C
+		\iff y+\C=y'+\C.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		\[
+		Hy^T=Hy'^T
+		\iff H(y-y')^T=0
+		\iff y-y'\in \Ker(H)
+		\iff y-y'\in \C.
+		\]
+	\end{proof}
+	
+	Thus syndromes classify cosets of \(\F_q^n/\C\).
+	
+	\subsection{Error-correction interpretation}
+	
+	Suppose \(c\in \C\) is sent and \(y=c+e\) is received. Then
+	\[
+	Hy^T = H(c+e)^T = Hc^T + He^T = 0 + He^T = He^T.
+	\]
+	So the syndrome depends only on the error vector \(e\), or equivalently only on the coset \(y+\C=e+\C\).
+	
+	This is why decoding is naturally phrased in terms of \(\F_q^n/\C\), not \(\F_q^n/\Cp\).
+	
+	\section{Summary of the Two Quotients}
+	
+	There are two natural quotient spaces associated to a code \(\C\subseteq \F_q^n\):
+	
+	\subsection*{First quotient}
+	\[
+	\F_q^n/\Cp \cong \C^*.
+	\]
+	Meaning: ambient vectors modulo those invisible to codewords.
+	
+	Interpretation: distinct linear functionals on the code.
+	
+	\subsection*{Second quotient}
+	\[
+	\F_q^n/\C \cong (\Cp)^*.
+	\]
+	Meaning: ambient words modulo adding a codeword.
+	
+	Interpretation: distinct syndrome classes; this is the quotient used in decoding.
+	
+	\subsection*{Memory aid}
+	\[
+	\boxed{
+		\begin{aligned}
+			\F_q^n/\Cp &\cong \C^*,\\
+			\F_q^n/\C &\cong (\Cp)^*.
+		\end{aligned}
+	}
+	\]
+	
+	\section{Direct Sum Issues: \(\C\oplus \Cp\)}
+	
+	Since
+	\[
+	\dim \C + \dim \Cp = n,
+	\]
+	one may ask whether
+	\[
+	\F_q^n = \C \oplus \Cp.
+	\]
+	
+	This happens if and only if
+	\[
+	\C\cap \Cp = \{0\}.
+	\]
+	
+	\begin{definition}
+		A code \(\C\) is called \emph{LCD} (linear complementary dual) if
+		\[
+		\C\cap \Cp=\{0\}.
+		\]
+	\end{definition}
+	
+	Then and only then,
+	\[
+	\F_q^n=\C\oplus \Cp.
+	\]
+	
+	\begin{remark}
+		Over finite fields, it is possible that \(\C\cap \Cp\neq\{0\}\). For instance, a nonzero vector may be orthogonal to itself.
+	\end{remark}
+	
+	\section{Worked Example over \(\F_2^3\)}
+	
+	Let
+	\[
+	\C = \Span\{(1,1,0),(0,1,1)\}\subseteq \F_2^3.
+	\]
+	Then \(\dim\C=2\), so \(\dim\Cp=1\).
+	
+	\subsection{A generator matrix}
+	
+	Take
+	\[
+	G=
+	\begin{pmatrix}
+		1&1&0\\
+		0&1&1
+	\end{pmatrix}.
+	\]
+	
+	\subsection{Find the dual code}
+	
+	Let \(h=(a,b,c)\in \F_2^3\). Then \(h\in\Cp\) if and only if
+	\[
+	\ip{(1,1,0)}{(a,b,c)}=a+b=0,
+	\]
+	and
+	\[
+	\ip{(0,1,1)}{(a,b,c)}=b+c=0.
+	\]
+	Thus
+	\[
+	a=b=c.
+	\]
+	Hence
+	\[
+	\Cp=\{(0,0,0),(1,1,1)\}=\Span\{(1,1,1)\}.
+	\]
+	
+	A parity-check matrix is therefore
+	\[
+	H=
+	\begin{pmatrix}
+		1&1&1
+	\end{pmatrix}.
+	\]
+	
+	\subsection{Interpretation of \(\C^*\)}
+	
+	Since \(\dim\C=2\), the space \(\C^*\) is 2-dimensional.
+	
+	For \(v\in \F_2^3\), the corresponding functional is
+	\[
+	f_v(c)=\ip{c}{v}.
+	\]
+	Two vectors \(v,v'\) define the same functional on \(\C\) iff \(v-v'\in\Cp\). Therefore
+	\[
+	\F_2^3/\Cp \cong \C^*.
+	\]
+	
+	\subsection{Interpretation of \((\Cp)^*\)}
+	
+	Since \(\dim\Cp=1\), the space \((\Cp)^*\) is 1-dimensional.
+	
+	For \(y\in \F_2^3\), the corresponding functional on \(\Cp\) is
+	\[
+	g_y(h)=\ip{h}{y}.
+	\]
+	Two vectors \(y,y'\) define the same functional on \(\Cp\) iff \(y-y'\in\C\). Therefore
+	\[
+	\F_2^3/\C \cong (\Cp)^*.
+	\]
+	
+	The syndrome of \(y\) is
+	\[
+	Hy^T = y_1+y_2+y_3.
+	\]
+	Thus there are exactly two cosets of \(\C\): one with syndrome \(0\), one with syndrome \(1\).
+	
+	\section{Conceptual Diagram}
+	
+	The entire story can be organized as follows:
+	
+	\[
+	\begin{array}{ccc}
+		\C & \subseteq & \F_q^n \\
+		\cup && \cup \\
+		\text{codewords} && \text{ambient words}
+	\end{array}
+	\]
+	
+	\[
+	\Cp
+	=
+	\{h\in\F_q^n:\ip{c}{h}=0 \ \forall c\in\C\}
+	\]
+	
+	\[
+	\begin{aligned}
+		G &: \text{rows span } \C,\\[4pt]
+		H &: \text{rows span } \Cp.
+	\end{aligned}
+	\]
+	
+	\[
+	\begin{aligned}
+		\F_q^n/\Cp &\cong \C^*
+		&& \text{(linear functionals on codewords)},\\[4pt]
+		\F_q^n/\C &\cong (\Cp)^*
+		&& \text{(linear functionals on parity checks / syndrome space)}.
+	\end{aligned}
+	\]
+	
+	\[
+	c\in\C \iff Hc^T=0.
+	\]
+	
+	\[
+	y\mapsto Hy^T
+	\quad\text{classifies cosets of }\F_q^n/\C.
+	\]
+	
+	\section{Final Remarks}
+	
+	\begin{enumerate}[leftmargin=2em]
+		\item The dual code \(\Cp\) is the orthogonal complement of \(\C\) inside \(\F_q^n\).
+		\item The dual space \(\C^*\) is the space of linear functionals on \(\C\).
+		\item These are different objects:
+		\[
+		\Cp \neq \C^*
+		\]
+		in general.
+		\item However, they are linked by the bilinear form on \(\F_q^n\):
+		\[
+		\F_q^n/\Cp \cong \C^*.
+		\]
+		\item Dually,
+		\[
+		\F_q^n/\C \cong (\Cp)^*.
+		\]
+		\item In decoding, the quotient \(\F_q^n/\C\) is the natural one, because syndromes classify cosets modulo \(\C\).
+		\item In functional or duality language, the quotient \(\F_q^n/\Cp\) is the natural one, because it records all ambient linear tests on codewords.
+	\end{enumerate}
+
+	\newpage
+	\section{Algebraic Diagrams}
+	
+	We summarize the relations among the code, the dual code, the quotient spaces, and the dual spaces by commutative diagrams.
+	
+	\subsection{From the ambient space to \(\C^*\)}
+	
+	Define
+	\[
+	\Phi:\F_q^n\to \C^*,\qquad \Phi(v)(c)=\langle c,v\rangle.
+	\]
+	Its kernel is \(\C^\perp\). Hence:
+	\[
+	\F_q^n/\C^\perp \cong \C^*.
+	\]
+	
+	\[
+	\begin{tikzcd}[column sep=large]
+		0 \arrow[r] & \C^\perp \arrow[r, hook] & \F_q^n \arrow[r, "\Phi"] & \C^* \arrow[r] & 0
+	\end{tikzcd}
+	\]
+	
+	Equivalently, the quotient map factors through the induced isomorphism:
+	\[
+	\begin{tikzcd}[column sep=huge]
+		\F_q^n \arrow[r, two heads] \arrow[dr, "\Phi"'] & \F_q^n/\C^\perp \arrow[d, "\sim"] \\
+		& \C^*
+	\end{tikzcd}
+	\]
+	\subsection{From the ambient space to \((\C^\perp)^*\)}
+	
+	Define
+	\[
+	\Psi:\F_q^n\to (\C^\perp)^*,\qquad \Psi(y)(h)=\langle h,y\rangle.
+	\]
+	Its kernel is \(\C\). Hence:
+	\[
+	\F_q^n/\C \cong (\C^\perp)^*.
+	\]
+	
+	\[
+	\begin{tikzcd}[column sep=large]
+		0 \arrow[r] & \C \arrow[r, hook] & \F_q^n \arrow[r, "\Psi"] & (\C^\perp)^* \arrow[r] & 0
+	\end{tikzcd}
+	\]
+	
+	Equivalently,
+	\[
+	\begin{tikzcd}[column sep=huge]
+		\F_q^n \arrow[r, two heads] \arrow[dr, "\Psi"'] & \F_q^n/\C \arrow[d, "\sim"] \\
+		& (\C^\perp)^*
+	\end{tikzcd}
+	\]
+	
+	\subsection{Generator and parity-check viewpoints}
+	
+	Let \(G\) be a generator matrix of \(\C\), and let \(H\) be a parity-check matrix of \(\C\). Then:
+	
+	\[
+	\begin{tikzcd}[column sep=large, row sep=large]
+		\F_q^k \arrow[r, "u \mapsto uG"] & \C \arrow[r, hook] & \F_q^n \arrow[r, "y \mapsto Hy^T"] & \F_q^{n-k}
+	\end{tikzcd}
+	\]
+	
+	Here:
+	
+	\begin{itemize}
+		\item the map \(u \mapsto uG\) parametrizes codewords;
+		\item the inclusion \(\C \hookrightarrow \F_q^n\) places the code inside the ambient space;
+		\item the map \(y \mapsto Hy^T\) gives the syndrome;
+		\item \(\ker(H)=\C\).
+	\end{itemize}
+
+	\newpage
+	\subsection{Duality square}
+	
+	\[
+	\begin{tikzcd}[row sep=large, column sep=huge]
+		\F_q^n/\C^\perp \arrow[r, "\sim"] & \C^* \\
+		\F_q^n/\C \arrow[r, "\sim"] \arrow[u, dashed] & (\C^\perp)^* \arrow[u, dashed]
+	\end{tikzcd}
+	\]
+	
+	\section{Algebraic Diagrams via \texttt{tikz-cd}}
+	
+	The two fundamental quotient identifications in coding theory are
+	\[
+	\F_q^n/\C^\perp \cong \C^*,
+	\qquad
+	\F_q^n/\C \cong (\C^\perp)^*.
+	\]
+	
+	The first comes from the pairing of ambient vectors with codewords:
+	\[
+	\Phi:\F_q^n\to \C^*,\qquad \Phi(v)(c)=\langle c,v\rangle.
+	\]
+	Its kernel is \(\C^\perp\), so we obtain the short exact sequence
+	\[
+	\begin{tikzcd}[column sep=large]
+		0 \arrow[r] & \C^\perp \arrow[r, hook] & \F_q^n \arrow[r, "\Phi"] & \C^* \arrow[r] & 0.
+	\end{tikzcd}
+	\]
+	Therefore,
+	\[
+	\begin{tikzcd}[column sep=huge]
+		\F_q^n \arrow[r, two heads] \arrow[dr, "\Phi"'] & \F_q^n/\C^\perp \arrow[d, "\sim"] \\
+		& \C^*.
+	\end{tikzcd}
+	\]
+	
+	The second comes from the pairing of ambient vectors with parity checks:
+	\[
+	\Psi:\F_q^n\to (\C^\perp)^*,\qquad \Psi(y)(h)=\langle h,y\rangle.
+	\]
+	Its kernel is \(\C\), so we obtain
+	\[
+	\begin{tikzcd}[column sep=large]
+		0 \arrow[r] & \C \arrow[r, hook] & \F_q^n \arrow[r, "\Psi"] & (\C^\perp)^* \arrow[r] & 0.
+	\end{tikzcd}
+	\]
+	Therefore,
+	\[
+	\begin{tikzcd}[column sep=huge]
+		\F_q^n \arrow[r, two heads] \arrow[dr, "\Psi"'] & \F_q^n/\C \arrow[d, "\sim"] \\
+		& (\C^\perp)^*.
+	\end{tikzcd}
+	\]
+	
+	These diagrams express the two complementary viewpoints:
+	
+	\begin{itemize}
+		\item \(\F_q^n/\C^\perp \cong \C^*\): ambient vectors modulo those invisible to codewords;
+		\item \(\F_q^n/\C \cong (\C^\perp)^*\): ambient vectors modulo codewords, which is the quotient relevant for syndrome decoding.
+	\end{itemize}
+
+	\newpage
+%	\begin{table}[h]
+%		\centering
+%		\renewcommand{\arraystretch}{1.35}
+%		\begin{tabular}{|p{3cm}|p{2cm}|p{4.6cm}|p{3.8cm}|}
+%			\hline
+%			\textbf{Concept} & \textbf{Meaning} & \textbf{Formal condition} & \textbf{Coding-theory consequence} \\
+%			\hline
+%			Nondegenerate bilinear form
+%			&
+%			No nonzero vector is orthogonal to \emph{every} vector in the whole ambient space.
+%			&
+%			For \(v\in \F_q^n\),
+%			$
+%			\langle x,v\rangle=0 \ \forall x\in \F_q^n
+%			\quad\Longrightarrow\quad
+%			v=0.
+%			$
+%			&
+%			Ensures the orthogonal-complement operation behaves well, e.g.
+%			$
+%			\dim \mathcal C+\dim \mathcal C^\perp=n,
+%			\qquad
+%			(\mathcal C^\perp)^\perp=\mathcal C.
+%			$
+%			\\
+%			\hline
+%			Positive-definite form
+%			&
+%			A vector can be orthogonal to itself only if it is zero.
+%			&
+%			$
+%			\langle v,v\rangle=0 \Longrightarrow v=0.
+%			$
+%			&
+%			This usually fails over finite fields. Hence one cannot generally conclude
+%			$
+%			\mathcal C\cap \mathcal C^\perp=\{0\}.
+%			$
+%			\\
+%			\hline
+%			Isotropic vector
+%			&
+%			A nonzero vector orthogonal to itself.
+%			&
+%			$
+%			v\neq 0,
+%			\qquad
+%			\langle v,v\rangle=0.
+%			$
+%			&
+%			Makes self-orthogonality possible. Such vectors can lie in both
+%			\(\mathcal C\) and \(\mathcal C^\perp\).
+%			\\
+%			\hline
+%			Self-orthogonal code
+%			&
+%			Every codeword is orthogonal to every codeword of the code.
+%			&
+%			$
+%			\mathcal C\subseteq \mathcal C^\perp.
+%			$
+%			&
+%			All codewords satisfy all parity checks coming from the code itself.
+%			In particular,
+%			$
+%			\mathcal C\cap \mathcal C^\perp=\mathcal C.
+%			$
+%			\\
+%			\hline
+%			Self-dual code
+%			&
+%			The code equals its dual.
+%			&
+%			$
+%			\mathcal C=\mathcal C^\perp.
+%			$
+%			&
+%			The code is exactly its own parity-check space. Necessarily
+%			$
+%			\dim \mathcal C=\frac n2.
+%			$
+%			\\
+%			\hline
+%			LCD code
+%			&
+%			The code and its dual intersect trivially.
+%			&
+%			\[
+%			\mathcal C\cap \mathcal C^\perp=\{0\}.
+%			\]
+%			&
+%			Then the ambient space splits as a direct sum:
+%			\[
+%			\F_q^n=\mathcal C\oplus \mathcal C^\perp.
+%			\]
+%			\\
+%			\hline
+%		\end{tabular}
+%		\caption{Comparison of nondegeneracy, positive-definiteness, isotropic vectors, self-orthogonal codes, self-dual codes, and LCD codes.}
+%	\end{table}
+	
+	\subsection*{Nondegenerate bilinear form}
+	
+	A bilinear form \(\langle\ ,\ \rangle\) on \(\F_q^n\) is called \emph{nondegenerate} if
+	\[
+	\langle x,v\rangle=0 \quad \text{for all } x\in \F_q^n
+	\quad \Longrightarrow \quad
+	v=0.
+	\]
+	This means that no nonzero vector is orthogonal to every vector in the whole ambient space.
+	
+	In coding theory, this property ensures that orthogonal complements behave well. In particular, for any linear code \(\mathcal C\subseteq \F_q^n\),
+	\[
+	\dim \mathcal C+\dim \mathcal C^\perp=n,
+	\qquad
+	(\mathcal C^\perp)^\perp=\mathcal C.
+	\]
+	
+	\subsection*{Positive-definite form}
+	
+	A bilinear form is called \emph{positive-definite} in the Euclidean sense if
+	\[
+	\langle v,v\rangle=0 \quad \Longrightarrow \quad v=0.
+	\]
+	This is the property that makes orthogonality in \(\mathbb R^n\) so rigid.
+	
+	However, over finite fields the standard bilinear form is generally \emph{not} positive-definite. Therefore it may happen that a nonzero vector satisfies
+	\[
+	\langle v,v\rangle=0.
+	\]
+	This is the main reason why one cannot generally conclude that
+	\[
+	\mathcal C\cap \mathcal C^\perp=\{0\}.
+	\]
+	
+	\subsection*{Isotropic vector}
+	
+	A nonzero vector \(v\in \F_q^n\) is called \emph{isotropic} if
+	\[
+	\langle v,v\rangle=0.
+	\]
+	So an isotropic vector is a nonzero vector that is orthogonal to itself.
+	
+	Such vectors are impossible in a positive-definite space, but they often exist over finite fields. Their existence is exactly what allows a codeword to lie in both \(\mathcal C\) and \(\mathcal C^\perp\).
+	
+	\subsection*{Self-orthogonal code}
+	
+	A linear code \(\mathcal C\subseteq \F_q^n\) is called \emph{self-orthogonal} if
+	\[
+	\mathcal C\subseteq \mathcal C^\perp.
+	\]
+	This means that every codeword is orthogonal to every codeword of the code, including itself.
+	
+	In that case, every vector in \(\mathcal C\) automatically satisfies all parity checks coming from \(\mathcal C\) itself. In particular,
+	\[
+	\mathcal C\cap \mathcal C^\perp=\mathcal C.
+	\]
+	
+	\subsection*{Self-dual code}
+	
+	A linear code \(\mathcal C\subseteq \F_q^n\) is called \emph{self-dual} if
+	\[
+	\mathcal C=\mathcal C^\perp.
+	\]
+	So the code coincides exactly with its dual code.
+	
+	This means that the code is simultaneously the space of codewords and the space of all parity checks for those codewords. Since
+	\[
+	\dim \mathcal C+\dim \mathcal C^\perp=n,
+	\]
+	a self-dual code must satisfy
+	\[
+	\dim \mathcal C=\frac n2.
+	\]
+	
+	\subsection*{LCD code}
+	
+	A linear code \(\mathcal C\subseteq \F_q^n\) is called \emph{LCD} (linear complementary dual) if
+	\[
+	\mathcal C\cap \mathcal C^\perp=\{0\}.
+	\]
+	This means that the code and its dual meet only at the zero vector.
+	
+	In that case the ambient space splits as a direct sum:
+	\[
+	\F_q^n=\mathcal C\oplus \mathcal C^\perp.
+	\]
+	So every vector in \(\F_q^n\) can be written uniquely as the sum of one vector from \(\mathcal C\) and one vector from \(\mathcal C^\perp\).
+	
+	\subsection*{Main point}
+	
+	The key distinction is the following:
+	
+	\begin{itemize}
+		\item nondegeneracy says that no nonzero vector is orthogonal to the entire ambient space;
+		\item positive-definiteness says that no nonzero vector is orthogonal to itself.
+	\end{itemize}
+	
+	Over finite fields, the standard bilinear form is nondegenerate but usually not positive-definite. Hence isotropic vectors may exist, and therefore it is possible that
+	\[
+	\mathcal C\cap \mathcal C^\perp\neq \{0\}.
+	\]
+	
+	\subsection*{Example}
+	
+	Over \(\F_2\), let
+	\[
+	\mathcal C=\operatorname{span}\{(1,1)\}\subseteq \F_2^2.
+	\]
+	Then
+	\[
+	\langle (1,1),(1,1)\rangle = 1+1 = 0 \pmod 2.
+	\]
+	So \((1,1)\) is isotropic. Hence
+	\[
+	\mathcal C=\mathcal C^\perp,
+	\]
+	and therefore
+	\[
+	\mathcal C\cap \mathcal C^\perp=\mathcal C\neq \{0\}.
+	\]
+	This shows that trivial intersection does not hold in general over finite fields.
+
+
+	\begin{example}
+		Over \(\F_2\), let
+		\[
+		\mathcal C=\operatorname{span}\{(1,1)\}\subseteq \F_2^2.
+		\]
+		Then
+		\[
+		\langle (1,1),(1,1)\rangle = 1+1 = 0 \pmod 2.
+		\]
+		So \((1,1)\) is isotropic, and hence
+		\[
+		\mathcal C=\mathcal C^\perp.
+		\]
+		Therefore
+		\[
+		\mathcal C\cap \mathcal C^\perp=\mathcal C\neq \{0\}.
+		\]
+		This shows that trivial intersection does not hold in general over finite fields.
+	\end{example}
+\end{document}
