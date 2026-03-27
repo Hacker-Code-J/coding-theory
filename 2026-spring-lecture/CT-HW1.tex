@@ -23,23 +23,23 @@
 %\renewcommand*\familydefault{\sfdefault}
 %\usepackage{textcomp}
 
-%\usepackage[T1]{fontspec}
-%\usepackage{newpxtext,newpxmath}
-%\setmainfont{TeX Gyre Termes}
-%\setsansfont[
-%Path = fonts/,
-%UprightFont = *Medium.ttf,
-%BoldFont    = *Bold.ttf,
-%AutoFakeSlant = 0.2
-%]{GmarketSansTTF}
-\usepackage{fontspec}
-\usepackage{unicode-math} % The modern replacement for newpxmath
+%%\usepackage[T1]{fontspec}
+%%\usepackage{newpxtext,newpxmath}
+%%\setmainfont{TeX Gyre Termes}
+%%\setsansfont[
+%%Path = fonts/,
+%%UprightFont = *Medium.ttf,
+%%BoldFont    = *Bold.ttf,
+%%AutoFakeSlant = 0.2
+%%]{GmarketSansTTF}
+%\usepackage{fontspec}
+%\usepackage{unicode-math} % The modern replacement for newpxmath
 
 % Set the main serif text font (Times clone)
 \setmainfont{TeX Gyre Termes}
 
-% Set the matching math font
-\setmathfont{TeX Gyre Termes Math} 
+%% Set the matching math font
+%\setmathfont{TeX Gyre Termes Math} 
 
 % Set the sans-serif font using your local .ttf files
 \setsansfont[
@@ -84,10 +84,12 @@ AutoFakeSlant = 0.2
 \usepackage[most]{tcolorbox}
 
 %Tikzpicture
+\usepackage{tikz}
 \usepackage{tikz-cd}
-\usetikzlibrary{positioning}
+\usetikzlibrary{calc, positioning, arrows.meta, shapes.symbols, decorations.pathreplacing}
 \usetikzlibrary{angles, quotes}
 \usetikzlibrary{patterns,patterns.meta}
+\usetikzlibrary{matrix, fit, backgrounds, positioning, calc}
 
 \usepackage[linesnumbered,ruled]{algorithm2e}
 \usepackage{algpseudocode}
@@ -189,7 +191,7 @@ AutoFakeSlant = 0.2
 \newtheorem{theorem}{Theorem}
 \newtheorem*{theorem*}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{corollary}[theorem]{Corollary}
 \newtheorem*{corollary*}{Corollary}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem*{lemma*}{Lemma}
@@ -217,7 +219,7 @@ AutoFakeSlant = 0.2
 \newcommand{\Arg}{\operatorname{Arg}}
 \newcommand{\pv}{\operatorname{P.V.}}
 %\newcommand{\F}{\mathbb{F}}
-\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\GL}{\text{GL}}
 \newcommand{\rank}{\operatorname{rank}}
 \newcommand{\im}{\operatorname{Im}}
 \newcommand{\Ker}{\operatorname{Ker}}
@@ -244,6 +246,9 @@ AutoFakeSlant = 0.2
 
 \renewcommand{\emph}[1]{\textbf{#1}}
 
+
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_q}
+
 \definecolor{axiomcolor}{HTML}{a88bfa}
 \definecolor{defcolor}{RGB}{52, 152, 219}
 \definecolor{procolor}{RGB}{241, 196, 15}
@@ -254,6 +259,7 @@ AutoFakeSlant = 0.2
 
 \usepackage{blochsphere}
 \usepackage{braket}
+\usepackage{adjustbox}
 
 %------------------------------------------------------------------
 % Global parameters for the Bloch sphere and state coordinates
@@ -266,242 +272,224 @@ AutoFakeSlant = 0.2
 \begin{document}
 \pagenumbering{arabic}
 \begin{center}
-	\huge\textbf{HW\#1: Counting Invertible Matrices}\\
+	\huge\textbf{HW\#1: Number of Distinct $k$-dimensional Subspaces in $n$-dimensional Vector Space}\\
 	\vspace{0.5em}
 \end{center}
 
-\begin{notation}
-	We denote the space of $m\times m$ matrices over a finite field $\F_q$ by $\mathrm{Mat}_m(\F_q)$ instead of $\F_q^{m\times m}$.
-\end{notation}
-
-
-\begin{tcolorbox}[colback=white, colframe=axiomcolor,title={\textbf{Cardinality of the matrix space \(\mathrm{Mat}_m(\F_q)\)}}]
-\begin{proposition}
-Let \(m,n\in \mathbb{Z}_{>0}\), and let \(q\) be a prime power. The number of \(m\times n\) matrices over the finite field \(\F_q\) is \[
-\bigl|\mathrm{Mat}_m(\F_q)\bigr|=q^{mn}.
-\]
-In particular, \[
-\bigl|\mathrm{Mat}_m(\F_q)\bigr|=q^{m^2}.
-\]
-\end{proposition}
-\end{tcolorbox}
-
-%\begin{proof}
-%We write an arbitrary matrix $A\in\mathrm{Mat}_{m\times n}(\F_q)$ in matrix form: \[
-%A=
-%\begin{pmatrix}
-%	a_{11} & a_{12} & \cdots & a_{1n}\\
-%	a_{21} & a_{22} & \cdots & a_{2n}\\
-%	\vdots & \vdots & \ddots & \vdots\\
-%	a_{m1} & a_{m2} & \cdots & a_{mn}
-%\end{pmatrix},
-%\qquad a_{ij}\in \F_q.
-%\]To specify such a matrix, we must choose each entry
-%\[
-%a_{11},a_{12},\dots,a_{1n},
-%a_{21},a_{22},\dots,a_{2n},
-%\dots,
-%a_{m1},a_{m2},\dots,a_{mn}.
-%\]
-%There are exactly \(mn\) entries altogether.
+%\begin{notation}
+%	We denote the space of $m\times m$ matrices over a finite field $\F_q$ by $\mathrm{Mat}_m(\F_q)$ instead of $\F_q^{m\times m}$.
+%\end{notation}
 %
-%Since \(\F_q\) has exactly \(q\) elements, each entry \(a_{ij}\) has \(q\) possible choices. Thus \[
-%\begin{array}{cccccc}
-%	a_{11} & a_{12} & \cdots & a_{1n} & \cdots & a_{mn}\\
-%	q & q & \cdots & q & \cdots & q
-%\end{array}
-%\]
-%By the product rule, the total number of matrices is \[
-%\underbrace{q\cdot q\cdot \dots \cdot q}_{mn\text{ factors}}
-%=
-%q^{mn}.
-%\]
-%Therefore
-%\[
-%\bigl|\mathrm{Mat}_{m\times n}(\F_q)\bigr|=q^{mn}.
-%\]
-%In the case \(n=m\), we get
-%\[
-%\bigl|\mathrm{Mat}_m(\F_q)\bigr|
-%=
-%q^{m\cdot m}
-%=
-%q^{m^2}.
-%\]
-%\end{proof}
-
-%\newpage
-
-\medskip
-
-\begin{tcolorbox}[colback=white, colframe=defcolor,title={\textbf{General linear group}}]
-\begin{definition}
-	The \emph{general linear group} over \(\F_q\) is
-	\[
-	\GL_m(\F_q) := \{A\in \mathrm{Mat}_{m\times m}(\F_q) : A \text{ is invertible}\}.
-	\]
-\end{definition}
-\end{tcolorbox}
-\begin{remark}
-	$\GL_m(\F_q)=\set{A\in\mathrm{Mat}_{m\times m}(\F_q):\det A\neq 0}=\mathrm{Mat}_{m\times m}(\F_q)\setminus\set{A\in\mathrm{Mat}_{m\times m}(\F_q):\det A = 0}$.
-\end{remark}
-
-\begin{remark}
-	Let
-	\[
-	A=
-	\begin{pmatrix}
-		| & | & & |\\
-		\textbf{v}_1 & \textbf{v}_2 & \cdots & \textbf{v}_m\\
-		| & | & & |
-	\end{pmatrix}
-	\in \mathrm{Mat}_{m\times m}(\F_q),
-	\]
-	where \(\textbf{v}_i\in \F_q^m\) are the columns of \(A\). Then \(A\) is invertible if and only if its columns are linearly independent.
-	\begin{center}
-		\includegraphics[width=\textwidth]{tikz/HW1-invertible.pdf}
-	\end{center}
-\end{remark}
-
-%\newpage
-
-\begin{observation}[Computation of \(|GL_1(\F_q)|\)]
-\; \begin{center}
-\begin{minipage}{.48\textwidth}
-A \(1\times 1\) matrix has the form
-\[
-A=\begin{pmatrix} a \end{pmatrix}=a, \qquad a\in \F_q.
-\]
-Such a matrix is invertible iff \(a\neq 0\). Therefore \[
-GL_1(\F_q)=\left\{a: a\in \F_q^\times\right\},
-\]
-and hence
-\[
-|GL_1(\F_q)|=|\F_q^\times|=q-1.
-\]
-\end{minipage}
-\begin{minipage}{.48\textwidth}\centering
-	\includegraphics[width=.7\textwidth]{tikz/HW1-card-gl_1.pdf}
-\end{minipage}
-\end{center}
-\end{observation}
-
-\newpage
-
-\begin{observation}[Computation of \(|GL_2(\F_q)|\)]
-\; \begin{center}
-\begin{minipage}{.49\textwidth}
-A \(2\times 2\) matrix has the form
-\[
-A=\begin{pmatrix}
-	a & b\\
-	c & d
-\end{pmatrix},
-\qquad a,b,c,d\in \F_q.
-\] Write the columns as
-\[
-\textbf{v}_1=\begin{pmatrix} a\\ c \end{pmatrix},
-\qquad
-\textbf{v}_2=\begin{pmatrix} b\\ d \end{pmatrix}.
-\]
-\end{minipage}
-\begin{minipage}{.49\textwidth}\centering
-	\includegraphics[width=.8\textwidth]{tikz/HW1-card-gl_2.pdf}
-\end{minipage}
-\end{center}
-\begin{enumerate}[(i)]
-	\item The vector \(\textbf{v}_1\) can be any nonzero vector in \(\F_q^2\). Hence there are
-	$q^2-1$ choices.
-	\item Since \(\Span(\textbf{v}_1)=\set{\lambda\textbf{v}_1:\lambda\in\F_q}\) has exactly \(q\) elements, there are
-	$q^2-q$ choices for \(\textbf{v}_2\).
-\end{enumerate}
-	Multiplying these choices, we obtain
-	\[
-	|GL_2(\F_q)|=(q^2-1)(q^2-q).
-	\]
-\end{observation}
-
-\medskip
-
-\begin{observation}[Computation of \(|GL_3(\F_q)|\)]
-\; \begin{center}
-%	\begin{minipage}{.49\textwidth}
-%A \(3\times 3\) matrix has the form
-%\[
-%A=
-%\begin{pmatrix}
-%	a & b & c\\
-%	d & e & f\\
-%	g & h & i
-%\end{pmatrix},
-%\] $a,b,c,d,e,f,g,h,i\in \F_q.$
-%Write the columns as
-%\[
-%\textbf{v}_1=
-%\begin{pmatrix}
-%	a\\ d\\ g
-%\end{pmatrix},
-%\qquad
-%\textbf{v}_2=
-%\begin{pmatrix}
-%	b\\ e\\ h
-%\end{pmatrix},
-%\qquad
-%\textbf{v}_3=
-%\begin{pmatrix}
-%	c\\ f\\ i
-%\end{pmatrix}.
-%\]
-%\end{minipage}
-%	\begin{minipage}{.49\textwidth}\centering
-%		\includegraphics[width=1\textwidth]{tikz/HW1-card-gl_3.pdf}
-%	\end{minipage}
-\includegraphics[scale=1.4]{tikz/HW1-card-gl_3.pdf}
-\end{center}
-%\begin{enumerate}[(i)]
-%	\item The vector \(\textbf{v}_1\) can be any nonzero vector in \(\F_q^3\). Hence there are $
-%	q^3-1$ choices.
-%	\item Since \(\Span(\textbf{v}_1)\) has exactly \(q\) elements, there are $
-%	q^3-q$ choices for \(\textbf{v}_2\).
-%	\item Since \(\textbf{v}_1\) and \(\textbf{v}_2\) are linearly independent, their span is a \(2\)-dimensional subspace of \(\F_q^3\), so it has exactly \(q^2\) elements. Therefore there are $
-%	q^3-q^2$ choices for \(v_3\).
-%\end{enumerate}
-%Multiplying these choices, we obtain
-%\[
-%|GL_3(\F_q)|=(q^3-1)(q^3-q)(q^3-q^2).
-%\]
-\end{observation}
-
-\medskip
-
-\begin{observation}[Computation of \(|GL_4(\F_q)|\)]
-	\; \begin{center}
-			\includegraphics[scale=1.4]{tikz/HW1-card-gl_4.pdf}
-		\end{center}
-\end{observation}
-
-\newpage
-\begin{tcolorbox}[colback=white, colframe=axiomcolor,title={\textbf{Counting invertible matrices over a finite field \(\F_q\)}}]
-\begin{theorem}
-Let \(m,n\in \mathbb{Z}_{>0}\), and let \(q\) be a prime power.
-The number of invertible \(m\times m\) matrices over \(\F_q\) is \[
-|\GL_m(\F_q)| = (q^m-1)(q^m-q)(q^m-q^2)\cdots(q^m-q^{m-1}).
-\]
-Equivalently, \[
-|\GL_m(\F_q)| = \prod_{i=0}^{m-1}(q^m-q^i).
-\]
+%\medskip
+%
+%\begin{tcolorbox}[colback=white, colframe=axiomcolor,title={\textbf{Counting invertible matrices over a finite field \(\F_q\)}}]
+%\begin{lemma}
+%Let \(n\in \mathbb{Z}_{>0}\), and let \(q\) be a prime power.
 %The number of invertible \(m\times m\) matrices over \(\F_q\) is \[
-%|\GL_m(\F_q)| = (q^m-1)(q^m-q)(q^m-q^2)\cdots(q^m-q^{m-1})
-%= \prod_{i=0}^{m-1}(q^m-q^i).
+%|\GL_n(\F_q)| = (q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{n-1}).
 %\]
+%Equivalently, \[
+%|\GL_n(\F_q)| = \prod_{i=0}^{n-1}(q^n-q^i).
+%\]
+%\end{lemma}
+%\end{tcolorbox}
+
+\medskip
+\begin{note}
+Consider a \(k\)-dimensional subspace \(W\leq \F_q^n\). \\
+%Then 
+%\[\#\text{(Distinct Subspaces)} = \frac{\text{\#(Total Bases)}}{\#\text{(Bases per Subspace)}}\]
+\adjustbox{scale=.75,center}{
+\begin{tikzpicture}[font=\sffamily]
+	% --- LEFT PANEL: THE METAPHOR (SHEEP & LEGS) ---
+	\node[draw, thick, rounded corners, minimum width=7.5cm, minimum height=6cm] (MetaphorBox) at (-4,0) {};
+	%		\node[font=\Large\bfseries, text=green!60!black] at (-4, 2.8) {The Metaphor};
+	
+	\begin{scope}[shift={(0,1)}]
+	% Sheep Body (The 'Space')
+	\node[cloud, cloud puffs=13, cloud puff arc=110, aspect=2.2, draw=black, thick, fill=white, minimum width=3cm, minimum height=1.5cm] (Sheep) at (-4, 0.8) {\textbf{1 Sheep}};
+	
+	% Sheep Legs (The 'Bases')
+	\draw[line width=4pt, color=darkgray, line cap=round] (-4.8, 0.2) -- (-4.8, -.2) node[below, font=\small\bfseries] {1};
+	\draw[line width=4pt, color=darkgray, line cap=round] (-4.3, 0.2) -- (-4.3, -.2) node[below, font=\small\bfseries] {2};
+	\draw[line width=4pt, color=darkgray, line cap=round] (-3.7, 0.2) -- (-3.7, -.2) node[below, font=\small\bfseries] {3};
+	\draw[line width=4pt, color=darkgray, line cap=round] (-3.2, 0.2) -- (-3.2, -.2) node[below, font=\small\bfseries] {4};
+	\end{scope}
+
+	\begin{scope}[shift={(-2,-2)}]
+		\node[cloud, cloud puffs=13, cloud puff arc=110, aspect=2.2, draw=black, thick, fill=white, minimum width=3cm, minimum height=1.5cm] (Sheep) at (-4, 0.8) {\textbf{1 Sheep}};
+		
+		% Sheep Legs (The 'Bases')
+		\draw[line width=4pt, color=darkgray, line cap=round] (-4.8, 0.2) -- (-4.8, -.2) node[below, font=\small\bfseries] {1};
+		\draw[line width=4pt, color=darkgray, line cap=round] (-4.3, 0.2) -- (-4.3, -.2) node[below, font=\small\bfseries] {2};
+		\draw[line width=4pt, color=darkgray, line cap=round] (-3.7, 0.2) -- (-3.7, -.2) node[below, font=\small\bfseries] {3};
+		\draw[line width=4pt, color=darkgray, line cap=round] (-3.2, 0.2) -- (-3.2, -.2) node[below, font=\small\bfseries] {4};
+	\end{scope}
+
+
+	\begin{scope}[shift={(2,-2)}]
+		\node[cloud, cloud puffs=13, cloud puff arc=110, aspect=2.2, draw=black, thick, fill=white, minimum width=3cm, minimum height=1.5cm] (Sheep) at (-4, 0.8) {\textbf{1 Sheep}};
+		
+		% Sheep Legs (The 'Bases')
+		\draw[line width=4pt, color=darkgray, line cap=round] (-4.8, 0.2) -- (-4.8, -.2) node[below, font=\small\bfseries] {1};
+		\draw[line width=4pt, color=darkgray, line cap=round] (-4.3, 0.2) -- (-4.3, -.2) node[below, font=\small\bfseries] {2};
+		\draw[line width=4pt, color=darkgray, line cap=round] (-3.7, 0.2) -- (-3.7, -.2) node[below, font=\small\bfseries] {3};
+		\draw[line width=4pt, color=darkgray, line cap=round] (-3.2, 0.2) -- (-3.2, -.2) node[below, font=\small\bfseries] {4};
+	\end{scope}
+	
+	% --- RIGHT PANEL: THE MATH (SUBSPACE & BASES) ---
+	\node[draw, thick, rounded corners, minimum width=7.5cm, minimum height=6cm] (MathBox) at (4,0) {};
+	%		\node[font=\Large\bfseries, text=blue!60!black] at (4, 2.8) {The Mathematics};
+	
+	% Origin
+	\coordinate (Origin) at (4, -1.5);
+	
+	% Basis Vectors (The 'Legs')
+	\draw[->, >=Stealth, line width=1.5pt, color=cyan] (Origin) -- (3.0, 0.6) node[midway, left=2pt] {$\mathbf{v}_1$};
+	\draw[->, >=Stealth, line width=1.5pt, color=cyan] (Origin) -- (4.0, 1.4) node[near end, right=2pt] {$\mathbf{v}_2$};
+	\draw[->, >=Stealth, line width=1.5pt, color=cyan, dashed] (Origin) -- (5.0, 0.4) node[midway, right=2pt] {$\dots \mathbf{v}_k$};
+	
+	\filldraw[black] (Origin) circle (1.5pt) node[right, font=\small\bfseries] {$O$};
+	
+	% Subspace Platform (The 'Sheep')
+	\draw[fill=blue!15, draw=blue!80!black, thick, line join=round, opacity=.5] (1.5, 1.2) -- (4, 2.0) -- (6.75, 0.8) -- (4.25, 0.0) -- cycle;
+	\node[font=\bfseries, text=blue!80!black] at (4.2, 1.0) {1 Subspace $W\leq \mathbb F_q^n$};
+	
+	% Bottom Summary Equation
+	\node[draw=darkgray, thick, fill=white, rounded corners=6pt, minimum width=10cm, inner sep=10pt, align=center] at (0, -4.3) {
+		\large $\text{Total legs} = \text{(number of sheep)}\times\text{(legs per sheep)}$\\ [4pt]
+		\large $\text{Total bases} = \text{(number of subspaces)}\times\text{(bases per subspace)}$
+%		\large $\displaystyle \frac{\text{Total Legs}}{\text{Legs per Sheep}} \quad \equiv \quad \frac{\text{Total Independent } k\text{-tuples}}{\text{Bases per Subspace}}$
+	};
+\end{tikzpicture}}
+We have two steps.
+\begin{enumerate}
+	\item Count all ordered \(k\)-tuples $
+	(\textbf{v}_1,\dots,\textbf{v}_k)$
+	of linearly independent vectors in \(V\).
+	\item Divide by the number of ordered bases of one fixed \(k\)-dimensional subspace.
+\end{enumerate}
+Then we have \[
+\#\{\text{\(k\)-dimensional subspaces of }V\}
+=
+\frac{\#\{\text{ordered linearly independent \(k\)-tuples in }V\}}
+{\#\{\text{ordered bases of one fixed \(k\)-dimensional subspace}\}}.
+\]
+\end{note}
+
+%\newpage
+%\vfill
+
+\begin{tcolorbox}[colback=white, colframe=axiomcolor,title={\textbf{}}]
+\begin{theorem}
+Let \(V=\F_q^n\) be a $n$-dimensional $\F_2$-vector space, where \(q\) is a prime power. For \(0\le k\le n\),
+\[
+\#\{W\leq \F_q^n : \dim W = k\}
+=
+\qbinom{n}{k}
+=
+\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+=
+\frac{(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})}{(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})}.
+\]
 \end{theorem}
 \end{tcolorbox}
 
-\begin{remark}
-\; \begin{center}
-	\includegraphics[width=.8\textwidth]{tikz/HW1-card-gl_m.pdf}
+%\begin{proof}
+%Let
+%\[
+%\Omega=\{(v_1,\dots,v_k)\in (\F_q^n)^k : v_1,\dots,v_k \text{ are linearly independent}\}.
+%\]
+%Then
+%\[
+%|\Omega|=(q^n-1)(q^n-q)\cdots(q^n-q^{k-1}),
+%\]
+%since \(v_1\) can be any nonzero vector, and after choosing \(v_1,\dots,v_i\), the next vector \(v_{i+1}\) can be any vector outside their span, which has \(q^i\) elements.
+%
+%On the other hand, every element of \(\Omega\) is an ordered basis of a unique \(k\)-dimensional subspace of \(\F_q^n\), and each \(k\)-dimensional subspace has exactly
+%\[
+%(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})
+%\]
+%ordered bases.
+%
+%Therefore
+%\[
+%\#\{W\le \F_q^n:\dim W=k\}
+%=
+%\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+%{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}
+%=
+%\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+%=
+%\qbinom{n}{k}.
+%\]	
+	
+%We count the set
+%\[
+%\Omega=\{(v_1,\dots,v_k)\in (\F_q^n)^k : v_1,\dots,v_k \text{ are linearly independent}\}
+%\]
+%in two ways.
+%
+%First, we count \(\Omega\) directly. The first vector \(v_1\) may be any nonzero vector of \(\F_q^n\), so there are \(q^n-1\) choices. Once \(v_1,\dots,v_i\) have been chosen linearly independently, their span has dimension \(i\), hence contains exactly \(q^i\) vectors. Therefore \(v_{i+1}\) may be chosen arbitrarily outside this span, giving \(q^n-q^i\) choices. Thus
+%\[
+%|\Omega|
+%=
+%(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+%\]
+%
+%Next, we count \(\Omega\) by first choosing the subspace spanned by the tuple. Every element \((v_1,\dots,v_k)\in\Omega\) is an ordered basis of the \(k\)-dimensional subspace
+%\[
+%W=\langle v_1,\dots,v_k\rangle.
+%\]
+%Conversely, every ordered basis of a \(k\)-dimensional subspace gives an element of \(\Omega\).
+%
+%Now fix a \(k\)-dimensional subspace \(W\le \F_q^n\). The number of ordered bases of \(W\) is computed in exactly the same way as above, but now inside the \(k\)-dimensional space \(W\). The first basis vector may be any nonzero vector of \(W\), so there are \(q^k-1\) choices. After choosing \(i\) linearly independent vectors in \(W\), their span contains \(q^i\) vectors, so the next basis vector has \(q^k-q^i\) choices. Hence the number of ordered bases of \(W\) is
+%\[
+%(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+%\]
+%
+%Let
+%\[
+%N=\#\{W\le \F_q^n:\dim W=k\}.
+%\]
+%Since every \(k\)-dimensional subspace has the same number of ordered bases, counting \(\Omega\) by subspaces gives
+%\[
+%|\Omega|
+%=
+%N\,(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+%\]
+%
+%Comparing this with the first count of \(|\Omega|\), we obtain
+%\[
+%(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})
+%=
+%N\,(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+%\]
+%Therefore
+%\[
+%N
+%=
+%\frac{(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})}
+%{(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})}.
+%\]
+%
+%Finally, this may be written as
+%\[
+%N
+%=
+%\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}.
+%\]
+%By definition, this is the Gaussian binomial coefficient \(\qbinom{n}{k}\). Hence
+%\[
+%\#\{W\leq \F_q^n:\dim W=k\}
+%=
+%\qbinom{n}{k}.
+%\]
+%\end{proof}
+
+\begin{center}
+\includegraphics[width=\textwidth]{HW1/k-dim-vs-tikz1.pdf}
 \end{center}
-\end{remark}
 
 %\begin{proof}
 %	We count invertible matrices by choosing their columns.
@@ -517,205 +505,11 @@ Equivalently, \[
 %	\]
 %\end{proof}
 
-%\begin{remark}
-%	There is a natural bijection between \(GL_m(\F_q)\) and the set of ordered bases of \(\F_q^m\). Indeed, an invertible matrix
-%	\[
-%	A=
-%	\begin{pmatrix}
-%		| & | & & |\\
-%		v_1 & v_2 & \cdots & v_m\\
-%		| & | & & |
-%	\end{pmatrix}\in GL_m(\F_q)
-%	\]
-%	is determined by its columns, and \(A\) is invertible if and only if \(v_1,\dots,v_m\) form a basis of \(\F_q^m\). Since the columns are listed in order, this is an ordered basis.
-%\end{remark}
-%
-%\begin{remark}
-%	An invertible matrix is the same thing as an \emph{ordered basis} of \(\F_q^m\), written as columns. Thus \begin{align*}
-%	\GL_m(\F_q) &= \{\text{ordered bases of }\F_q^m\text{ written as columns}\}, \\
-%	|\GL_m(\F_q)| &= \#\{\text{ordered bases of }\F_q^m\}.
-%	\end{align*}
-%\end{remark}
-
 \medskip
 
-\begin{remark}
-Recall that
-\[
-|\Mat_m(\F_q)|=q^{m^2},
-\qquad
-|GL_m(\F_q)|=\prod_{i=0}^{m-1}(q^m-q^i),
-\]
-and hence \begin{align*}
-\frac{|GL_m(\F_q)|}{|\Mat_m(\F_q)|} =
-\frac{\prod_{i=0}^{m-1}(q^m-q^i)}{q^{m^2}}
-&= \frac{1}{q^{m^2}}\left[(q^m-1)(q^m-q)(q^m-q^2)\cdots(q^m-q^{m-1})\right] \\
-&= \frac{1}{q^{m^2}}\left[q^m\Bigg(1-\frac{1}{q^m}\Bigg)\Bigg(1-\frac{1}{q^{m-1}}\Bigg)\Bigg(1-\frac{1}{q^{m-2}}\Bigg)\cdots\Bigg(1-\frac{1}{q^{1}}\Bigg)\right]\\
-&= \Bigg(1-\frac{1}{q^m}\Bigg)\Bigg(1-\frac{1}{q^{m-1}}\Bigg)\Bigg(1-\frac{1}{q^{m-2}}\Bigg)\cdots\Bigg(1-\frac{1}{q^{1}}\Bigg)\\
-&=\prod_{j=1}^{m}(1-q^{-j}).
-\end{align*}
-%\[
-%\frac{|GL_m(\F_q)|}{|\Mat_m(\F_q)|}
-%=
-%\prod_{j=1}^{m}(1-q^{-j}).
-%\]
+
 
 \newpage
-\begin{center}
-	\resizebox{\textwidth}{!}{%
-		\renewcommand{\arraystretch}{1.5}
-		\begin{tabular}{c c c c}
-			\toprule
-			\rowcolor{gray!8}
-			\(m\) & \(\lvert \Mat_m(\F_q)\rvert\) & \(\lvert GL_m(\F_q)\rvert\) & \(\dfrac{\lvert GL_m(\F_q)\rvert}{\lvert \Mat_m(\F_q)\rvert}\) \\
-			\midrule
-			\(1\) & \(q\) & \(q-1\) & \(1-q^{-1}\) \\
-			\rowcolor{gray!8}
-			\(2\) & \(q^4\) & \((q^2-1)(q^2-q)\) & \((1-q^{-1})(1-q^{-2})\) \\
-			\(3\) & \(q^9\) & \((q^3-1)(q^3-q)(q^3-q^2)\) & \((1-q^{-1})(1-q^{-2})(1-q^{-3})\) \\
-			\rowcolor{gray!8}
-			\(4\) & \(q^{16}\) & \((q^4-1)(q^4-q)(q^4-q^2)(q^4-q^3)\) & \((1-q^{-1})(1-q^{-2})(1-q^{-3})(1-q^{-4})\) \\
-			\(\vdots\) & \(\vdots\) & \(\vdots\) & \(\vdots\) \\
-			\rowcolor{gray!8}
-			\(m\) & \(q^{m^2}\) & \(\displaystyle\prod_{i=0}^{m-1}(q^m-q^i)\) & \(\displaystyle\prod_{j=1}^{m}(1-q^{-j})\) \\
-			\bottomrule
-		\end{tabular}}
-\end{center}
-\end{remark}
-
-\medskip
-
-\begin{example}[Invertible binary matrices]
-For \(q=2\), we have
-\[
-|\Mat_m(\F_2)|=2^{m^2},
-\qquad
-\frac{|GL_m(\F_2)|}{|\Mat_m(\F_2)|}
-=
-\prod_{j=1}^{m}(1-2^{-j}).
-\] 	\begin{center}
-	\renewcommand{\arraystretch}{1.5}
-	\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}c c c c}
-		\toprule
-%		\rowcolor{gray!8}
-		\(m\) & \(\lvert \Mat_m(\F_2)\rvert\) & \(\lvert GL_m(\F_2)\rvert\) & \(\dfrac{\lvert GL_m(\F_2)\rvert}{\lvert \Mat_m(\F_2)\rvert}\) \\
-		\midrule
-		\(1\) & \(2\) & \(1\) & \(0.500000\) \\
-		\(2\) & \(16\) & \(6\) & \(0.375000\) \\ %\rowcolor{gray!8}
-		\(3\) & \(512\) & \(168\) & \(0.328125\) \\
-		\(4\) & \(65,536\) & \(20,160\) & \(0.307617\) \\ %\rowcolor{gray!8}
-		\(\vdots\) & \(\vdots\) & \(\vdots\) & \(\vdots\) \\
-		\(20\) & \(-\) & \(-\) & \(0.288788\) \\
-		\bottomrule
-	\end{tabular*}
-\end{center}
-
-\begin{lstlisting}[style=sagemath, numbers=none]
-q = 2
-
-print(f"{'m':>2} {'|Mat_m(F_q)|':>15} {'|GL_m(F_q)|':>15} {'ratio':>12}")
-print("-" * 48)
-
-for m in range(1, 7):
-	Mat = q^(m^2)
-	GL = prod(q^m - q^i for i in range(m))
-	ratio = GL / Mat
-	print(f"{m:>2} {Mat:>15} {GL:>15} {ratio.n():>12.6f}")
-\end{lstlisting}
-\begin{lstlisting}
-m    |Mat_m(F_q)|     |GL_m(F_q)|        ratio
-------------------------------------------------
-1               2               1     0.500000
-2              16               6     0.375000
-3             512             168     0.328125
-4           65536           20160     0.307617
-5        33554432         9999360     0.298004
-6     68719476736     20158709760     0.293348
-\end{lstlisting}
-\end{example}
-
-\newpage
-\begin{tcolorbox}[colback=white, colframe=axiomcolor,title={\textbf{}}]
-\begin{proposition}
-Let \(q\ge 2\) be fixed, and define
-\[
-a_m:=\frac{|GL_m(\F_q)|}{|\Mat_m(\F_q)|}
-=
-\prod_{j=1}^{m}(1-q^{-j}).
-\]
-Then the sequence \(\langle a_m\rangle_{m\ge 1}\) converges as \(m\to\infty\). In other words, there exists $\lim\limits_{n\to\infty}\prod_{j=1}^{m}(1-q^{-j})\in\R$. %Moreover, its limit is positive.
-\end{proposition}
-\end{tcolorbox}
-%\begin{proof}
-%Since each factor satisfies \(0<1-\frac{1}{q^j}<1\), we have \(a_m>0\) for all \(m\). Also,
-%\[
-%a_{m+1}=a_m(1-q^{-(m+1)})<a_m,
-%\]
-%so \((a_m)\) is decreasing. Hence \((a_m)\) is decreasing and bounded below by \(0\), therefore it converges.
-%\end{proof}
-\begin{proof}
-For every \(j\ge 1\),
-\[
-q\ge 2\implies q^j\ge 2^j>1\implies
-0<\frac{1}{q^j}<1.
-\]
-Therefore
-\[
-0<\frac{1}{q^j}<1\implies 
--1<-\frac{1}{q^j}<0\implies 0<1-\frac{1}{q^j}<1.
-\]
-It follows that for each \(m\ge 1\),
-\[
-a_m=\prod_{j=1}^{m}(1-q^{-j})>0.
-\]
-So the sequence \(\langle a_m\rangle\) is bounded below by \(0\). Moreover,
-\[
-a_{m+1}
-=
-\prod_{j=1}^{m+1}(1-q^{-j})
-=
-\left[\prod_{j=1}^{m}(1-q^{-j})\right]\cdot(1-q^{-(m+1)})
-=
-a_m(1-q^{-(m+1)}).
-\]
-Since \(0<1-q^{-(m+1)}<1\), we obtain $
-a_{m+1}<a_m.$ Thus \(\langle a_m\rangle\) is decreasing. Therefore \(\langle a_m\rangle\) is a monotone decreasing sequence which is bounded below. Hence it converges.
-\end{proof}
-
-\medskip
-
-\begin{example}
-For small prime $q$, the limit is approximately \begin{align*}
-	q=2: && \prod_{j=1}^{\infty}(1-2^{-j})&\approx0.288788095\\
-	q=3: && \prod_{j=1}^{\infty}(1-3^{-j})&\approx0.560126077\\
-	q=5: && \prod_{j=1}^{\infty}(1-5^{-j})&\approx0.760332795
-\end{align*}
-\begin{center}
-\begin{minipage}[t]{.52\textwidth}
-\begin{lstlisting}[style=sagemath, numbers=none]
-q = 2
-r = 3
-s = 5
-R = RealField(100)
-
-L = prod(R(1) - R(q)^(-j) for j in range(1, 100))
-M = prod(R(1) - R(r)^(-j) for j in range(1, 100))
-N = prod(R(1) - R(s)^(-j) for j in range(1, 100))
-
-print(L)
-print(M)
-print(N)
-\end{lstlisting}
-\end{minipage}\hfill
-\begin{minipage}[t]{.45\textwidth}
-\begin{lstlisting}
-0.28878809508660242127889972193
-0.56012607792794894496979224331
-0.76033279587123242010148829629
-\end{lstlisting}
-\end{minipage}
-\end{center}
-\end{example}
 
 
 %\vfill

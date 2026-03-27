@@ -1,0 +1,865 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\title{Lecture Notes on the Pentagonal Number Theorem}
+\author{}
+\date{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\PP}{\mathcal{P}}
+\newcommand{\qP}{\mathscr{P}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\gen}[1]{\left\langle #1 \right\rangle}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{Introduction}
+	
+	One of the most beautiful identities in the theory of partitions is Euler's \emph{Pentagonal Number Theorem}:
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	=
+	\sum_{k=-\infty}^{\infty}(-1)^k q^{k(3k-1)/2}.
+	\]
+	At first sight this formula is mysterious. The left-hand side is an infinite product, while the right-hand side is a highly sparse power series involving the numbers
+	\[
+	\frac{k(3k-1)}{2},
+	\qquad k\in \ZZ.
+	\]
+	These are the \emph{generalized pentagonal numbers}:
+	\[
+	0,1,2,5,7,12,15,22,26,\dots
+	\]
+	
+	The theorem is central in the study of partitions. It leads directly to Euler's recurrence for the partition function \(p(n)\), and it is also a prototype for many deep identities in \(q\)-series, modular forms, and combinatorics.
+	
+	The aim of these notes is to explain the theorem carefully, from basic definitions up to proof and applications.
+	
+	\section{Partitions and Generating Functions}
+	
+	\subsection{Partitions}
+	
+	\begin{definition}
+		A \emph{partition} of a nonnegative integer \(n\) is a way of writing \(n\) as a sum of positive integers
+		\[
+		n=\lambda_1+\lambda_2+\cdots+\lambda_r
+		\]
+		with
+		\[
+		\lambda_1\ge \lambda_2\ge \cdots \ge \lambda_r\ge 1.
+		\]
+		The integers \(\lambda_i\) are called the \emph{parts} of the partition.
+	\end{definition}
+	
+	\begin{example}
+		The partitions of \(4\) are:
+		\[
+		4,\qquad 3+1,\qquad 2+2,\qquad 2+1+1,\qquad 1+1+1+1.
+		\]
+		So the number of partitions of \(4\) is \(5\).
+	\end{example}
+	
+	\begin{definition}
+		Let \(p(n)\) denote the number of partitions of \(n\), with \(p(0)=1\).
+	\end{definition}
+	
+	\subsection{Generating function for partitions}
+	
+	A standard argument shows that
+	\[
+	\sum_{n=0}^{\infty} p(n) q^n
+	=
+	\prod_{m=1}^{\infty}\frac{1}{1-q^m}.
+	\]
+	
+	Indeed, for each integer \(m\ge 1\), the factor
+	\[
+	\frac{1}{1-q^m}=1+q^m+q^{2m}+q^{3m}+\cdots
+	\]
+	records how many times the part \(m\) is used in a partition. Multiplying over all \(m\) gives the partition generating function.
+	
+	The Pentagonal Number Theorem concerns the reciprocal product
+	\[
+	\prod_{m=1}^{\infty}(1-q^m).
+	\]
+	
+	\section{The Pentagonal Numbers}
+	
+	\subsection{Ordinary pentagonal numbers}
+	
+	\begin{definition}
+		The \(n\)-th pentagonal number is
+		\[
+		P_n=\frac{n(3n-1)}{2},
+		\qquad n\ge 1.
+		\]
+	\end{definition}
+	
+	These begin as
+	\[
+	1,5,12,22,35,\dots
+	\]
+	
+	They arise from a classical polygonal-number formula. For the Pentagonal Number Theorem, however, what appears naturally is a symmetrized version.
+	
+	\subsection{Generalized pentagonal numbers}
+	
+	\begin{definition}
+		The \emph{generalized pentagonal numbers} are the integers
+		\[
+		\frac{k(3k-1)}{2},
+		\qquad k\in \ZZ.
+		\]
+	\end{definition}
+	
+	If we list them for
+	\[
+	k=0,1,-1,2,-2,3,-3,\dots
+	\]
+	we get
+	\[
+	0,1,2,5,7,12,15,22,26,\dots
+	\]
+	
+	Explicitly:
+	\[
+	\frac{1(3\cdot 1-1)}{2}=1,\qquad
+	\frac{(-1)(3(-1)-1)}{2}=2,
+	\]
+	\[
+	\frac{2(6-1)}{2}=5,\qquad
+	\frac{(-2)(-6-1)}{2}=7,
+	\]
+	and so on.
+	
+	\begin{remark}
+		The generalized pentagonal numbers occur in pairs:
+		\[
+		\frac{k(3k-1)}{2},\qquad \frac{k(3k+1)}{2},
+		\]
+		for \(k\ge 1\), because
+		\[
+		\frac{(-k)(3(-k)-1)}{2}=\frac{k(3k+1)}{2}.
+		\]
+	\end{remark}
+	
+	Thus the theorem is often written in the form
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	=
+	1+\sum_{k=1}^{\infty}(-1)^k
+	\left(q^{k(3k-1)/2}+q^{k(3k+1)/2}\right).
+	\]
+	
+	\section{Statement of the Pentagonal Number Theorem}
+	
+	\begin{theorem}[Pentagonal Number Theorem]
+		In the ring of formal power series,
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		=
+		\sum_{k=-\infty}^{\infty}(-1)^k q^{k(3k-1)/2}.
+		\]
+		Equivalently,
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		=
+		1+\sum_{k=1}^{\infty}(-1)^k
+		\left(q^{k(3k-1)/2}+q^{k(3k+1)/2}\right).
+		\]
+	\end{theorem}
+	
+	Expanding the first terms gives
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	=
+	1-q-q^2+q^5+q^7-q^{12}-q^{15}+q^{22}+q^{26}-\cdots
+	\]
+	There are no other powers of \(q\): only the generalized pentagonal numbers appear.
+	
+	\section{Why This Is Surprising}
+	
+	The finite partial products
+	\[
+	(1-q)(1-q^2)(1-q^3)\cdots(1-q^N)
+	\]
+	expand into many terms, with cancellations. It is far from obvious that in the infinite limit the remaining coefficients are so sparse and so structured.
+	
+	The theorem says:
+	\begin{itemize}
+		\item if \(n\) is not a generalized pentagonal number, then the coefficient of \(q^n\) is \(0\);
+		\item if
+		\[
+		n=\frac{k(3k\pm 1)}{2},
+		\]
+		then the coefficient is \((-1)^k\).
+	\end{itemize}
+	
+	So the whole power series is completely determined by this remarkable pattern.
+	
+	\section{Combinatorial Meaning of the Product}
+	
+	Let us interpret
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	\]
+	combinatorially.
+	
+	For each \(m\), the factor
+	\[
+	1-q^m
+	\]
+	means: either do not choose the part \(m\), or choose it once and attach a minus sign.
+	
+	Therefore the coefficient of \(q^n\) in the product is
+	\[
+	\sum_{\lambda}(-1)^{\ell(\lambda)},
+	\]
+	where the sum runs over partitions \(\lambda\) of \(n\) into \emph{distinct} parts, and \(\ell(\lambda)\) denotes the number of parts.
+	
+	So the coefficient of \(q^n\) is:
+	\[
+	(\text{number of partitions of \(n\) into an even number of distinct parts})
+	-
+	(\text{number of partitions of \(n\) into an odd number of distinct parts}).
+	\]
+	
+	The Pentagonal Number Theorem therefore says that this signed difference is almost always \(0\), except at the generalized pentagonal numbers.
+	
+	\section{A First Examples of the Coefficients}
+	
+	\begin{example}
+		For \(n=3\), the partitions into distinct parts are
+		\[
+		3,\qquad 2+1.
+		\]
+		So the signed contribution is
+		\[
+		(-1)^1+(-1)^2=-1+1=0.
+		\]
+		Indeed, \(3\) is not a generalized pentagonal number.
+	\end{example}
+	
+	\begin{example}
+		For \(n=5\), the partitions into distinct parts are
+		\[
+		5,\qquad 4+1,\qquad 3+2.
+		\]
+		The signed sum is
+		\[
+		(-1)^1+(-1)^2+(-1)^2=-1+1+1=1.
+		\]
+		Since \(5=\frac{2(3\cdot 2-1)}{2}\), the theorem predicts coefficient \(+1\).
+	\end{example}
+	
+	\begin{example}
+		For \(n=6\), the partitions into distinct parts are
+		\[
+		6,\qquad 5+1,\qquad 4+2,\qquad 3+2+1.
+		\]
+		The signed sum is
+		\[
+		-1+1+1-1=0.
+		\]
+		Again this agrees with the theorem.
+	\end{example}
+	
+	\section{A Proof via Euler's Recurrence Argument}
+	
+	We first explain the theorem in a way closely tied to partitions and generating functions. Then later we give the classic involution proof.
+	
+	Let
+	\[
+	F(q)=\prod_{m=1}^{\infty}(1-q^m).
+	\]
+	Suppose
+	\[
+	F(q)=\sum_{n=0}^{\infty} a_n q^n.
+	\]
+	Then
+	\[
+	\left(\sum_{n=0}^{\infty} p(n)q^n\right)\left(\sum_{n=0}^{\infty} a_n q^n\right)=1,
+	\]
+	because
+	\[
+	\sum_{n=0}^{\infty} p(n)q^n=\prod_{m=1}^{\infty}\frac{1}{1-q^m}.
+	\]
+	
+	Thus the coefficients \(a_n\) are determined by the condition that
+	\[
+	\sum_{k=0}^{n} p(k)a_{n-k}=0
+	\qquad (n\ge 1),
+	\]
+	with \(a_0=1\).
+	
+	Euler observed experimentally that the \(a_n\) are exactly
+	\[
+	a_n=
+	\begin{cases}
+		(-1)^m, & n=\dfrac{m(3m-1)}{2}\text{ or }\dfrac{m(3m+1)}{2},\\[1em]
+		0, & \text{otherwise}.
+	\end{cases}
+	\]
+	
+	This leads to the partition recurrence
+	\[
+	p(n)=p(n-1)+p(n-2)-p(n-5)-p(n-7)+p(n-12)+p(n-15)-\cdots
+	\]
+	where the offsets are generalized pentagonal numbers.
+	
+	This recurrence is one of the main uses of the theorem.
+	
+	\section{Euler's Recurrence for the Partition Function}
+	
+	\begin{corollary}[Euler recurrence]
+		For \(n\ge 1\),
+		\[
+		p(n)
+		=
+		\sum_{k=1}^{\infty}(-1)^{k-1}
+		\left(
+		p\!\left(n-\frac{k(3k-1)}{2}\right)
+		+
+		p\!\left(n-\frac{k(3k+1)}{2}\right)
+		\right),
+		\]
+		where \(p(m)=0\) for \(m<0\).
+	\end{corollary}
+	
+	\begin{proof}
+		Starting from
+		\[
+		\left(\sum_{n=0}^{\infty}p(n)q^n\right)
+		\left(1+\sum_{k=1}^{\infty}(-1)^k
+		\left(q^{k(3k-1)/2}+q^{k(3k+1)/2}\right)\right)=1,
+		\]
+		compare coefficients of \(q^n\) for \(n\ge 1\).
+	\end{proof}
+	
+	\begin{example}
+		Let us compute \(p(5)\):
+		\[
+		p(5)=p(4)+p(3)-p(0).
+		\]
+		Since
+		\[
+		p(4)=5,\qquad p(3)=3,\qquad p(0)=1,
+		\]
+		we get
+		\[
+		p(5)=5+3-1=7.
+		\]
+	\end{example}
+	
+	\section{Ferrers Diagrams}
+	
+	To explain the combinatorial proof, we need diagrams.
+	
+	\begin{definition}
+		The \emph{Ferrers diagram} of a partition
+		\[
+		\lambda=(\lambda_1,\lambda_2,\dots,\lambda_r)
+		\]
+		is the array of dots or boxes with \(\lambda_i\) boxes in row \(i\), left-justified.
+	\end{definition}
+	
+	\begin{example}
+		The partition
+		\[
+		7=4+2+1
+		\]
+		has Ferrers diagram
+		\[
+		\begin{array}{llll}
+			\bullet & \bullet & \bullet & \bullet\\
+			\bullet & \bullet\\
+			\bullet
+		\end{array}
+		\]
+	\end{example}
+	
+	For partitions into distinct parts, the row lengths are strictly decreasing.
+	
+	\section{Durfee Squares}
+	
+	\begin{definition}
+		The \emph{Durfee square} of a partition is the largest square that fits inside its Ferrers diagram.
+	\end{definition}
+	
+	\begin{example}
+		For
+		\[
+		\lambda=(6,4,3,1),
+		\]
+		the Durfee square has side length \(3\), since the first three rows have lengths at least \(3\), but a \(4\times 4\) square does not fit.
+	\end{example}
+	
+	Durfee squares are useful in the involution proof because they organize partitions according to their geometric shape.
+	
+	\section{Euler's Involution: Outline}
+	
+	Let \(D(n)\) be the set of partitions of \(n\) into distinct parts. We want to evaluate
+	\[
+	\sum_{\lambda\in D(n)}(-1)^{\ell(\lambda)}.
+	\]
+	
+	Euler's idea is to pair off most partitions in \(D(n)\) so that each pair contributes
+	\[
+	(-1)^r+(-1)^{r+1}=0.
+	\]
+	Only a small exceptional family remains unmatched, and those exceptional partitions occur exactly when \(n\) is a generalized pentagonal number.
+	
+	That is the source of the theorem.
+	
+	\section{Description of the Exceptional Partitions}
+	
+	The unmatched partitions in Euler's involution turn out to be of the forms
+	\[
+	(2m-1,\,2m-2,\,\dots,\,m)
+	\]
+	and
+	\[
+	(2m,\,2m-1,\,\dots,\,m+1).
+	\]
+	
+	Let us compute their sizes.
+	
+	For the first:
+	\[
+	(2m-1)+(2m-2)+\cdots+m
+	=
+	\sum_{j=m}^{2m-1} j.
+	\]
+	This is
+	\[
+	\frac{(m+(2m-1))m}{2}
+	=
+	\frac{(3m-1)m}{2}.
+	\]
+	
+	For the second:
+	\[
+	(2m)+(2m-1)+\cdots+(m+1)
+	=
+	\sum_{j=m+1}^{2m} j
+	=
+	\frac{((m+1)+2m)m}{2}
+	=
+	\frac{m(3m+1)}{2}.
+	\]
+	
+	These are exactly the two forms of generalized pentagonal numbers.
+	
+	\section{Euler's Involution in More Detail}
+	
+	We now sketch the classic involution. Let
+	\[
+	\lambda=(\lambda_1>\lambda_2>\cdots>\lambda_r)
+	\]
+	be a partition into distinct parts.
+	
+	Define:
+	\begin{itemize}
+		\item \(s=r\), the number of parts;
+		\item \(t=\lambda_r\), the smallest part.
+	\end{itemize}
+	
+	The Ferrers diagram has a diagonal of some length, and one compares the smallest part with the number of parts. Roughly:
+	\begin{itemize}
+		\item if the smallest part is larger than the number of parts, remove \(1\) from each part and append a new smallest part;
+		\item if the smallest part is at most the number of parts, reverse the process by deleting the smallest part and adding \(1\) to several parts.
+	\end{itemize}
+	
+	This operation changes the number of parts by \(1\), hence changes the sign. It is an involution on all non-exceptional partitions.
+	
+	The exceptional cases are precisely the staircase-like partitions described above, and these yield the generalized pentagonal numbers.
+	
+	\section{A More Precise Involution Formulation}
+	
+	Let
+	\[
+	\lambda=(\lambda_1>\lambda_2>\cdots>\lambda_r)
+	\]
+	be a partition into distinct parts.
+	
+	There is a standard map defined on non-exceptional partitions:
+	\begin{enumerate}[label=\arabic*.]
+		\item If \(\lambda_r>r\), replace
+		\[
+		(\lambda_1,\lambda_2,\dots,\lambda_r)
+		\]
+		by
+		\[
+		(\lambda_1-1,\lambda_2-1,\dots,\lambda_r-1,r).
+		\]
+		\item If \(\lambda_r\le r\), reverse this process.
+	\end{enumerate}
+	
+	One checks:
+	\begin{itemize}
+		\item the resulting partition still has distinct parts except in the exceptional staircase cases;
+		\item applying the map twice returns to the original partition;
+		\item the parity of the number of parts changes.
+	\end{itemize}
+	
+	Hence all non-exceptional partitions cancel in the signed sum.
+	
+	The only survivors are the two staircase families:
+	\[
+	(2m-1,2m-2,\dots,m),
+	\qquad
+	(2m,2m-1,\dots,m+1).
+	\]
+	These have \(m\) parts, so each contributes sign \((-1)^m\).
+	
+	Thus
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	=
+	1+\sum_{m=1}^{\infty}(-1)^m
+	\left(q^{m(3m-1)/2}+q^{m(3m+1)/2}\right).
+	\]
+	
+	This proves the theorem.
+	
+	\section{Proof of the Pentagonal Number Theorem}
+	
+	\begin{proof}[Combinatorial proof]
+		Expand
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		\]
+		as a generating function for partitions into distinct parts, with sign \((-1)^{\ell(\lambda)}\). Thus the coefficient of \(q^n\) is
+		\[
+		\sum_{\lambda\in D(n)}(-1)^{\ell(\lambda)}.
+		\]
+		
+		Euler's involution pairs all non-exceptional partitions in \(D(n)\) into pairs whose numbers of parts differ by \(1\). Therefore each pair contributes zero to the signed sum.
+		
+		The only partitions not paired are the two staircase families:
+		\[
+		(2m-1,2m-2,\dots,m),
+		\qquad
+		(2m,2m-1,\dots,m+1).
+		\]
+		These have sizes
+		\[
+		\frac{m(3m-1)}{2},
+		\qquad
+		\frac{m(3m+1)}{2},
+		\]
+		respectively, and each has \(m\) parts, hence contributes sign \((-1)^m\).
+		
+		Therefore
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		=
+		1+\sum_{m=1}^{\infty}(-1)^m
+		\left(q^{m(3m-1)/2}+q^{m(3m+1)/2}\right),
+		\]
+		which is exactly the Pentagonal Number Theorem.
+	\end{proof}
+	
+	\section{First Terms of the Expansion}
+	
+	Let us write out the first terms:
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	=
+	1-q-q^2+q^5+q^7-q^{12}-q^{15}+q^{22}+q^{26}-\cdots
+	\]
+	
+	The exponents are:
+	\[
+	0,\ 1,\ 2,\ 5,\ 7,\ 12,\ 15,\ 22,\ 26,\dots
+	\]
+	coming from
+	\[
+	\frac{k(3k-1)}{2},
+	\qquad k\in \ZZ.
+	\]
+	
+	The signs occur in pairs:
+	\[
+	+,\ -,-,\ +,+,\ -,-,\ +,+,\dots
+	\]
+	more precisely:
+	\[
+	(-1)^m \quad \text{for the pair } \frac{m(3m-1)}{2},\ \frac{m(3m+1)}{2}.
+	\]
+	
+	\section{Computing with the Theorem}
+	
+	\begin{example}
+		Using the theorem,
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		=
+		1-q-q^2+q^5+q^7-\cdots
+		\]
+		so the coefficient of \(q^6\) is \(0\).
+	\end{example}
+	
+	\begin{example}
+		The coefficient of \(q^{12}\) is \(-1\), because
+		\[
+		12=\frac{3(3\cdot 3-1)}{2}=\frac{3\cdot 8}{2}=12.
+		\]
+	\end{example}
+	
+	\begin{example}
+		The coefficient of \(q^{15}\) is also \(-1\), because
+		\[
+		15=\frac{3(3\cdot 3+1)}{2}.
+		\]
+	\end{example}
+	
+	\section{The Theorem as an Identity of Formal Power Series}
+	
+	It is important to note that the theorem is best interpreted formally. In the ring of formal power series \(\ZZ[[q]]\), the infinite product
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	\]
+	is well-defined because the coefficient of \(q^n\) depends only on finitely many factors.
+	
+	So the theorem is not merely an analytic identity for \(|q|<1\), though it is true analytically there as well. It is an exact algebraic identity in formal power series.
+	
+	\begin{remark}
+		This formal viewpoint is standard in generatingfunctionology and combinatorics.
+	\end{remark}
+	
+	\section{Connection with the Jacobi Triple Product}
+	
+	The Pentagonal Number Theorem can also be derived from the Jacobi triple product:
+	\[
+	\sum_{k=-\infty}^{\infty} z^k q^{k^2}
+	=
+	\prod_{m=1}^{\infty}(1-q^{2m})(1+zq^{2m-1})(1+z^{-1}q^{2m-1}).
+	\]
+	
+	By a suitable specialization, one obtains Euler's identity. This places the Pentagonal Number Theorem in a broader family of theta-function identities.
+	
+	Although we do not pursue that proof here, it is worth knowing that Euler's theorem sits at the entrance to a vast subject.
+	
+	\section{Geometric Intuition for the Pentagonal Numbers}
+	
+	Why pentagonal numbers? The short answer is: not because pentagons are visually built into the product, but because the exceptional staircase partitions have sizes
+	\[
+	\frac{m(3m\pm 1)}{2},
+	\]
+	which are exactly the generalized pentagonal numbers.
+	
+	So the pentagonal numbers arise from the geometry of Ferrers diagrams under Euler's involution, rather than from any immediate polygonal construction on the product side.
+	
+	\section{A Table of Small Values}
+	
+	The beginning of
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	\]
+	looks like this:
+	
+	\[
+	\begin{array}{c|c}
+		n & [q^n]\prod_{m=1}^{\infty}(1-q^m)\\
+		\hline
+		0 & 1\\
+		1 & -1\\
+		2 & -1\\
+		3 & 0\\
+		4 & 0\\
+		5 & 1\\
+		6 & 0\\
+		7 & 1\\
+		8 & 0\\
+		9 & 0\\
+		10 & 0\\
+		11 & 0\\
+		12 & -1\\
+		13 & 0\\
+		14 & 0\\
+		15 & -1
+	\end{array}
+	\]
+	
+	This matches the theorem perfectly.
+	
+	\section{Applications}
+	
+	\subsection{Partition recurrence}
+	
+	The main application is Euler's recurrence for \(p(n)\), already discussed.
+	
+	\subsection{Congruences and modular ideas}
+	
+	The infinite products
+	\[
+	\prod_{m=1}^{\infty}(1-q^m)
+	\quad\text{and}\quad
+	\prod_{m=1}^{\infty}\frac{1}{1-q^m}
+	\]
+	are fundamental in modular form theory and in the study of partition congruences such as Ramanujan's:
+	\[
+	p(5n+4)\equiv 0 \pmod 5,
+	\]
+	\[
+	p(7n+5)\equiv 0 \pmod 7,
+	\]
+	\[
+	p(11n+6)\equiv 0 \pmod{11}.
+	\]
+	
+	\subsection{Combinatorial involutions}
+	
+	The theorem is a classical example of a \emph{sign-reversing involution}, one of the central techniques in enumerative combinatorics.
+	
+	\section{Summary}
+	
+	Let us summarize the main points.
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item The generating function for partitions is
+		\[
+		\sum_{n=0}^{\infty}p(n)q^n
+		=
+		\prod_{m=1}^{\infty}\frac{1}{1-q^m}.
+		\]
+		\item The reciprocal product
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		\]
+		is the signed generating function for partitions into distinct parts.
+		\item Euler's involution pairs off almost all such partitions, leaving only the exceptional staircase partitions.
+		\item The sizes of these exceptional partitions are the generalized pentagonal numbers
+		\[
+		\frac{k(3k-1)}{2},\qquad k\in \ZZ.
+		\]
+		\item Hence
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		=
+		\sum_{k=-\infty}^{\infty}(-1)^k q^{k(3k-1)/2}.
+		\]
+	\end{enumerate}
+	
+	That is the Pentagonal Number Theorem.
+	
+	\section{Final Theorem Statement}
+	
+	\begin{theorem}[Euler's Pentagonal Number Theorem]
+		In \(\ZZ[[q]]\),
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		=
+		\sum_{k=-\infty}^{\infty}(-1)^k q^{k(3k-1)/2}
+		=
+		1+\sum_{k=1}^{\infty}(-1)^k
+		\left(q^{k(3k-1)/2}+q^{k(3k+1)/2}\right).
+		\]
+	\end{theorem}
+	
+	\section{Exercises}
+	
+	\begin{exercise}
+		List all partitions of \(6\) into distinct parts and verify that their signed count is \(0\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Verify directly that the coefficient of \(q^7\) in
+		\[
+		\prod_{m=1}^{\infty}(1-q^m)
+		\]
+		is \(1\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Show that the partition
+		\[
+		(2m-1,2m-2,\dots,m)
+		\]
+		has size \(m(3m-1)/2\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Show that the partition
+		\[
+		(2m,2m-1,\dots,m+1)
+		\]
+		has size \(m(3m+1)/2\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Use the Pentagonal Number Theorem to compute \(p(6)\) from Euler's recurrence.
+	\end{exercise}
+	
+	\begin{exercise}
+		Write out the first ten generalized pentagonal numbers.
+	\end{exercise}
+	
+	\begin{exercise}
+		Explain why the Pentagonal Number Theorem is naturally a statement in formal power series.
+	\end{exercise}
+	
+	\section{Selected Answers}
+	
+	\begin{itemize}
+		\item The first generalized pentagonal numbers are
+		\[
+		0,1,2,5,7,12,15,22,26,35.
+		\]
+		
+		\item For \(m=3\),
+		\[
+		(5,4,3)
+		\]
+		has size
+		\[
+		5+4+3=12=\frac{3(3\cdot 3-1)}{2}.
+		\]
+		
+		\item Also for \(m=3\),
+		\[
+		(6,5,4)
+		\]
+		has size
+		\[
+		6+5+4=15=\frac{3(3\cdot 3+1)}{2}.
+		\]
+	\end{itemize}
+	
+	\section*{One-Sentence Takeaway}
+	
+	Euler's Pentagonal Number Theorem says that the infinite product \(\prod_{m\ge 1}(1-q^m)\), which is the signed generating function for partitions into distinct parts, collapses to a sparse series supported exactly on the generalized pentagonal numbers.
+	
+\end{document}

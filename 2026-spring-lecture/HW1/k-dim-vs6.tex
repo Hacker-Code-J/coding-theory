@@ -1,0 +1,657 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\title{Lecture Notes: Counting \(k\)-Dimensional Subspaces of an \(n\)-Dimensional Vector Space via Bases}
+\author{}
+\date{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\Q}{\mathbf{Q}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\Gr}{\mathrm{Gr}}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_q}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{Introduction}
+	
+	Let \(V\) be an \(n\)-dimensional vector space over a field \(K\). We want to answer the following question:
+	
+	\begin{quote}
+		How many distinct \(k\)-dimensional subspaces does \(V\) have?
+	\end{quote}
+	
+	The answer depends on the field \(K\).
+	
+	\begin{itemize}
+		\item If \(K=\F_q\) is a finite field with \(q\) elements, then the number of \(k\)-dimensional subspaces is finite and is given by the \emph{Gaussian binomial coefficient}.
+		\item If \(K\) is infinite, then for \(0<k<n\) there are infinitely many \(k\)-dimensional subspaces.
+	\end{itemize}
+	
+	In these notes, we develop the finite-field formula using the most concrete approach: \emph{counting bases}. The key idea is simple:
+	
+	\begin{quote}
+		Count all ordered bases of all \(k\)-dimensional subspaces of \(\F_q^n\), and then divide by the number of ordered bases of one fixed \(k\)-dimensional subspace.
+	\end{quote}
+	
+	This basis-counting method is the most direct way to understand why the formula has the shape it does.
+	
+	\section{Why We May Work in \(\F_q^n\)}
+	
+	Suppose \(V\) is an \(n\)-dimensional vector space over \(\F_q\). After choosing a basis of \(V\), we obtain an isomorphism
+	\[
+	V \cong \F_q^n.
+	\]
+	Since vector space isomorphisms preserve subspaces and dimensions, counting \(k\)-dimensional subspaces of \(V\) is equivalent to counting \(k\)-dimensional subspaces of \(\F_q^n\).
+	
+	\begin{proposition}
+		If \(T:V\to W\) is a vector space isomorphism, then the map
+		\[
+		U\longmapsto T(U)
+		\]
+		gives a bijection between the \(k\)-dimensional subspaces of \(V\) and the \(k\)-dimensional subspaces of \(W\).
+	\end{proposition}
+	
+	\begin{proof}
+		If \(U\subseteq V\) is a subspace, then \(T(U)\subseteq W\) is a subspace. Since \(T|_U:U\to T(U)\) is an isomorphism, we have
+		\[
+		\dim T(U)=\dim U.
+		\]
+		The inverse correspondence is given by \(X\mapsto T^{-1}(X)\), so the map is bijective.
+	\end{proof}
+	
+	\begin{remark}
+		Thus the number of \(k\)-dimensional subspaces depends only on \(n\) and the field, not on the specific vector space.
+	\end{remark}
+	
+	So from now on we assume
+	\[
+	V=\F_q^n.
+	\]
+	
+	\section{Ordinary Binomial Coefficients as Motivation}
+	
+	Before counting subspaces, recall a familiar counting problem.
+	
+	\begin{quote}
+		How many \(k\)-element subsets does an \(n\)-element set have?
+	\end{quote}
+	
+	The answer is
+	\[
+	\binom{n}{k}.
+	\]
+	
+	The finite-field analogue replaces subsets by subspaces:
+	\[
+	\text{\(k\)-element subsets of an \(n\)-element set}
+	\quad \longleftrightarrow \quad
+	\text{\(k\)-dimensional subspaces of \(\F_q^n\)}.
+	\]
+	
+	This leads to the \emph{Gaussian binomial coefficient}, also called the \emph{\(q\)-binomial coefficient}.
+	
+	\section{Statement of the Main Formula}
+	
+	\begin{definition}
+		For integers \(0\le k\le n\), the \emph{Gaussian binomial coefficient} is
+		\[
+		\qbinom{n}{k}
+		=
+		\frac{(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})}.
+		\]
+		Equivalently,
+		\[
+		\qbinom{n}{k}
+		=
+		\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}.
+		\]
+	\end{definition}
+	
+	\begin{theorem}[Main Theorem]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+	\end{theorem}
+	
+	Our goal is to prove this theorem using bases.
+	
+	\section{The Basis-Counting Strategy}
+	
+	To count \(k\)-dimensional subspaces of \(\F_q^n\), we proceed in two stages.
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item Count all ordered linearly independent \(k\)-tuples
+		\[
+		(v_1,\dots,v_k)
+		\]
+		in \(\F_q^n\). Each such tuple is an ordered basis of some \(k\)-dimensional subspace.
+		\item Determine how many ordered bases a single fixed \(k\)-dimensional subspace has.
+	\end{enumerate}
+	
+	Then:
+	\[
+	\#\{\text{\(k\)-dimensional subspaces}\}
+	=
+	\frac{\#\{\text{ordered bases of all \(k\)-subspaces}\}}
+	{\#\{\text{ordered bases of one \(k\)-subspace}\}}.
+	\]
+	
+	This is the central idea of the whole argument.
+	
+	\section{Counting Ordered Independent \(k\)-Tuples}
+	
+	We now count the ordered \(k\)-tuples
+	\[
+	(v_1,\dots,v_k)\in (\F_q^n)^k
+	\]
+	that are linearly independent.
+	
+	\begin{lemma}
+		The number of ordered linearly independent \(k\)-tuples in \(\F_q^n\) is
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{lemma}
+	
+	\begin{proof}
+		We choose the vectors one at a time.
+		
+		\begin{itemize}
+			\item The first vector \(v_1\) can be any nonzero vector of \(\F_q^n\). Since \(\F_q^n\) has \(q^n\) vectors total, there are
+			\[
+			q^n-1
+			\]
+			choices for \(v_1\).
+			
+			\item The second vector \(v_2\) must not lie in \(\Span(v_1)\). Since \(\Span(v_1)\) is a 1-dimensional subspace, it has exactly \(q\) elements. Therefore there are
+			\[
+			q^n-q
+			\]
+			choices for \(v_2\).
+			
+			\item The third vector \(v_3\) must not lie in \(\Span(v_1,v_2)\). Since \(v_1,v_2\) are linearly independent, this span has dimension \(2\), hence \(q^2\) elements. So there are
+			\[
+			q^n-q^2
+			\]
+			choices for \(v_3\).
+		\end{itemize}
+		
+		Continuing this way, when choosing \(v_i\), the previously chosen vectors span a subspace of dimension \(i-1\), which has \(q^{i-1}\) elements. Thus the number of choices for \(v_i\) is
+		\[
+		q^n-q^{i-1}.
+		\]
+		
+		Multiplying over \(i=1,\dots,k\), we obtain
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This count is sometimes called the number of ordered \(k\)-frames in \(\F_q^n\).
+	\end{remark}
+	
+	\section{Counting Ordered Bases of a Fixed \(k\)-Dimensional Subspace}
+	
+	Now fix one \(k\)-dimensional subspace \(W\subseteq \F_q^n\). We ask: how many ordered bases does \(W\) have?
+	
+	\begin{lemma}
+		A fixed \(k\)-dimensional subspace \(W\) has exactly
+		\[
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})
+		\]
+		ordered bases.
+	\end{lemma}
+	
+	\begin{proof}
+		Since \(W\) is \(k\)-dimensional, it is isomorphic to \(\F_q^k\). So counting ordered bases of \(W\) is the same as counting ordered linearly independent \(k\)-tuples in \(\F_q^k\).
+		
+		Applying the previous lemma with \(n=k\), we get
+		\[
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This number is also the order of the general linear group \(\GL_k(\F_q)\), since an invertible \(k\times k\) matrix is exactly an ordered basis of \(\F_q^k\).
+	\end{remark}
+	
+	\section{Proof of the Main Theorem}
+	
+	We now combine the two counts.
+	
+	\begin{proof}[Proof of the Main Theorem]
+		Every ordered linearly independent \(k\)-tuple in \(\F_q^n\) spans a unique \(k\)-dimensional subspace. Conversely, each \(k\)-dimensional subspace contributes exactly as many ordered linearly independent \(k\)-tuples as it has ordered bases, namely
+		\[
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+		
+		Therefore,
+		\[
+		\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+		=
+		\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}.
+		\]
+		
+		By definition, this is exactly
+		\[
+		\qbinom{n}{k}.
+		\]
+	\end{proof}
+	
+	\section{Why the Formula Has This Shape}
+	
+	It is worth pausing to interpret the formula:
+	\[
+	\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+	{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}.
+	\]
+	
+	\begin{itemize}
+		\item The numerator counts all ordered bases of all \(k\)-dimensional subspaces inside \(\F_q^n\).
+		\item The denominator counts how many ordered bases correspond to one fixed \(k\)-dimensional subspace.
+	\end{itemize}
+	
+	So the quotient removes the overcounting caused by the fact that the same subspace has many different ordered bases.
+	
+	This is exactly analogous to ordinary counting arguments where one counts objects with labels and then divides by the number of labelings.
+	
+	\section{Examples}
+	
+	\begin{example}[Lines in \(\F_q^3\)]
+		A \(1\)-dimensional subspace is a line through the origin. The number of such lines is
+		\[
+		\qbinom{3}{1}
+		=
+		\frac{q^3-1}{q-1}
+		=
+		q^2+q+1.
+		\]
+	\end{example}
+	
+	\begin{example}[Planes in \(\F_q^3\)]
+		A \(2\)-dimensional subspace is a plane through the origin. The number of such planes is
+		\[
+		\qbinom{3}{2}
+		=
+		\qbinom{3}{1}
+		=
+		q^2+q+1.
+		\]
+	\end{example}
+	
+	\begin{example}[All lines in \(\F_2^2\)]
+		The space \(\F_2^2\) has vectors
+		\[
+		(0,0),\ (1,0),\ (0,1),\ (1,1).
+		\]
+		Its nonzero vectors are
+		\[
+		(1,0),\ (0,1),\ (1,1).
+		\]
+		Each 1-dimensional subspace contains exactly one nonzero vector, so there are exactly three lines:
+		\[
+		\Span(1,0),\qquad
+		\Span(0,1),\qquad
+		\Span(1,1).
+		\]
+		This agrees with
+		\[
+		\qbinom{2}{1}
+		=
+		\frac{2^2-1}{2-1}
+		=
+		3.
+		\]
+	\end{example}
+	
+	\begin{example}[Two-dimensional subspaces of \(\F_2^4\)]
+		Take \(q=2\), \(n=4\), \(k=2\). Then
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(2^4-1)(2^4-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{15\cdot 14}{3\cdot 2}
+		=
+		35.
+		\]
+		So \(\F_2^4\) has exactly \(35\) distinct 2-dimensional subspaces.
+	\end{example}
+	
+	\section{A Fully Concrete Example: \(\F_2^3\)}
+	
+	Let us count the 2-dimensional subspaces of \(\F_2^3\) directly by bases.
+	
+	The formula predicts:
+	\[
+	\qbinom{3}{2}\Big|_{q=2}
+	=
+	\frac{(2^3-1)(2^3-2)}{(2^2-1)(2^2-2)}
+	=
+	\frac{7\cdot 6}{3\cdot 2}
+	=
+	7.
+	\]
+	
+	Now let us interpret this.
+	
+	\subsection*{Step 1: Count ordered bases of 2-dimensional subspaces of \(\F_2^3\)}
+	
+	To choose an ordered basis \((v_1,v_2)\):
+	
+	\begin{itemize}
+		\item \(v_1\) can be any nonzero vector: \(7\) choices.
+		\item \(v_2\) must not lie in \(\Span(v_1)\). Over \(\F_2\), the span of a nonzero vector contains only \(0\) and the vector itself, so there are \(6\) choices.
+	\end{itemize}
+	
+	Thus there are
+	\[
+	7\cdot 6=42
+	\]
+	ordered bases of 2-dimensional subspaces in \(\F_2^3\).
+	
+	\subsection*{Step 2: Count ordered bases of one fixed 2-dimensional subspace}
+	
+	A 2-dimensional subspace is isomorphic to \(\F_2^2\). In \(\F_2^2\),
+	
+	\begin{itemize}
+		\item the first basis vector has \(3\) choices,
+		\item the second has \(2\) choices.
+	\end{itemize}
+	
+	So one 2-dimensional subspace has
+	\[
+	3\cdot 2=6
+	\]
+	ordered bases.
+	
+	\subsection*{Step 3: Divide}
+	
+	Therefore the number of distinct 2-dimensional subspaces is
+	\[
+	\frac{42}{6}=7.
+	\]
+	
+	\section{The General Linear Group and Bases}
+	
+	The basis-counting argument is closely related to the size of the general linear group.
+	
+	\begin{proposition}
+		The order of \(\GL_k(\F_q)\) is
+		\[
+		|\GL_k(\F_q)|
+		=
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		An invertible \(k\times k\) matrix is exactly an ordered basis of \(\F_q^k\), written as its columns. Counting such ordered bases gives the formula.
+	\end{proof}
+	
+	\begin{remark}
+		So the denominator in the Gaussian coefficient is exactly \(|\GL_k(\F_q)|\). This means:
+		\[
+		\qbinom{n}{k}
+		=
+		\frac{\text{number of ordered \(k\)-frames in \(\F_q^n\)}}{|\GL_k(\F_q)|}.
+		\]
+	\end{remark}
+	
+	\section{Special Cases}
+	
+	\begin{proposition}
+		For every \(n\) and \(q\),
+		\begin{align*}
+			\qbinom{n}{0} &= 1,\\
+			\qbinom{n}{1} &= \frac{q^n-1}{q-1}=1+q+q^2+\cdots+q^{n-1},\\
+			\qbinom{n}{n-1} &= \qbinom{n}{1},\\
+			\qbinom{n}{n} &= 1.
+		\end{align*}
+	\end{proposition}
+	
+	\begin{proof}
+		The cases \(k=0\) and \(k=n\) are obvious. For \(k=1\), count nonzero vectors and divide by the number \(q-1\) of nonzero scalar multiples of a given vector. The case \(k=n-1\) follows from symmetry.
+	\end{proof}
+	
+	\section{Symmetry}
+	
+	\begin{proposition}
+		For \(0\le k\le n\),
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		This follows directly from the product formulas. It also reflects a geometric duality between \(k\)-dimensional and \((n-k)\)-dimensional objects.
+	\end{proof}
+	
+	\section{Another Form of the Gaussian Binomial Coefficient}
+	
+	The Gaussian coefficient may also be written as
+	\[
+	\qbinom{n}{k}
+	=
+	\frac{(q^n-1)(q^{n-1}-1)\cdots(q^{n-k+1}-1)}
+	{(q^k-1)(q^{k-1}-1)\cdots(q-1)}.
+	\]
+	
+	This form is often convenient in algebraic manipulations and makes the symmetry
+	\[
+	\qbinom{n}{k}=\qbinom{n}{n-k}
+	\]
+	more transparent.
+	
+	\section{The \(q\to 1\) Philosophy}
+	
+	The Gaussian binomial coefficient is called a \(q\)-analogue of the ordinary binomial coefficient because, after simplification as a polynomial in \(q\), setting \(q=1\) gives the ordinary binomial coefficient.
+	
+	\begin{example}
+		Since
+		\[
+		\qbinom{3}{1}=q^2+q+1,
+		\]
+		substituting \(q=1\) gives
+		\[
+		1+1+1=3=\binom{3}{1}.
+		\]
+	\end{example}
+	
+	So subsets are the \(q=1\) shadow of subspaces over finite fields.
+	
+	\section{Infinite Fields}
+	
+	What happens if the field is infinite?
+	
+	\begin{proposition}
+		If \(K\) is an infinite field and \(V\) is an \(n\)-dimensional vector space over \(K\), then for \(0<k<n\), the number of \(k\)-dimensional subspaces of \(V\) is infinite.
+	\end{proposition}
+	
+	\begin{proof}
+		It is enough to consider \(k=1\). In \(K^2\), every line through the origin is a 1-dimensional subspace. Since \(K\) is infinite, there are infinitely many such lines. Therefore there are infinitely many \(k\)-dimensional subspaces in general for \(0<k<n\).
+	\end{proof}
+	
+	\begin{remark}
+		So the finite formula \(\qbinom{n}{k}\) is special to finite fields.
+	\end{remark}
+	
+	\section{Grassmannians}
+	
+	\begin{definition}
+		The set of all \(k\)-dimensional subspaces of an \(n\)-dimensional vector space is called the \emph{Grassmannian}, denoted
+		\[
+		\Gr(k,n).
+		\]
+	\end{definition}
+	
+	Over \(\F_q\), the Grassmannian is a finite set, and
+	\[
+	|\Gr(k,n)|=\qbinom{n}{k}.
+	\]
+	
+	So Gaussian binomial coefficients count the points of Grassmannians over finite fields.
+	
+	\section{Conceptual Summary}
+	
+	The basis-counting proof rests on the following facts:
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item A \(k\)-dimensional subspace is determined by any ordered basis of it.
+		\item The number of ordered linearly independent \(k\)-tuples in \(\F_q^n\) is
+		\[
+		(q^n-1)(q^n-q)\cdots(q^n-q^{k-1}).
+		\]
+		\item The number of ordered bases of one fixed \(k\)-dimensional space is
+		\[
+		(q^k-1)(q^k-q)\cdots(q^k-q^{k-1}).
+		\]
+		\item Dividing gives the number of distinct \(k\)-dimensional subspaces.
+	\end{enumerate}
+	
+	Thus
+	\[
+	\boxed{
+		\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+		=
+		\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}
+		=
+		\qbinom{n}{k}.
+	}
+	\]
+	
+	\section{Final Theorem}
+	
+	\begin{theorem}[Final Form]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+		This formula is obtained by counting ordered bases of \(k\)-dimensional subspaces and dividing by the number of ordered bases of one fixed \(k\)-dimensional subspace.
+	\end{theorem}
+	
+	\section{Exercises}
+	
+	\begin{exercise}
+		Prove directly that an \(r\)-dimensional subspace of \(\F_q^n\) has exactly \(q^r\) elements.
+	\end{exercise}
+	
+	\begin{exercise}
+		Show that the number of ordered bases of \(\F_q^k\) is \(|\GL_k(\F_q)|\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Use basis-counting to compute the number of lines in \(\F_q^4\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(\qbinom{4}{2}\) when \(q=2\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(\qbinom{4}{2}\) when \(q=3\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Show that
+		\[
+		\qbinom{n}{1}=1+q+q^2+\cdots+q^{n-1}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Prove that
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Explain why the basis-counting proof fails over an infinite field if one tries to get a finite number.
+	\end{exercise}
+	
+	\section{Selected Answers}
+	
+	\begin{itemize}
+		\item For \(q=2\),
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(2^4-1)(2^4-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{15\cdot 14}{3\cdot 2}
+		=
+		35.
+		\]
+		
+		\item For \(q=3\),
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(3^4-1)(3^4-3)}{(3^2-1)(3^2-3)}
+		=
+		\frac{80\cdot 78}{8\cdot 6}
+		=
+		130.
+		\]
+		
+		\item The number of lines in \(\F_q^4\) is
+		\[
+		\qbinom{4}{1}
+		=
+		\frac{q^4-1}{q-1}
+		=
+		1+q+q^2+q^3.
+		\]
+	\end{itemize}
+	
+	\section*{One-Sentence Takeaway}
+	
+	Over a finite field \(\F_q\), the number of distinct \(k\)-dimensional subspaces of an \(n\)-dimensional vector space is the Gaussian binomial coefficient \(\qbinom{n}{k}\), and the most direct proof comes from counting ordered bases.
+	
+\end{document}

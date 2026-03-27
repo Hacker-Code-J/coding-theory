@@ -1,0 +1,670 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\title{Lecture Notes: The Number of Distinct \(k\)-Dimensional Subspaces in an \(n\)-Dimensional Vector Space}
+\author{}
+\date{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\Q}{\mathbf{Q}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\Gr}{\mathrm{Gr}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_q}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{The Main Question}
+	
+	Let \(V\) be an \(n\)-dimensional vector space over a field \(K\). We want to answer:
+	
+	\begin{quote}
+		How many distinct \(k\)-dimensional subspaces does \(V\) have?
+	\end{quote}
+	
+	The answer depends strongly on whether the field \(K\) is finite or infinite.
+	
+	\begin{itemize}
+		\item If \(K=\F_q\) is a finite field with \(q\) elements, then the number of \(k\)-dimensional subspaces is finite and is given by the \emph{Gaussian binomial coefficient}.
+		\item If \(K\) is infinite, then for \(0<k<n\) there are infinitely many \(k\)-dimensional subspaces.
+	\end{itemize}
+	
+	The goal of these notes is to explain the finite-field formula, prove it, and clarify why the answer does not depend on the choice of basis. We will also include a section on change of basis, since that is the conceptual reason the counting formula is intrinsic to the vector space and not tied to coordinates.
+	
+	\section{Why Change of Basis Matters}
+	
+	At first glance, the notation \(\F_q^n\) seems to depend on a chosen basis. But the number of \(k\)-dimensional subspaces should be a property of the vector space \(V\) itself, not of a particular coordinate description.
+	
+	This is where change of basis enters.
+	
+	\begin{proposition}
+		Let \(V\) be an \(n\)-dimensional vector space over a field \(K\). If \(\mathcal{B}\) and \(\mathcal{B}'\) are two bases of \(V\), then the coordinate maps
+		\[
+		[V]_{\mathcal{B}} : V \to K^n,
+		\qquad
+		[V]_{\mathcal{B}'} : V \to K^n
+		\]
+		differ by an invertible linear transformation
+		\[
+		P \in \GL_n(K).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		The change-of-basis matrix from \(\mathcal{B}\) to \(\mathcal{B}'\) is invertible because both \(\mathcal{B}\) and \(\mathcal{B}'\) are bases. Thus if \(x=[v]_{\mathcal{B}}\) and \(x'=[v]_{\mathcal{B}'}\), then
+		\[
+		x' = Px
+		\]
+		for some \(P\in\GL_n(K)\).
+	\end{proof}
+	
+	\begin{remark}
+		This means that two coordinate descriptions of the same vector space differ only by an invertible linear transformation. So any construction preserved by invertible linear maps is independent of basis.
+	\end{remark}
+	
+	\begin{proposition}
+		If \(T:V\to W\) is a vector space isomorphism, then \(U\subseteq V\) is a \(k\)-dimensional subspace if and only if \(T(U)\subseteq W\) is a \(k\)-dimensional subspace.
+	\end{proposition}
+	
+	\begin{proof}
+		Since \(T\) is linear, \(T(U)\) is a subspace. Since \(T|_U:U\to T(U)\) is an isomorphism, we have
+		\[
+		\dim T(U)=\dim U=k.
+		\]
+	\end{proof}
+	
+	\begin{corollary}
+		The number of \(k\)-dimensional subspaces of an \(n\)-dimensional vector space depends only on \(n\) and the field \(K\), not on the choice of basis.
+	\end{corollary}
+	
+	\begin{proof}
+		Any \(n\)-dimensional vector space over \(K\) is isomorphic to \(K^n\), and an isomorphism gives a bijection between \(k\)-dimensional subspaces.
+	\end{proof}
+	
+	So from now on, when the field is finite, we are free to replace \(V\) by \(\F_q^n\) after choosing a basis. The answer we obtain will be intrinsic, because a different basis simply changes coordinates by an invertible matrix.
+	
+	\section{Review: Ordinary Binomial Coefficients}
+	
+	Before discussing vector spaces, recall a familiar counting problem:
+	
+	\begin{quote}
+		How many \(k\)-element subsets does an \(n\)-element set have?
+	\end{quote}
+	
+	The answer is
+	\[
+	\binom{n}{k}.
+	\]
+	
+	The Gaussian binomial coefficient is the vector-space analogue of this number:
+	\[
+	\text{ordinary subsets} \quad \longleftrightarrow \quad \text{subspaces over } \F_q.
+	\]
+	
+	Thus \(\qbinom{n}{k}\) is often called a \(q\)-analogue of \(\binom{n}{k}\).
+	
+	\section{Statement of the Finite-Field Formula}
+	
+	Assume now that \(V\) is an \(n\)-dimensional vector space over the finite field \(\F_q\). Since \(V\cong \F_q^n\), we may work in coordinates.
+	
+	\begin{definition}
+		The \emph{Gaussian binomial coefficient} is
+		\[
+		\qbinom{n}{k}
+		=
+		\frac{(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})}
+		\]
+		for \(0\le k\le n\).
+	\end{definition}
+	
+	It is also written as
+	\[
+	\qbinom{n}{k}
+	=
+	\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}.
+	\]
+	
+	\begin{theorem}
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+	\end{theorem}
+	
+	This is the main result.
+	
+	\section{Why This Formula Appears}
+	
+	The formula
+	\[
+	\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+	{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}
+	\]
+	comes from a simple idea:
+	
+	\begin{quote}
+		Count all ordered bases of all \(k\)-dimensional subspaces in \(\F_q^n\), then divide by the number of ordered bases of one fixed \(k\)-dimensional subspace.
+	\end{quote}
+	
+	So the numerator counts ordered linearly independent \(k\)-tuples in \(\F_q^n\), and the denominator counts ordered bases of a single \(k\)-dimensional space.
+	
+	\section{Counting Ordered Linearly Independent \(k\)-Tuples}
+	
+	We first count ordered \(k\)-tuples
+	\[
+	(v_1,\dots,v_k)\in (\F_q^n)^k
+	\]
+	such that \(v_1,\dots,v_k\) are linearly independent.
+	
+	\begin{lemma}
+		The number of ordered linearly independent \(k\)-tuples in \(\F_q^n\) is
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{lemma}
+	
+	\begin{proof}
+		Choose the vectors one by one.
+		
+		\begin{itemize}
+			\item \(v_1\): any nonzero vector, so \(q^n-1\) choices.
+			\item \(v_2\): must lie outside \(\Span(v_1)\), and \(\Span(v_1)\) has \(q\) elements, so \(q^n-q\) choices.
+			\item \(v_3\): must lie outside \(\Span(v_1,v_2)\), which has \(q^2\) elements, so \(q^n-q^2\) choices.
+		\end{itemize}
+		
+		Continue in the same way. At step \(i\), the span of the previous vectors has dimension \(i-1\), hence contains \(q^{i-1}\) vectors. So the number of choices for \(v_i\) is \(q^n-q^{i-1}\). Multiplying gives the formula.
+	\end{proof}
+	
+	\section{Counting Ordered Bases of a Fixed \(k\)-Dimensional Subspace}
+	
+	Now let \(W\subseteq \F_q^n\) be a fixed \(k\)-dimensional subspace.
+	
+	\begin{lemma}
+		The number of ordered bases of \(W\) is
+		\[
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+	\end{lemma}
+	
+	\begin{proof}
+		Since \(\dim W=k\), the space \(W\) is isomorphic to \(\F_q^k\). Thus counting ordered bases of \(W\) is exactly the same as counting ordered linearly independent \(k\)-tuples in \(\F_q^k\). Applying the previous counting argument with \(n=k\) gives the formula.
+	\end{proof}
+	
+	\section{Proof of the Main Counting Formula}
+	
+	We now combine the two counts.
+	
+	\begin{proof}[Proof of the Main Theorem]
+		Every ordered linearly independent \(k\)-tuple in \(\F_q^n\) spans a unique \(k\)-dimensional subspace. Conversely, every \(k\)-dimensional subspace contributes exactly as many ordered linearly independent \(k\)-tuples as it has ordered bases, namely
+		\[
+		(q^k-1)(q^k-q)\cdots(q^k-q^{k-1}).
+		\]
+		
+		Therefore,
+		\[
+		\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+		=
+		\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}.
+		\]
+		
+		Since \(V\cong \F_q^n\) and change of basis preserves subspaces and dimensions, this is also the number of \(k\)-dimensional subspaces of \(V\).
+	\end{proof}
+	
+	\section{Change of Basis Revisited}
+	
+	Let us make explicit where change of basis enters the proof.
+	
+	Suppose \(V\) is an \(n\)-dimensional vector space over \(\F_q\), and choose a basis \(\mathcal{B}\). Then every vector \(v\in V\) is identified with a coordinate column \([v]_{\mathcal{B}}\in \F_q^n\). Under this identification:
+	
+	\begin{itemize}
+		\item linear independence in \(V\) becomes linear independence in \(\F_q^n\),
+		\item subspaces of \(V\) become subspaces of \(\F_q^n\),
+		\item dimension is preserved.
+	\end{itemize}
+	
+	If we choose another basis \(\mathcal{B}'\), then the coordinates change by an invertible matrix
+	\[
+	P\in\GL_n(\F_q).
+	\]
+	Thus a subspace \(U\subseteq \F_q^n\) is sent to another subspace \(PU\subseteq \F_q^n\), and
+	\[
+	\dim(PU)=\dim(U).
+	\]
+	
+	So the set of \(k\)-dimensional subspaces is merely relabeled by change of basis. The count is unchanged.
+	
+	\begin{proposition}
+		The group \(\GL_n(\F_q)\) acts on the set of \(k\)-dimensional subspaces of \(\F_q^n\) by
+		\[
+		A\cdot U = A(U),
+		\qquad A\in \GL_n(\F_q),
+		\]
+		and this action preserves dimension.
+	\end{proposition}
+	
+	\begin{proof}
+		An invertible linear map sends subspaces to subspaces and preserves dimension.
+	\end{proof}
+	
+	\begin{remark}
+		This is the correct conceptual way to think about change of basis: a basis change is not changing the vector space itself, only the coordinates used to describe it.
+	\end{remark}
+	
+	\section{Small Examples}
+	
+	\begin{example}[Lines in \(\F_q^3\)]
+		A \(1\)-dimensional subspace is a line through the origin. The number of lines is
+		\[
+		\qbinom{3}{1}=\frac{q^3-1}{q-1}=q^2+q+1.
+		\]
+	\end{example}
+	
+	\begin{example}[Planes in \(\F_q^3\)]
+		A \(2\)-dimensional subspace is a plane through the origin. The number of planes is
+		\[
+		\qbinom{3}{2}=\qbinom{3}{1}=q^2+q+1.
+		\]
+	\end{example}
+	
+	\begin{example}[Two-dimensional subspaces of \(\F_2^4\)]
+		Take \(q=2\), \(n=4\), \(k=2\). Then
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(2^4-1)(2^4-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{15\cdot 14}{3\cdot 2}
+		=
+		35.
+		\]
+		So there are \(35\) distinct \(2\)-dimensional subspaces of \(\F_2^4\).
+	\end{example}
+	
+	\begin{example}[All lines in \(\F_2^2\)]
+		The space \(\F_2^2\) has vectors
+		\[
+		(0,0),\ (1,0),\ (0,1),\ (1,1).
+		\]
+		Its nonzero vectors are
+		\[
+		(1,0),\ (0,1),\ (1,1).
+		\]
+		Each \(1\)-dimensional subspace contains exactly one nonzero vector, so there are \(3\) lines:
+		\[
+		\Span(1,0),\qquad \Span(0,1),\qquad \Span(1,1).
+		\]
+		Indeed,
+		\[
+		\qbinom{2}{1}=\frac{2^2-1}{2-1}=3.
+		\]
+	\end{example}
+	
+	\section{A Fully Concrete Example: \(\F_2^3\)}
+	
+	Let us count the \(2\)-dimensional subspaces of \(\F_2^3\) directly.
+	
+	The formula gives
+	\[
+	\binom{3}{2}_{q} \Big|_{q=2}
+	=
+	\frac{(2^3-1)(2^3-2)}{(2^2-1)(2^2-2)}
+	=
+	\frac{7\cdot 6}{3\cdot 2}
+	=
+	7.
+	\]
+	
+	Here is the direct interpretation.
+	
+	\begin{itemize}
+		\item First choose \(v_1\neq 0\): \(7\) choices.
+		\item Then choose \(v_2\notin \Span(v_1)\): \(6\) choices.
+	\end{itemize}
+	
+	So there are \(42\) ordered linearly independent pairs.
+	
+	Each \(2\)-dimensional subspace has \(6\) ordered bases, because in \(\F_2^2\):
+	\begin{itemize}
+		\item the first basis vector has \(3\) choices,
+		\item the second has \(2\) choices.
+	\end{itemize}
+	
+	Thus
+	\[
+	\frac{42}{6}=7.
+	\]
+	
+	\section{Special Cases}
+	
+	\begin{proposition}
+		For all \(n\) and \(q\),
+		\begin{align*}
+			\qbinom{n}{0} &= 1,\\
+			\qbinom{n}{1} &= \frac{q^n-1}{q-1}=1+q+\cdots+q^{n-1},\\
+			\qbinom{n}{n-1} &= \qbinom{n}{1},\\
+			\qbinom{n}{n} &= 1.
+		\end{align*}
+	\end{proposition}
+	
+	\begin{proof}
+		The cases \(k=0\) and \(k=n\) correspond to the zero subspace and the whole space. The formula for \(k=1\) is immediate. The case \(k=n-1\) follows from symmetry below.
+	\end{proof}
+	
+	\section{Symmetry}
+	
+	\begin{proposition}
+		For \(0\le k\le n\),
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		This follows from algebraic manipulation of the product formula. It also reflects the duality between \(k\)-dimensional and \((n-k)\)-dimensional objects.
+	\end{proof}
+	
+	\section{Recursion}
+	
+	The Gaussian binomial coefficients satisfy a \(q\)-analogue of Pascal's identity.
+	
+	\begin{proposition}
+		For \(1\le k\le n-1\),
+		\[
+		\qbinom{n}{k}
+		=
+		\qbinom{n-1}{k}
+		+
+		q^{n-k}\qbinom{n-1}{k-1}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Fix a hyperplane \(H\subseteq \F_q^n\) of dimension \(n-1\). A \(k\)-dimensional subspace \(W\subseteq \F_q^n\) either lies inside \(H\) or does not.
+		
+		\begin{itemize}
+			\item If \(W\subseteq H\), then there are \(\qbinom{n-1}{k}\) possibilities.
+			\item If \(W\not\subseteq H\), then \(W\cap H\) has dimension \(k-1\), and each \((k-1)\)-dimensional subspace of \(H\) extends in \(q^{n-k}\) ways to such a \(W\).
+		\end{itemize}
+		
+		Hence
+		\[
+		\qbinom{n}{k}
+		=
+		\qbinom{n-1}{k}
+		+
+		q^{n-k}\qbinom{n-1}{k-1}.
+		\]
+	\end{proof}
+	
+	\section{A Matrix Interpretation and Change of Basis}
+	
+	There is another clean way to see both the counting formula and the role of change of basis.
+	
+	A \(k\)-dimensional subspace of \(\F_q^n\) can be represented as the row space of a full-rank \(k\times n\) matrix.
+	
+	\begin{itemize}
+		\item The number of full-rank \(k\times n\) matrices is
+		\[
+		(q^n-1)(q^n-q)\cdots(q^n-q^{k-1}).
+		\]
+		\item Two such matrices represent the same row space if and only if one can be obtained from the other by invertible row operations, that is, by left multiplication by some matrix in \(\GL_k(\F_q)\).
+		\item The number of such invertible \(k\times k\) matrices is
+		\[
+		|\GL_k(\F_q)|=(q^k-1)(q^k-q)\cdots(q^k-q^{k-1}).
+		\]
+	\end{itemize}
+	
+	Therefore,
+	\[
+	\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+	=
+	\frac{\#\{\text{full-rank }k\times n\text{ matrices}\}}{|\GL_k(\F_q)|}
+	=
+	\qbinom{n}{k}.
+	\]
+	
+	This viewpoint is deeply related to change of basis:
+	\begin{itemize}
+		\item left multiplication by \(\GL_k(\F_q)\) changes the basis of the subspace itself,
+		\item right multiplication by \(\GL_n(\F_q)\) changes the ambient basis of \(\F_q^n\).
+	\end{itemize}
+	
+	Neither operation changes the abstract \(k\)-dimensional subspace structure; they only change coordinates.
+	
+	\section{What Happens Over Infinite Fields?}
+	
+	Now suppose the base field \(K\) is infinite.
+	
+	\begin{proposition}
+		If \(V\) is an \(n\)-dimensional vector space over an infinite field and \(0<k<n\), then \(V\) has infinitely many distinct \(k\)-dimensional subspaces.
+	\end{proposition}
+	
+	\begin{proof}
+		It is enough to consider \(k=1\). In \(\R^2\), every line through the origin is a \(1\)-dimensional subspace, and such lines are parametrized by slope:
+		\[
+		y=mx \qquad (m\in \R),
+		\]
+		together with the vertical line. Hence there are infinitely many. The same phenomenon occurs in any higher-dimensional space.
+	\end{proof}
+	
+	\begin{remark}
+		The only finite cases over an infinite field are the trivial ones:
+		\[
+		\{0\}
+		\quad\text{and}\quad
+		V.
+		\]
+	\end{remark}
+	
+	\section{Grassmannians}
+	
+	\begin{definition}
+		The set of all \(k\)-dimensional subspaces of an \(n\)-dimensional vector space is called the \emph{Grassmannian}, denoted
+		\[
+		\Gr(k,n).
+		\]
+	\end{definition}
+	
+	Over \(\F_q\), the Grassmannian is a finite set, and
+	\[
+	|\Gr(k,n)(\F_q)|=\qbinom{n}{k}.
+	\]
+	
+	Over \(\R\) or \(\C\), the Grassmannian is not finite; it is a geometric object, namely a manifold and an algebraic variety.
+	
+	Thus Gaussian binomial coefficients are counting finite-field points of Grassmannians.
+	
+	\section{The Size of \(\GL_n(\F_q)\)}
+	
+	A related counting formula is the size of the general linear group.
+	
+	\begin{proposition}
+		\[
+		|\GL_n(\F_q)|=(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{n-1}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		An invertible \(n\times n\) matrix is exactly an ordered basis of \(\F_q^n\). The first column can be any nonzero vector, the second must lie outside the span of the first, and so on.
+	\end{proof}
+	
+	This is the full-basis version of the same counting principle used for \(\qbinom{n}{k}\).
+	
+	\section{The \(q\to 1\) Philosophy}
+	
+	The Gaussian binomial coefficient is called a \(q\)-analogue because, after simplification as a polynomial in \(q\), substituting \(q=1\) gives the ordinary binomial coefficient.
+	
+	\begin{example}
+		\[
+		\qbinom{3}{1}=q^2+q+1.
+		\]
+		Setting \(q=1\) gives
+		\[
+		1+1+1=3=\binom{3}{1}.
+		\]
+	\end{example}
+	
+	So:
+	\[
+	\text{subsets} \quad \leftrightarrow \quad q=1,
+	\qquad
+	\text{subspaces over }\F_q \quad \leftrightarrow \quad q\text{-analogue}.
+	\]
+	
+	\section{Conceptual Summary}
+	
+	The counting formula
+	\[
+	\qbinom{n}{k}
+	=
+	\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+	{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}
+	\]
+	comes from the following ideas:
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item Choose ordered linearly independent \(k\)-tuples in \(\F_q^n\).
+		\item Recognize that many of these tuples span the same \(k\)-dimensional subspace.
+		\item Divide by the number of ordered bases of one fixed \(k\)-dimensional subspace.
+		\item Use change of basis to conclude that the result is intrinsic to the vector space \(V\), not to coordinates.
+	\end{enumerate}
+	
+	\section{Final Theorem}
+	
+	\begin{theorem}[Final Form]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+		This number is independent of the choice of basis because any change of basis is given by an invertible linear map, and invertible linear maps preserve dimension and give bijections on subspaces.
+	\end{theorem}
+	
+	\section{Exercises}
+	
+	\begin{exercise}
+		Prove directly that a change of basis matrix belongs to \(\GL_n(K)\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Show that if \(T:V\to W\) is an isomorphism, then \(U\mapsto T(U)\) gives a bijection between \(k\)-dimensional subspaces of \(V\) and \(W\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(\qbinom{5}{1}\) when \(q=2\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(\qbinom{4}{2}\) when \(q=3\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Show that
+		\[
+		\qbinom{n}{1}=1+q+q^2+\cdots+q^{n-1}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Prove the symmetry
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Verify the recursion
+		\[
+		\qbinom{n}{k}
+		=
+		\qbinom{n-1}{k}
+		+
+		q^{n-k}\qbinom{n-1}{k-1}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Count the \(2\)-dimensional subspaces of \(\F_2^3\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Explain why there are infinitely many \(1\)-dimensional subspaces of \(\R^2\).
+	\end{exercise}
+	
+	\section{Selected Answers}
+	
+	\begin{itemize}
+		\item For \(q=2\),
+		\[
+		\qbinom{5}{1}=\frac{2^5-1}{2-1}=31.
+		\]
+		
+		\item For \(q=3\),
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(3^4-1)(3^4-3)}{(3^2-1)(3^2-3)}
+		=
+		\frac{80\cdot 78}{8\cdot 6}
+		=
+		130.
+		\]
+		
+		\item For \(\F_2^3\),
+		\[
+		\qbinom{3}{2}
+		=
+		\frac{(2^3-1)(2^3-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{7\cdot 6}{3\cdot 2}
+		=
+		7.
+		\]
+	\end{itemize}
+	
+	\section*{One-Sentence Takeaway}
+	
+	Over a finite field \(\F_q\), the number of distinct \(k\)-dimensional subspaces of an \(n\)-dimensional vector space is the Gaussian binomial coefficient \(\qbinom{n}{k}\), and change of basis shows that this count is an intrinsic property of the vector space, not of any chosen coordinates.
+	
+\end{document}

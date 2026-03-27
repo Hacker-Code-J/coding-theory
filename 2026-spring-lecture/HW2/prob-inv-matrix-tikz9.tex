@@ -1,0 +1,264 @@
+\documentclass[tikz,border=8pt]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{calc,positioning}
+
+\begin{document}
+	
+	\tikzset{
+		posbar/.style={draw, thick, fill=blue!18},
+		negbar/.style={draw, thick, fill=red!18},
+		axislabel/.style={font=\small},
+		rowlabel/.style={font=\small, anchor=east},
+		title/.style={font=\bfseries},
+		coeffpos/.style={draw, fill=blue!18},
+		coeffneg/.style={draw, fill=red!18}
+	}
+	
+	% -------------------------------------------------
+	% helper macro:
+	% #1 title
+	% #2 max x on main axis
+	% #3 list of rows: y/label/sign/blocks/term
+	%    sign is p or n
+	%    blocks is comma-separated list of widths, e.g. {1,3}
+	% #4 histogram shift x
+	% #5 histogram coefficients x/h pairs
+	% #6 histogram formula
+	% -------------------------------------------------
+	
+	% =========================
+	% CASE 1
+	% =========================
+	\begin{tikzpicture}[x=7mm,y=7mm]
+		\node[title, anchor=west] at (0,2.1)
+		{$\displaystyle (1-q)(1-q^2)=1-q-q^2+q^3$};
+		
+		% main axis
+		\draw[->] (0,0) -- (4.5,0) node[right,axislabel] {$\deg q$};
+		\foreach \x in {0,1,2,3,4}
+		\draw (\x,0.08) -- (\x,-0.08) node[below=2pt,axislabel] {\x};
+		
+		% rows
+		\node[rowlabel] at (-0.2,1.5) {$\varnothing$};
+		\fill[green!50!black] (0,1.5) circle (1.2pt);
+		\node[anchor=west,axislabel] at (0.12,1.5) {$+1$};
+		
+		\node[rowlabel] at (-0.2,1.0) {$\{1\}$};
+		\draw[negbar] (0,0.88) rectangle +(1,0.24);
+		\node[anchor=west,axislabel] at (1.12,1.0) {$-q$};
+		
+		\node[rowlabel] at (-0.2,0.5) {$\{2\}$};
+		\draw[negbar] (0,0.38) rectangle +(2,0.24);
+		\node[anchor=west,axislabel] at (2.12,0.5) {$-q^2$};
+		
+		\node[rowlabel] at (-0.2,0.0) {$\{1,2\}$};
+		\draw[posbar] (0,-0.12) rectangle +(1,0.24);
+		\draw[posbar] (1,-0.12) rectangle +(2,0.24);
+		\node[anchor=west,axislabel] at (3.12,0.0) {$+q^3$};
+		
+		% histogram
+		\begin{scope}[shift={(6.3,0)}]
+			\node[axislabel, anchor=west] at (0,2.0) {coefficients};
+			\draw[->] (0,-1.4) -- (0,1.6);
+			\draw[->] (0,0) -- (4.5,0);
+			\foreach \x in {0,1,2,3,4}
+			\draw (\x,0.08) -- (\x,-0.08) node[below=2pt,axislabel] {\x};
+			
+			\foreach \x/\h in {0/1,1/-1,2/-1,3/1} {
+				\ifdim \h pt > 0pt
+				\draw[coeffpos] (\x+0.15,0) rectangle +(0.7,\h*0.6);
+				\fi
+				\ifdim \h pt < 0pt
+				\draw[coeffneg] (\x+0.15,0) rectangle +(0.7,\h*0.6);
+				\fi
+			}
+		\end{scope}
+	\end{tikzpicture}
+	
+	\vspace{8mm}
+	
+	% =========================
+	% CASE 2
+	% =========================
+	\begin{tikzpicture}[x=7mm,y=7mm]
+		\node[title, anchor=west] at (0,4.1)
+		{$\displaystyle (1-q)(1-q^2)(1-q^3)=1-q-q^2+q^4+q^5-q^6$};
+		
+		% main axis
+		\draw[->] (0,0) -- (7.2,0) node[right,axislabel] {$\deg q$};
+		\foreach \x in {0,1,2,3,4,5,6,7}
+		\draw (\x,0.08) -- (\x,-0.08) node[below=2pt,axislabel] {\x};
+		
+		% rows
+		\node[rowlabel] at (-0.2,3.5) {$\varnothing$};
+		\fill[green!50!black] (0,3.5) circle (1.2pt);
+		\node[anchor=west,axislabel] at (0.12,3.5) {$+1$};
+		
+		\node[rowlabel] at (-0.2,3.0) {$\{1\}$};
+		\draw[negbar] (0,2.88) rectangle +(1,0.24);
+		\node[anchor=west,axislabel] at (1.12,3.0) {$-q$};
+		
+		\node[rowlabel] at (-0.2,2.5) {$\{2\}$};
+		\draw[negbar] (0,2.38) rectangle +(2,0.24);
+		\node[anchor=west,axislabel] at (2.12,2.5) {$-q^2$};
+		
+		\node[rowlabel] at (-0.2,2.0) {$\{3\}$};
+		\draw[negbar] (0,1.88) rectangle +(3,0.24);
+		\node[anchor=west,axislabel] at (3.12,2.0) {$-q^3$};
+		
+		\node[rowlabel] at (-0.2,1.5) {$\{1,2\}$};
+		\draw[posbar] (0,1.38) rectangle +(1,0.24);
+		\draw[posbar] (1,1.38) rectangle +(2,0.24);
+		\node[anchor=west,axislabel] at (3.12,1.5) {$+q^3$};
+		
+		\node[rowlabel] at (-0.2,1.0) {$\{1,3\}$};
+		\draw[posbar] (0,0.88) rectangle +(1,0.24);
+		\draw[posbar] (1,0.88) rectangle +(3,0.24);
+		\node[anchor=west,axislabel] at (4.12,1.0) {$+q^4$};
+		
+		\node[rowlabel] at (-0.2,0.5) {$\{2,3\}$};
+		\draw[posbar] (0,0.38) rectangle +(2,0.24);
+		\draw[posbar] (2,0.38) rectangle +(3,0.24);
+		\node[anchor=west,axislabel] at (5.12,0.5) {$+q^5$};
+		
+		\node[rowlabel] at (-0.2,0.0) {$\{1,2,3\}$};
+		\draw[negbar] (0,-0.12) rectangle +(1,0.24);
+		\draw[negbar] (1,-0.12) rectangle +(2,0.24);
+		\draw[negbar] (3,-0.12) rectangle +(3,0.24);
+		\node[anchor=west,axislabel] at (6.12,0.0) {$-q^6$};
+		
+		% histogram
+		\begin{scope}[shift={(9.0,0)}]
+			\node[axislabel, anchor=west] at (0,4.0) {coefficients};
+			\draw[->] (0,-1.4) -- (0,1.6);
+			\draw[->] (0,0) -- (7.2,0);
+			\foreach \x in {0,1,2,3,4,5,6,7}
+			\draw (\x,0.08) -- (\x,-0.08) node[below=2pt,axislabel] {\x};
+			
+			\foreach \x/\h in {0/1,1/-1,2/-1,3/0,4/1,5/1,6/-1} {
+				\ifdim \h pt > 0pt
+				\draw[coeffpos] (\x+0.15,0) rectangle +(0.7,\h*0.6);
+				\fi
+				\ifdim \h pt < 0pt
+				\draw[coeffneg] (\x+0.15,0) rectangle +(0.7,\h*0.6);
+				\fi
+			}
+		\end{scope}
+	\end{tikzpicture}
+	
+	\vspace{8mm}
+	
+	% =========================
+	% CASE 3
+	% =========================
+	\begin{tikzpicture}[x=6mm,y=6mm]
+		\node[title, anchor=west] at (0,8.4)
+		{$\displaystyle (1-q)(1-q^2)(1-q^3)(1-q^4)=1-q-q^2+2q^5-q^8-q^9+q^{10}$};
+		
+		% main axis
+		\draw[->] (0,0) -- (11.2,0) node[right,axislabel] {$\deg q$};
+		\foreach \x in {0,1,...,10}
+		\draw (\x,0.08) -- (\x,-0.08) node[below=2pt,axislabel] {\x};
+		
+		% rows
+		\node[rowlabel] at (-0.2,7.5) {$\varnothing$};
+		\fill[green!50!black] (0,7.5) circle (1.2pt);
+		\node[anchor=west,axislabel] at (0.12,7.5) {$+1$};
+		
+		\node[rowlabel] at (-0.2,7.0) {$\{1\}$};
+		\draw[negbar] (0,6.88) rectangle +(1,0.24);
+		\node[anchor=west,axislabel] at (1.12,7.0) {$-q$};
+		
+		\node[rowlabel] at (-0.2,6.5) {$\{2\}$};
+		\draw[negbar] (0,6.38) rectangle +(2,0.24);
+		\node[anchor=west,axislabel] at (2.12,6.5) {$-q^2$};
+		
+		\node[rowlabel] at (-0.2,6.0) {$\{3\}$};
+		\draw[negbar] (0,5.88) rectangle +(3,0.24);
+		\node[anchor=west,axislabel] at (3.12,6.0) {$-q^3$};
+		
+		\node[rowlabel] at (-0.2,5.5) {$\{4\}$};
+		\draw[negbar] (0,5.38) rectangle +(4,0.24);
+		\node[anchor=west,axislabel] at (4.12,5.5) {$-q^4$};
+		
+		\node[rowlabel] at (-0.2,5.0) {$\{1,2\}$};
+		\draw[posbar] (0,4.88) rectangle +(1,0.24);
+		\draw[posbar] (1,4.88) rectangle +(2,0.24);
+		\node[anchor=west,axislabel] at (3.12,5.0) {$+q^3$};
+		
+		\node[rowlabel] at (-0.2,4.5) {$\{1,3\}$};
+		\draw[posbar] (0,4.38) rectangle +(1,0.24);
+		\draw[posbar] (1,4.38) rectangle +(3,0.24);
+		\node[anchor=west,axislabel] at (4.12,4.5) {$+q^4$};
+		
+		\node[rowlabel] at (-0.2,4.0) {$\{1,4\}$};
+		\draw[posbar] (0,3.88) rectangle +(1,0.24);
+		\draw[posbar] (1,3.88) rectangle +(4,0.24);
+		\node[anchor=west,axislabel] at (5.12,4.0) {$+q^5$};
+		
+		\node[rowlabel] at (-0.2,3.5) {$\{2,3\}$};
+		\draw[posbar] (0,3.38) rectangle +(2,0.24);
+		\draw[posbar] (2,3.38) rectangle +(3,0.24);
+		\node[anchor=west,axislabel] at (5.12,3.5) {$+q^5$};
+		
+		\node[rowlabel] at (-0.2,3.0) {$\{2,4\}$};
+		\draw[posbar] (0,2.88) rectangle +(2,0.24);
+		\draw[posbar] (2,2.88) rectangle +(4,0.24);
+		\node[anchor=west,axislabel] at (6.12,3.0) {$+q^6$};
+		
+		\node[rowlabel] at (-0.2,2.5) {$\{3,4\}$};
+		\draw[posbar] (0,2.38) rectangle +(3,0.24);
+		\draw[posbar] (3,2.38) rectangle +(4,0.24);
+		\node[anchor=west,axislabel] at (7.12,2.5) {$+q^7$};
+		
+		\node[rowlabel] at (-0.2,2.0) {$\{1,2,3\}$};
+		\draw[negbar] (0,1.88) rectangle +(1,0.24);
+		\draw[negbar] (1,1.88) rectangle +(2,0.24);
+		\draw[negbar] (3,1.88) rectangle +(3,0.24);
+		\node[anchor=west,axislabel] at (6.12,2.0) {$-q^6$};
+		
+		\node[rowlabel] at (-0.2,1.5) {$\{1,2,4\}$};
+		\draw[negbar] (0,1.38) rectangle +(1,0.24);
+		\draw[negbar] (1,1.38) rectangle +(2,0.24);
+		\draw[negbar] (3,1.38) rectangle +(4,0.24);
+		\node[anchor=west,axislabel] at (7.12,1.5) {$-q^7$};
+		
+		\node[rowlabel] at (-0.2,1.0) {$\{1,3,4\}$};
+		\draw[negbar] (0,0.88) rectangle +(1,0.24);
+		\draw[negbar] (1,0.88) rectangle +(3,0.24);
+		\draw[negbar] (4,0.88) rectangle +(4,0.24);
+		\node[anchor=west,axislabel] at (8.12,1.0) {$-q^8$};
+		
+		\node[rowlabel] at (-0.2,0.5) {$\{2,3,4\}$};
+		\draw[negbar] (0,0.38) rectangle +(2,0.24);
+		\draw[negbar] (2,0.38) rectangle +(3,0.24);
+		\draw[negbar] (5,0.38) rectangle +(4,0.24);
+		\node[anchor=west,axislabel] at (9.12,0.5) {$-q^9$};
+		
+		\node[rowlabel] at (-0.2,0.0) {$\{1,2,3,4\}$};
+		\draw[posbar] (0,-0.12) rectangle +(1,0.24);
+		\draw[posbar] (1,-0.12) rectangle +(2,0.24);
+		\draw[posbar] (3,-0.12) rectangle +(3,0.24);
+		\draw[posbar] (6,-0.12) rectangle +(4,0.24);
+		\node[anchor=west,axislabel] at (10.12,0.0) {$+q^{10}$};
+		
+		% histogram
+		\begin{scope}[shift={(13.2,0)}]
+			\node[axislabel, anchor=west] at (0,8.0) {coefficients};
+			\draw[->] (0,-1.4) -- (0,1.9);
+			\draw[->] (0,0) -- (11.2,0);
+			\foreach \x in {0,1,...,10}
+			\draw (\x,0.08) -- (\x,-0.08) node[below=2pt,axislabel] {\x};
+			
+			\foreach \x/\h in {0/1,1/-1,2/-1,3/0,4/0,5/2,6/0,7/0,8/-1,9/-1,10/1} {
+				\ifdim \h pt > 0pt
+				\draw[coeffpos] (\x+0.15,0) rectangle +(0.7,\h*0.5);
+				\fi
+				\ifdim \h pt < 0pt
+				\draw[coeffneg] (\x+0.15,0) rectangle +(0.7,\h*0.5);
+				\fi
+			}
+		\end{scope}
+	\end{tikzpicture}
+	
+\end{document}

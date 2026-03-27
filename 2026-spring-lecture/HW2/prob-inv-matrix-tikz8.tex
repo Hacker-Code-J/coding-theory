@@ -1,0 +1,190 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,positioning,calc}
+
+\begin{document}
+	
+	\tikzset{
+		plusnode/.style={circle, draw, fill=blue!20, inner sep=1.6pt},
+		minusnode/.style={circle, draw, fill=red!20, inner sep=1.6pt},
+		txt/.style={font=\scriptsize},
+		mytitle/.style={font=\bfseries},
+		myarrow/.style={gray!60, -{Latex[length=1.5mm]}},
+		coeffplus/.style={draw, fill=blue!20},
+		coeffminus/.style={draw, fill=red!20}
+	}
+	
+	% =========================================================
+	% CASE n=2
+	% =========================================================
+	\begin{tikzpicture}[x=1.5cm,y=1.2cm]
+		\node[mytitle, anchor=west] at (-0.5,3.2)
+		{$\displaystyle (1-q)(1-q^2)=1-q-q^2+q^3$};
+		
+		\node[txt] at (1.5,-1.0) {subset sum $\sum S$};
+		\node[txt, rotate=90] at (-0.9,1.0) {subset size $|S|$};
+		
+		\foreach \x in {0,1,2,3}
+		\node[txt] at (\x,-0.45) {\x};
+		\foreach \y in {0,1,2}
+		\node[txt] at (-0.35,\y) {\y};
+		
+		\node[plusnode, label=left:{\scriptsize $\varnothing$}] (a) at (0,0) {};
+		\node[minusnode, label=above:{\scriptsize $\{1\}$}] (b) at (1,1) {};
+		\node[minusnode, label=above:{\scriptsize $\{2\}$}] (c) at (2,1) {};
+		\node[plusnode, label=above:{\scriptsize $\{1,2\}$}] (d) at (3,2) {};
+		
+		\draw[myarrow] (a)--(b);
+		\draw[myarrow] (a)--(c);
+		\draw[myarrow] (b)--(d);
+		\draw[myarrow] (c)--(d);
+		
+		\begin{scope}[shift={(5.2,0)}]
+			\node[txt] at (1.5,2.8) {net coefficient};
+			\draw[->] (0,-0.2) -- (4,-0.2);
+			\foreach \x in {0,1,2,3}
+			\node[txt] at (\x+0.3,-0.5) {\x};
+			
+			\draw[coeffplus]  (0.05,-0.2) rectangle +(0.5,0.5);
+			\draw[coeffminus] (1.05,-0.2) rectangle +(0.5,-0.5);
+			\draw[coeffminus] (2.05,-0.2) rectangle +(0.5,-0.5);
+			\draw[coeffplus]  (3.05,-0.2) rectangle +(0.5,0.5);
+			
+			\node[txt, anchor=west] at (0.0,-1.1) {$1-q-q^2+q^3$};
+		\end{scope}
+	\end{tikzpicture}
+	
+	\vspace{8mm}
+	
+	% =========================================================
+	% CASE n=3
+	% =========================================================
+	\begin{tikzpicture}[x=1.15cm,y=1.0cm]
+		\node[mytitle, anchor=west] at (-0.5,4.2)
+		{$\displaystyle (1-q)(1-q^2)(1-q^3)=1-q-q^2+q^4+q^5-q^6$};
+		
+		\node[txt] at (3,-1.0) {subset sum $\sum S$};
+		\node[txt, rotate=90] at (-0.9,1.5) {subset size $|S|$};
+		
+		\foreach \x in {0,1,2,3,4,5,6}
+		\node[txt] at (\x,-0.45) {\x};
+		\foreach \y in {0,1,2,3}
+		\node[txt] at (-0.35,\y) {\y};
+		
+		\node[plusnode, label=left:{\scriptsize $\varnothing$}] (e0) at (0,0) {};
+		
+		\node[minusnode, label=above:{\scriptsize $\{1\}$}] (e1) at (1,1) {};
+		\node[minusnode, label=above:{\scriptsize $\{2\}$}] (e2) at (2,1) {};
+		\node[minusnode, label=above:{\scriptsize $\{3\}$}] (e3) at (3,1) {};
+		
+		\node[plusnode, label=above:{\scriptsize $\{1,2\}$}] (e12) at (3,2) {};
+		\node[plusnode, label=above:{\scriptsize $\{1,3\}$}] (e13) at (4,2) {};
+		\node[plusnode, label=above:{\scriptsize $\{2,3\}$}] (e23) at (5,2) {};
+		
+		\node[minusnode, label=above:{\scriptsize $\{1,2,3\}$}] (e123) at (6,3) {};
+		
+		\draw[myarrow] (e0)--(e1); \draw[myarrow] (e0)--(e2); \draw[myarrow] (e0)--(e3);
+		\draw[myarrow] (e1)--(e12); \draw[myarrow] (e1)--(e13);
+		\draw[myarrow] (e2)--(e12); \draw[myarrow] (e2)--(e23);
+		\draw[myarrow] (e3)--(e13); \draw[myarrow] (e3)--(e23);
+		\draw[myarrow] (e12)--(e123); \draw[myarrow] (e13)--(e123); \draw[myarrow] (e23)--(e123);
+		
+		\draw[dashed, gray] (3,-0.2) -- (3,2.4);
+		\node[txt, anchor=west] at (3.15,1.5) {$-q^3$ and $+q^3$ cancel};
+		
+		\begin{scope}[shift={(8.5,0)}]
+			\node[txt] at (3,3.6) {net coefficient};
+			\draw[->] (0,-0.2) -- (7,-0.2);
+			\foreach \x in {0,1,2,3,4,5,6}
+			\node[txt] at (\x+0.3,-0.5) {\x};
+			
+			\draw[coeffplus]  (0.05,-0.2) rectangle +(0.5,0.5);
+			\draw[coeffminus] (1.05,-0.2) rectangle +(0.5,-0.5);
+			\draw[coeffminus] (2.05,-0.2) rectangle +(0.5,-0.5);
+			\draw[coeffplus]  (4.05,-0.2) rectangle +(0.5,0.5);
+			\draw[coeffplus]  (5.05,-0.2) rectangle +(0.5,0.5);
+			\draw[coeffminus] (6.05,-0.2) rectangle +(0.5,-0.5);
+			
+			\node[txt, anchor=west] at (0.0,-1.1) {$1-q-q^2+q^4+q^5-q^6$};
+		\end{scope}
+	\end{tikzpicture}
+	
+	\vspace{8mm}
+	
+	% =========================================================
+	% CASE n=4
+	% =========================================================
+	\begin{tikzpicture}[x=0.95cm,y=0.9cm]
+		\node[mytitle, anchor=west] at (-0.5,5.1)
+		{$\displaystyle (1-q)(1-q^2)(1-q^3)(1-q^4)=1-q-q^2+2q^5-q^8-q^9+q^{10}$};
+		
+		\node[txt] at (5,-1.0) {subset sum $\sum S$};
+		\node[txt, rotate=90] at (-0.9,2.0) {subset size $|S|$};
+		
+		\foreach \x in {0,1,...,10}
+		\node[txt] at (\x,-0.45) {\x};
+		\foreach \y in {0,1,2,3,4}
+		\node[txt] at (-0.35,\y) {\y};
+		
+		\node[plusnode, label=left:{\scriptsize $\varnothing$}] (f0) at (0,0) {};
+		
+		\node[minusnode, label=above:{\scriptsize $\{1\}$}] (f1) at (1,1) {};
+		\node[minusnode, label=above:{\scriptsize $\{2\}$}] (f2) at (2,1) {};
+		\node[minusnode, label=above:{\scriptsize $\{3\}$}] (f3) at (3,1) {};
+		\node[minusnode, label=above:{\scriptsize $\{4\}$}] (f4) at (4,1) {};
+		
+		\node[plusnode, label=below:{\scriptsize $\{1,2\}$}] (f12) at (3,2) {};
+		\node[plusnode, label=below:{\scriptsize $\{1,3\}$}] (f13) at (4,2) {};
+		\node[plusnode, label=below:{\scriptsize $\{1,4\}$}] (f14) at (5,2) {};
+		\node[plusnode, label=below:{\scriptsize $\{2,3\}$}] (f23) at (5,2.55) {};
+		\node[plusnode, label=below:{\scriptsize $\{2,4\}$}] (f24) at (6,2) {};
+		\node[plusnode, label=below:{\scriptsize $\{3,4\}$}] (f34) at (7,2) {};
+		
+		\node[minusnode, label=above:{\scriptsize $\{1,2,3\}$}] (f123) at (6,3) {};
+		\node[minusnode, label=above:{\scriptsize $\{1,2,4\}$}] (f124) at (7,3) {};
+		\node[minusnode, label=above:{\scriptsize $\{1,3,4\}$}] (f134) at (8,3) {};
+		\node[minusnode, label=above:{\scriptsize $\{2,3,4\}$}] (f234) at (9,3) {};
+		
+		\node[plusnode, label=above:{\scriptsize $\{1,2,3,4\}$}] (f1234) at (10,4) {};
+		
+		\draw[myarrow] (f0)--(f1); \draw[myarrow] (f0)--(f2); \draw[myarrow] (f0)--(f3); \draw[myarrow] (f0)--(f4);
+		\draw[myarrow] (f1)--(f12); \draw[myarrow] (f1)--(f13); \draw[myarrow] (f1)--(f14);
+		\draw[myarrow] (f2)--(f12); \draw[myarrow] (f2)--(f23); \draw[myarrow] (f2)--(f24);
+		\draw[myarrow] (f3)--(f13); \draw[myarrow] (f3)--(f23); \draw[myarrow] (f3)--(f34);
+		\draw[myarrow] (f4)--(f14); \draw[myarrow] (f4)--(f24); \draw[myarrow] (f4)--(f34);
+		
+		\draw[myarrow] (f12)--(f123); \draw[myarrow] (f12)--(f124);
+		\draw[myarrow] (f13)--(f123); \draw[myarrow] (f13)--(f134);
+		\draw[myarrow] (f14)--(f124); \draw[myarrow] (f14)--(f134);
+		\draw[myarrow] (f23)--(f123); \draw[myarrow] (f23)--(f234);
+		\draw[myarrow] (f24)--(f124); \draw[myarrow] (f24)--(f234);
+		\draw[myarrow] (f34)--(f134); \draw[myarrow] (f34)--(f234);
+		
+		\draw[myarrow] (f123)--(f1234); \draw[myarrow] (f124)--(f1234);
+		\draw[myarrow] (f134)--(f1234); \draw[myarrow] (f234)--(f1234);
+		
+		\draw[dashed, gray] (5,-0.2) -- (5,3.0);
+		\node[txt, anchor=west] at (5.15,2.8) {$q^5$: two positive subsets};
+		
+		\draw[dashed, gray] (6,-0.2) -- (6,3.2);
+		\node[txt, anchor=west] at (6.15,1.4) {$q^6$: + and - cancel};
+		
+		\begin{scope}[shift={(12.8,0)}]
+			\node[txt] at (5,4.5) {net coefficient};
+			\draw[->] (0,-0.2) -- (11,-0.2);
+			\foreach \x in {0,1,...,10}
+			\node[txt] at (\x+0.3,-0.5) {\x};
+			
+			\draw[coeffplus]  (0.05,-0.2) rectangle +(0.5,0.5);
+			\draw[coeffminus] (1.05,-0.2) rectangle +(0.5,-0.5);
+			\draw[coeffminus] (2.05,-0.2) rectangle +(0.5,-0.5);
+			\draw[coeffplus]  (5.05,-0.2) rectangle +(0.5,1.0);
+			\draw[coeffminus] (8.05,-0.2) rectangle +(0.5,-0.5);
+			\draw[coeffminus] (9.05,-0.2) rectangle +(0.5,-0.5);
+			\draw[coeffplus]  (10.05,-0.2) rectangle +(0.5,0.5);
+			
+			\node[txt, anchor=west] at (0.0,-1.1) {$1-q-q^2+2q^5-q^8-q^9+q^{10}$};
+		\end{scope}
+	\end{tikzpicture}
+	
+\end{document}

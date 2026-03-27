@@ -1,0 +1,777 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{bm}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\title{Lecture Notes: Counting \(k\)-Dimensional Subspaces of an \(n\)-Dimensional Vector Space via Linear Operators}
+\author{}
+\date{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\Q}{\mathbf{Q}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\End}{\mathrm{End}}
+\newcommand{\Hom}{\mathrm{Hom}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\nullity}{\operatorname{nullity}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\Ker}{\operatorname{Ker}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\Gr}{\mathrm{Gr}}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_q}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{Introduction}
+	
+	Let \(V\) be an \(n\)-dimensional vector space over a field \(K\). We want to answer the question:
+	
+	\begin{quote}
+		How many distinct \(k\)-dimensional subspaces does \(V\) have?
+	\end{quote}
+	
+	If \(K\) is infinite, then for \(0<k<n\) the answer is infinite. The interesting counting problem occurs when \(K=\F_q\) is a finite field with \(q\) elements.
+	
+	The standard answer is:
+	\[
+	\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}=\qbinom{n}{k}.
+	\]
+	
+	There are several ways to prove this. In these notes, we develop a proof and interpretation in terms of \emph{linear operators}. More precisely, we study surjective linear operators
+	\[
+	T:\F_q^n\to \F_q^k
+	\]
+	and show that the kernels of such operators encode the \((n-k)\)-dimensional subspaces of \(\F_q^n\). By counting such operators carefully, we recover the Gaussian binomial coefficient.
+	
+	So the philosophy is:
+	
+	\begin{quote}
+		Subspaces can be studied through kernels, images, and ranks of linear operators.
+	\end{quote}
+	
+	This viewpoint is very natural from linear algebra, since subspaces often arise as kernels and images of maps.
+	
+	\section{The Main Result}
+	
+	\begin{definition}
+		Let \(0\le k\le n\). The \emph{Gaussian binomial coefficient} is defined by
+		\[
+		\qbinom{n}{k}
+		=
+		\frac{(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})}.
+		\]
+		Equivalently,
+		\[
+		\qbinom{n}{k}
+		=
+		\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}.
+		\]
+	\end{definition}
+	
+	\begin{theorem}[Main Theorem]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+	\end{theorem}
+	
+	Our goal is to prove this formula using linear operators.
+	
+	\section{Why Linear Operators Are Relevant}
+	
+	A subspace can often be described as a kernel or as an image.
+	
+	\begin{itemize}
+		\item If \(T:V\to W\) is linear, then \(\Ker(T)\subseteq V\) is a subspace.
+		\item If \(T:V\to W\) is linear, then \(\im(T)\subseteq W\) is a subspace.
+	\end{itemize}
+	
+	Thus one can try to count subspaces by counting linear operators with prescribed kernel or image.
+	
+	For our counting problem, kernels are especially useful. If
+	\[
+	T:\F_q^n\to \F_q^k
+	\]
+	is surjective, then by rank-nullity,
+	\[
+	\dim\Ker(T)=n-k.
+	\]
+	So surjective linear maps from \(\F_q^n\) onto \(\F_q^k\) produce \((n-k)\)-dimensional subspaces of \(\F_q^n\).
+	
+	Conversely, every \((n-k)\)-dimensional subspace arises as the kernel of many surjective operators.
+	
+	This gives a counting strategy:
+	\begin{enumerate}[label=\arabic*.]
+		\item count surjective linear operators \(T:\F_q^n\to \F_q^k\),
+		\item determine how many such operators have a fixed kernel,
+		\item divide.
+	\end{enumerate}
+	
+	That is the operator-theoretic version of the standard basis-counting argument.
+	
+	\section{Preliminaries on Linear Operators}
+	
+	We recall the fundamental dimension theorem.
+	
+	\begin{theorem}[Rank-Nullity]
+		Let \(T:V\to W\) be a linear operator between finite-dimensional vector spaces. Then
+		\[
+		\dim V=\rank(T)+\nullity(T),
+		\]
+		that is,
+		\[
+		\dim V=\dim\im(T)+\dim\Ker(T).
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Choose a basis \(u_1,\dots,u_r\) of \(\Ker(T)\), and extend it to a basis
+		\[
+		u_1,\dots,u_r,v_1,\dots,v_s
+		\]
+		of \(V\). Then one checks that
+		\[
+		T(v_1),\dots,T(v_s)
+		\]
+		form a basis of \(\im(T)\). Hence
+		\[
+		\dim V=r+s=\dim\Ker(T)+\dim\im(T).
+		\]
+	\end{proof}
+	
+	\begin{corollary}
+		If \(T:\F_q^n\to \F_q^k\) is surjective, then
+		\[
+		\dim\Ker(T)=n-k.
+		\]
+	\end{corollary}
+	
+	\begin{proof}
+		If \(T\) is surjective, then \(\rank(T)=k\). By rank-nullity,
+		\[
+		n=\rank(T)+\nullity(T)=k+\nullity(T),
+		\]
+		so \(\nullity(T)=n-k\).
+	\end{proof}
+	
+	So every surjective linear operator \(\F_q^n\to \F_q^k\) determines an \((n-k)\)-dimensional subspace, namely its kernel.
+	
+	\section{Every Subspace Is a Kernel}
+	
+	The next fact explains why kernels capture all subspaces of the appropriate dimension.
+	
+	\begin{proposition}
+		Let \(U\subseteq \F_q^n\) be a subspace of dimension \(n-k\). Then there exists a surjective linear operator
+		\[
+		T:\F_q^n\to \F_q^k
+		\]
+		such that
+		\[
+		\Ker(T)=U.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Choose a basis
+		\[
+		u_1,\dots,u_{n-k}
+		\]
+		of \(U\), and extend it to a basis
+		\[
+		u_1,\dots,u_{n-k},v_1,\dots,v_k
+		\]
+		of \(\F_q^n\). Define \(T\) on this basis by
+		\[
+		T(u_i)=0 \quad (1\le i\le n-k), \qquad T(v_j)=e_j \quad (1\le j\le k),
+		\]
+		where \(e_1,\dots,e_k\) is the standard basis of \(\F_q^k\). Extend linearly.
+		
+		Then \(T\) is surjective because the \(e_j\)'s lie in its image, and
+		\[
+		\Ker(T)=U.
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		Thus \((n-k)\)-dimensional subspaces of \(\F_q^n\) are exactly the kernels of surjective operators
+		\[
+		\F_q^n\to \F_q^k.
+		\]
+	\end{remark}
+	
+	Since counting \(k\)-dimensional subspaces is the same as counting \((n-k)\)-dimensional subspaces, kernels already solve the whole problem in principle.
+	
+	\section{Counting Surjective Operators}
+	
+	We now count the number of surjective linear operators
+	\[
+	T:\F_q^n\to \F_q^k.
+	\]
+	
+	A linear operator is determined by the images of a basis of the domain. Equivalently, after choosing bases, it is represented by a \(k\times n\) matrix over \(\F_q\). The operator is surjective exactly when the matrix has rank \(k\).
+	
+	\begin{proposition}
+		The number of surjective linear operators
+		\[
+		T:\F_q^n\to \F_q^k
+		\]
+		is
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		A surjective map \(T:\F_q^n\to \F_q^k\) has rank \(k\). The rows of a representing \(k\times n\) matrix must therefore be linearly independent in the dual viewpoint, or equivalently the columns must span \(\F_q^k\). It is simplest to count by choosing the rows as an ordered linearly independent \(k\)-tuple in \((\F_q^n)^*\), which has the same count as an ordered linearly independent \(k\)-tuple in \(\F_q^n\).
+		
+		Thus:
+		\begin{itemize}
+			\item the first row can be any nonzero vector: \(q^n-1\) choices,
+			\item the second row must be outside its span: \(q^n-q\) choices,
+			\item the third row must be outside the span of the first two: \(q^n-q^2\) choices,
+		\end{itemize}
+		and so on.
+		
+		Hence the number of surjective operators is
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This is also the number of \(k\times n\) matrices of rank \(k\).
+	\end{remark}
+	
+	\section{How Many Surjective Operators Have a Fixed Kernel?}
+	
+	Now fix an \((n-k)\)-dimensional subspace
+	\[
+	U\subseteq \F_q^n.
+	\]
+	We ask: how many surjective linear operators
+	\[
+	T:\F_q^n\to \F_q^k
+	\]
+	satisfy
+	\[
+	\Ker(T)=U?
+	\]
+	
+	The answer is controlled by the quotient space \(\F_q^n/U\).
+	
+	\begin{proposition}
+		Let \(U\subseteq \F_q^n\) be a subspace of dimension \(n-k\). Then the number of surjective linear operators
+		\[
+		T:\F_q^n\to \F_q^k
+		\]
+		with kernel \(U\) is
+		\[
+		|\GL_k(\F_q)|
+		=
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Since \(\dim U=n-k\), the quotient space \(\F_q^n/U\) has dimension
+		\[
+		n-(n-k)=k.
+		\]
+		If \(T:\F_q^n\to \F_q^k\) has kernel \(U\), then by the universal property of quotients, \(T\) factors uniquely as
+		\[
+		\F_q^n \xrightarrow{\pi} \F_q^n/U \xrightarrow{\widetilde{T}} \F_q^k,
+		\]
+		where \(\pi\) is the quotient map and \(\widetilde{T}\) is linear.
+		
+		Now \(T\) is surjective and \(\dim(\F_q^n/U)=\dim(\F_q^k)=k\), so \(\widetilde{T}\) must be an isomorphism. Conversely, every isomorphism
+		\[
+		\widetilde{T}:\F_q^n/U\to \F_q^k
+		\]
+		gives a surjective linear map \(T=\widetilde{T}\circ\pi\) with kernel \(U\).
+		
+		So the number of such \(T\) is exactly the number of vector space isomorphisms
+		\[
+		\F_q^n/U\to \F_q^k,
+		\]
+		which is the number of ordered bases of \(\F_q^k\), namely
+		\[
+		|\GL_k(\F_q)|
+		=
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This is the central linear-operator idea: a fixed kernel corresponds not to one operator, but to all possible isomorphisms from the quotient \(V/U\) onto the codomain.
+	\end{remark}
+	
+	\section{The Counting Formula from Kernels of Operators}
+	
+	We are now ready for the main counting argument.
+	
+	\begin{proof}[Proof of the Main Theorem]
+		Let
+		\[
+		\mathcal{S}=\{T:\F_q^n\to \F_q^k \mid T \text{ is surjective}\}.
+		\]
+		We count \(|\mathcal{S}|\) in two ways.
+		
+		First, by the proposition above,
+		\[
+		|\mathcal{S}|=(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+		
+		Second, each surjective operator \(T\) has kernel of dimension \(n-k\), and every \((n-k)\)-dimensional subspace arises as such a kernel. For each fixed \((n-k)\)-dimensional subspace \(U\), the number of surjective operators with kernel \(U\) is
+		\[
+		|\GL_k(\F_q)|
+		=
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+		
+		Therefore,
+		\[
+		|\mathcal{S}|
+		=
+		\bigl(\#\{\text{\((n-k)\)-dimensional subspaces of }\F_q^n\}\bigr)\cdot |\GL_k(\F_q)|.
+		\]
+		
+		So
+		\[
+		\#\{\text{\((n-k)\)-dimensional subspaces of }\F_q^n\}
+		=
+		\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}.
+		\]
+		
+		By symmetry of Gaussian coefficients,
+		\[
+		\qbinom{n}{n-k}=\qbinom{n}{k},
+		\]
+		so this is also the number of \(k\)-dimensional subspaces. Hence
+		\[
+		\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+		=
+		\qbinom{n}{k}.
+		\]
+	\end{proof}
+	
+	\section{A Direct Operator Form of the Answer}
+	
+	The previous proof can be summarized in a clean operator identity:
+	
+	\begin{align*}
+		\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+		&=
+		\#\{\text{\((n-k)\)-dimensional subspaces of }\F_q^n\} \\
+		&=
+		\frac{\#\{\text{surjective }T:\F_q^n\to \F_q^k\}}
+		{\#\{\text{automorphisms of }\F_q^k\}} \\
+		&=
+		\frac{\#\{\text{surjective }T:\F_q^n\to \F_q^k\}}
+		{|\GL_k(\F_q)|}.
+	\end{align*}
+	
+	This is the operator-theoretic analogue of dividing by the number of bases of a fixed subspace.
+	
+	\section{Images Instead of Kernels}
+	
+	One may also formulate the same story using images.
+	
+	Let
+	\[
+	S:\F_q^k\to \F_q^n
+	\]
+	be an injective linear operator. Then \(\im(S)\) is a \(k\)-dimensional subspace of \(\F_q^n\). Conversely, every \(k\)-dimensional subspace arises as the image of many injective operators.
+	
+	\begin{proposition}
+		The number of injective linear operators
+		\[
+		S:\F_q^k\to \F_q^n
+		\]
+		is
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		To define an injective map \(S\), choose the images of a basis of \(\F_q^k\). These images must be linearly independent in \(\F_q^n\). So we count ordered linearly independent \(k\)-tuples in \(\F_q^n\), obtaining
+		\[
+		(q^n-1)(q^n-q)\cdots(q^n-q^{k-1}).
+		\]
+	\end{proof}
+	
+	\begin{proposition}
+		If \(W\subseteq \F_q^n\) is a fixed \(k\)-dimensional subspace, then the number of injective operators
+		\[
+		S:\F_q^k\to \F_q^n
+		\]
+		with image \(W\) is
+		\[
+		|\GL_k(\F_q)|.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Such an injective operator is exactly an isomorphism
+		\[
+		\F_q^k \xrightarrow{\sim} W.
+		\]
+		The number of these is the number of ordered bases of \(W\), namely \(|\GL_k(\F_q)|\).
+	\end{proof}
+	
+	Therefore,
+	\[
+	\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+	=
+	\frac{\#\{\text{injective }S:\F_q^k\to \F_q^n\}}
+	{|\GL_k(\F_q)|}.
+	\]
+	
+	So kernels and images give two dual operator proofs of the same formula.
+	
+	\section{Change of Basis and Operator Invariance}
+	
+	It is important that the answer does not depend on a chosen basis.
+	
+	\begin{proposition}
+		If \(V\) and \(W\) are isomorphic finite-dimensional vector spaces over \(\F_q\), then the number of \(k\)-dimensional subspaces of \(V\) equals the number of \(k\)-dimensional subspaces of \(W\).
+	\end{proposition}
+	
+	\begin{proof}
+		If \(A:V\to W\) is an isomorphism, then
+		\[
+		U\longmapsto A(U)
+		\]
+		is a bijection between the \(k\)-dimensional subspaces of \(V\) and the \(k\)-dimensional subspaces of \(W\).
+	\end{proof}
+	
+	Thus we may always choose a basis and work in \(\F_q^n\). The operator counts above are intrinsic, because rank, kernel, image, and isomorphism type are basis-independent notions.
+	
+	\section{Examples}
+	
+	\begin{example}[Lines in \(\F_q^3\)]
+		The number of \(1\)-dimensional subspaces is
+		\[
+		\qbinom{3}{1}
+		=
+		\frac{q^3-1}{q-1}
+		=
+		q^2+q+1.
+		\]
+		Operator interpretation: these are precisely the images of injective maps
+		\[
+		\F_q\to \F_q^3,
+		\]
+		modulo automorphisms of \(\F_q\), or equivalently the kernels of surjective maps
+		\[
+		\F_q^3\to \F_q^2.
+		\]
+	\end{example}
+	
+	\begin{example}[Planes in \(\F_q^3\)]
+		The number of \(2\)-dimensional subspaces is
+		\[
+		\qbinom{3}{2}=\qbinom{3}{1}=q^2+q+1.
+		\]
+		Operator interpretation: these are the kernels of nonzero linear functionals
+		\[
+		T:\F_q^3\to \F_q.
+		\]
+		Each nonzero functional is surjective, and two such functionals have the same kernel exactly when they differ by a nonzero scalar. Hence
+		\[
+		\frac{q^3-1}{q-1}=q^2+q+1.
+		\]
+	\end{example}
+	
+	\begin{example}[A very concrete operator count for \(\F_2^3\)]
+		Let us count the \(2\)-dimensional subspaces of \(\F_2^3\).
+		
+		A \(2\)-dimensional subspace is the kernel of a surjective operator
+		\[
+		T:\F_2^3\to \F_2.
+		\]
+		Since \(\F_2\) has only one nonzero scalar, every nonzero linear functional has a distinct kernel count contribution of size \(1\). There are
+		\[
+		2^3-1=7
+		\]
+		nonzero linear functionals, hence exactly \(7\) distinct kernels, i.e. \(7\) planes in \(\F_2^3\).
+		
+		This agrees with
+		\[
+		\qbinom{3}{2}\Big|_{q=2}=7.
+		\]
+	\end{example}
+	
+	\section{Special Cases}
+	
+	\begin{proposition}
+		For every \(n\) and \(q\),
+		\begin{align*}
+			\qbinom{n}{0} &= 1,\\
+			\qbinom{n}{1} &= \frac{q^n-1}{q-1}=1+q+q^2+\cdots+q^{n-1},\\
+			\qbinom{n}{n-1} &= \qbinom{n}{1},\\
+			\qbinom{n}{n} &= 1.
+		\end{align*}
+	\end{proposition}
+	
+	\begin{proof}
+		The cases \(k=0\) and \(k=n\) are obvious. For \(k=1\), count injective maps
+		\[
+		\F_q\to \F_q^n
+		\]
+		or equivalently nonzero vectors in \(\F_q^n\), and divide by the nonzero scalars \(q-1\). This gives
+		\[
+		\qbinom{n}{1}=\frac{q^n-1}{q-1}.
+		\]
+		The case \(k=n-1\) follows dually by kernels of nonzero linear functionals.
+	\end{proof}
+	
+	\section{Symmetry}
+	
+	\begin{proposition}
+		For \(0\le k\le n\),
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		One proof is algebraic from the product formula. Another proof comes from operators: \(k\)-dimensional subspaces can be counted by images of injective maps
+		\[
+		\F_q^k\to \F_q^n,
+		\]
+		while \((n-k)\)-dimensional subspaces can be counted by kernels of surjective maps
+		\[
+		\F_q^n\to \F_q^k.
+		\]
+		These yield the same quotient formula.
+	\end{proof}
+	
+	\section{Relation with Rank-\(k\) Operators}
+	
+	There is a broader operator viewpoint.
+	
+	A linear operator
+	\[
+	T:\F_q^n\to \F_q^n
+	\]
+	of rank \(k\) has:
+	\begin{itemize}
+		\item image a \(k\)-dimensional subspace,
+		\item kernel an \((n-k)\)-dimensional subspace.
+	\end{itemize}
+	
+	So rank-\(k\) operators simultaneously encode two subspaces. This connects the counting of subspaces with the classification of linear maps by rank.
+	
+	One can therefore think of Gaussian coefficients as arising naturally from the structure theory of finite-dimensional operators over finite fields.
+	
+	\section{Grassmannians from the Operator Viewpoint}
+	
+	The set of all \(k\)-dimensional subspaces of \(\F_q^n\) is called the Grassmannian:
+	\[
+	\Gr(k,n).
+	\]
+	
+	From the operator viewpoint, \(\Gr(k,n)\) can be realized in two ways:
+	
+	\begin{itemize}
+		\item as the set of images of injective operators
+		\[
+		\F_q^k \to \F_q^n
+		\]
+		modulo automorphisms of \(\F_q^k\),
+		\item as the set of kernels of surjective operators
+		\[
+		\F_q^n \to \F_q^{n-k}
+		\]
+		modulo automorphisms of the codomain.
+	\end{itemize}
+	
+	This makes the Grassmannian a natural moduli space for linear operators of full rank.
+	
+	\section{Infinite Fields}
+	
+	\begin{proposition}
+		If \(K\) is infinite and \(V\) is an \(n\)-dimensional vector space over \(K\), then for \(0<k<n\) there are infinitely many \(k\)-dimensional subspaces of \(V\).
+	\end{proposition}
+	
+	\begin{proof}
+		For \(k=1\), every line through the origin in \(K^2\) is a \(1\)-dimensional subspace, and there are infinitely many such lines when \(K\) is infinite. Hence there are infinitely many \(k\)-dimensional subspaces in general for \(0<k<n\).
+	\end{proof}
+	
+	\begin{remark}
+		So the finite formula
+		\[
+		\qbinom{n}{k}
+		\]
+		is special to finite fields.
+	\end{remark}
+	
+	\section{Conceptual Summary}
+	
+	The operator-theoretic proof rests on the following facts:
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item Every \((n-k)\)-dimensional subspace \(U\subseteq \F_q^n\) is the kernel of a surjective operator
+		\[
+		T:\F_q^n\to \F_q^k.
+		\]
+		\item The number of surjective operators \(\F_q^n\to \F_q^k\) is
+		\[
+		(q^n-1)(q^n-q)\cdots(q^n-q^{k-1}).
+		\]
+		\item For a fixed kernel \(U\), the number of such operators is
+		\[
+		|\GL_k(\F_q)|
+		=
+		(q^k-1)(q^k-q)\cdots(q^k-q^{k-1}).
+		\]
+		\item Dividing gives the number of subspaces.
+	\end{enumerate}
+	
+	So:
+	\[
+	\boxed{
+		\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+		=
+		\frac{\#\{\text{surjective }T:\F_q^n\to \F_q^k\}}
+		{|\GL_k(\F_q)|}
+		=
+		\qbinom{n}{k}
+	}.
+	\]
+	
+	\section{Final Theorem}
+	
+	\begin{theorem}[Final Form]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+		Equivalently, this number can be computed from linear operators by
+		\[
+		\#\{\text{\(k\)-dimensional subspaces of }V\}
+		=
+		\frac{\#\{\text{injective }S:\F_q^k\to V\}}{|\GL_k(\F_q)|},
+		\]
+		or dually by
+		\[
+		\#\{\text{\(k\)-dimensional subspaces of }V\}
+		=
+		\frac{\#\{\text{surjective }T:V\to \F_q^k\}}{|\GL_k(\F_q)|}.
+		\]
+	\end{theorem}
+	
+	\section{Exercises}
+	
+	\begin{exercise}
+		Let \(U\subseteq \F_q^n\) have dimension \(n-k\). Construct explicitly a surjective linear operator
+		\[
+		T:\F_q^n\to \F_q^k
+		\]
+		with \(\Ker(T)=U\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Prove carefully that if \(U\subseteq \F_q^n\) has dimension \(n-k\), then the number of surjective linear operators \(T:\F_q^n\to \F_q^k\) with kernel \(U\) is \(|\GL_k(\F_q)|\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Count the number of injective maps
+		\[
+		\F_q^2\to \F_q^4.
+		\]
+		Use this to compute \(\qbinom{4}{2}\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Show directly that the number of nonzero linear functionals
+		\[
+		T:\F_q^n\to \F_q
+		\]
+		modulo nonzero scalar multiples is \(\qbinom{n}{n-1}\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute the number of \(2\)-dimensional subspaces of \(\F_2^4\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Explain why images of injective maps and kernels of surjective maps give the same counting formula.
+	\end{exercise}
+	
+	\section{Selected Answers}
+	
+	\begin{itemize}
+		\item The number of injective maps
+		\[
+		\F_q^2\to \F_q^4
+		\]
+		is
+		\[
+		(q^4-1)(q^4-q).
+		\]
+		
+		\item Therefore
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(q^4-1)(q^4-q)}{(q^2-1)(q^2-q)}.
+		\]
+		
+		\item For \(q=2\),
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(2^4-1)(2^4-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{15\cdot 14}{3\cdot 2}
+		=
+		35.
+		\]
+	\end{itemize}
+	
+	\section*{One-Sentence Takeaway}
+	
+	Over a finite field \(\F_q\), the \(k\)-dimensional subspaces of an \(n\)-dimensional vector space can be counted by counting injective or surjective linear operators and dividing by the number of automorphisms of the \(k\)-dimensional model space, which yields the Gaussian binomial coefficient \(\qbinom{n}{k}\).
+	
+\end{document}

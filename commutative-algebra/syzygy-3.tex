@@ -1,0 +1,659 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{tikz-cd}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\Syz}{\operatorname{Syz}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\kerR}{\operatorname{ker}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Ann}{\operatorname{Ann}}
+\newcommand{\rank}{\operatorname{rank}}
+
+\title{Lecture Notes on Syzygies\\
+	\large From Linear Dependence to Relations in Commutative Algebra}
+\author{}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{Motivation from linear algebra}
+	
+	In linear algebra, linear dependence of vectors \(\textbf{v}_1,\dots,\textbf{v}_r\in V\) is expressed by an equation
+	\[
+	c_1\textbf{v}_1+\cdots+c_r\textbf{v}_r=\textbf{0}
+	\]
+	for some scalars \(c_1,\dots,c_r\in\F\).
+	
+	In commutative algebra, one studies an analogous notion for elements of a ring, but now the coefficients are allowed to lie in the ring \(R\) itself.
+	
+	This is the basic idea behind the notion of a \emph{syzygy}.
+	
+	\subsection*{Guiding question}
+	
+	Suppose \(f_1,\dots,f_r\in R\).  
+	Can we find elements \(a_1,\dots,a_r\in R\) such that
+	\[
+	a_1f_1+\cdots+a_rf_r=0?
+	\]
+	If yes, then the tuple \((a_1,\dots,a_r)\) records a relation among the \(f_i\).  
+	That relation is called a syzygy.
+	
+	\section{From linear dependence to syzygies}
+	
+	Let us compare the two situations.
+	
+	\subsection{Linear algebra}
+	
+	If \(V\) is a vector space over \(\F\), then a relation among vectors
+	\[
+	\textbf{v}_1,\dots,\textbf{v}_r\in V
+	\]
+	has the form
+	\[
+	c_1\textbf{v}_1+\cdots+c_r\textbf{v}_r=\textbf{0},
+	\qquad c_i\in \F.
+	\]
+	The coefficients come from the field \(\F\).
+	
+	\subsection{Commutative algebra}
+	
+	If \(R\) is a commutative ring and
+	\[
+	f_1,\dots,f_r\in R,
+	\]
+	then a relation among these elements has the form
+	\[
+	a_1f_1+\cdots+a_rf_r=0,
+	\qquad a_i\in R.
+	\]
+	The coefficients now come from the ring \(R\) itself.
+	
+	\begin{remark}
+		This is richer than linear algebra because coefficients are no longer just constants; they may be polynomials or other ring elements.
+	\end{remark}
+	
+	\section{Definition of syzygy}
+	
+	\begin{definition}
+		Let \(R\) be a commutative ring, and let \(f_1,\dots,f_r\in R\).
+		A \emph{syzygy} among \(f_1,\dots,f_r\) is a tuple
+		\[
+		(a_1,\dots,a_r)\in R^r
+		\]
+		such that
+		\[
+		a_1f_1+\cdots+a_rf_r=0.
+		\]
+	\end{definition}
+	
+	\begin{definition}
+		The set of all syzygies among \(f_1,\dots,f_r\) is called the \emph{syzygy module} of \(f_1,\dots,f_r\), denoted
+		\[
+		\Syz(f_1,\dots,f_r)
+		=
+		\left\{
+		(a_1,\dots,a_r)\in R^r \;\middle|\; a_1f_1+\cdots+a_rf_r=0
+		\right\}.
+		\]
+	\end{definition}
+	
+	\begin{proposition}
+		\(\Syz(f_1,\dots,f_r)\) is an \(R\)-submodule of \(R^r\).
+	\end{proposition}
+	
+	\begin{proof}
+		Let \((a_1,\dots,a_r)\) and \((b_1,\dots,b_r)\) be syzygies. Then
+		\[
+		a_1f_1+\cdots+a_rf_r=0,
+		\qquad
+		b_1f_1+\cdots+b_rf_r=0.
+		\]
+		Adding these equations gives
+		\[
+		(a_1+b_1)f_1+\cdots+(a_r+b_r)f_r=0,
+		\]
+		so the sum is again a syzygy.
+		
+		If \(c\in R\), then multiplying the first equation by \(c\) gives
+		\[
+		(ca_1)f_1+\cdots+(ca_r)f_r=0.
+		\]
+		So scalar multiples are again syzygies.
+	\end{proof}
+	
+	\section{The first basic example}
+	
+	Let
+	\[
+	R=\C[x,y].
+	\]
+	Choose
+	\[
+	f_1=x,\qquad f_2=y.
+	\]
+	A syzygy of \(f_1,f_2\) is a pair \((a_1,a_2)\in R^2\) such that
+	\[
+	a_1x+a_2y=0.
+	\]
+	
+	\begin{example}
+		The pair
+		\[
+		(-y,x)
+		\]
+		is a syzygy of \(x\) and \(y\), because
+		\[
+		(-y)x+xy=-xy+xy=0.
+		\]
+	\end{example}
+	
+	This is the first example one should remember.
+	
+	\subsection*{Interpretation}
+	
+	The pair \((-y,x)\) means that the generators \(x\) and \(y\) are not independent. There is a precise way to combine them so that they cancel:
+	\[
+	(-y)\cdot x + x\cdot y = 0.
+	\]
+	
+	\section{Why a syzygy is a tuple in \(R^r\)}
+	
+	Suppose we have chosen elements
+	\[
+	f_1,\dots,f_r\in R.
+	\]
+	A relation among them must specify one coefficient for each \(f_i\). Therefore the data of a relation is naturally a tuple
+	\[
+	(a_1,\dots,a_r)\in R^r.
+	\]
+	The equation
+	\[
+	a_1f_1+\cdots+a_rf_r=0
+	\]
+	says that this tuple produces the zero relation.
+	
+	So:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item \(R^r\) is the space of all coefficient choices,
+		\item a syzygy is a coefficient choice that gives zero.
+	\end{itemize}
+	
+	\section{Syzygies as kernels}
+	
+	This is the cleanest conceptual viewpoint.
+	
+	Given \(f_1,\dots,f_r\in R\), define an \(R\)-linear map
+	\[
+	\varphi:R^r\to R
+	\]
+	by
+	\[
+	\varphi(a_1,\dots,a_r)=a_1f_1+\cdots+a_rf_r.
+	\]
+	
+	Then by definition,
+	\[
+	\Syz(f_1,\dots,f_r)=\kerR(\varphi).
+	\]
+	
+	Thus a syzygy is simply an element of the kernel of the map determined by the chosen generators.
+	
+	\begin{remark}
+		This is the most penetrating viewpoint:
+		\[
+		\text{syzygy}=\text{kernel element of the generator map}.
+		\]
+	\end{remark}
+	
+	\subsection{The example \(x,y\)}
+	
+	Let
+	\[
+	\varphi:\C[x,y]^2\to \C[x,y],
+	\qquad
+	\varphi(a_1,a_2)=a_1x+a_2y.
+	\]
+	Then
+	\[
+	\Syz(x,y)=\kerR(\varphi).
+	\]
+	Since
+	\[
+	\varphi(-y,x)=(-y)x+xy=0,
+	\]
+	the pair \((-y,x)\) lies in the kernel.
+	
+	\section{Relation with ideals}
+	
+	If \(f_1,\dots,f_r\in R\), they generate the ideal
+	\[
+	(f_1,\dots,f_r)
+	=
+	\{a_1f_1+\cdots+a_rf_r\mid a_i\in R\}.
+	\]
+	So there is a natural surjective map
+	\[
+	\pi:R^r\to (f_1,\dots,f_r),
+	\qquad
+	(a_1,\dots,a_r)\mapsto a_1f_1+\cdots+a_rf_r.
+	\]
+	
+	The kernel of this map is the module of syzygies:
+	\[
+	0\to \Syz(f_1,\dots,f_r)\to R^r\xrightarrow{\pi}(f_1,\dots,f_r)\to 0.
+	\]
+	
+	This exact sequence says:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item \(R^r\) remembers the chosen generators,
+		\item the image is the ideal they generate,
+		\item the kernel records the hidden relations among them.
+	\end{itemize}
+	
+	\section{All syzygies of \(x\) and \(y\)}
+	
+	We now study the example
+	\[
+	R=k[x,y],\qquad f_1=x,\qquad f_2=y
+	\]
+	more carefully.
+	
+	Suppose
+	\[
+	ax+by=0
+	\]
+	for some \(a,b\in R\). We claim that every such relation is a multiple of \((-y,x)\).
+	
+	\begin{proposition}
+		In \(R=k[x,y]\),
+		\[
+		\Syz(x,y)=R\cdot(-y,x).
+		\]
+		That is, every syzygy of \(x\) and \(y\) has the form
+		\[
+		(-cy,cx)
+		\]
+		for some \(c\in R\).
+	\end{proposition}
+	
+	\begin{proof}
+		Suppose
+		\[
+		ax+by=0.
+		\]
+		Then
+		\[
+		ax=-by.
+		\]
+		Hence \(ax\) is divisible by \(y\). Since \(x\) and \(y\) are relatively prime in \(k[x,y]\), it follows that \(a\) must be divisible by \(y\). So we may write
+		\[
+		a=-cy
+		\]
+		for some \(c\in R\). Substituting gives
+		\[
+		(-cy)x+by=0,
+		\]
+		hence
+		\[
+		y(-cx+b)=0.
+		\]
+		Since \(R\) is an integral domain,
+		\[
+		-cx+b=0,
+		\]
+		so
+		\[
+		b=cx.
+		\]
+		Therefore
+		\[
+		(a,b)=(-cy,cx)=c(-y,x).
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This is a beautiful example: there are infinitely many syzygies, but they are all generated by one basic syzygy.
+	\end{remark}
+	
+	\section{A second example}
+	
+	Let
+	\[
+	R=k[x,y]
+	\]
+	and consider
+	\[
+	f_1=x^2,\qquad f_2=xy,\qquad f_3=y^2.
+	\]
+	We look for triples \((a,b,c)\in R^3\) such that
+	\[
+	ax^2+bxy+cy^2=0.
+	\]
+	
+	Two obvious syzygies are
+	\[
+	(-y,x,0)
+	\]
+	and
+	\[
+	(0,-y,x).
+	\]
+	
+	Indeed,
+	\[
+	(-y)x^2+x(xy)+0\cdot y^2=-x^2y+x^2y=0,
+	\]
+	and
+	\[
+	0\cdot x^2+(-y)(xy)+x(y^2)=-xy^2+xy^2=0.
+	\]
+	
+	\begin{remark}
+		This shows how syzygies arise from different ways of forming the same product.
+	\end{remark}
+	
+	\section{Syzygies and presentations}
+	
+	Suppose \(M\) is an \(R\)-module generated by elements
+	\[
+	m_1,\dots,m_r.
+	\]
+	Then there is a surjective map
+	\[
+	\pi:R^r\to M,
+	\qquad
+	(a_1,\dots,a_r)\mapsto a_1m_1+\cdots+a_rm_r.
+	\]
+	Its kernel is the module of relations among the generators.
+	
+	\begin{definition}
+		The kernel of the map \(R^r\to M\) is called the \emph{module of first syzygies} of the chosen generators of \(M\).
+	\end{definition}
+	
+	Thus one has an exact sequence
+	\[
+	0\to K_1\to R^r\to M\to 0,
+	\]
+	where
+	\[
+	K_1=\kerR(R^r\to M).
+	\]
+	
+	This is called a \emph{presentation} of \(M\): the module \(M\) is described by generators and relations.
+	
+	\section{Higher syzygies}
+	
+	The first syzygy module may itself have generators and relations.
+	
+	Suppose
+	\[
+	0\to K_1\to F_0\to M\to 0
+	\]
+	with \(F_0\) free. If \(K_1\) is generated by some elements, then there is a surjection
+	\[
+	F_1\to K_1\to 0
+	\]
+	from another free module \(F_1\). The kernel of \(F_1\to K_1\) consists of relations among the first syzygies.
+	
+	These are called \emph{second syzygies}.
+	
+	Continuing in this way, one gets
+	\[
+	\cdots \to F_2\to F_1\to F_0\to M\to 0.
+	\]
+	
+	\begin{definition}
+		An exact sequence
+		\[
+		\cdots \to F_2\to F_1\to F_0\to M\to 0
+		\]
+		with each \(F_i\) a free \(R\)-module is called a \emph{free resolution} of \(M\).
+	\end{definition}
+	
+	Interpretation:
+	\[
+	\begin{array}{c|c}
+		\text{Module} & \text{Meaning} \\
+		\hline
+		F_0 & \text{generators of }M \\
+		F_1 & \text{first syzygies} \\
+		F_2 & \text{second syzygies} \\
+		F_3 & \text{third syzygies} \\
+		\vdots & \vdots
+	\end{array}
+	\]
+	
+	\section{A concrete exact sequence}
+	
+	For the ideal
+	\[
+	I=(x,y)\subseteq k[x,y],
+	\]
+	consider the map
+	\[
+	\varphi:R^2\to I,
+	\qquad
+	\varphi(a,b)=ax+by.
+	\]
+	This map is surjective, and its kernel is generated by \((-y,x)\). Therefore we have an exact sequence
+	\[
+	0\to R \xrightarrow{\psi} R^2 \xrightarrow{\varphi} I\to 0,
+	\]
+	where
+	\[
+	\psi(c)=(-cy,cx).
+	\]
+	
+	This says:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item the ideal \(I\) has two generators \(x,y\),
+		\item these generators satisfy one basic relation,
+		\item all other relations come from this one.
+	\end{itemize}
+	
+	\section{Comparison with linear algebra}
+	
+	It is worth returning to the analogy with linear algebra.
+	
+	\subsection{Vector spaces}
+	
+	A map
+	\[
+	T:\F^r\to V,
+	\qquad
+	(c_1,\dots,c_r)\mapsto c_1\textbf{v}_1+\cdots+c_r\textbf{v}_r
+	\]
+	has kernel equal to the space of linear relations among \(\textbf{v}_1,\dots,\textbf{v}_r\).
+	
+	\subsection{Modules over rings}
+	
+	A map
+	\[
+	\varphi:R^r\to M,
+	\qquad
+	(a_1,\dots,a_r)\mapsto a_1m_1+\cdots+a_rm_r
+	\]
+	has kernel equal to the module of syzygies among \(m_1,\dots,m_r\).
+	
+	So syzygies are the natural generalization of linear dependence from vector spaces to modules.
+	
+	\section{Why syzygies matter}
+	
+	Syzygies matter because they reveal hidden structure.
+	
+	Knowing generators of an ideal or module is only the first step. One also wants to know:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item how the generators depend on one another,
+		\item how complicated those dependencies are,
+		\item and whether there are higher layers of dependencies.
+	\end{itemize}
+	
+	Thus syzygies are a way of measuring structure beyond generators.
+	
+	\subsection*{Slogan}
+	\[
+	\text{generators} \longrightarrow \text{relations} \longrightarrow \text{relations among relations} \longrightarrow \cdots
+	\]
+	
+	\section{A brief geometric remark}
+	
+	In algebraic geometry, one often studies a variety by the equations defining it inside projective space. Those equations may satisfy relations among themselves. These relations are syzygies.
+	
+	So:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item equations describe the variety,
+		\item syzygies describe how the equations fit together.
+	\end{itemize}
+	
+	This is why syzygies are central in modern algebraic geometry.
+	
+	\section{Exercises}
+	
+	\begin{exercise}
+		Let \(R=\C[x,y]\). Show directly that
+		\[
+		(-y,x)
+		\]
+		is a syzygy of \(x\) and \(y\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Let \(R=k[x,y]\). Prove that every syzygy of \(x\) and \(y\) is a multiple of \((-y,x)\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Find two explicit syzygies among
+		\[
+		x^2,\ xy,\ y^2.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Let \(R=k[x,y,z]\). Show that
+		\[
+		(-y,x,0),\qquad (-z,0,x),\qquad (0,-z,y)
+		\]
+		are syzygies of \(x,y,z\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Let \(M=R/(x,y)\) with \(R=k[x,y]\). Write down a presentation of \(M\) and describe its first syzygy module.
+	\end{exercise}
+	
+	\begin{exercise}
+		Explain why \(\Syz(f_1,\dots,f_r)\) is naturally an \(R\)-submodule of \(R^r\).
+	\end{exercise}
+	
+	\section{Solutions sketch}
+	
+	\subsection*{Exercise 1}
+	Compute
+	\[
+	(-y)x+xy=-xy+xy=0.
+	\]
+	So \((-y,x)\) is a syzygy.
+	
+	\subsection*{Exercise 2}
+	If
+	\[
+	ax+by=0,
+	\]
+	then \(ax=-by\). Since \(x\) and \(y\) are relatively prime, \(y\mid a\). Write \(a=-cy\). Substituting gives \(b=cx\). Hence
+	\[
+	(a,b)=c(-y,x).
+	\]
+	
+	\subsection*{Exercise 3}
+	Two syzygies are
+	\[
+	(-y,x,0),\qquad (0,-y,x).
+	\]
+	
+	\subsection*{Exercise 4}
+	Check directly that each tuple gives zero when substituted into
+	\[
+	ax+by+cz.
+	\]
+	
+	\subsection*{Exercise 5}
+	The quotient \(M=R/(x,y)\) has presentation
+	\[
+	R^2\to R\to R/(x,y)\to 0,
+	\]
+	where \(R^2\to R\) sends the standard basis vectors to \(x\) and \(y\). The first syzygy module is generated by \((-y,x)\).
+	
+	\subsection*{Exercise 6}
+	One checks closure under addition and scalar multiplication exactly as in the proof above.
+	
+	\section{Final summary}
+	
+	A syzygy is a relation among chosen elements of a ring or module.
+	
+	The transition from linear algebra to commutative algebra is simple but profound:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item in linear algebra, coefficients come from a field,
+		\item in commutative algebra, coefficients come from the ring itself.
+	\end{itemize}
+	
+	Thus, if \(f_1,\dots,f_r\in R\), a syzygy is a tuple
+	\[
+	(a_1,\dots,a_r)\in R^r
+	\]
+	such that
+	\[
+	a_1f_1+\cdots+a_rf_r=0.
+	\]
+	
+	The example
+	\[
+	(-y)x+xy=0
+	\]
+	already contains the whole philosophy: generators are not enough by themselves; one must also understand the relations tying them together.
+	
+	That is what syzygies measure.
+	
+\end{document}

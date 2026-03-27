@@ -1,0 +1,772 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{mathrsfs}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\im}{\operatorname{Im}}
+\newcommand{\Ker}{\operatorname{Ker}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\cC}{\mathcal{C}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}[definition]{Example}
+\newtheorem{remark}[definition]{Remark}
+
+\theoremstyle{plain}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+
+\title{Lecture Notes on Finite-Field Matrices, Full Rank,\\
+	Parity-Check Maps, and Syndromes}
+\author{}
+\date{}
+
+\begin{document}
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{Overview}
+	
+	These notes summarize a basic but important story in linear algebra over finite fields and its application to coding theory.
+	
+	The main points are:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item Counting all matrices over a finite field.
+		\item Counting invertible matrices over a finite field.
+		\item Computing the probability that a random matrix is invertible or full rank.
+		\item Understanding parity-check matrices as linear maps.
+		\item Interpreting the syndrome map as a surjective map whose kernel is the code.
+		\item Packaging the whole picture as a short exact sequence
+		\[
+		0 \longrightarrow \cC \longrightarrow \F_q^n \xrightarrow{\,H\,} \F_q^{n-k} \longrightarrow 0.
+		\]
+	\end{itemize}
+	
+	Throughout, \(q\) is a prime power and \(\F_q\) denotes the finite field with \(q\) elements.
+	
+	\section{Counting Matrices over \(\F_q\)}
+	
+	\subsection{All matrices}
+	
+	\begin{proposition}
+		The number of \(m\times n\) matrices over \(\F_q\) is
+		\[
+		\bigl|\F_q^{m\times n}\bigr| = q^{mn}.
+		\]
+		In particular,
+		\[
+		\bigl|\F_q^{m\times m}\bigr| = q^{m^2}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		An \(m\times n\) matrix has \(mn\) entries. Each entry can be chosen independently from \(\F_q\), which has \(q\) elements. Therefore the total number of matrices is \(q^{mn}\).
+	\end{proof}
+	
+	\begin{remark}
+		This is the simplest counting principle in the subject: finite-field matrix spaces are just finite Cartesian products.
+	\end{remark}
+	
+	\section{Counting Invertible Matrices}
+	
+	\subsection{The general linear group}
+	
+	\begin{definition}
+		The \emph{general linear group} over \(\F_q\) is
+		\[
+		\GL_m(\F_q) = \{A\in \F_q^{m\times m} : A \text{ is invertible}\}.
+		\]
+	\end{definition}
+	
+	\begin{theorem}
+		The number of invertible \(m\times m\) matrices over \(\F_q\) is
+		\[
+		|\GL_m(\F_q)| = (q^m-1)(q^m-q)(q^m-q^2)\cdots(q^m-q^{m-1}).
+		\]
+		Equivalently,
+		\[
+		|\GL_m(\F_q)| = \prod_{i=0}^{m-1}(q^m-q^i).
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		We count invertible matrices by choosing their columns.
+		
+		A matrix is invertible if and only if its columns form a basis of \(\F_q^m\), equivalently if and only if its columns are linearly independent.
+		
+		\begin{itemize}[leftmargin=2em]
+			\item The first column can be any nonzero vector of \(\F_q^m\), so there are \(q^m-1\) choices.
+			\item The second column must not lie in the span of the first column. Since the span of one nonzero vector has \(q\) elements, there are \(q^m-q\) choices.
+			\item The third column must not lie in the span of the first two columns. If those are independent, their span has \(q^2\) elements, so there are \(q^m-q^2\) choices.
+			\item Continuing this way, the \(k\)-th column must avoid a subspace of size \(q^{k-1}\), so there are \(q^m-q^{k-1}\) choices.
+		\end{itemize}
+		
+		Multiplying all factors gives
+		\[
+		|\GL_m(\F_q)| = \prod_{i=0}^{m-1}(q^m-q^i).
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		An invertible matrix is the same thing as an \emph{ordered basis} of \(\F_q^m\), written as columns. Thus
+		\[
+		|\GL_m(\F_q)| = \#\{\text{ordered bases of }\F_q^m\}.
+		\]
+	\end{remark}
+	
+	\subsection{A useful factorization}
+	
+	\begin{proposition}
+		One may rewrite the above formula as
+		\[
+		|\GL_m(\F_q)| = q^{m^2}\prod_{j=1}^m (1-q^{-j}).
+		\]
+		Equivalently,
+		\[
+		|\GL_m(\F_q)| = q^{\frac{m(m-1)}{2}} \prod_{j=1}^m (q^j-1).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Starting from
+		\[
+		|\GL_m(\F_q)|=\prod_{i=0}^{m-1}(q^m-q^i),
+		\]
+		factor out \(q^m\) from each term:
+		\[
+		q^m-q^i = q^m(1-q^{i-m}).
+		\]
+		Hence
+		\[
+		|\GL_m(\F_q)| = q^{m^2}\prod_{i=0}^{m-1}(1-q^{i-m}).
+		\]
+		Reindexing with \(j=m-i\) yields
+		\[
+		|\GL_m(\F_q)| = q^{m^2}\prod_{j=1}^{m}(1-q^{-j}).
+		\]
+		
+		For the second factorization, write
+		\[
+		q^m-q^i = q^i(q^{m-i}-1),
+		\]
+		so
+		\[
+		\prod_{i=0}^{m-1}(q^m-q^i)
+		=
+		\left(\prod_{i=0}^{m-1} q^i\right)\left(\prod_{i=0}^{m-1}(q^{m-i}-1)\right)
+		=
+		q^{0+1+\cdots+(m-1)}\prod_{j=1}^{m}(q^j-1),
+		\]
+		and
+		\[
+		0+1+\cdots+(m-1)=\frac{m(m-1)}2.
+		\]
+	\end{proof}
+	
+	\section{Probability that a Random Square Matrix is Invertible}
+	
+	\subsection{Exact formula}
+	
+	A uniformly random \(m\times m\) matrix over \(\F_q\) is invertible with probability
+	\[
+	\Prob(A\in \GL_m(\F_q))=\frac{|\GL_m(\F_q)|}{|\F_q^{m\times m}|}.
+	\]
+	
+	Since
+	\[
+	|\F_q^{m\times m}|=q^{m^2},
+	\]
+	we obtain the following.
+	
+	\begin{theorem}
+		For a uniformly random matrix \(A\in \F_q^{m\times m}\),
+		\[
+		\Prob(A \text{ invertible}) = \prod_{j=1}^{m}(1-q^{-j}).
+		\]
+		Therefore
+		\[
+		\Prob(A \text{ singular}) = 1-\prod_{j=1}^{m}(1-q^{-j}).
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Divide the formula for \(|\GL_m(\F_q)|\) by \(q^{m^2}\).
+	\end{proof}
+	
+	\subsection{Row-by-row viewpoint}
+	
+	There is another derivation that matches Gaussian elimination more closely.
+	
+	\begin{proposition}
+		Let \(A\in \F_q^{m\times m}\) be chosen uniformly at random. Then
+		\[
+		\Prob(A \text{ invertible}) = \prod_{k=1}^{m}\left(1-q^{k-1-m}\right)
+		= \prod_{j=1}^{m}(1-q^{-j}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Write the rows of \(A\) as \(r_1,\dots,r_m\in \F_q^m\). The matrix is invertible if and only if its rows are linearly independent.
+		
+		\begin{itemize}[leftmargin=2em]
+			\item \(r_1\) must be nonzero, which occurs with probability
+			\[
+			\frac{q^m-1}{q^m}=1-q^{-m}.
+			\]
+			\item Given that \(r_1\neq 0\), the row \(r_2\) must avoid \(\Span(r_1)\), which has \(q\) elements. Thus the conditional probability is
+			\[
+			\frac{q^m-q}{q^m}=1-q^{1-m}.
+			\]
+			\item Given that \(r_1,r_2\) are independent, the row \(r_3\) must avoid their span, which has \(q^2\) elements. Thus
+			\[
+			\frac{q^m-q^2}{q^m}=1-q^{2-m}.
+			\]
+		\end{itemize}
+		
+		Continuing in this manner, the \(k\)-th row must avoid a subspace of size \(q^{k-1}\), so the corresponding conditional probability is
+		\[
+		1-q^{k-1-m}.
+		\]
+		Multiplying all conditional probabilities yields
+		\[
+		\Prob(A \text{ invertible}) = \prod_{k=1}^{m}(1-q^{k-1-m}).
+		\]
+		Reindexing gives
+		\[
+		\prod_{j=1}^{m}(1-q^{-j}).
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This is exactly the condition that Gaussian elimination finds a pivot in every row.
+	\end{remark}
+	
+	\subsection{Examples}
+	
+	\begin{example}
+		For \(m=2\),
+		\[
+		|\GL_2(\F_q)|=(q^2-1)(q^2-q),
+		\]
+		so
+		\[
+		\Prob(A\in \GL_2(\F_q))=(1-q^{-1})(1-q^{-2}).
+		\]
+		If \(q=2\), then
+		\[
+		\Prob(A\in \GL_2(\F_2))=\left(1-\frac12\right)\left(1-\frac14\right)=\frac38.
+		\]
+		Indeed,
+		\[
+		|\GL_2(\F_2)|=(4-1)(4-2)=6,
+		\]
+		and \(6/16=3/8\).
+	\end{example}
+	
+	\begin{example}
+		For \(m=3\) and \(q=2\),
+		\[
+		\Prob(A\in \GL_3(\F_2))
+		=
+		\left(1-\frac12\right)\left(1-\frac14\right)\left(1-\frac18\right)
+		=
+		\frac12\cdot\frac34\cdot\frac78
+		=
+		\frac{21}{64}.
+		\]
+		Since \(|\F_2^{3\times 3}|=2^9=512\), it follows that
+		\[
+		|\GL_3(\F_2)|=512\cdot \frac{21}{64}=168.
+		\]
+	\end{example}
+	
+	\section{Rectangular Matrices and Full Row Rank}
+	
+	In coding theory, parity-check matrices are generally rectangular rather than square.
+	
+	\subsection{Counting full-row-rank matrices}
+	
+	Let \(H\in \F_q^{r\times n}\) with \(r\le n\). We want to count those matrices having full row rank \(r\).
+	
+	\begin{theorem}
+		The number of \(r\times n\) matrices over \(\F_q\) having full row rank \(r\) is
+		\[
+		\prod_{i=0}^{r-1}(q^n-q^i).
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Choose the rows one by one so that they remain linearly independent.
+		
+		\begin{itemize}[leftmargin=2em]
+			\item The first row can be any nonzero vector in \(\F_q^n\), so there are \(q^n-1\) choices.
+			\item The second row must avoid the span of the first, which has \(q\) elements, so there are \(q^n-q\) choices.
+			\item The third row must avoid the span of the first two, which has \(q^2\) elements, so there are \(q^n-q^2\) choices.
+		\end{itemize}
+		
+		Continuing, the \(r\)-th row must avoid a subspace of size \(q^{r-1}\), giving \(q^n-q^{r-1}\) choices. Multiplying yields
+		\[
+		\prod_{i=0}^{r-1}(q^n-q^i).
+		\]
+	\end{proof}
+	
+	\subsection{Probability of full row rank}
+	
+	Since the total number of \(r\times n\) matrices is \(q^{rn}\), we obtain:
+	
+	\begin{corollary}
+		A uniformly random matrix \(H\in \F_q^{r\times n}\) has full row rank \(r\) with probability
+		\[
+		\Prob(\rank(H)=r)=\frac{\prod_{i=0}^{r-1}(q^n-q^i)}{q^{rn}}
+		=
+		\prod_{i=0}^{r-1}(1-q^{i-n}).
+		\]
+	\end{corollary}
+	
+	\begin{example}
+		Let \(H\in \F_2^{3\times 7}\) be uniformly random. Then
+		\[
+		\Prob(\rank(H)=3)
+		=
+		\left(1-2^{-7}\right)\left(1-2^{-6}\right)\left(1-2^{-5}\right).
+		\]
+		That is,
+		\[
+		\Prob(\rank(H)=3)=\frac{127}{128}\cdot\frac{63}{64}\cdot\frac{31}{32}
+		=
+		\frac{248031}{262144}\approx 0.946.
+		\]
+		So a random \(3\times 7\) binary matrix is full rank with probability about \(94.6\%\).
+	\end{example}
+	
+	\section{Linear Codes and Parity-Check Matrices}
+	
+	\subsection{Linear codes}
+	
+	\begin{definition}
+		An \emph{\([n,k]\) linear code over \(\F_q\)} is a \(k\)-dimensional linear subspace
+		\[
+		\cC \subseteq \F_q^n.
+		\]
+	\end{definition}
+	
+	\begin{remark}
+		The parameter \(n\) is the block length, and \(k\) is the dimension of the code. Thus \(|\cC|=q^k\).
+	\end{remark}
+	
+	\subsection{Parity-check matrices}
+	
+	\begin{definition}
+		A matrix \(H\in \F_q^{(n-k)\times n}\) is called a \emph{parity-check matrix} for a linear code \(\cC\subseteq \F_q^n\) if
+		\[
+		\cC = \Ker(H),
+		\]
+		where \(H\) is viewed as the linear map
+		\[
+		H:\F_q^n \to \F_q^{n-k}, \qquad x\longmapsto Hx^\top.
+		\]
+	\end{definition}
+	
+	\begin{remark}
+		The parity-check matrix describes the code as the solution space of a system of linear equations. A word \(x\in \F_q^n\) belongs to the code precisely when it satisfies all parity checks:
+		\[
+		Hx^\top = 0.
+		\]
+	\end{remark}
+	
+	\section{Full Rank and Surjectivity of the Syndrome Map}
+	
+	\subsection{The syndrome map}
+	
+	Given a parity-check matrix \(H\in \F_q^{(n-k)\times n}\), define the associated linear map
+	\[
+	H:\F_q^n\to \F_q^{n-k}, \qquad x\mapsto Hx^\top.
+	\]
+	This is often called the \emph{syndrome map}.
+	
+	\begin{definition}
+		For any \(y\in \F_q^n\), the \emph{syndrome} of \(y\) is
+		\[
+		s(y)=Hy^\top \in \F_q^{n-k}.
+		\]
+	\end{definition}
+	
+	\subsection{Full row rank is equivalent to surjectivity}
+	
+	\begin{theorem}
+		Let \(H\in \F_q^{(n-k)\times n}\). Then the following are equivalent:
+		\begin{enumerate}[label=\textnormal{(\arabic*)}, leftmargin=2.5em]
+			\item \(H\) has full row rank:
+			\[
+			\rank(H)=n-k.
+			\]
+			\item The linear map
+			\[
+			H:\F_q^n\to \F_q^{n-k}
+			\]
+			is surjective.
+		\end{enumerate}
+	\end{theorem}
+	
+	\begin{proof}
+		Since the image of a linear map has dimension equal to the rank of its matrix,
+		\[
+		\dim(\im H)=\rank(H).
+		\]
+		Thus \(\rank(H)=n-k\) if and only if
+		\[
+		\dim(\im H)=n-k.
+		\]
+		But \(\im H\) is a subspace of \(\F_q^{n-k}\), whose dimension is also \(n-k\). Therefore \(\dim(\im H)=n-k\) if and only if
+		\[
+		\im H=\F_q^{n-k},
+		\]
+		which is exactly surjectivity.
+	\end{proof}
+	
+	\subsection{Rank-nullity and the code dimension}
+	
+	\begin{corollary}
+		If \(H\in \F_q^{(n-k)\times n}\) has full row rank \(n-k\), then
+		\[
+		\dim \Ker(H)=k.
+		\]
+	\end{corollary}
+	
+	\begin{proof}
+		By rank-nullity,
+		\[
+		\dim\Ker(H)+\rank(H)=n.
+		\]
+		If \(\rank(H)=n-k\), then
+		\[
+		\dim\Ker(H)=n-(n-k)=k.
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This is exactly why one wants a parity-check matrix to have full row rank: otherwise some parity checks are redundant, and the kernel has dimension larger than intended.
+	\end{remark}
+	
+	\section{The Meaning of the Syndrome}
+	
+	\subsection{Syndrome as measurement of parity-check failure}
+	
+	For a vector \(y\in \F_q^n\), the syndrome
+	\[
+	Hy^\top
+	\]
+	records the values of all parity-check equations evaluated on \(y\).
+	
+	\begin{itemize}[leftmargin=2em]
+		\item If \(Hy^\top=0\), then \(y\in \cC\).
+		\item If \(Hy^\top\neq 0\), then \(y\notin \cC\), and the syndrome measures how the parity checks fail.
+	\end{itemize}
+	
+	Thus the syndrome is not a codeword; rather, it is the image of a word under the parity-check map.
+	
+	\subsection{Syndrome of a received word with error}
+	
+	Suppose \(c\in \cC\) is a codeword and \(e\in \F_q^n\) is an error vector. If the received word is
+	\[
+	y=c+e,
+	\]
+	then
+	\[
+	Hy^\top = H(c+e)^\top = Hc^\top + He^\top = 0 + He^\top = He^\top.
+	\]
+	So:
+	
+	\begin{proposition}
+		If \(y=c+e\) with \(c\in \cC\), then the syndrome of \(y\) depends only on the error \(e\):
+		\[
+		s(y)=Hy^\top=He^\top.
+		\]
+	\end{proposition}
+	
+	\begin{remark}
+		This is the foundation of syndrome decoding. The syndrome does not depend on which codeword was sent; it depends only on the error pattern modulo the code.
+	\end{remark}
+	
+	\section{Syndrome as a Coset Label}
+	
+	\subsection{Cosets of the code}
+	
+	Since \(\cC=\Ker(H)\) is a subspace of \(\F_q^n\), we may consider cosets
+	\[
+	v+\cC = \{v+c : c\in \cC\}.
+	\]
+	
+	\begin{proposition}
+		Two vectors \(x,y\in \F_q^n\) have the same syndrome if and only if they lie in the same coset of \(\cC\).
+	\end{proposition}
+	
+	\begin{proof}
+		We have
+		\[
+		Hx^\top = Hy^\top
+		\iff H(x-y)^\top=0
+		\iff x-y\in \Ker(H)=\cC.
+		\]
+		This is equivalent to saying that \(x\) and \(y\) lie in the same coset modulo \(\cC\).
+	\end{proof}
+	
+	\begin{corollary}
+		The syndrome is a complete label for the cosets of \(\cC\) in \(\F_q^n\).
+	\end{corollary}
+	
+	\begin{proof}
+		The previous proposition shows that the fibers of the syndrome map are exactly the cosets of \(\cC\). If \(H\) is surjective, every syndrome occurs, so the set of syndromes is in bijection with the set of cosets.
+	\end{proof}
+	
+	\subsection{Number of cosets}
+	
+	If \(H\) has full row rank \(n-k\), then
+	\[
+	\dim(\cC)=k.
+	\]
+	Hence
+	\[
+	|\cC|=q^k,
+	\qquad
+	|\F_q^n|=q^n.
+	\]
+	Therefore the number of cosets is
+	\[
+	\frac{q^n}{q^k}=q^{n-k}.
+	\]
+	But this is also the number of syndrome vectors in \(\F_q^{n-k}\).
+	
+	So the syndrome map gives a natural identification:
+	\[
+	\F_q^n/\cC \cong \F_q^{n-k}.
+	\]
+	
+	\section{Short Exact Sequence Viewpoint}
+	
+	\subsection{The fundamental exact sequence}
+	
+	When \(H\in \F_q^{(n-k)\times n}\) has full row rank, the code \(\cC=\Ker(H)\) fits into the short exact sequence
+	\[
+	0 \longrightarrow \cC \longrightarrow \F_q^n \xrightarrow{\,H\,} \F_q^{n-k} \longrightarrow 0.
+	\]
+	
+	Let us unpack this.
+	
+	\begin{itemize}[leftmargin=2em]
+		\item The map \(\cC\to \F_q^n\) is the inclusion, hence injective.
+		\item The kernel of \(H:\F_q^n\to \F_q^{n-k}\) is exactly \(\cC\).
+		\item Since \(H\) has full row rank, it is surjective.
+	\end{itemize}
+	
+	This is exactly what exactness means.
+	
+	\subsection{Interpretation}
+	
+	The short exact sequence says:
+	
+	\begin{itemize}[leftmargin=2em]
+		\item \(\cC\) consists of words that satisfy all parity checks.
+		\item \(\F_q^n\) is the ambient space of all words.
+		\item \(\F_q^{n-k}\) is the space of all possible syndrome values.
+	\end{itemize}
+	
+	So the quotient of the ambient space by the code is measured by syndromes:
+	\[
+	\F_q^n/\cC \cong \F_q^{n-k}.
+	\]
+	
+	\begin{remark}
+		This is the clean algebraic meaning of the slogan:
+		\[
+		\text{syndrome} = \text{coset label}.
+		\]
+	\end{remark}
+	
+	\section{A Concrete Binary Example}
+	
+	\subsection{A \(3\times 7\) parity-check matrix}
+	
+	Consider
+	\[
+	H=
+	\begin{pmatrix}
+		1&0&1&0&1&0&1\\
+		0&1&1&0&0&1&1\\
+		0&0&0&1&1&1&1
+	\end{pmatrix}
+	\in \F_2^{3\times 7}.
+	\]
+	Its rows are linearly independent, so
+	\[
+	\rank(H)=3.
+	\]
+	Therefore the map
+	\[
+	H:\F_2^7\to \F_2^3
+	\]
+	is surjective.
+	
+	Let
+	\[
+	\cC=\Ker(H).
+	\]
+	Then rank-nullity gives
+	\[
+	\dim(\cC)=7-3=4.
+	\]
+	Thus \(\cC\) is a \([7,4]\) binary linear code.
+	
+	\subsection{Syndromes}
+	
+	Since the codomain is \(\F_2^3\), there are exactly \(2^3=8\) possible syndromes. Because \(H\) is surjective, all \(8\) syndrome vectors occur.
+	
+	The cosets of \(\cC\) in \(\F_2^7\) are precisely the fibers of the syndrome map
+	\[
+	\F_2^7 \xrightarrow{\,H\,} \F_2^3.
+	\]
+	Each syndrome labels one coset.
+	
+	\subsection{Single-bit errors}
+	
+	Let \(e_i\in \F_2^7\) denote the vector with a \(1\) in position \(i\) and \(0\) elsewhere. Then
+	\[
+	He_i^\top
+	\]
+	is exactly the \(i\)-th column of \(H\).
+	
+	Hence, for this matrix, each single-bit error has a syndrome equal to the corresponding column of \(H\). In Hamming-type constructions, the columns are chosen to be all nonzero vectors of \(\F_2^3\), so each nonzero syndrome identifies a unique single-bit error.
+	
+	\section{Conceptual Summary}
+	
+	The story can be summarized as follows.
+	
+	\subsection*{Finite-field linear algebra}
+	
+	\begin{itemize}[leftmargin=2em]
+		\item There are \(q^{m^2}\) square \(m\times m\) matrices over \(\F_q\).
+		\item The invertible ones are counted by
+		\[
+		|\GL_m(\F_q)|=\prod_{i=0}^{m-1}(q^m-q^i).
+		\]
+		\item Therefore
+		\[
+		\Prob(A\in \GL_m(\F_q))=\prod_{j=1}^{m}(1-q^{-j}).
+		\]
+	\end{itemize}
+	
+	\subsection*{Rectangular full-rank matrices}
+	
+	\begin{itemize}[leftmargin=2em]
+		\item The number of full-row-rank \(r\times n\) matrices is
+		\[
+		\prod_{i=0}^{r-1}(q^n-q^i).
+		\]
+		\item Therefore
+		\[
+		\Prob(H\in \F_q^{r\times n} \text{ has rank }r)=\prod_{i=0}^{r-1}(1-q^{i-n}).
+		\]
+	\end{itemize}
+	
+	\subsection*{Coding theory}
+	
+	\begin{itemize}[leftmargin=2em]
+		\item A parity-check matrix \(H\in \F_q^{(n-k)\times n}\) defines a code
+		\[
+		\cC=\Ker(H)\subseteq \F_q^n.
+		\]
+		\item If \(H\) has full row rank \(n-k\), then the syndrome map
+		\[
+		H:\F_q^n\to \F_q^{n-k}
+		\]
+		is surjective.
+		\item Rank-nullity then gives
+		\[
+		\dim(\cC)=k.
+		\]
+		\item The syndrome of a received word \(y\) is \(Hy^\top\).
+		\item If \(y=c+e\) with \(c\in \cC\), then
+		\[
+		Hy^\top=He^\top.
+		\]
+		\item Two words have the same syndrome if and only if they lie in the same coset of \(\cC\).
+	\end{itemize}
+	
+	\subsection*{Exact-sequence form}
+	
+	All of this is neatly encoded by
+	\[
+	0 \longrightarrow \cC \longrightarrow \F_q^n \xrightarrow{\,H\,} \F_q^{n-k} \longrightarrow 0.
+	\]
+	
+	\section{Further Remarks}
+	
+	\begin{remark}
+		The finite-field counting formulas are not just combinatorial curiosities. They explain why a random rectangular matrix is very likely to have full rank when the field size or ambient dimension is reasonably large. This is why random parity-check matrices often define codes of the intended dimension.
+	\end{remark}
+	
+	\begin{remark}
+		In coding theory, one often moves freely between three viewpoints on a linear code:
+		\begin{enumerate}[label=\textnormal{(\arabic*)}, leftmargin=2.5em]
+			\item \(\cC\) as a subspace of \(\F_q^n\),
+			\item \(\cC\) as the image of an encoder \(G:\F_q^k\to \F_q^n\),
+			\item \(\cC\) as the kernel of a parity-check map \(H:\F_q^n\to \F_q^{n-k}\).
+		\end{enumerate}
+		The discussion in these notes has emphasized the third viewpoint.
+	\end{remark}
+	
+	\begin{remark}
+		The quotient interpretation
+		\[
+		\F_q^n/\cC \cong \F_q^{n-k}
+		\]
+		is one of the cleanest conceptual bridges from abstract linear algebra to practical syndrome decoding.
+	\end{remark}
+	
+	\section*{Exercises}
+	
+	\begin{enumerate}[leftmargin=2em]
+		\item Verify directly that the number of \(2\times 2\) invertible matrices over \(\F_2\) is \(6\).
+		\item Show that the probability a random \(4\times 4\) matrix over \(\F_3\) is invertible is
+		\[
+		(1-3^{-1})(1-3^{-2})(1-3^{-3})(1-3^{-4}).
+		\]
+		\item Let \(H\in \F_q^{r\times n}\) have full row rank. Prove directly that the fibers of the map
+		\[
+		H:\F_q^n\to \F_q^r
+		\]
+		are exactly the cosets of \(\Ker(H)\).
+		\item For the binary matrix
+		\[
+		H=
+		\begin{pmatrix}
+			1&0&1&0&1&0&1\\
+			0&1&1&0&0&1&1\\
+			0&0&0&1&1&1&1
+		\end{pmatrix},
+		\]
+		compute the syndrome of each standard basis vector \(e_1,\dots,e_7\).
+		\item Prove that if \(y=c+e\) with \(c\in \cC=\Ker(H)\), then the syndrome \(Hy^\top\) depends only on the coset \(y+\cC\).
+	\end{enumerate}
+	
+\end{document}

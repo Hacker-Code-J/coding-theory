@@ -1,0 +1,590 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\title{Lecture Notes: Counting \(k\)-Dimensional Subspaces of an \(n\)-Dimensional Vector Space}
+\author{}
+\date{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\Q}{\mathbf{Q}}
+\newcommand{\Gr}{\mathrm{Gr}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_q}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{The Main Question}
+	
+	Let \(V\) be an \(n\)-dimensional vector space. We want to answer the following question:
+	
+	\begin{quote}
+		How many distinct \(k\)-dimensional subspaces does \(V\) have?
+	\end{quote}
+	
+	The answer depends on the field over which \(V\) is defined.
+	
+	\begin{itemize}
+		\item If the field is finite, say \(\F_q\) with \(q\) elements, then the answer is finite and is given by the \emph{Gaussian binomial coefficient}.
+		\item If the field is infinite, such as \(\R\), \(\C\), or \(\Q\), then there are infinitely many \(k\)-dimensional subspaces whenever \(0<k<n\).
+	\end{itemize}
+	
+	These notes explain the finite-field formula, prove it carefully, and place it in a broader geometric and combinatorial context.
+	
+	\section{Ordinary Binomial Coefficients as Motivation}
+	
+	Recall that the number of \(k\)-element subsets of an \(n\)-element set is
+	\[
+	\binom{n}{k}.
+	\]
+	The Gaussian binomial coefficient is the vector-space analogue of this number.
+	
+	\begin{center}
+		\begin{tabular}{c|c}
+			Set Theory & Linear Algebra over \(\F_q\) \\ \hline
+			\(k\)-element subsets of an \(n\)-element set & \(k\)-dimensional subspaces of \(\F_q^n\) \\
+			\(\binom{n}{k}\) & \(\qbinom{n}{k}\)
+		\end{tabular}
+	\end{center}
+	
+	So the Gaussian binomial coefficient is often called a \(q\)-analogue of the ordinary binomial coefficient.
+	
+	\section{Statement of the Formula over a Finite Field}
+	
+	Assume from now on that
+	\[
+	V \cong \F_q^n,
+	\]
+	where \(\F_q\) is a finite field with \(q\) elements.
+	
+	\begin{definition}
+		The \emph{Gaussian binomial coefficient} (or \emph{\(q\)-binomial coefficient}) is defined by
+		\[
+		\qbinom{n}{k}
+		=
+		\frac{(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})}
+		\]
+		for \(0\leq k\leq n\).
+	\end{definition}
+	
+	An equivalent product form is
+	\[
+	\qbinom{n}{k}
+	=
+	\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}.
+	\]
+	
+	Another useful form is
+	\[
+	\qbinom{n}{k}
+	=
+	\frac{(q^n-1)(q^{n-1}-1)\cdots(q^{n-k+1}-1)}
+	{(q^k-1)(q^{k-1}-1)\cdots(q-1)}.
+	\]
+	
+	\begin{theorem}
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+	\end{theorem}
+	
+	\section{Proof by Counting Ordered Bases}
+	
+	The proof is a clean double-counting argument.
+	
+	\subsection{Counting Ordered Linearly Independent \(k\)-Tuples in \(\F_q^n\)}
+	
+	We count the number of ordered tuples
+	\[
+	(v_1,\dots,v_k)\in (\F_q^n)^k
+	\]
+	such that \(v_1,\dots,v_k\) are linearly independent.
+	
+	\begin{itemize}
+		\item The first vector \(v_1\) can be any nonzero vector, so there are \(q^n-1\) choices.
+		\item The second vector \(v_2\) must not lie in \(\Span(v_1)\), and \(\Span(v_1)\) has \(q\) elements, so there are \(q^n-q\) choices.
+		\item The third vector \(v_3\) must not lie in \(\Span(v_1,v_2)\), which has \(q^2\) elements, so there are \(q^n-q^2\) choices.
+	\end{itemize}
+	
+	Continuing in this way, we obtain:
+	
+	\begin{lemma}
+		The number of ordered linearly independent \(k\)-tuples in \(\F_q^n\) is
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{lemma}
+	
+	\subsection{Counting Ordered Bases of a Fixed \(k\)-Dimensional Subspace}
+	
+	Now fix a \(k\)-dimensional subspace \(W\subseteq \F_q^n\). Since \(W\cong \F_q^k\), the number of ordered bases of \(W\) is the same as the number of ordered linearly independent \(k\)-tuples in \(\F_q^k\).
+	
+	\begin{lemma}
+		A fixed \(k\)-dimensional subspace \(W\) has exactly
+		\[
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})
+		\]
+		ordered bases.
+	\end{lemma}
+	
+	\subsection{Dividing Out the Overcount}
+	
+	Each ordered linearly independent \(k\)-tuple spans a unique \(k\)-dimensional subspace, and every \(k\)-dimensional subspace contributes exactly the number of ordered bases computed above.
+	
+	Therefore:
+	
+	\begin{proof}[Proof of the Theorem]
+		The number of ordered linearly independent \(k\)-tuples in \(\F_q^n\) is
+		\[
+		(q^n-1)(q^n-q)\cdots(q^n-q^{k-1}).
+		\]
+		Each \(k\)-dimensional subspace has exactly
+		\[
+		(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})
+		\]
+		ordered bases. Dividing, we obtain the number of distinct \(k\)-dimensional subspaces:
+		\[
+		\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}
+		=
+		\qbinom{n}{k}.
+		\]
+	\end{proof}
+	
+	\section{Why the Denominator Appears}
+	
+	A frequent source of confusion is the denominator
+	\[
+	(q^k-1)(q^k-q)\cdots(q^k-q^{k-1}).
+	\]
+	
+	The reason is that many different ordered bases span the same subspace. So the numerator counts the same subspace many times, once for each ordered basis of that subspace.
+	
+	Thus:
+	\begin{itemize}
+		\item numerator = all ordered bases of all \(k\)-dimensional subspaces,
+		\item denominator = ordered bases of one fixed \(k\)-dimensional subspace,
+		\item quotient = number of distinct \(k\)-dimensional subspaces.
+	\end{itemize}
+	
+	\section{Examples}
+	
+	\begin{example}[Lines in \(\F_q^3\)]
+		A \(1\)-dimensional subspace is a line through the origin. The number of such lines is
+		\[
+		\qbinom{3}{1}
+		=
+		\frac{q^3-1}{q-1}
+		=
+		q^2+q+1.
+		\]
+	\end{example}
+	
+	\begin{example}[Planes in \(\F_q^3\)]
+		A \(2\)-dimensional subspace of \(\F_q^3\) is a plane through the origin. The number of such planes is
+		\[
+		\qbinom{3}{2}
+		=
+		\qbinom{3}{1}
+		=
+		q^2+q+1.
+		\]
+	\end{example}
+	
+	\begin{example}[Two-dimensional subspaces of \(\F_2^4\)]
+		Take \(q=2\), \(n=4\), \(k=2\). Then
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(2^4-1)(2^4-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{15\cdot 14}{3\cdot 2}
+		=
+		35.
+		\]
+		So \(\F_2^4\) has exactly \(35\) distinct \(2\)-dimensional subspaces.
+	\end{example}
+	
+	\begin{example}[All lines in \(\F_2^2\)]
+		The vector space \(\F_2^2\) has vectors
+		\[
+		(0,0),\quad (1,0),\quad (0,1),\quad (1,1).
+		\]
+		Its nonzero vectors are
+		\[
+		(1,0),\quad (0,1),\quad (1,1).
+		\]
+		Over \(\F_2\), each \(1\)-dimensional subspace has exactly one nonzero vector, so the distinct lines are
+		\[
+		\Span(1,0),\qquad \Span(0,1),\qquad \Span(1,1).
+		\]
+		Thus there are \(3\) of them, in agreement with
+		\[
+		\qbinom{2}{1}=\frac{2^2-1}{2-1}=3.
+		\]
+	\end{example}
+	
+	\section{Special Cases}
+	
+	\begin{proposition}
+		For all \(n\) and \(q\), we have:
+		\begin{align*}
+			\qbinom{n}{0} &= 1,\\
+			\qbinom{n}{1} &= \frac{q^n-1}{q-1}=1+q+q^2+\cdots+q^{n-1},\\
+			\qbinom{n}{n-1} &= \qbinom{n}{1},\\
+			\qbinom{n}{n} &= 1.
+		\end{align*}
+	\end{proposition}
+	
+	\begin{proof}
+		The cases \(k=0\) and \(k=n\) correspond to the unique zero subspace and the whole space. The case \(k=1\) is immediate from the formula. The case \(k=n-1\) follows from symmetry, proved below.
+	\end{proof}
+	
+	\section{Symmetry}
+	
+	Just as ordinary binomial coefficients satisfy
+	\[
+	\binom{n}{k}=\binom{n}{n-k},
+	\]
+	Gaussian binomial coefficients satisfy the analogous identity.
+	
+	\begin{proposition}
+		For \(0\leq k\leq n\),
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Using the form
+		\[
+		\qbinom{n}{k}
+		=
+		\frac{(q^n-1)(q^{n-1}-1)\cdots(q^{n-k+1}-1)}
+		{(q^k-1)(q^{k-1}-1)\cdots(q-1)},
+		\]
+		one checks directly that replacing \(k\) by \(n-k\) produces the same value after cancellation.
+	\end{proof}
+	
+	\begin{remark}
+		This symmetry reflects a geometric duality: a \(k\)-dimensional subspace is naturally related to an \((n-k)\)-dimensional object in the dual vector space.
+	\end{remark}
+	
+	\section{A Recursive Formula}
+	
+	Ordinary binomial coefficients satisfy Pascal's identity
+	\[
+	\binom{n}{k}=\binom{n-1}{k}+\binom{n-1}{k-1}.
+	\]
+	Gaussian binomial coefficients satisfy a \(q\)-analogue.
+	
+	\begin{proposition}
+		For \(1\leq k\leq n-1\),
+		\[
+		\qbinom{n}{k}
+		=
+		\qbinom{n-1}{k}
+		+
+		q^{\,n-k}\qbinom{n-1}{k-1}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Fix a hyperplane \(H\subseteq \F_q^n\) of dimension \(n-1\). Let \(W\subseteq \F_q^n\) be a \(k\)-dimensional subspace.
+		
+		There are two cases.
+		
+		\begin{enumerate}[label=\arabic*.]
+			\item \(W\subseteq H\).  
+			The number of such subspaces is \(\qbinom{n-1}{k}\).
+			
+			\item \(W\not\subseteq H\).  
+			Then \(W\cap H\) has dimension \(k-1\). For each \((k-1)\)-dimensional subspace \(U\subseteq H\), the number of \(k\)-dimensional subspaces \(W\) such that \(W\cap H=U\) is \(q^{n-k}\). Hence the number of subspaces in this case is
+			\[
+			q^{n-k}\qbinom{n-1}{k-1}.
+			\]
+		\end{enumerate}
+		
+		Adding the two cases gives
+		\[
+		\qbinom{n}{k}
+		=
+		\qbinom{n-1}{k}
+		+
+		q^{n-k}\qbinom{n-1}{k-1}.
+		\]
+	\end{proof}
+	
+	\section{Polynomial Nature}
+	
+	Although the formula for \(\qbinom{n}{k}\) is written as a fraction, it actually simplifies to a polynomial in \(q\) with integer coefficients.
+	
+	\begin{example}
+		\[
+		\qbinom{3}{1}=q^2+q+1.
+		\]
+		Also,
+		\[
+		\qbinom{4}{2}=q^4+q^3+2q^2+q+1.
+		\]
+	\end{example}
+	
+	This fact is highly important in algebraic combinatorics.
+	
+	\section{The \(q\to 1\) Philosophy}
+	
+	The Gaussian binomial coefficient is called a \(q\)-analogue of \(\binom{n}{k}\) because, after simplification as a polynomial in \(q\), substituting \(q=1\) gives the ordinary binomial coefficient.
+	
+	\begin{example}
+		Since
+		\[
+		\qbinom{3}{1}=q^2+q+1,
+		\]
+		setting \(q=1\) gives
+		\[
+		1+1+1=3=\binom{3}{1}.
+		\]
+	\end{example}
+	
+	So one may think of
+	\[
+	\qbinom{n}{k}
+	\]
+	as the vector-space version of
+	\[
+	\binom{n}{k}.
+	\]
+	
+	\section{What Happens over Infinite Fields?}
+	
+	Suppose now that the base field is infinite.
+	
+	\begin{proposition}
+		If \(V\) is an \(n\)-dimensional vector space over an infinite field and \(0<k<n\), then \(V\) has infinitely many distinct \(k\)-dimensional subspaces.
+	\end{proposition}
+	
+	\begin{proof}
+		It is enough to consider the case \(k=1\). In \(\R^2\), each line through the origin is a \(1\)-dimensional subspace, and such lines are parametrized by slope:
+		\[
+		y=mx \qquad (m\in \R),
+		\]
+		together with the vertical line \(x=0\). Thus there are infinitely many \(1\)-dimensional subspaces. The general case follows similarly.
+	\end{proof}
+	
+	\begin{remark}
+		The only finite cases are trivial:
+		\begin{itemize}
+			\item exactly one \(0\)-dimensional subspace, namely \(\{0\}\),
+			\item exactly one \(n\)-dimensional subspace, namely \(V\).
+		\end{itemize}
+	\end{remark}
+	
+	\section{The Grassmannian Viewpoint}
+	
+	\begin{definition}
+		The set of all \(k\)-dimensional subspaces of an \(n\)-dimensional vector space is called the \emph{Grassmannian}, denoted
+		\[
+		\Gr(k,n).
+		\]
+	\end{definition}
+	
+	Over a finite field, the Grassmannian is a finite set, and
+	\[
+	|\Gr(k,n)(\F_q)|=\qbinom{n}{k}.
+	\]
+	
+	Over \(\R\) or \(\C\), the Grassmannian is not finite. Instead, it is a geometric object: a manifold and also an algebraic variety.
+	
+	So the Gaussian binomial coefficient counts the \(\F_q\)-rational points of the Grassmannian.
+	
+	\section{A Matrix-Theoretic Interpretation}
+	
+	There is another very useful proof using matrices.
+	
+	A \(k\)-dimensional subspace of \(\F_q^n\) can be represented as the row space of a full-rank \(k\times n\) matrix.
+	
+	\begin{itemize}
+		\item The number of full-rank \(k\times n\) matrices is
+		\[
+		(q^n-1)(q^n-q)\cdots(q^n-q^{k-1}).
+		\]
+		\item Two such matrices have the same row space if and only if one is obtained from the other by multiplication on the left by an invertible \(k\times k\) matrix.
+		\item The group \(\GL_k(\F_q)\) has size
+		\[
+		|\GL_k(\F_q)|=(q^k-1)(q^k-q)\cdots(q^k-q^{k-1}).
+		\]
+	\end{itemize}
+	
+	Therefore,
+	\[
+	\#\{\text{\(k\)-dimensional subspaces of }\F_q^n\}
+	=
+	\frac{\#\{\text{full-rank }k\times n\text{ matrices}\}}
+	{|\GL_k(\F_q)|}
+	=
+	\qbinom{n}{k}.
+	\]
+	
+	\section{Related Formula: The Size of \(\GL_n(\F_q)\)}
+	
+	The same counting method gives the size of the general linear group.
+	
+	\begin{proposition}
+		\[
+		|\GL_n(\F_q)|=(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{n-1}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		An invertible \(n\times n\) matrix is exactly an ordered basis of \(\F_q^n\). The first column can be any nonzero vector, the second must be outside the span of the first, and so on.
+	\end{proof}
+	
+	This is the full-basis version of the same principle used in the Gaussian binomial coefficient.
+	
+	\section{Conceptual Summary}
+	
+	The formula
+	\[
+	\qbinom{n}{k}
+	=
+	\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+	{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}
+	\]
+	comes from two ideas:
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item Count ordered linearly independent \(k\)-tuples in \(\F_q^n\).
+		\item Divide by the number of ordered bases of a fixed \(k\)-dimensional subspace.
+	\end{enumerate}
+	
+	This is the exact finite-field analogue of counting \(k\)-element subsets of an \(n\)-element set.
+	
+	\section{Final Theorem}
+	
+	\begin{theorem}[Final Form]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+		If the base field is infinite, then for \(0<k<n\) the number of \(k\)-dimensional subspaces is infinite.
+	\end{theorem}
+	
+	\section{Exercises}
+	
+	\begin{exercise}
+		Compute \(\qbinom{5}{1}\) when \(q=2\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(\qbinom{4}{2}\) when \(q=3\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Show directly that
+		\[
+		\qbinom{n}{1}=1+q+q^2+\cdots+q^{n-1}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Prove that
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Verify the recursion
+		\[
+		\qbinom{n}{k}
+		=
+		\qbinom{n-1}{k}
+		+
+		q^{n-k}\qbinom{n-1}{k-1}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Count the \(2\)-dimensional subspaces of \(\F_2^3\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Explain why there are infinitely many \(1\)-dimensional subspaces of \(\R^2\).
+	\end{exercise}
+	
+	\section{Selected Answers}
+	
+	\begin{itemize}
+		\item For \(q=2\),
+		\[
+		\qbinom{5}{1}=\frac{2^5-1}{2-1}=31.
+		\]
+		
+		\item For \(q=3\),
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(3^4-1)(3^4-3)}{(3^2-1)(3^2-3)}
+		=
+		\frac{80\cdot 78}{8\cdot 6}
+		=
+		130.
+		\]
+		
+		\item
+		\[
+		\binom{3}{2}_{q=2}
+		=
+		\binom{3}{1}_{q=2}
+		=
+		\frac{2^3-1}{2-1}
+		=
+		7.
+		\]
+	\end{itemize}
+	
+	\section*{One-Sentence Takeaway}
+	
+	Over a finite field \(\F_q\), the number of \(k\)-dimensional subspaces of \(\F_q^n\) is the Gaussian binomial coefficient \(\qbinom{n}{k}\); over an infinite field, the number is usually infinite.
+	
+\end{document}

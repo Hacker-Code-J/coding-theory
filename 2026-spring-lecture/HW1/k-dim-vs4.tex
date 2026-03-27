@@ -1,0 +1,639 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\title{Lecture Notes: Counting \(k\)-Dimensional Subspaces of an \(n\)-Dimensional Vector Space via Group Actions}
+\author{}
+\date{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\Gr}{\mathrm{Gr}}
+\newcommand{\Stab}{\mathrm{Stab}}
+\newcommand{\Orb}{\mathrm{Orb}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_q}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{Introduction}
+	
+	Let \(V\) be an \(n\)-dimensional vector space over a field \(K\). We want to answer the question:
+	
+	\begin{quote}
+		How many distinct \(k\)-dimensional subspaces does \(V\) have?
+	\end{quote}
+	
+	If \(K\) is infinite, then for \(0<k<n\) there are infinitely many such subspaces. The interesting counting problem occurs when \(K=\F_q\) is a finite field with \(q\) elements.
+	
+	The standard answer is that the number of \(k\)-dimensional subspaces of \(\F_q^n\) is the Gaussian binomial coefficient
+	\[
+	\qbinom{n}{k}.
+	\]
+	
+	In these notes we derive this formula using \emph{group actions}. This viewpoint is conceptually important because it explains the counting formula as an orbit-stabilizer computation for the natural action of \(\GL_n(\F_q)\) on the Grassmannian of \(k\)-dimensional subspaces.
+	
+	\section{The Grassmannian and the Main Result}
+	
+	\begin{definition}
+		Let \(V\) be an \(n\)-dimensional vector space over \(K\). The set of all \(k\)-dimensional subspaces of \(V\) is called the \emph{Grassmannian} and is denoted by
+		\[
+		\Gr(k,V).
+		\]
+		When \(V=K^n\), we also write
+		\[
+		\Gr(k,n)=\Gr(k,K^n).
+		\]
+	\end{definition}
+	
+	When \(K=\F_q\), the set \(\Gr(k,n)\) is finite.
+	
+	\begin{definition}
+		For \(0\le k\le n\), the \emph{Gaussian binomial coefficient} is defined by
+		\[
+		\qbinom{n}{k}
+		=
+		\frac{(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})}.
+		\]
+		Equivalently,
+		\[
+		\qbinom{n}{k}
+		=
+		\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}.
+		\]
+	\end{definition}
+	
+	\begin{theorem}[Main Theorem]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		|\Gr(k,V)|=\qbinom{n}{k}.
+		\]
+		Equivalently, if \(V\cong \F_q^n\), then
+		\[
+		|\Gr(k,n)|=\qbinom{n}{k}.
+		\]
+	\end{theorem}
+	
+	Our goal is to prove this theorem by group actions.
+	
+	\section{Why Group Actions Enter Naturally}
+	
+	The group \(\GL_n(\F_q)\) consists of all invertible linear maps
+	\[
+	\F_q^n \to \F_q^n.
+	\]
+	Since invertible linear maps send subspaces to subspaces and preserve dimension, \(\GL_n(\F_q)\) acts naturally on \(\Gr(k,n)\).
+	
+	This action is the key idea:
+	\begin{itemize}
+		\item the set we want to count is \(\Gr(k,n)\),
+		\item the acting group is \(\GL_n(\F_q)\),
+		\item the action is transitive,
+		\item so \(|\Gr(k,n)|\) is an orbit size,
+		\item orbit-stabilizer reduces the problem to computing the stabilizer of one standard \(k\)-subspace.
+	\end{itemize}
+	
+	\section{Review of Group Actions}
+	
+	\begin{definition}
+		Let \(G\) be a group and \(X\) a set. A \emph{left action} of \(G\) on \(X\) is a map
+		\[
+		G\times X \to X,\qquad (g,x)\mapsto g\cdot x,
+		\]
+		such that:
+		\begin{enumerate}[label=(\arabic*)]
+			\item \(e\cdot x=x\) for all \(x\in X\),
+			\item \((gh)\cdot x=g\cdot(h\cdot x)\) for all \(g,h\in G\) and \(x\in X\).
+		\end{enumerate}
+	\end{definition}
+	
+	\begin{definition}
+		Let \(G\) act on \(X\), and let \(x\in X\).
+		\begin{itemize}
+			\item The \emph{orbit} of \(x\) is
+			\[
+			\Orb(x)=\{g\cdot x:g\in G\}.
+			\]
+			\item The \emph{stabilizer} of \(x\) is
+			\[
+			\Stab(x)=\{g\in G:g\cdot x=x\}.
+			\]
+		\end{itemize}
+	\end{definition}
+	
+	\begin{theorem}[Orbit-Stabilizer]
+		If a finite group \(G\) acts on a set \(X\), then for every \(x\in X\),
+		\[
+		|\Orb(x)|=\frac{|G|}{|\Stab(x)|}.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		The orbit \(\Orb(x)\) is in bijection with the left coset space \(G/\Stab(x)\). Indeed,
+		\[
+		g\Stab(x)\longmapsto g\cdot x
+		\]
+		is well-defined and bijective. Therefore
+		\[
+		|\Orb(x)|=[G:\Stab(x)]=\frac{|G|}{|\Stab(x)|}.
+		\]
+	\end{proof}
+	
+	\section{The Action of \(\GL_n(\F_q)\) on \(\Gr(k,n)\)}
+	
+	\begin{proposition}
+		The group \(\GL_n(\F_q)\) acts on \(\Gr(k,n)\) by
+		\[
+		A\cdot W = A(W),
+		\qquad A\in \GL_n(\F_q),\ W\in \Gr(k,n).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		If \(W\subseteq \F_q^n\) is a \(k\)-dimensional subspace and \(A\in \GL_n(\F_q)\), then \(A(W)\) is again a subspace. Since \(A\) is an isomorphism, we have
+		\[
+		\dim A(W)=\dim W=k.
+		\]
+		Thus \(A(W)\in \Gr(k,n)\). The identity matrix fixes every subspace, and
+		\[
+		(AB)(W)=A(B(W)),
+		\]
+		so this is a group action.
+	\end{proof}
+	
+	\begin{proposition}
+		This action is transitive.
+	\end{proposition}
+	
+	\begin{proof}
+		Let \(W,U\in \Gr(k,n)\). Choose a basis \(w_1,\dots,w_k\) of \(W\) and extend it to a basis
+		\[
+		w_1,\dots,w_k,w_{k+1},\dots,w_n
+		\]
+		of \(\F_q^n\). Similarly choose a basis \(u_1,\dots,u_k\) of \(U\) and extend it to a basis
+		\[
+		u_1,\dots,u_k,u_{k+1},\dots,u_n.
+		\]
+		There exists a unique linear isomorphism \(A\in \GL_n(\F_q)\) such that
+		\[
+		A(w_i)=u_i \qquad (1\le i\le n).
+		\]
+		Then \(A(W)=U\). Hence the action is transitive.
+	\end{proof}
+	
+	\begin{remark}
+		Transitivity means that all \(k\)-dimensional subspaces look the same from the point of view of \(\GL_n(\F_q)\). So to count all of them, it is enough to understand one convenient representative and its stabilizer.
+	\end{remark}
+	
+	\section{A Standard \(k\)-Subspace}
+	
+	Let
+	\[
+	W_0 = \Span(e_1,\dots,e_k)\subseteq \F_q^n,
+	\]
+	where \(e_1,\dots,e_n\) is the standard basis of \(\F_q^n\).
+	
+	Since the action is transitive,
+	\[
+	\Gr(k,n)=\Orb(W_0).
+	\]
+	Therefore,
+	\[
+	|\Gr(k,n)|=|\Orb(W_0)|=\frac{|\GL_n(\F_q)|}{|\Stab(W_0)|}.
+	\]
+	
+	So the problem reduces to computing \(|\GL_n(\F_q)|\) and \(|\Stab(W_0)|\).
+	
+	\section{The Size of \(\GL_n(\F_q)\)}
+	
+	\begin{proposition}
+		The order of \(\GL_n(\F_q)\) is
+		\[
+		|\GL_n(\F_q)|
+		=
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{n-1}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		An invertible \(n\times n\) matrix over \(\F_q\) is exactly an ordered basis of \(\F_q^n\), written as its column vectors.
+		
+		To choose such a basis:
+		\begin{itemize}
+			\item the first column can be any nonzero vector: \(q^n-1\) choices,
+			\item the second column must lie outside the span of the first: \(q^n-q\) choices,
+			\item the third column must lie outside the span of the first two: \(q^n-q^2\) choices,
+		\end{itemize}
+		and so on. For the \(i\)-th column, one must avoid an \((i-1)\)-dimensional subspace containing \(q^{i-1}\) vectors, so there are \(q^n-q^{i-1}\) choices.
+		
+		Multiplying gives
+		\[
+		|\GL_n(\F_q)|
+		=
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{n-1}).
+		\]
+	\end{proof}
+	
+	\section{The Stabilizer of the Standard \(k\)-Subspace}
+	
+	We now compute \(\Stab(W_0)\), where
+	\[
+	W_0=\Span(e_1,\dots,e_k).
+	\]
+	
+	\begin{proposition}
+		A matrix \(A\in \GL_n(\F_q)\) stabilizes \(W_0\) if and only if it has block form
+		\[
+		A=
+		\begin{pmatrix}
+			B & C\\
+			0 & D
+		\end{pmatrix},
+		\]
+		where
+		\[
+		B\in \GL_k(\F_q),\qquad D\in \GL_{n-k}(\F_q),\qquad C\in M_{k\times (n-k)}(\F_q).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Write vectors in \(\F_q^n\) according to the decomposition
+		\[
+		\F_q^n = W_0 \oplus W_0',
+		\qquad
+		W_0'=\Span(e_{k+1},\dots,e_n).
+		\]
+		Relative to this decomposition, a linear map has block matrix form
+		\[
+		A=
+		\begin{pmatrix}
+			B & C\\
+			E & D
+		\end{pmatrix}.
+		\]
+		Now \(A(W_0)=W_0\) if and only if every vector of \(W_0\) is sent into \(W_0\). This happens exactly when the lower-left block \(E\) is zero. Thus
+		\[
+		A=
+		\begin{pmatrix}
+			B & C\\
+			0 & D
+		\end{pmatrix}.
+		\]
+		Such a block upper-triangular matrix is invertible if and only if both diagonal blocks are invertible, that is,
+		\[
+		B\in \GL_k(\F_q),\qquad D\in \GL_{n-k}(\F_q).
+		\]
+		The block \(C\) is arbitrary.
+	\end{proof}
+	
+	\begin{corollary}
+		The stabilizer has order
+		\[
+		|\Stab(W_0)|
+		=
+		|\GL_k(\F_q)|\,|\GL_{n-k}(\F_q)|\,q^{k(n-k)}.
+		\]
+	\end{corollary}
+	
+	\begin{proof}
+		The block \(B\) can be any element of \(\GL_k(\F_q)\), the block \(D\) can be any element of \(\GL_{n-k}(\F_q)\), and the block \(C\) can be any \(k\times (n-k)\) matrix. There are
+		\[
+		q^{k(n-k)}
+		\]
+		choices for \(C\). Multiplying gives the formula.
+	\end{proof}
+	
+	\section{Orbit-Stabilizer Computation}
+	
+	We now apply orbit-stabilizer to the action of \(\GL_n(\F_q)\) on \(\Gr(k,n)\).
+	
+	\begin{proof}[Proof of the Main Theorem]
+		Since the action of \(\GL_n(\F_q)\) on \(\Gr(k,n)\) is transitive,
+		\[
+		|\Gr(k,n)|=\frac{|\GL_n(\F_q)|}{|\Stab(W_0)|}.
+		\]
+		Using the formulas already proved,
+		\[
+		|\GL_n(\F_q)|
+		=
+		\prod_{i=0}^{n-1}(q^n-q^i),
+		\]
+		and
+		\[
+		|\Stab(W_0)|
+		=
+		|\GL_k(\F_q)|\,|\GL_{n-k}(\F_q)|\,q^{k(n-k)}.
+		\]
+		Thus
+		\[
+		|\Gr(k,n)|
+		=
+		\frac{|\GL_n(\F_q)|}{|\GL_k(\F_q)|\,|\GL_{n-k}(\F_q)|\,q^{k(n-k)}}.
+		\]
+		
+		Now substitute
+		\[
+		|\GL_k(\F_q)|=(q^k-1)(q^k-q)\cdots(q^k-q^{k-1}),
+		\]
+		\[
+		|\GL_{n-k}(\F_q)|=(q^{n-k}-1)(q^{n-k}-q)\cdots(q^{n-k}-q^{n-k-1}).
+		\]
+		After simplifying, this becomes
+		\[
+		|\Gr(k,n)|
+		=
+		\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}.
+		\]
+		Therefore
+		\[
+		|\Gr(k,n)|=\qbinom{n}{k}.
+		\]
+	\end{proof}
+	
+	\section{A Cleaner Simplification}
+	
+	It is useful to see the simplification more transparently.
+	
+	Start with
+	\[
+	|\Gr(k,n)|=\frac{|\GL_n(\F_q)|}{|\GL_k(\F_q)|\,|\GL_{n-k}(\F_q)|\,q^{k(n-k)}}.
+	\]
+	Write
+	\[
+	|\GL_n(\F_q)|=\prod_{i=0}^{n-1}(q^n-q^i),
+	\qquad
+	|\GL_k(\F_q)|=\prod_{i=0}^{k-1}(q^k-q^i),
+	\]
+	\[
+	|\GL_{n-k}(\F_q)|=\prod_{i=0}^{n-k-1}(q^{n-k}-q^i).
+	\]
+	One may also rewrite
+	\[
+	|\GL_n(\F_q)|=q^{\frac{n(n-1)}{2}}\prod_{j=1}^n(q^j-1),
+	\]
+	and similarly for the smaller general linear groups. Then the powers of \(q\) cancel exactly, leaving
+	\[
+	|\Gr(k,n)|
+	=
+	\frac{\prod_{j=n-k+1}^n(q^j-1)}{\prod_{j=1}^k(q^j-1)}.
+	\]
+	This is another standard form of the Gaussian binomial coefficient:
+	\[
+	\qbinom{n}{k}
+	=
+	\frac{(q^n-1)(q^{n-1}-1)\cdots(q^{n-k+1}-1)}
+	{(q^k-1)(q^{k-1}-1)\cdots(q-1)}.
+	\]
+	
+	\section{Interpretation of the Stabilizer Formula}
+	
+	The formula
+	\[
+	|\Stab(W_0)|=|\GL_k(\F_q)|\,|\GL_{n-k}(\F_q)|\,q^{k(n-k)}
+	\]
+	has a clear meaning.
+	
+	The stabilizer consists of all invertible linear maps that preserve the standard \(k\)-subspace \(W_0\). Such a map may:
+	\begin{itemize}
+		\item change basis inside \(W_0\): this contributes a factor \(|\GL_k(\F_q)|\),
+		\item change basis inside a complementary \((n-k)\)-space: this contributes \(|\GL_{n-k}(\F_q)|\),
+		\item shear the complement into \(W_0\): this contributes \(q^{k(n-k)}\).
+	\end{itemize}
+	
+	So the orbit-stabilizer formula says:
+	\[
+	\text{number of \(k\)-subspaces}
+	=
+	\frac{\text{all ambient basis changes}}{\text{basis changes preserving one chosen \(k\)-subspace}}.
+	\]
+	
+	This is the group-action analogue of the more elementary counting argument with ordered bases.
+	
+	\section{Examples}
+	
+	\begin{example}[Lines in \(\F_q^3\)]
+		The number of \(1\)-dimensional subspaces of \(\F_q^3\) is
+		\[
+		\qbinom{3}{1}=\frac{q^3-1}{q-1}=q^2+q+1.
+		\]
+		So there are \(q^2+q+1\) lines through the origin.
+	\end{example}
+	
+	\begin{example}[Planes in \(\F_q^3\)]
+		The number of \(2\)-dimensional subspaces of \(\F_q^3\) is
+		\[
+		\qbinom{3}{2}=\qbinom{3}{1}=q^2+q+1.
+		\]
+		This symmetry reflects the fact that \(k\)-subspaces and \((n-k)\)-subspaces are counted by the same Gaussian coefficient.
+	\end{example}
+	
+	\begin{example}[Two-dimensional subspaces of \(\F_2^4\)]
+		For \(q=2\), \(n=4\), \(k=2\),
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(2^4-1)(2^4-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{15\cdot 14}{3\cdot 2}
+		=
+		35.
+		\]
+		So \(\F_2^4\) has exactly \(35\) distinct \(2\)-dimensional subspaces.
+	\end{example}
+	
+	\section{Symmetry}
+	
+	\begin{proposition}
+		For \(0\le k\le n\),
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		This follows directly from the product formulas. It also has a group-theoretic interpretation: the stabilizer of a \(k\)-subspace and the stabilizer of a complementary \((n-k)\)-subspace have matching sizes in the orbit calculation.
+	\end{proof}
+	
+	\section{Connection with the Elementary Counting Proof}
+	
+	There is another classical proof:
+	\begin{itemize}
+		\item count ordered linearly independent \(k\)-tuples in \(\F_q^n\),
+		\item divide by the number of ordered bases of a fixed \(k\)-space.
+	\end{itemize}
+	
+	That proof gives
+	\[
+	\qbinom{n}{k}
+	=
+	\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+	{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}.
+	\]
+	
+	The group-action proof is really the same idea at a more structural level:
+	\begin{itemize}
+		\item \(\GL_n(\F_q)\) encodes all ambient basis changes,
+		\item the stabilizer encodes the changes that preserve one chosen \(k\)-subspace,
+		\item orbit-stabilizer turns this into the desired count.
+	\end{itemize}
+	
+	So the group-action method is not only elegant; it explains \emph{why} the quotient formula must appear.
+	
+	\section{Infinite Fields}
+	
+	\begin{proposition}
+		If \(K\) is infinite and \(V\) is an \(n\)-dimensional vector space over \(K\), then for \(0<k<n\) the set \(\Gr(k,V)\) is infinite.
+	\end{proposition}
+	
+	\begin{proof}
+		It suffices to consider \(k=1\). In \(K^2\), each line through the origin is a \(1\)-dimensional subspace. When \(K\) is infinite, there are infinitely many slopes, hence infinitely many such lines. Therefore \(\Gr(1,2)\) is infinite, and similarly \(\Gr(k,V)\) is infinite whenever \(0<k<n\).
+	\end{proof}
+	
+	\begin{remark}
+		So the finite counting formula is specific to finite fields. Over infinite fields, the Grassmannian is not a finite set but a geometric space.
+	\end{remark}
+	
+	\section{Grassmannians as Homogeneous Spaces}
+	
+	The group-action proof can be summarized in one elegant formula:
+	\[
+	\Gr(k,n)\cong \GL_n(\F_q)/P_k,
+	\]
+	where \(P_k=\Stab(W_0)\) is the stabilizer of the standard \(k\)-subspace. Such a subgroup is called a \emph{parabolic subgroup}.
+	
+	Thus the Grassmannian is a homogeneous space for \(\GL_n(\F_q)\), and its cardinality is
+	\[
+	|\Gr(k,n)|=\frac{|\GL_n(\F_q)|}{|P_k|}.
+	\]
+	
+	This is the natural group-theoretic form of the answer.
+	
+	\section{Final Theorem}
+	
+	\begin{theorem}[Final Form]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\). Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			|\Gr(k,V)|=\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+		Moreover, this count is obtained from the transitive action of \(\GL_n(\F_q)\) on \(\Gr(k,V)\) by orbit-stabilizer:
+		\[
+		|\Gr(k,V)|=\frac{|\GL_n(\F_q)|}{|\Stab(W_0)|}.
+		\]
+	\end{theorem}
+	
+	\section{Exercises}
+	
+	\begin{exercise}
+		Prove directly that the action of \(\GL_n(\F_q)\) on \(\Gr(k,n)\) is transitive.
+	\end{exercise}
+	
+	\begin{exercise}
+		Let \(W_0=\Span(e_1,\dots,e_k)\). Show that
+		\[
+		\Stab(W_0)=
+		\left\{
+		\begin{pmatrix}
+			B & C\\
+			0 & D
+		\end{pmatrix}
+		:
+		B\in \GL_k(\F_q),\ D\in \GL_{n-k}(\F_q),\ C\in M_{k\times(n-k)}(\F_q)
+		\right\}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(|\GL_2(\F_q)|\) and \(|\GL_3(\F_q)|\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Use orbit-stabilizer to compute the number of lines in \(\F_q^3\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(\qbinom{4}{2}\) when \(q=2\) and when \(q=3\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Prove the symmetry
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{exercise}
+	
+	\begin{exercise}
+		Explain how the elementary basis-counting proof is related to the orbit-stabilizer proof.
+	\end{exercise}
+	
+	\section{Selected Answers}
+	
+	\begin{itemize}
+		\item
+		\[
+		|\GL_2(\F_q)|=(q^2-1)(q^2-q).
+		\]
+		
+		\item
+		\[
+		|\GL_3(\F_q)|=(q^3-1)(q^3-q)(q^3-q^2).
+		\]
+		
+		\item
+		\[
+		\qbinom{4}{2}\Big|_{q=2}
+		=
+		\frac{(2^4-1)(2^4-2)}{(2^2-1)(2^2-2)}
+		=
+		35.
+		\]
+		
+		\item
+		\[
+		\qbinom{4}{2}\Big|_{q=3}
+		=
+		\frac{(3^4-1)(3^4-3)}{(3^2-1)(3^2-3)}
+		=
+		\frac{80\cdot 78}{8\cdot 6}
+		=
+		130.
+		\]
+	\end{itemize}
+	
+	\section*{One-Sentence Takeaway}
+	
+	Over a finite field \(\F_q\), the \(k\)-dimensional subspaces of \(\F_q^n\) form a single \(\GL_n(\F_q)\)-orbit, and orbit-stabilizer computes their number as the Gaussian binomial coefficient \(\qbinom{n}{k}\).
+	
+\end{document}

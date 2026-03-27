@@ -1,0 +1,769 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	urlcolor=blue,
+	citecolor=blue
+}
+
+\title{Lecture Notes: Counting \(k\)-Dimensional Subspaces of an \(n\)-Dimensional Vector Space Using a Concrete Basis \(v_1,\dots,v_n\)}
+\author{}
+\date{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\Q}{\mathbf{Q}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\Gr}{\mathrm{Gr}}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}_q}
+
+\begin{document}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\section{Introduction}
+	
+	Let \(V\) be an \(n\)-dimensional vector space over a field \(K\). We want to answer:
+	
+	\begin{quote}
+		How many distinct \(k\)-dimensional subspaces does \(V\) have?
+	\end{quote}
+	
+	The answer depends on the field.
+	
+	\begin{itemize}
+		\item If \(K=\F_q\) is a finite field with \(q\) elements, then the number of \(k\)-dimensional subspaces is finite and is given by the \emph{Gaussian binomial coefficient}.
+		\item If \(K\) is infinite, then for \(0<k<n\) there are infinitely many \(k\)-dimensional subspaces.
+	\end{itemize}
+	
+	In these notes we explain the finite-field formula in the most concrete way possible: we fix a basis
+	\[
+	v_1,\dots,v_n
+	\]
+	of \(V\), write every vector in coordinates relative to that basis, and count subspaces by counting ordered bases inside \(V\) itself.
+	
+	So the philosophy is this:
+	
+	\begin{quote}
+		A \(k\)-dimensional subspace is determined by an ordered basis of \(k\) linearly independent vectors, and we can count these directly once a concrete basis \(v_1,\dots,v_n\) is fixed.
+	\end{quote}
+	
+	\section{Fixing a Concrete Basis \(v_1,\dots,v_n\)}
+	
+	From now on, assume that \(V\) is an \(n\)-dimensional vector space over \(\F_q\), and fix a basis
+	\[
+	v_1,\dots,v_n.
+	\]
+	
+	Then every vector \(x\in V\) can be written uniquely in the form
+	\[
+	x=a_1v_1+\cdots+a_nv_n,
+	\qquad a_i\in \F_q.
+	\]
+	
+	Thus each vector of \(V\) corresponds uniquely to an \(n\)-tuple
+	\[
+	(a_1,\dots,a_n)\in \F_q^n.
+	\]
+	
+	So although we do not identify \(V\) with \(\F_q^n\) abstractly at first, the fixed basis \(v_1,\dots,v_n\) lets us count vectors exactly as if we were in \(\F_q^n\). In particular:
+	
+	\begin{itemize}
+		\item \(V\) has exactly \(q^n\) elements;
+		\item any \(r\)-dimensional subspace of \(V\) has exactly \(q^r\) elements.
+	\end{itemize}
+	
+	\begin{proposition}
+		Let \(W\subseteq V\) be an \(r\)-dimensional subspace. Then \(W\) has exactly \(q^r\) elements.
+	\end{proposition}
+	
+	\begin{proof}
+		Choose a basis \(w_1,\dots,w_r\) of \(W\). Every vector in \(W\) has a unique expression
+		\[
+		b_1w_1+\cdots+b_rw_r,
+		\qquad b_i\in \F_q.
+		\]
+		Since each coefficient has \(q\) possibilities, the total number of vectors in \(W\) is \(q^r\).
+	\end{proof}
+	
+	This simple fact is the engine behind the counting formula.
+	
+	\section{The Main Formula}
+	
+	\begin{definition}
+		For integers \(0\le k\le n\), the \emph{Gaussian binomial coefficient} is
+		\[
+		\qbinom{n}{k}
+		=
+		\frac{(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})}.
+		\]
+		Equivalently,
+		\[
+		\qbinom{n}{k}
+		=
+		\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}.
+		\]
+	\end{definition}
+	
+	\begin{theorem}[Main Theorem]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\), and fix a basis
+		\[
+		v_1,\dots,v_n.
+		\]
+		Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+	\end{theorem}
+	
+	The proof will be carried out entirely inside \(V\), using the fixed basis \(v_1,\dots,v_n\) to count vectors and spans concretely.
+	
+	\section{The Counting Strategy}
+	
+	The argument has two steps.
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item Count all ordered \(k\)-tuples
+		\[
+		(w_1,\dots,w_k)
+		\]
+		of linearly independent vectors in \(V\).
+		\item Divide by the number of ordered bases of one fixed \(k\)-dimensional subspace.
+	\end{enumerate}
+	
+	Why does this work? Because every ordered linearly independent \(k\)-tuple is an ordered basis of exactly one \(k\)-dimensional subspace, namely
+	\[
+	\Span(w_1,\dots,w_k),
+	\]
+	and every \(k\)-dimensional subspace has many ordered bases.
+	
+	So the desired count is:
+	\[
+	\#\{\text{\(k\)-dimensional subspaces of }V\}
+	=
+	\frac{\#\{\text{ordered linearly independent \(k\)-tuples in }V\}}
+	{\#\{\text{ordered bases of one fixed \(k\)-dimensional subspace}\}}.
+	\]
+	
+	\section{Counting Ordered Linearly Independent \(k\)-Tuples in \(V\)}
+	
+	We now count ordered tuples
+	\[
+	(w_1,\dots,w_k)\in V^k
+	\]
+	such that \(w_1,\dots,w_k\) are linearly independent.
+	
+	Because the basis \(v_1,\dots,v_n\) is fixed, every vector in \(V\) has coordinates
+	\[
+	w=a_1v_1+\cdots+a_nv_n.
+	\]
+	Hence \(V\) has exactly \(q^n\) vectors.
+	
+	\begin{lemma}
+		The number of ordered linearly independent \(k\)-tuples in \(V\) is
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{lemma}
+	
+	\begin{proof}
+		We choose the vectors one by one.
+		
+		\subsection*{Step 1: choosing \(w_1\)}
+		The first vector \(w_1\) can be any nonzero vector of \(V\). Since \(V\) has \(q^n\) vectors, there are
+		\[
+		q^n-1
+		\]
+		choices for \(w_1\).
+		
+		\subsection*{Step 2: choosing \(w_2\)}
+		Once \(w_1\) is fixed, the vector \(w_2\) must not lie in \(\Span(w_1)\). Since \(\Span(w_1)\) is 1-dimensional, it contains exactly \(q\) vectors. Therefore the number of choices for \(w_2\) is
+		\[
+		q^n-q.
+		\]
+		
+		\subsection*{Step 3: choosing \(w_3\)}
+		Once \(w_1,w_2\) are linearly independent, the vector \(w_3\) must not lie in
+		\[
+		\Span(w_1,w_2).
+		\]
+		This is a 2-dimensional subspace, so it contains exactly \(q^2\) vectors. Hence the number of choices for \(w_3\) is
+		\[
+		q^n-q^2.
+		\]
+		
+		Continuing in this way, after choosing linearly independent vectors
+		\[
+		w_1,\dots,w_{i-1},
+		\]
+		their span has dimension \(i-1\), so it contains exactly \(q^{i-1}\) vectors. Thus the number of choices for \(w_i\) is
+		\[
+		q^n-q^{i-1}.
+		\]
+		
+		Multiplying over \(i=1,\dots,k\), we obtain
+		\[
+		(q^n-1)(q^n-q)(q^n-q^2)\cdots(q^n-q^{k-1}).
+		\]
+	\end{proof}
+	
+	\begin{remark}
+		This count depends only on the fact that \(V\) has a basis \(v_1,\dots,v_n\). Once such a basis is fixed, the counting becomes completely concrete.
+	\end{remark}
+	
+	\section{Counting Ordered Bases of One Fixed \(k\)-Dimensional Subspace}
+	
+	Now fix a \(k\)-dimensional subspace \(W\subseteq V\). We want to count how many ordered bases \(W\) has.
+	
+	\begin{lemma}
+		A fixed \(k\)-dimensional subspace \(W\) has exactly
+		\[
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1})
+		\]
+		ordered bases.
+	\end{lemma}
+	
+	\begin{proof}
+		Since \(W\) has dimension \(k\), choose a basis
+		\[
+		u_1,\dots,u_k
+		\]
+		of \(W\). Then every vector of \(W\) has a unique expression
+		\[
+		c_1u_1+\cdots+c_ku_k,
+		\qquad c_i\in \F_q.
+		\]
+		So \(W\) has exactly \(q^k\) vectors.
+		
+		Now count ordered bases of \(W\) exactly as before:
+		
+		\begin{itemize}
+			\item the first basis vector can be any nonzero vector of \(W\): \(q^k-1\) choices;
+			\item the second must lie outside the span of the first: \(q^k-q\) choices;
+			\item the third must lie outside the span of the first two: \(q^k-q^2\) choices;
+			\item and so on.
+		\end{itemize}
+		
+		Thus the number of ordered bases of \(W\) is
+		\[
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+	\end{proof}
+	
+	\section{Proof of the Main Theorem}
+	
+	We now combine the two counts.
+	
+	\begin{proof}[Proof of the Main Theorem]
+		Every ordered linearly independent \(k\)-tuple
+		\[
+		(w_1,\dots,w_k)
+		\]
+		in \(V\) spans a unique \(k\)-dimensional subspace
+		\[
+		\Span(w_1,\dots,w_k).
+		\]
+		Conversely, every \(k\)-dimensional subspace contributes exactly as many such ordered tuples as it has ordered bases, namely
+		\[
+		(q^k-1)(q^k-q)\cdots(q^k-q^{k-1}).
+		\]
+		
+		Therefore,
+		\[
+		\#\{\text{\(k\)-dimensional subspaces of }V\}
+		=
+		\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}.
+		\]
+		
+		By definition, this is exactly
+		\[
+		\qbinom{n}{k}.
+		\]
+	\end{proof}
+	
+	\section{What the Basis \(v_1,\dots,v_n\) Is Doing}
+	
+	It is worth emphasizing the role of the concrete basis
+	\[
+	v_1,\dots,v_n.
+	\]
+	
+	We are not saying that every \(k\)-dimensional subspace is simply
+	\[
+	\Span(v_{i_1},\dots,v_{i_k})
+	\]
+	for some choice of indices \(i_1<\cdots<i_k\). That would count only the coordinate subspaces, and there are many more subspaces than that.
+	
+	Rather, the basis \(v_1,\dots,v_n\) is used to do three things:
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item to write every vector of \(V\) uniquely in coordinates;
+		\item to conclude that \(V\) has exactly \(q^n\) vectors;
+		\item to conclude that each \(r\)-dimensional subspace has exactly \(q^r\) vectors.
+	\end{enumerate}
+	
+	Once these facts are known, the counting argument becomes possible.
+	
+	\begin{remark}
+		So the basis \(v_1,\dots,v_n\) is a counting device, not a list from which all subspaces are built by merely selecting subsets of basis vectors.
+	\end{remark}
+	
+	\section{Coordinate Subspaces Versus All Subspaces}
+	
+	To avoid confusion, let us state this explicitly.
+	
+	\begin{definition}
+		A \emph{coordinate \(k\)-subspace} relative to the basis \(v_1,\dots,v_n\) is a subspace of the form
+		\[
+		\Span(v_{i_1},\dots,v_{i_k})
+		\]
+		for some
+		\[
+		1\le i_1<\cdots<i_k\le n.
+		\]
+	\end{definition}
+	
+	There are exactly
+	\[
+	\binom{n}{k}
+	\]
+	such coordinate \(k\)-subspaces.
+	
+	However, in general,
+	\[
+	\binom{n}{k}\neq \qbinom{n}{k}.
+	\]
+	The Gaussian coefficient is usually much larger.
+	
+	\begin{example}
+		In \(\F_2^3\), the number of coordinate 1-dimensional subspaces relative to a fixed basis \(v_1,v_2,v_3\) is only
+		\[
+		\binom{3}{1}=3,
+		\]
+		namely
+		\[
+		\Span(v_1),\qquad \Span(v_2),\qquad \Span(v_3).
+		\]
+		
+		But the total number of 1-dimensional subspaces is
+		\[
+		\qbinom{3}{1}
+		=
+		\frac{2^3-1}{2-1}
+		=
+		7.
+		\]
+		
+		So four more lines appear, such as
+		\[
+		\Span(v_1+v_2),\qquad
+		\Span(v_1+v_3),\qquad
+		\Span(v_2+v_3),\qquad
+		\Span(v_1+v_2+v_3).
+		\]
+	\end{example}
+	
+	This shows clearly why ordinary binomial coefficients are not the answer here.
+	
+	\section{Examples}
+	
+	\begin{example}[Lines in \(V\)]
+		The number of 1-dimensional subspaces of \(V\) is
+		\[
+		\qbinom{n}{1}
+		=
+		\frac{q^n-1}{q-1}.
+		\]
+		
+		Indeed, a 1-dimensional subspace is determined by any nonzero vector, but each such subspace has exactly \(q-1\) nonzero vectors. So
+		\[
+		\#\{\text{lines in }V\}
+		=
+		\frac{q^n-1}{q-1}.
+		\]
+	\end{example}
+	
+	\begin{example}[Hyperplanes in \(V\)]
+		The number of \((n-1)\)-dimensional subspaces of \(V\) is
+		\[
+		\qbinom{n}{n-1}
+		=
+		\qbinom{n}{1}
+		=
+		\frac{q^n-1}{q-1}.
+		\]
+	\end{example}
+	
+	\begin{example}[The case \(V=\F_2^2\) with basis \(v_1,v_2\)]
+		The vectors of \(V\) are
+		\[
+		0,\quad v_1,\quad v_2,\quad v_1+v_2.
+		\]
+		So the nonzero vectors are
+		\[
+		v_1,\quad v_2,\quad v_1+v_2.
+		\]
+		Each 1-dimensional subspace contains exactly one nonzero vector because the only nonzero scalar in \(\F_2\) is \(1\). Thus the three 1-dimensional subspaces are
+		\[
+		\Span(v_1),\qquad
+		\Span(v_2),\qquad
+		\Span(v_1+v_2).
+		\]
+		Hence
+		\[
+		\qbinom{2}{1}
+		=
+		\frac{2^2-1}{2-1}
+		=
+		3.
+		\]
+	\end{example}
+	
+	\begin{example}[The case \(V=\F_2^3\) with basis \(v_1,v_2,v_3\)]
+		The formula gives
+		\[
+		\qbinom{3}{2}
+		=
+		\frac{(2^3-1)(2^3-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{7\cdot 6}{3\cdot 2}
+		=
+		7.
+		\]
+		So \(V\) has exactly seven 2-dimensional subspaces.
+	\end{example}
+	
+	\section{A Fully Concrete Example Using \(v_1,v_2,v_3\)}
+	
+	Let \(V\) be a 3-dimensional vector space over \(\F_2\) with fixed basis
+	\[
+	v_1,v_2,v_3.
+	\]
+	Then the vectors of \(V\) are
+	\[
+	0,\quad
+	v_1,\quad
+	v_2,\quad
+	v_3,\quad
+	v_1+v_2,\quad
+	v_1+v_3,\quad
+	v_2+v_3,\quad
+	v_1+v_2+v_3.
+	\]
+	
+	Let us count the 2-dimensional subspaces directly.
+	
+	\subsection*{Step 1: count ordered bases of 2-dimensional subspaces}
+	To choose an ordered basis \((w_1,w_2)\):
+	
+	\begin{itemize}
+		\item \(w_1\) can be any nonzero vector: \(7\) choices;
+		\item \(w_2\) must not lie in \(\Span(w_1)\). Since \(\Span(w_1)\) has exactly \(2\) elements, namely \(0\) and \(w_1\), there are \(6\) choices.
+	\end{itemize}
+	
+	So there are
+	\[
+	7\cdot 6=42
+	\]
+	ordered bases of 2-dimensional subspaces.
+	
+	\subsection*{Step 2: count ordered bases of one fixed 2-dimensional subspace}
+	Take for example
+	\[
+	W=\Span(v_1,v_2).
+	\]
+	Its vectors are
+	\[
+	0,\quad v_1,\quad v_2,\quad v_1+v_2.
+	\]
+	Thus its nonzero vectors are
+	\[
+	v_1,\quad v_2,\quad v_1+v_2.
+	\]
+	To choose an ordered basis of \(W\):
+	
+	\begin{itemize}
+		\item the first basis vector has \(3\) choices;
+		\item the second must be different from the first and nonzero, so it has \(2\) choices.
+	\end{itemize}
+	
+	Hence \(W\) has
+	\[
+	3\cdot 2=6
+	\]
+	ordered bases.
+	
+	\subsection*{Step 3: divide}
+	Therefore the number of distinct 2-dimensional subspaces is
+	\[
+	\frac{42}{6}=7.
+	\]
+	
+	This matches the formula
+	\[
+	\qbinom{3}{2}=7.
+	\]
+	
+	\section{The General Linear Group and Ordered Bases}
+	
+	The denominator in the Gaussian coefficient is also the size of the general linear group.
+	
+	\begin{proposition}
+		The number of ordered bases of a \(k\)-dimensional vector space over \(\F_q\) is
+		\[
+		|\GL_k(\F_q)|
+		=
+		(q^k-1)(q^k-q)(q^k-q^2)\cdots(q^k-q^{k-1}).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		An invertible \(k\times k\) matrix over \(\F_q\) is exactly an ordered basis of \(\F_q^k\), written as its columns. Counting such ordered bases gives the formula.
+	\end{proof}
+	
+	So we may rewrite the counting theorem as
+	\[
+	\qbinom{n}{k}
+	=
+	\frac{\text{number of ordered linearly independent \(k\)-tuples in \(V\)}}{|\GL_k(\F_q)|}.
+	\]
+	
+	\section{Special Cases}
+	
+	\begin{proposition}
+		For every \(n\) and \(q\),
+		\begin{align*}
+			\qbinom{n}{0} &= 1,\\
+			\qbinom{n}{1} &= \frac{q^n-1}{q-1}=1+q+q^2+\cdots+q^{n-1},\\
+			\qbinom{n}{n-1} &= \qbinom{n}{1},\\
+			\qbinom{n}{n} &= 1.
+		\end{align*}
+	\end{proposition}
+	
+	\begin{proof}
+		The cases \(k=0\) and \(k=n\) are immediate. The formula for \(k=1\) follows by counting nonzero vectors and dividing by the \(q-1\) nonzero scalar multiples of each one. The case \(k=n-1\) follows from symmetry.
+	\end{proof}
+	
+	\section{Symmetry}
+	
+	\begin{proposition}
+		For \(0\le k\le n\),
+		\[
+		\qbinom{n}{k}=\qbinom{n}{n-k}.
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		This follows from the standard product formulas for the Gaussian binomial coefficient.
+	\end{proof}
+	
+	\begin{remark}
+		This symmetry says that the number of \(k\)-dimensional subspaces equals the number of \((n-k)\)-dimensional subspaces.
+	\end{remark}
+	
+	\section{Another Form of the Formula}
+	
+	The Gaussian coefficient may also be written as
+	\[
+	\qbinom{n}{k}
+	=
+	\frac{(q^n-1)(q^{n-1}-1)\cdots(q^{n-k+1}-1)}
+	{(q^k-1)(q^{k-1}-1)\cdots(q-1)}.
+	\]
+	
+	This form is often convenient for algebraic manipulation and makes the symmetry more visible.
+	
+	\section{What Happens Over Infinite Fields?}
+	
+	If the base field is infinite, then the answer is usually infinite.
+	
+	\begin{proposition}
+		Let \(V\) be an \(n\)-dimensional vector space over an infinite field \(K\). If \(0<k<n\), then \(V\) has infinitely many distinct \(k\)-dimensional subspaces.
+	\end{proposition}
+	
+	\begin{proof}
+		It suffices to consider \(k=1\). Let \(u_1,u_2\) be linearly independent vectors in \(V\). For each scalar \(a\in K\), the vector
+		\[
+		u_1+au_2
+		\]
+		spans a 1-dimensional subspace
+		\[
+		\Span(u_1+au_2).
+		\]
+		Different values of \(a\) give different lines. Since \(K\) is infinite, there are infinitely many such lines. Hence there are infinitely many 1-dimensional subspaces, and therefore infinitely many \(k\)-dimensional subspaces for \(0<k<n\).
+	\end{proof}
+	
+	\section{Grassmannians}
+	
+	\begin{definition}
+		The set of all \(k\)-dimensional subspaces of an \(n\)-dimensional vector space is called the \emph{Grassmannian}, denoted
+		\[
+		\Gr(k,n).
+		\]
+	\end{definition}
+	
+	Over \(\F_q\), the Grassmannian is a finite set and
+	\[
+	|\Gr(k,n)|=\qbinom{n}{k}.
+	\]
+	
+	So the Gaussian binomial coefficient counts the points of the Grassmannian over \(\F_q\).
+	
+	\section{Conceptual Summary}
+	
+	Let us summarize the whole argument in the concrete basis language.
+	
+	Fix a basis
+	\[
+	v_1,\dots,v_n
+	\]
+	of the \(n\)-dimensional vector space \(V\) over \(\F_q\).
+	
+	\begin{enumerate}[label=\arabic*.]
+		\item Every vector of \(V\) has unique coordinates relative to \(v_1,\dots,v_n\), so \(V\) has \(q^n\) elements.
+		\item Every \(r\)-dimensional subspace has \(q^r\) elements.
+		\item Ordered linearly independent \(k\)-tuples in \(V\) can be counted as
+		\[
+		(q^n-1)(q^n-q)\cdots(q^n-q^{k-1}).
+		\]
+		\item One fixed \(k\)-dimensional subspace has
+		\[
+		(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})
+		\]
+		ordered bases.
+		\item Dividing gives the number of distinct \(k\)-dimensional subspaces.
+	\end{enumerate}
+	
+	Thus
+	\[
+	\boxed{
+		\#\{\text{\(k\)-dimensional subspaces of }V\}
+		=
+		\frac{(q^n-1)(q^n-q)\cdots(q^n-q^{k-1})}
+		{(q^k-1)(q^k-q)\cdots(q^k-q^{k-1})}
+		=
+		\qbinom{n}{k}.
+	}
+	\]
+	
+	\section{Final Theorem}
+	
+	\begin{theorem}[Final Form]
+		Let \(V\) be an \(n\)-dimensional vector space over \(\F_q\), and fix a concrete basis
+		\[
+		v_1,\dots,v_n.
+		\]
+		Then the number of distinct \(k\)-dimensional subspaces of \(V\) is
+		\[
+		\boxed{
+			\qbinom{n}{k}
+			=
+			\prod_{i=0}^{k-1}\frac{q^n-q^i}{q^k-q^i}
+		}.
+		\]
+		The proof is obtained by counting ordered bases of \(k\)-dimensional subspaces relative to the fixed basis \(v_1,\dots,v_n\).
+	\end{theorem}
+	
+	\section{Exercises}
+	
+	\begin{exercise}
+		Let \(V\) be a 3-dimensional vector space over \(\F_2\) with basis \(v_1,v_2,v_3\). List all vectors of \(V\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Show directly that
+		\[
+		\Span(v_1+v_2)\neq \Span(v_1)
+		\]
+		in a vector space over \(\F_2\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Using the basis \(v_1,v_2,v_3\), count the number of 1-dimensional subspaces of \(V\) when \(V\) is over \(\F_2\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Prove that an \(r\)-dimensional subspace over \(\F_q\) has exactly \(q^r\) elements.
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(\qbinom{4}{2}\) when \(q=2\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Compute \(\qbinom{4}{2}\) when \(q=3\).
+	\end{exercise}
+	
+	\begin{exercise}
+		Explain why choosing \(k\) vectors from the fixed basis \(v_1,\dots,v_n\) counts only coordinate subspaces, not all \(k\)-dimensional subspaces.
+	\end{exercise}
+	
+	\begin{exercise}
+		Show that the number of coordinate \(k\)-subspaces relative to \(v_1,\dots,v_n\) is \(\binom{n}{k}\).
+	\end{exercise}
+	
+	\section{Selected Answers}
+	
+	\begin{itemize}
+		\item For \(q=2\),
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(2^4-1)(2^4-2)}{(2^2-1)(2^2-2)}
+		=
+		\frac{15\cdot 14}{3\cdot 2}
+		=
+		35.
+		\]
+		
+		\item For \(q=3\),
+		\[
+		\qbinom{4}{2}
+		=
+		\frac{(3^4-1)(3^4-3)}{(3^2-1)(3^2-3)}
+		=
+		\frac{80\cdot 78}{8\cdot 6}
+		=
+		130.
+		\]
+		
+		\item The number of coordinate \(k\)-subspaces relative to \(v_1,\dots,v_n\) is
+		\[
+		\binom{n}{k}.
+		\]
+	\end{itemize}
+	
+	\section*{One-Sentence Takeaway}
+	
+	Once a concrete basis \(v_1,\dots,v_n\) is fixed, vectors and subspaces can be counted explicitly, and the number of distinct \(k\)-dimensional subspaces of an \(n\)-dimensional vector space over \(\F_q\) is the Gaussian binomial coefficient \(\qbinom{n}{k}\).
+	
+\end{document}
