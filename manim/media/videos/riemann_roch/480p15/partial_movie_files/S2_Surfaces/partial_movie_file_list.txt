@@ -1,0 +1,9 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S2_Surfaces/2340480722_2732047615_223132457.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S2_Surfaces/875235068_418924999_1389288216.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S2_Surfaces/875235068_2924579097_488617636.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S2_Surfaces/875235068_2803744190_2219902168.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S2_Surfaces/875235068_2924579097_3739579600.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S2_Surfaces/875235068_1062960236_928151421.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S2_Surfaces/875235068_1928391349_202295615.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S2_Surfaces/875235068_2168709927_4030148250.mp4'

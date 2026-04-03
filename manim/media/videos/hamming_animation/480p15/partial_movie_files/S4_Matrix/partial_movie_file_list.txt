@@ -1,0 +1,10 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/2340480722_4188026955_223132457.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/875235068_3741697512_591056797.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/875235068_2831026617_2190940244.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/875235068_370280688_491095886.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/875235068_2282884663_4220034732.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/875235068_3736678387_2132889872.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/875235068_1744106249_1247341566.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/875235068_2376443722_2773356287.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S4_Matrix/875235068_3086116746_554207670.mp4'

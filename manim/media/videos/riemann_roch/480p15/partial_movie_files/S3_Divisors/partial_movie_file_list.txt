@@ -1,0 +1,13 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/2340480722_599692190_223132457.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_2305054199_288854058.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_1115353917_540401227.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_3186415075_3086810834.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_54240872_3319981939.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_4217549388_1299497397.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_233113111_153851549.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_3644081790_1764699946.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_2924579097_1028087691.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_2010030480_1499683029.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_1928391349_111705925.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/riemann_roch/480p15/partial_movie_files/S3_Divisors/875235068_3647514149_2669723324.mp4'

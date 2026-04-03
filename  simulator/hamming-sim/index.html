@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamming(7,4) Algebraic Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-900" x-data="hammingLogic()">
+
+    <div class="max-w-6xl mx-auto px-4 py-10">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-black text-slate-800 tracking-tight">Hamming(7,4) Algebraic Lab</h1>
+            <p class="text-slate-500 mt-2 font-medium">Matrix Operations over $GF(2)$</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="space-y-6">
+                <div class="card p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                    <h2 class="label">Step 1: Input Vector $\vec{d}$</h2>
+                    <div class="flex justify-between my-6">
+                        <template x-for="(bit, i) in dataVec">
+                            <button @click="toggleData(i)" 
+                                    class="w-12 h-14 rounded-lg border-2 font-mono text-2xl font-bold transition-all"
+                                    :class="bit ? 'bg-blue-600 border-blue-700 text-white' : 'bg-slate-100 border-slate-200 text-slate-400'"
+                                    x-text="bit"></button>
+                        </template>
+                    </div>
+                    <div id="enc-formula" class="math-box"></div>
+                </div>
+
+                <div class="card p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                    <h2 class="label">Generator Matrix $G$</h2>
+                    <div id="g-matrix" class="matrix-container"></div>
+                    <p class="text-[10px] mt-4 text-slate-400 uppercase text-center font-bold">Systematic Form: $[I_4 | P]$</p>
+                </div>
+            </div>
+
+            <div class="card p-6 bg-slate-900 rounded-2xl shadow-xl border border-slate-800">
+                <h2 class="label text-slate-400">The Noisy Channel</h2>
+                <p class="text-slate-500 text-xs mb-8">Click a bit to flip it and observe the Syndrome reaction.</p>
+                
+                <div class="space-y-3">
+                    <template x-for="(bit, i) in receivedVec">
+                        <div @click="toggleError(i)" 
+                             class="flex justify-between items-center p-4 rounded-xl border cursor-pointer transition-all hover:scale-[1.02]"
+                             :class="isError(i) ? 'bg-red-900/20 border-red-500 text-red-400' : 'bg-slate-800 border-slate-700 text-slate-300'">
+                            <span class="text-xs font-bold opacity-40" x-text="'Bit ' + (i+1)"></span>
+                            <span class="text-2xl font-mono font-black" x-text="bit"></span>
+                            <span class="text-[10px] uppercase tracking-widest font-bold" x-text="getLabel(i)"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="card p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                    <h2 class="label">Step 2: Syndrome $\vec{s}$</h2>
+                    <div id="dec-formula" class="math-box mb-6"></div>
+                    
+                    <div class="p-4 rounded-xl text-center font-bold uppercase tracking-tight transition-colors"
+                         :class="syndromeSum === 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+                        <span x-text="syndromeSum === 0 ? '✔ Valid Codeword' : '✘ Error at Position ' + errorPos"></span>
+                    </div>
+                </div>
+
+                <div class="card p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                    <h2 class="label">Parity-Check Matrix $H$</h2>
+                    <div id="h-matrix" class="matrix-container"></div>
+                    <p class="text-[10px] mt-4 text-slate-400 uppercase text-center font-bold">Linear Check: $H \cdot \vec{r}^T = \vec{s}$</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

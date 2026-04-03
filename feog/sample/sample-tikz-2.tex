@@ -1,0 +1,80 @@
+\documentclass[border=15pt]{standalone}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usetikzlibrary{arrows.meta, positioning, shadows, decorations.pathreplacing, calc}
+
+% Color palette matching your previous diagrams
+\definecolor{accent}{HTML}{1F4E79}
+\definecolor{softaccent}{HTML}{EAF2F8}
+\definecolor{softgray}{HTML}{F6F7F9}
+
+\begin{document}
+	
+	\begin{tikzpicture}[
+		>=Stealth,
+		% Style for single input symbols
+		symbol/.style={
+			circle, draw=accent, thick, fill=softgray,
+			minimum size=9mm, inner sep=0pt, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the output codeword arrays
+		block/.style={
+			rectangle, draw=accent, thick, fill=softaccent, rounded corners=2mm,
+			minimum width=3.8cm, minimum height=1.1cm, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the mapping arrows
+		maparrow/.style={
+			|->, thick, accent, shorten >=1.5mm, shorten <=1.5mm
+		},
+		labeltext/.style={
+			font=\small\sffamily, text=black!85
+		},
+		header/.style={
+			font=\bfseries\sffamily, text=accent
+		}
+		]
+		
+		% --- Column Headers ---
+		\node[header] (h1) at (0, 1.2) {Message ($k=1$)};
+		\node[header] (h2) at (5.5, 1.2) {Codeword ($n$)};
+		
+		% --- General Formula Row ---
+		\node[symbol] (x1) at (0, 0) {$x_1$};
+		\node[block] (outX) at (5.5, 0) {$(x_1, \, x_1, \, \dots, \, x_1)$};
+		
+		\draw[maparrow] (x1) -- node[above, labeltext] {$\mathsf{Encode}$} (outX.west);
+		
+		% Brace under the general codeword to show length
+		\draw[thick, accent, decorate, decoration={brace, amplitude=5pt, mirror}]
+		([xshift=4mm, yshift=-2.5mm]outX.south west) -- 
+		([xshift=-4mm, yshift=-2.5mm]outX.south east)
+		node[midway, below=6pt, labeltext] {$n$ copies ($\in \Sigma^n$)};
+		
+		% --- Horizontal Divider ---
+		\draw[dashed, draw=gray!40, thick] (-2.5, -1.6) -- (8, -1.6);
+		
+		% --- Binary Case: Input 0 ---
+		% Using white fill to contrast with the abstract case
+		\node[symbol, fill=white] (b0) at (0, -2.8) {$0$};
+		\node[block, fill=white] (out0) at (5.5, -2.8) {$(0, \, 0, \, \dots, \, 0)$};
+		
+		\draw[maparrow] (b0) -- node[above, labeltext] {$\mapsto$} (out0.west);
+		
+		% --- Binary Case: Input 1 ---
+		\node[symbol, fill=white] (b1) at (0, -4.3) {$1$};
+		\node[block, fill=white] (out1) at (5.5, -4.3) {$(1, \, 1, \, \dots, \, 1)$};
+		
+		\draw[maparrow] (b1) -- node[above, labeltext] {$\mapsto$} (out1.west);
+		
+		% --- Left Brace for Binary Group ---
+		\draw[thick, accent, decorate, decoration={brace, amplitude=5pt}]
+		([yshift=2mm, xshift=-1.5mm]b0.north west) -- 
+		([yshift=-2mm, xshift=-1.5mm]b1.south west)
+		node[midway, left=10pt, labeltext, align=center] {Binary\\Repetition Code\\$\Sigma = \{0, 1\}$};
+		
+	\end{tikzpicture}
+	
+\end{document}

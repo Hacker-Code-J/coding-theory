@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AG-Goppa: Riemann-Roch Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 pb-20" x-data="agLogic()">
+
+    <div class="max-w-6xl mx-auto px-6 py-12">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-serif italic font-bold text-slate-800">Algebraic Geometry Lab</h1>
+            <p class="text-slate-500 uppercase tracking-widest text-xs mt-2 font-bold">Riemann-Roch Codes over Elliptic Curves</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div class="space-y-6">
+                <section class="card p-6 bg-white border rounded-2xl shadow-sm">
+                    <h2 class="label">1. The Curve $\mathcal{X}(\mathbb{F}_7)$</h2>
+                    <div id="curve-eq" class="my-4 text-center text-lg"></div>
+                    <p class="text-[10px] text-slate-400 mb-2 uppercase text-center">Rational Points (Evaluation Points)</p>
+                    <div class="flex flex-wrap gap-1 justify-center">
+                        <template x-for="(p, i) in points" :key="i">
+                            <div class="text-[10px] bg-slate-100 p-1.5 rounded text-center font-mono border border-slate-200" 
+                                 x-text="`P_{${i+1}}(${p.x},${p.y})`"></div>
+                        </template>
+                    </div>
+                </section>
+
+                <section class="card p-6 bg-white border rounded-2xl shadow-sm">
+                    <h2 class="label">2. Message $\vec{m}$ (Basis Coefficients)</h2>
+                    <div class="flex gap-3">
+                        <template x-for="(val, i) in message" :key="i">
+                            <div class="flex-1">
+                                <label class="text-[10px] font-bold text-slate-400 block text-center mb-1" x-text="`m${i}`"></label>
+                                <input type="number" min="0" max="6" :value="message[i]" @input="updateMessage(i, $event.target.value)"
+                                       class="w-full p-2 border-2 border-slate-200 rounded-lg font-mono text-xl text-center focus:border-indigo-500 outline-none transition-colors">
+                            </div>
+                        </template>
+                    </div>
+                </section>
+            </div>
+
+            <div class="card p-8 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-800">
+                <h2 class="label text-slate-500">3. The Channel (Codeword)</h2>
+                <p class="text-xs text-slate-400 mb-6 italic">Click a value to simulate transmission noise.</p>
+                
+                <div class="space-y-2">
+                    <template x-for="(c, i) in codeword" :key="i">
+                        <div @click="toggleError(i)" 
+                             class="flex justify-between items-center p-3 rounded-lg border-2 cursor-pointer transition-all hover:scale-[1.02]"
+                             :class="received[i] !== c ? 'border-red-500 bg-red-950/40 text-red-300' : 'border-slate-700 bg-slate-800 text-slate-200'">
+                            <span class="text-[10px] font-bold tracking-wider" x-text="`P_{${i+1}}`"></span>
+                            <span class="font-mono text-2xl font-black" x-text="received[i]"></span>
+                            <span class="text-[10px] opacity-50" x-text="received[i] !== c ? 'CORRUPT' : 'CLEAN'"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <section class="card p-6 bg-white border rounded-2xl shadow-sm h-full flex flex-col">
+                    <h2 class="label">4. Geometric Decoder</h2>
+                    <p class="text-xs text-slate-500 mb-2 text-center">Dual Space Discrepancy $\Delta(x,y)$</p>
+                    <div id="syndrome-math" class="math-box mb-6 flex-grow flex items-center justify-center min-h-[80px]"></div>
+                    
+                    <div class="p-5 rounded-xl border-2 transition-all"
+                         :class="errorPos === null ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'">
+                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-[10px] font-black uppercase tracking-widest"
+                               :class="errorPos === null ? 'text-green-600' : 'text-red-600'">Diagnostic Status</p>
+                            <span x-show="errorPos !== null" class="relative flex h-3 w-3">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                            </span>
+                        </div>
+                        <p class="text-sm font-medium" 
+                           :class="errorPos === null ? 'text-green-800' : 'text-red-800'"
+                           x-text="errorPos === null ? 'Function space is consistent. No errors.' : `Discrepancy detected. Error located at P_{${errorPos+1}} (${points[errorPos]?.x}, ${points[errorPos]?.y}).`"></p>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <section class="card p-8 bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <h2 class="text-xl font-serif font-bold text-slate-800 border-b pb-4 mb-6">Mathematical Formulation</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div>
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">1. Encoding (Evaluation Map)</h3>
+                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                        An Algebraic Geometry (AG) code is defined by evaluating functions from a Riemann-Roch space $L(G)$ at a set of rational points $D = \{P_1, P_2, \dots, P_n\}$ on a curve $\mathcal{X}$. The codeword $\vec{c}$ is the evaluation map $ev: L(G) \to \mathbb{F}_q^n$.
+                    </p>
+                    <div id="formal-enc-1" class="math-box mb-2"></div>
+                    <div id="formal-enc-2" class="math-box"></div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-red-600 mb-3">2. Decoding (Syndromes & Dual Space)</h3>
+                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                        The received vector $\vec{r} = \vec{c} + \vec{e}$ is checked against the dual code $C_\Omega(D, G)$, which relies on the parity-check matrix $H$ composed of differential forms. The syndrome vector $\vec{s}$ reveals the discrepancy $\Delta(P)$.
+                    </p>
+                    <div id="formal-dec-1" class="math-box mb-2"></div>
+                    <div id="formal-dec-2" class="math-box"></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+\documentclass[11pt,openany]{article}
+
+\input{preamble}
+\input{tcolorbox}
+\input{theorem}
+\input{tikz}
+\input{commands}
+
+
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{bm}
+
+\DeclareMathOperator{\sgn}{sgn}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\Re}{\operatorname*{Re}}
+\renewcommand{\Im}{\operatorname*{Im}}
+\newcommand{\Mat}{\operatorname{Mat}}
+
+\newcommand{\Sym}{\mathrm{Sym}}
+\newcommand{\tr}{\operatorname{tr}}
+\renewcommand{\d}{\mathrm{d}} % For the exterior derivative 'd'
+\newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\spderiv}[3]{\frac{\partial^2 #1}{\partial #2\partial #3}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\restrict}[2]{{#1}\!\mid_{#2}}
+\newcommand{\Syz}{\operatorname{Syz}}
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\code}{\mathcal{C}}
+%\newcommand{\vect}[1]{\bm{#1}}
+\newcommand{\transpose}{^{\mathsf T}}
+
+\setstretch{1.25}
+
+\begin{document}
+\pagenumbering{arabic}
+\begin{center}
+\huge\textbf{Introduction to Coding theory
+}\\
+\vspace{0.5em}
+\large{Ji, Yonghyeon}\\
+\vspace{0.5em}
+\normalsize{\today}\\
+\end{center}
+
+\noindent 
+We cover the following topics in this note.
+\begin{itemize}
+%\item Syzygy
+\item TBA.
+\end{itemize}
+\hrule\vspace{12pt}
+\tableofcontents
+
+\newpage
+\section{Introduction}
+
+\newpage
+\input{linear code}
+
+\newpage
+\appendix
+\section{Exercises}
+
+\begin{enumerate}
+	\item Consider a communication channel, which takes as input a vector of length
+	$n = 5$, and erases exactly one out of the $5$ coefficients, but we do not know
+	which one. Design two linear codes over $\F_3$ that make sure any message of
+	length $k = 4$ can always be received perfectly at the receiver.
+	\begin{proof}[\sol]
+	Consider a communication channel that takes a vector of length $n = 5$ and erases exactly one coefficient. We want to design two linear codes over $\F_3$ that allow a message of length $k = 4$ to be recovered perfectly.
+	
+	\subsection*{Theory}
+	A linear code can correct $e$ erasures if and only if its minimum distance $d$ satisfies $d \ge e + 1$. To correct $e = 1$ erasure, we need a code with $d \ge 2$. In terms of the parity-check matrix $H$, $d \ge 2$ is achieved if and only if no column of $H$ is the zero vector.
+	
+	\subsection*{Code 1: Single Parity-Check Code}
+	The simplest approach is to add a parity digit that is the negative sum of the message digits, ensuring the sum of all components is zero in $\F_3$.
+	
+	\subsubsection*{Generator Matrix $G_1$}
+	For a systematic code where the first 4 symbols are the message, we define:
+	\[
+	G_1 = \begin{pmatrix} 
+		1 & 0 & 0 & 0 & 1 \\ 
+		0 & 1 & 0 & 0 & 1 \\ 
+		0 & 0 & 1 & 0 & 1 \\ 
+		0 & 0 & 0 & 1 & 1 
+	\end{pmatrix}
+	\]
+	
+	\subsubsection*{Parity Check Matrix $H_1$}
+	The parity check matrix $H_1$ satisfies $G_1 H_1^T = 0$. In $\F_3$:
+	\[
+	H_1 = \begin{pmatrix} 2 & 2 & 2 & 2 & 1 \end{pmatrix}
+	\]
+	Note: Any non-zero multiple of this row also works. Since every entry is non-zero, any single erased symbol can be uniquely determined from the remaining four.
+	
+	\subsection*{Code 2: Weighted Parity-Check Code}
+	We can use different coefficients to ensure the code is distinct. We assign weights (1 and 2) to the message symbols.
+	
+	\subsubsection*{Generator Matrix $G_2$}
+	\[
+	G_2 = \begin{pmatrix} 
+		1 & 0 & 0 & 0 & 1 \\ 
+		0 & 1 & 0 & 0 & 2 \\ 
+		0 & 0 & 1 & 0 & 1 \\ 
+		0 & 0 & 0 & 1 & 2 
+	\end{pmatrix}
+	\]
+	
+	\subsubsection*{Parity Check Matrix $H_2$}
+	The resulting check equation for the parity bit $x_5 = x_1 + 2x_2 + x_3 + 2x_4$ gives:
+	\[
+	H_2 = \begin{pmatrix} 2 & 1 & 2 & 1 & 1 \end{pmatrix}
+	\]
+	
+	\subsection*{Conclusion}
+	In both designs, no column of the parity-check matrix is zero. Therefore, $d \ge 2$. If any one symbol $x_i$ is erased, the receiver can solve the single linear equation defined by $H \cdot \mathbf{c}^T = 0$ for the missing variable $x_i$ because the $i$-th coefficient in the parity check is non-zero in $\F_3$.
+	\end{proof}
+\end{enumerate}
+
+\vfill
+\begin{thebibliography}{9}
+	
+	% If you want to cite the whole coding theory collection:
+	\bibitem{oggier-coding-site}
+	F.~Oggier,
+	\emph{Teaching Material: Coding Theory},
+	feog.github.io.
+	Available: \url{https://feog.github.io/}.
+	Accessed: 2026-04-01.
+	
+	% If you want to cite one specific note:
+	\bibitem{oggier-coding-intro}
+	F.~Oggier,
+	\emph{Coding Theory: Introduction}.
+	Available: \url{https://feog.github.io/1-coding.pdf}.
+	Accessed: 2026-04-01.
+	
+	\bibitem{oggier-coding-linear}
+	F.~Oggier,
+	\emph{Coding Theory: Linear Codes}.
+	Available: \url{https://feog.github.io/2-coding.pdf}.
+	Accessed: 2026-04-01.
+	
+\end{thebibliography}
+\end{document}

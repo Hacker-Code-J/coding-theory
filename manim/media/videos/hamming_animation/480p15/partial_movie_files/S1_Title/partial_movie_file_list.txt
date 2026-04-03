@@ -1,0 +1,6 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S1_Title/2340480722_2692096284_223132457.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S1_Title/875235068_1080841770_265156867.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S1_Title/875235068_3486670845_771778422.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S1_Title/875235068_1928391349_230457153.mp4'
+file 'file:/home/hacker-code-j/Desktop/2026/coding-theory/manim/media/videos/hamming_animation/480p15/partial_movie_files/S1_Title/875235068_2101097283_1101682277.mp4'

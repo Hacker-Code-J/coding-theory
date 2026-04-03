@@ -1,0 +1,365 @@
+\section{Linear Code}
+%We cover the following topics in this section.
+%\begin{itemize}
+%	\item Finite fields
+%	\item Linear encodings
+%	\item \([n,k]\) linear codes
+%	\item Generator matrices, systematic form, repetition
+%	\item Parity-check codes, and parity-check matrices.
+%\end{itemize}
+%\hrule\vspace{12pt}
+\definecolor{accent}{HTML}{1F4E79}
+\definecolor{softaccent}{HTML}{EAF2F8}
+\definecolor{softgray}{HTML}{F6F7F9}
+\definecolor{successdraw}{HTML}{27AE60}
+\definecolor{successfill}{HTML}{EAFAF1}
+\definecolor{errordraw}{HTML}{C0392B}
+\definecolor{errorfill}{HTML}{FDEDEC}
+%\begin{center}
+%\begin{tikzpicture}[scale=1,>=Stealth,
+%	block/.style={
+%		draw=accent,
+%		thick,
+%		fill=softaccent,
+%		rounded corners=2mm,
+%		minimum width=3.2cm,
+%		minimum height=1cm,
+%		align=center,
+%		font=\sffamily,
+%		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm} % Subtle depth
+%	},
+%	arrow/.style={
+%		->,
+%		thick,
+%		accent,
+%		rounded corners=2mm % Softens the sharp 90-degree turns
+%	}]
+%	\node[block] (tx) at (0,0) {Data $\vect{x}$};
+%	\node[block] (enc) at (6,0) {Encoder};
+%	\node[block] (chan) at (10,-2) {Channel + noise};
+%	\node[block] (dec) at (6,-4) {Decoder};
+%	\node[block] (rx) at (0,-4) {Data $\hat{\vect{x}}$};
+%	\draw[arrow] (tx) -- node[above] {$\vect{x}\in\F_q^k$} (enc);
+%	\draw[arrow] (enc) -| node[above] {$\vect{c}=\vect{x}G\in\F_q^n$} (chan);
+%	\draw[arrow] (chan) |- node[below] {$\vect{y}=\vect{c}+\vect{e}\in\F_q^n$} (dec);
+%	\draw[arrow] (dec) -- (rx);
+%\end{tikzpicture}
+%\end{center}
+\begin{center}
+\begin{tikzpicture}[scale=1,>=Stealth,
+	block/.style={
+		draw=accent,
+		thick,
+		fill=softaccent,
+		rounded corners=2mm,
+		minimum width=3.2cm,
+		minimum height=1cm,
+		align=center,
+		font=\sffamily,
+		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+	},
+	decision/.style={
+		diamond,
+		aspect=1.5, % Stretches the diamond horizontally to fit text
+		draw=accent,
+		thick,
+		fill=softgray,
+		align=center,
+		font=\sffamily\small,
+		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+	},
+	successblock/.style={
+		block,
+		draw=successdraw,
+		fill=successfill,
+		text=black!85
+	},
+	errorblock/.style={
+		block,
+		draw=errordraw,
+		fill=errorfill,
+		text=black!85
+	},
+	arrow/.style={
+		->,
+		thick,
+		accent,
+		rounded corners=2mm 
+	},
+	dashedarrow/.style={
+		->,
+		thick,
+		accent,
+		dashed, % Distinguishes evaluation logic from data flow
+		rounded corners=2mm 
+	}]
+	
+	% --- Main Pipeline Nodes ---
+	\node[block] (tx) at (0,0) {Data $\vect{x}$};
+	\node[block] (enc) at (6,0) {Encoder};
+	\node[block] (chan) at (10,-1.5) {Channel + noise};
+	\node[block] (dec) at (6,-3) {Decoder};
+	\node[block] (rx) at (0,-3) {Data $\hat{\vect{x}}$};
+	
+	% --- Evaluation Nodes ---
+	\node[decision] (comp) at (0,-6) {Is $\hat{\vect{x}} = \vect{x}?$};
+	\node[successblock] (succ) at (6,-5) {\textbf{Successful Decoding}\\$\hat{\vect{x}} = \vect{x}$};
+	\node[errorblock] (err) at (6,-7) {\textbf{Decoding Error}\\$\hat{\vect{x}} \neq \vect{x}$};
+	
+	% --- Main Pipeline Arrows ---
+	\draw[arrow] (tx) -- node[above, font=\small] {$\vect{x}\in\F_q^k$} (enc);
+	\draw[arrow] (enc) -| node[above right, font=\small, pos=0.25] {$\vect{c}=\vect{x}G\in\F_q^n$} (chan);
+	\draw[arrow] (chan) |- node[below right, font=\small, pos=0.75] {$\vect{y}=\vect{c}+\vect{e}\in\F_q^n$} (dec);
+	\draw[arrow] (dec) -- (rx);
+	
+	% --- Evaluation Arrows ---
+	% Route from estimated data down to comparison
+	\draw[dashedarrow] (rx.south) -- node[right, font=\small] {Estimate} (comp.north);
+	
+	% Route from original data around the left side down to comparison
+	\draw[dashedarrow] (tx.west) -- node[above, font=\small] {Original} ++(-1.5,0) |- (comp.west);
+	
+	% Branching arrows from comparison to success/error
+	\draw[arrow] (comp.east) -- ++(1.5,0) |- (succ.west);
+	\draw[arrow] (comp.east) -- ++(1.5,0) |- (err.west);
+	
+\end{tikzpicture}
+\end{center}
+\noindent
+A generic communication model has the form
+\[
+\vect{x}=(x_1,\dots,x_k)
+\xrightarrow{\text{encoder}}
+\underbrace{\vect{c}=(c_1,\dots,c_n)}_{\text{codeword}\; (n\geq k)}
+\xrightarrow{\text{noise }\vect e}
+\vect{y}=\vect{c}+\vect{e}
+\xrightarrow{\text{decoder}}
+\hat{\vect{x}}=(\hat x_1,\dots,\hat x_k).
+\]
+
+\newpage
+
+\begin{example}[Repetition code]
+Let \(\Sigma\) be an alphabet. An \emph{encoding} is a map
+\[
+\fullfunction{\mathsf{Encode}}{\Sigma^k}{\Sigma^n}{(x_1,\dots,x_k)}{(c_1,\dots,c_n)}
+\] with \(n\ge k\). %The output vector \(\vect c=(c_1,\dots,c_n)\) is the transmitted codeword.
+When \(k=1\), a very simple encoding repeats the same symbol
+%\[
+%(x_1)\longmapsto (x_1,x_1,\dots,x_1)\in \Sigma^n.
+%\]
+\begin{center}
+	\begin{tikzpicture}[
+		>=Stealth,
+		% Style for single input symbols
+		symbol/.style={
+			circle, draw=accent, thick, fill=softgray,
+			minimum size=9mm, inner sep=0pt, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the output codeword arrays
+		block/.style={
+			rectangle, draw=accent, thick, fill=softaccent, rounded corners=2mm,
+			minimum width=3.8cm, minimum height=1.1cm, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the mapping arrows
+		maparrow/.style={
+			|->, thick, accent, shorten >=1.5mm, shorten <=1.5mm
+		},
+		labeltext/.style={
+			font=\small\sffamily, text=black!85
+		}
+		]
+		% --- General Formula Row ---
+		\node[symbol] (x1) at (0, 0) {$x_1$};
+		\node[block] (outX) at (5.5, 0) {$(x_1, \, x_1, \, \dots, \, x_1)$};
+		
+		\draw[maparrow] (x1) -- node[above, labeltext] {$\mathsf{Encode}$} (outX.west);
+		
+		% Brace under the general codeword to show length
+		\draw[thick, accent, decorate, decoration={brace, amplitude=5pt, mirror}]
+		([xshift=4mm, yshift=-2.5mm]outX.south west) -- 
+		([xshift=-4mm, yshift=-2.5mm]outX.south east)
+		node[midway, below=6pt, labeltext] {$n$ copies ($\in \Sigma^n$)};
+	\end{tikzpicture}
+\end{center}
+%If \(\Sigma=\{0,1\}\) then
+%\[
+%(0)\mapsto (0,0,\dots,0),
+%\qquad
+%(1)\mapsto (1,1,\dots,1).
+%\]
+\begin{center}
+	\begin{tikzpicture}[
+		>=Stealth,
+		% Style for single input symbols
+		symbol/.style={
+			circle, draw=accent, thick, fill=softgray,
+			minimum size=9mm, inner sep=0pt, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the output codeword arrays
+		block/.style={
+			rectangle, draw=accent, thick, fill=softaccent, rounded corners=2mm,
+			minimum width=3.8cm, minimum height=1.1cm, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the mapping arrows
+		maparrow/.style={
+			|->, thick, accent, shorten >=1.5mm, shorten <=1.5mm
+		},
+		labeltext/.style={
+			font=\small\sffamily, text=black!85
+		},
+		header/.style={
+			font=\bfseries\sffamily, text=accent
+		}
+		]
+		% --- Binary Case: Input 0 ---
+		% Using white fill to contrast with the abstract case
+		\node[symbol, fill=white] (b0) at (0, -2.8) {$0$};
+		\node[block, fill=white] (out0) at (5.5, -2.8) {$(0, \, 0, \, \dots, \, 0)$};
+		
+		\draw[maparrow] (b0) -- (out0.west);
+		
+		% --- Binary Case: Input 1 ---
+		\node[symbol, fill=white] (b1) at (0, -4.3) {$1$};
+		\node[block, fill=white] (out1) at (5.5, -4.3) {$(1, \, 1, \, \dots, \, 1)$};
+		
+		\draw[maparrow] (b1) -- (out1.west);
+	\end{tikzpicture}
+\end{center}
+This is called the \emph{repetition code}. If one symbol is changed during transmission, we can still recover the original message by \emph{majority vote}. For instance,
+\[
+(0,0,0)\rightsquigarrow (0,1,0),
+\qquad
+(1,1,1)\rightsquigarrow (1,0,1).
+\]
+Since \(0\) appears most often in \((0,1,0)\), we decode it as \(0\), and since
+\(1\) appears most often in \((1,0,1)\), we decode it as \(1\).
+%More generally, if \(n\) is odd, then the repetition code can correct up to
+%\[
+%\left\lfloor \frac{n-1}{2}\right\rfloor
+%\]
+%errors, because the original symbol is still the majority symbol.
+
+\medskip
+
+\begin{center}
+\definecolor{success}{HTML}{27AE60}
+\begin{tikzpicture}[
+	>=Stealth,
+	block/.style={
+		rectangle, draw=accent, thick, fill=softaccent, rounded corners=2mm,
+		minimum width=2.2cm, minimum height=1cm, align=center, font=\large,
+		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+	},
+	decision/.style={
+		rectangle, draw=accent, thick, fill=softgray, rounded corners=2mm,
+		minimum width=3.2cm, minimum height=1.1cm, align=center, font=\sffamily\small,
+		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+	},
+	result/.style={
+		circle, draw=success, thick, fill=success!10, 
+		minimum size=10mm, inner sep=0pt, align=center, font=\Large\bfseries, text=success,
+		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+	},
+	arrow/.style={
+		->, thick, accent
+	},
+	noisearrow/.style={
+		->, thick, errordraw, 
+		% The snake decoration mimics the \rightsquigarrow command
+		decorate, decoration={snake, amplitude=0.4mm, segment length=3mm, post length=1.5mm}
+	},
+	labeltext/.style={font=\small\sffamily, text=black!85},
+	header/.style={font=\bfseries\sffamily, text=accent}
+	]
+	
+	% --- Column Headers ---
+	\node[header] at (0, 1.5) {Original Data};
+	\node[header] at (4, 1.5) {Received};
+	\node[header] at (8.5, 1.5) {Decoder};
+	\node[header] at (12.8, 1.5) {Recovered Data};
+	
+	\node[block] (tx1) at (0, 0) {$0$};
+	
+	% The corrupted bit is highlighted in bold red
+	\node[block] (rx1) at (4, 0) {$(0, \textcolor{errordraw}{\mathbf{1}}, 0)$};
+	
+	\node[decision] (vote1) at (8.5, 0) {Two 0s, One 1\\[1mm] (\textbf{0 is the majority})};
+	\node[result] (out1) at (12.8, 0) {0};
+	
+	\draw[noisearrow] (tx1) -- node[above, font=\small\sffamily, text=errordraw] {error} (rx1);
+	\draw[arrow] (rx1) -- node[above, labeltext] {} (vote1);
+	\draw[arrow] (vote1) -- (out1);
+	
+	% --- Horizontal Divider ---
+%	\draw[dashed, draw=gray!40, thick] (-1.5, -1.6) -- (14, -1.6);
+	
+%	% ==========================================
+	% EXAMPLE 2: Sending 1s
+	% ==========================================
+	\node[block] (tx2) at (0, -3.2) {$1$};
+	
+	% The corrupted bit is highlighted in bold red
+	\node[block] (rx2) at (4, -3.2) {$(1, \textcolor{errordraw}{\mathbf{0}}, 1)$};
+	
+	\node[decision] (vote2) at (8.5, -3.2) {Two 1s, One 0\\[1mm] (\textbf{1 is the majority})};
+	\node[result] (out2) at (12.8, -3.2) {1};
+	
+	\draw[noisearrow] (tx2) -- node[above, font=\small\sffamily, text=errordraw] {error} (rx2);
+	\draw[arrow] (rx2) -- node[above, labeltext] {} (vote2);
+	\draw[arrow] (vote2) -- (out2);
+\end{tikzpicture}
+\end{center}
+\end{example}
+
+\newpage
+\subsection{Linear Codes}
+\defbox[Linear Encoding]{\begin{definition}
+A \textbf{linear encoding} over \(\F_q\) is a linear map
+\[
+\F_q^k \longrightarrow \F_q^n,
+\qquad
+\vect{x}\longmapsto \vect{c}.
+\]
+\end{definition}}
+\begin{remark}
+Since the map is linear,
+\begin{itemize}
+	\item the sum of two codewords is again a codeword;
+	\item any scalar multiple of a codeword is again a codeword.
+\end{itemize}
+\end{remark}
+
+\medskip
+
+\defbox[Linear Code]{\begin{definition}
+	A linear subspace \(\code\subseteq \F_q^n\) is called a \textbf{linear code}.
+\end{definition}}
+
+
+If \(\code\) is a linear code, then automatically:
+\begin{itemize}
+	\item the zero codeword \(\vect 0\) belongs to \(\code\);
+	\item whenever \(\vect c\in \code\), also \(-\vect c\in \code\);
+	\item every codeword is a linear combination of basis vectors of \(\code\).
+\end{itemize}
+
+\begin{proposition}
+	If \(\code\) is an \((n,k)\) linear code over \(\F_q\), then
+	\[
+	|\code|=q^k.
+	\]
+\end{proposition}
+
+\begin{proof}
+	Choose a basis \(\vect b_1,\dots,\vect b_k\) of \(\code\). Every codeword can be written uniquely as
+	\[
+	x_1\vect b_1+\cdots+x_k\vect b_k,
+	\qquad x_i\in \F_q.
+	\]
+	Each coefficient \(x_i\) has \(q\) choices, and there are \(k\) independent coefficients. Therefore the number of codewords is \(q^k\).
+\end{proof}

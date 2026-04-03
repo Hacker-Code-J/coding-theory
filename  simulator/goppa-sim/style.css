@@ -1,0 +1,37 @@
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.label {
+    @apply text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 block border-b border-slate-100 pb-2;
+}
+
+.math-box {
+    @apply py-4 px-3 bg-slate-50 rounded-xl text-center overflow-x-auto border border-slate-200;
+}
+
+.card {
+    @apply transition-transform duration-300;
+}
+
+/* Hide number input spinners for a cleaner UI */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}

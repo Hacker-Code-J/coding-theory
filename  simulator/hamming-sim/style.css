@@ -1,0 +1,24 @@
+.label {
+    @apply text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-4;
+}
+
+.math-box {
+    @apply py-4 px-2 bg-slate-50 rounded-lg text-center overflow-x-auto;
+}
+
+.matrix-container {
+    @apply flex justify-center py-4 bg-slate-50 rounded-lg border border-slate-100 scale-90;
+}
+
+.card {
+    @apply transition-transform duration-300;
+}
+
+/* Custom scrollbar for small math boxes */
+.math-box::-webkit-scrollbar {
+    height: 4px;
+}
+.math-box::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}

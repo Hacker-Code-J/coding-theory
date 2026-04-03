@@ -1,0 +1,1975 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{DejaVu Serif}
+\setmonofont{DejaVu Sans Mono}
+\setmathfont{DejaVu Math TeX Gyre}
+\usepackage{amsmath,mathtools}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+\usepackage[most]{tcolorbox}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black}
+\setlength{\parindent}{0pt}
+\newtcolorbox{exercisebox}{breakable,colback=blue!2,colframe=blue!35!black,boxrule=0.6pt,arc=1.5mm,left=2mm,right=2mm,top=1mm,bottom=1mm}
+\newtcolorbox{solutionbox}{breakable,colback=green!2,colframe=green!35!black,boxrule=0.6pt,arc=1.5mm,left=2mm,right=2mm,top=1mm,bottom=1mm}
+\title{Solutions for Homeworks\\\large Best-effort LaTeX transcription from the uploaded PDF}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section*{Exercise 1}\addcontentsline{toc}{section}{Exercise 1}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Consider a communication channel, which takes as input a vector of length
+n = 5, and erases exactly one out of the 5 coefficients, but we do not know
+which one. Design two linear codes over F3 that make sure any message of
+length k = 4 can always be received perfectly at the receiver.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+Since k = 4 and n = 5, we will add one coefficient, a linear combination of the 4 data symbols x1 , x2 , x3 , x4 . Since we are over F3 , non-zero elements are 1 and 2, so we could choose a1 x1 + a2 x2 + a3 x4 + a4 x4 , with ai being 1 or 2. It is important that all 4 data symbols are present, because if the erasure affects any of the xi , a copy must be contained in the 5th coefficient.
+
+\end{solutionbox}
+\section*{Exercise 2}\addcontentsline{toc}{section}{Exercise 2}
+\begin{exercisebox}
+Consider G to be the generator matrix of a linear code over F5 :
+
+\begin{Verbatim}[fontsize=\small]
+1 2 4 0 1
+G =  2 2 0 2 2
+1 0 0 3 1
+Write G in systematic form.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+Basis vectors are rows of G. We are allowed to do a change of basis, that is do linear operations on the rows of G. We start by obtaining zeroes in the first column (this is the first step of Gaussian elimination), and then multiply the second row by 2 to have a 1 on the diagonal:
+
+\begin{Verbatim}[fontsize=\small]
+1 2
+4 0 1
+1 2
+4 0 1
+G →  0 -2 -3 2 0  →  0 1 -1 4 0
+0 -2 -4 3 0
+0 -2 -4 3 0
+Then use the second row to have zeroes on the first and third rows, and multiply
+the last row by -1 to have a 1 on the diagonal:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 1 -3 1
+1 0 1 -3 1
+G →  0 1 -1 4 0  →  0 1 -1 4 0  .
+0 0 -1 1 0
+0 0 1 -1 0
+Finally the last row is used to obtain the systematic form:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 0 -2 1
+1 0 0 3 1
+G →  0 1 0 3 0  →  0 1 0 3 0  .
+0 0 1 -1 0
+0 0 1 4 0
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 3}\addcontentsline{toc}{section}{Exercise 3}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Consider G to be the generator matrix of a linear code C over Fq :
+
+
+1 0 1
+G=
+0 1 1
+1. For q = 2, give the cardinality of C and list all codewords.
+2. For q = 4, give the cardinality of C and list all codewords.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. For q = 2, |C| = 22 and the codewords are (0, 0, 0), (1, 0, 1),
+(0, 1, 1), (1, 1, 0).
+2. For q = 4, |C| = 42 and for ω such that ω 2 = ω + 1, the codewords are
+(0, 0, 0), (0, 1, 1), (0, ω, ω), (0, ω 2 , ω 2 ), (1, 0, 1), (1, 1, 0), (1, ω, ω 2 ), (1, ω 2 , ω),
+(ω, 0, ω), (ω, 1, ω 2 ), (ω, ω, 0), (ω, ω 2 , 1), (ω 2 , 0, ω 2 ), (ω 2 , 1, ω), (ω 2 , ω, 1),
+(ω 2 , ω 2 , 0).
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 4}\addcontentsline{toc}{section}{Exercise 4}
+\begin{exercisebox}
+Compute a parity check matrix in systematic form for the code given by the following generator matrix:
+
+\begin{Verbatim}[fontsize=\small]
+1 0 0 0 0 1 1 1
+ 0 1 0 0 1 0 1 1
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+0 0 1 0 1 1 0 1
+0 0 0 1 1 1 1 0
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+Since the field is not specified, the parity check matrix is:
+
+\begin{Verbatim}[fontsize=\small]
+0 -1 -1 -1 1 0 0 0
+ -1 0 -1 -1 0 1 0 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+-1 -1 0 -1 0 0 1 0
+-1 -1 -1 0 0 0 0 1
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 5}\addcontentsline{toc}{section}{Exercise 5}
+\begin{exercisebox}
+Consider the linear (8, 4) code over F2 given by the generator matrix:
+
+\begin{Verbatim}[fontsize=\small]
+1 0 0 0 0 1 1 1
+  0 1 0 0 1 0 1 1
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+G=
+  0 0 1 0 1 1 0 1  .
+0 0 0 1 1 1 1 0
+Decide whether this code is self-orthogonal and/or self-dual. Does your answer
+change if you replace F2 by Fp for p an odd prime?
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+The parity check matrix of this code is
+
+\begin{Verbatim}[fontsize=\small]
+0 1 1 1 1 0 0 0
+ 1 0 1 1 0 1 0 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+H=
+ 1 1 0 1 0 0 1 0
+1 1 1 0 0 0 0 1
+\end{Verbatim}
+Flip row 1 and row 2 and then add (the new) row 1 to row 3 and 4:
+
+\begin{Verbatim}[fontsize=\small]
+1 0 1 1 0 1 0 0
+ 0 1 1 1 1 0 0 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+H→
+ 0 1 1 0 0 1 1 0
+0 1 0 1 0 1 0 1
+Then add row 2 to rows 3 and 4, and permute the newly obtained rows 3 and
+4:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 1 1 0 1 0 0
+ 0 1 1 1 1 0 0 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+H→
+ 0 0 1 0 1 1 0 1
+0 0 0 1 1 1 1 0
+and we already see that the last 2 rows are the same as that of G. We add row
+3 to row 1 and row 2, and then we add row 4 to the newly obtained row 1 and
+row 2:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 0 0 0 1 1 1
+ 0 1 0 0 1 0 1 1
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+H→
+ 0 0 1 0 1 1 0 1  .
+0 0 0 1 1 1 1 0
+This shows that the code is self-dual and thus self-orthogonal in particular.
+Note that this works over F2 , but not necessarily otherwise. For example,
+take the codeword (1, 0, 0, 0, 0, 1, 1, 1). Then the inner product of this codeword
+with itself is 4. This is also 0 modulo 2, but this is not 0 modulo another prime.
+This shows that the code is not included into its dual, and in thus not self-dual
+over Fp for p an odd prime.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 6}\addcontentsline{toc}{section}{Exercise 6}
+\begin{exercisebox}
+Show that if a code is self-dual, then its length n must be even, and its dimension must be n/2.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+A linear (n, k) code C has dimension k, its dual C ⊥ has dimension
+n - k. If we want C = C ⊥ , we need n - k = k, that is n = 2k and therefore n is
+even. That n = 2k also tells us that k = n/2.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 7 (*)}\addcontentsline{toc}{section}{Exercise 7 (*)}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+1. Consider the code C1 over F3 given by the following parity check matrix:
+
+
+2 2 1 0
+H1 =
+.
+0 1 1 2
+Is the code self-orthogonal? self-dual? Justify your answer.
+2. Consider the code C2 given by the following generator matrix over F4 :
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 0 1 w w
+G2 =  0 1 0 w 1 w  .
+0 0 1 w w 1
+Is this code self-orthogonal? self-dual? Justify your answer.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. Since we have a parity check matrix, we first put it into a
+familiar form, namely add minus row 1 to row 2 and then multiply row 2
+by 2 to get
+
+
+
+
+2 1 0
+2 2 1 0
+H1 →
+→
+.
+-2 -1 0 2
+-1 1 0 1
+Then a generator matrix is
+
+G1 =
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+
+.
+-1
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+From H1 , we can put it in systematic form by adding row 2 to row 1 and
+then multiply row 1 by 2:
+
+
+
+
+2 0 2 2
+1 0 1 1
+H1 →
+→
+.
+0 1 1 2
+0 1 1 2
+So the code is self-dual and so in particular it is self-orthogonal (it is the
+tetracode).
+2. Consider the code C2 given by the following generator matrix over F4 :
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 0 1 w w
+G2 =  0 1 0 w 1 w  .
+0 0 1 w w 1
+This code cannot be self-orthogonal since the inner product of row 1 and
+row 2 is w2 which is not 0. Thus the code is not self-dual either.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 8}\addcontentsline{toc}{section}{Exercise 8}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+For both
+1. the (n, n - 1) single parity check code,
+2. and the (4, 2) tetracode over F3 ,
+compute their minimum Hamming distance based on their parity check matrix.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. For the (n, n - 1) single parity check code, its parity check
+matrix is the matrix [1, . . . , 1] (it is the dual of the repetition code, whose
+generator matrix is [1, . . . , 1]). We need d linearly dependent columns
+(they are all linearly dependent), but such that no d - 1 columns are
+linearly dependent. So d = 2, which is consistent with what we know.
+2. For the (4, 2) tetracode over F3 , it is self-dual so its systematic parity
+check matrix is the same as its generator matrix, namely
+
+
+1 0 1 1
+.
+0 1 1 -1
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+We need d linearly dependent columns, we have that the first 3 columns
+for example are linearly dependent, and any two columns are linearly
+independent (for two vectors to be linearly dependent, we need λ1 x1 +
+λ2 x2 = 0, for λ1 , λ2 non-zero, that is x1 and x2 are multiples of each
+others). So d = 3, which is also consistent with what we know.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 9 (*)}\addcontentsline{toc}{section}{Exercise 9 (*)}
+\begin{exercisebox}
+For x ∈ Fn3 , prove that wt(x) ≡ x · xT (mod 3).
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+A vector x ∈ Fn3 has non-coefficients which are either 1 or 2, thus x · x will contain 02 ≡ 0, 12 ≡ 1 and 22 ≡ 1 so it counts 1 for every non-zero coefficients, which is the weight modulo 3.
+
+\end{solutionbox}
+\section*{Exercise 10}\addcontentsline{toc}{section}{Exercise 10}
+\begin{exercisebox}
+Consider the (4, 2) tetracode C over F3 . For every codework c of C, construct a Hamming sphere St (c) of radius t such that no sphere intersects.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+First we recall that the tetracode is given by
+C = {(x1 , x2 , x1 + x2 , x1 - x2 ), x1 , x2 ∈ F3 }
+and that by definition a Hamming sphere St (c) is
+St (c) = {v ∈ F43 , dH (c, v) ≤ t}.
+We know from a result seen in class that if the minimum Hamming distance
+dH (C) is d, then spheres of radius t = b d-1
+2 c around distinct codewords are
+disjoint, so we will use here t = 1 (make sure you remember why dH (C) = 3).
+We next have to compute S1 (c) for c ∈ C, in the computations below, a1 , a2 , a3
+are always element of F3 :
+S1 ((0, 0, 0, 0))
+\end{Verbatim}
+= \{(0, 0, 0, 0), (a1 , 0, 0, 0), (0, a1 , 0, 0), (0, 0, a1 , 0), (0, 0, 0, a1 ), a1 6= 0\}
+
+S1 ((1, 0, 1, 1))
+
+= \{(1, 0, 1, 1), (a1 , 0, 1, 1), (1, a2 , 1, 1), (1, 0, a1 , 1), (1, 0, 1, a1 ), a1 6= 1, a2 6= 0\}
+
+S1 ((2, 0, 2, 2))
+
+= \{(2, 0, 2, 2), (a1 , 0, 2, 2), (2, a2 , 2, 2), (2, 0, a1 , 2), (2, 0, 2, a1 ), a1 6= 2, a2 6= 0\}
+
+S1 ((0, 1, 1, 2))
+
+= \{(0, 1, 1, 2), (a1 , 1, 1, 2), (0, a2 , 1, 2), (0, 1, a2 , 2), (0, 1, 1, a3 ), a1 6= 0, a2 6= 1, a3 6= 2\}
+
+S1 ((1, 1, 2, 0))
+
+= \{(1, 1, 2, 0), (a1 , 1, 2, 0), (1, a1 , 2, 0), (1, 1, a2 , 0), (1, 1, 2, a3 ), a1 6= 1, a2 6= 2, a3 6= 0\}
+
+S1 ((2, 1, 0, 1))
+
+=
+
+S1 ((0, 2, 2, 1))
+
+= \{(0, 2, 2, 1), (a1 , 2, 2, 1), (0, a2 , 2, 1), (0, 2, a2 , 1), (0, 2, 2, a3 ), a1 6= 0, a2 6= 2, a3 6= 1\}
+
+S1 ((1, 2, 0, 2))
+
+= \{(1, 2, 0, 2), (a1 , 2, 0, 2), (1, a2 , 0, 2), (1, 2, a3 , 2), (1, 2, 0, a2 ), a1 6= 1, a2 6= 2, a3 6= 3\}
+
+S1 ((2, 2, 1, 0))
+
+= \{(2, 2, 1, 0), (a1 , 2, 1, 0), (2, a1 , 1, 0), (2, 2, a2 , 0), (2, 2, 1, a3 ), a1 6= 2, a2 6= 1, a3 6= 0\}
+
+\{(2, 1, 0, 1), (a1 , 1, 0, 1), (2, a2 , 0, 1), (2, 1, a3 , 1), (2, 1, 0, a2 ), a1 6= 2, a2 6= 1, a3 6= 0\}
+
+\end{solutionbox}
+\section*{Exercise 11 (*)}\addcontentsline{toc}{section}{Exercise 11 (*)}
+\begin{exercisebox}
+Let C be the code over F2 given by the generator matrix
+
+\begin{Verbatim}[fontsize=\small]
+1 1 0 0 0 0
+G =  0 1 1 0 0 0  .
+1 1 1 1 1 1
+\end{Verbatim}
+Do the codewords of C whose weights are divisible by 4 form a linear code? Justify your answer.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+It is not a linear code. Take for example the sum of row 1 and row 3, given by (0, 0, 1, 1, 1, 1), and the sum of row 2 and row 3, given by (1, 0, 0, 1, 1, 1). The sum of these two codewords is (0, 0, 1, 1, 1, 1) + (1, 0, 0, 1, 1, 1) = (1, 0, 1, 0, 0, 0). This codeword has weight 2, which is not divisible by 4, therefore the code cannot be linear.
+
+\end{solutionbox}
+\section*{Exercise 12}\addcontentsline{toc}{section}{Exercise 12}
+\begin{exercisebox}
+[Exercise 66 from Huffman and Pless] The weight of a coset is the smallest weight of a vector in the coset. Find a non-zero linear (4, k) code over F2 of minimum Hamming distance d such that all cosets contain a unique vector whose weight is the coset weight, and some coset has weight greater than t = b d-1 2 c.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+We consider a code C which is of length n = 4 over F2 , which
+means the code comprises codewords of the form (x1 , x2 , x3 , x4 ) ∈ F42 .
+• The code itself is a coset, and it necessarily contains (0, 0, 0, 0) since the
+code is linear. This codeword has Hamming weight 0, therefore the weight
+of this coset is 0 (and there is no other vector in it with weight 0).
+• We know cosets partition F42 , so every vector must appear in one coset.
+In particular, the vectors (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0) and (0, 0, 0, 1)
+(which are all vectors of weight 1) must belong to some coset.
+• As a consequence that cosets partition F42 , |F42 | = 24 = |C|·(number of
+cosets) = 2k 2n-k . So the number of cosets is a power of 2: it cannot be 1
+(this is when n = k), so it could be 2, 4 or 8 (it cannot be 16, this is when
+k = 0).
+Suppose we have 4 cosets, then we also have 4 vectors of weight 1, and we
+cannot put two vectors of weight 1 in the same coset, since this would violate
+the rule that we want only one vector of smallest weight, except if the coset is
+the code itself, since then we have a vector of weight 0 (which cannot happen
+with other cosets). So we could try to build a code that has 4 cosets, each coset
+contains 4 codewords, and the coset which is the code will contain one vector
+of weight 1, say (1, 0, 0, 0).
+coset 1 = C
+(0, 0, 0, 0)
+(1, 0, 0, 0)
+\end{Verbatim}
+coset 2 (0, 1, 0, 0)
+
+coset 3 (0, 0, 1, 0)
+
+coset 4 (0, 0, 0, 1)
+
+\begin{Verbatim}[fontsize=\small]
+Since we want the code to be a linear code, we must have k = 2, therefore
+we will have codewords of the form (x1 , x2 , x3 , x4 ) with (x1 , x2 ) ∈ F22 . Then
+x3 gives 0 both with (x1 , x2 ) = (0, 0), (1, 0), so x3 = x2 . But by the same
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+reasoning, we should have x4 = x2 . It is a strange code which basically sends
+two information bits, yet protects only the second one, but as per our definition
+of code, it is a subspace of dimension 2, so it is valid:
+coset 1 = C
+(0, 0, 0, 0)
+(1, 0, 0, 0)
+(0, 1, 1, 1)
+(1, 1, 1, 1)
+\end{Verbatim}
+coset 2 (0, 1, 0, 0)
+
+coset 3 (0, 0, 1, 0)
+
+coset 4 (0, 0, 0, 1)
+
+\begin{Verbatim}[fontsize=\small]
+coset 3
+(0, 0, 1, 0)
+(1, 0, 1, 0)
+(0, 1, 0, 1)
+(1, 1, 0, 1)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+coset 4
+(0, 0, 0, 1)
+(1, 0, 0, 1)
+(0, 1, 1, 0)
+(1, 1, 1, 0)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+So let us now compute the cosets.
+coset 1 = C
+(0, 0, 0, 0)
+(1, 0, 0, 0)
+(0, 1, 1, 1)
+(1, 1, 1, 1)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+coset 2
+(0, 1, 0, 0)
+(1, 1, 0, 0)
+(0, 0, 1, 1)
+(1, 0, 1, 1)
+\end{Verbatim}
+If we look at the weight of each coset, coset 1 has weight 0, all the others have weight 1, and they also have a single vector of smallest weight, as requested. We are left to check the condition that some coset has weight greater than b d-1 2 c. Here d = 1 (namely, the Hamming distance is 1), so t = 0 and indeed we have 3 cosets of weight 1.
+
+\end{solutionbox}
+\section*{Exercise 13 (*)}\addcontentsline{toc}{section}{Exercise 13 (*)}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+For C1 , C2 two linear codes of length n over Fq , consider the set
+C1 + C2 = {c1 + c2 , c1 ∈ C1 , c2 ∈ C2 }.
+Show that (C1 + C2 )⊥ = C1⊥ ∩ C2⊥ .
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+By definition, (C1 + C2 )⊥ = {y ∈ Fnq , y · c = 0 for all c ∈
+C1 + C2 } = {y ∈ Fnq , y · c1 + y · c2 = 0 for all c1 ∈ C1 , c2 ∈ C2 }. Since this holds
+for all c1 , c2 and both belong to linear codes, they can take the value 0, and so
+y must be both orthogonal to c1 and to c2 .
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 14}\addcontentsline{toc}{section}{Exercise 14}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Suppose the (4, 2) tetracode over F3 was used and the following vectors were
+received:
+1. (1, 1, 1, 1)
+2. (1, -1, 0, -1)
+Decode these vectors.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+The tetracode is self-dual, so its generator matrix in systematic
+form is also a parity check matrix:
+
+
+1 0 1 1
+H=
+.
+0 1 1 -1
+\end{Verbatim}
+Note that 
+
+\begin{Verbatim}[fontsize=\small]
+ 
+ 
+ 
+ 
+ x1
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1
+ x2   = x1 1 + x2 0 + x3 1 + x4 1 .
+-1
+-1  x3
+x4
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+When computing the table with syndromes HxT and coset leaders, we first
+consider x with weight 0 or less, and thus we know that computing HxT will
+give the column i of H if x has a one in coordinate i and zeros elsewhere, and
+similarly it will give twice the column i of H if x has a two in coordinate i and
+zeros elsewhere. Also since |F43 | = 34 = 32 32 , there are 9 cosets.
+HxT
+coset leader
+(0, 0) H(0, 0, 0, 0)T
+(0, 0, 0, 0)
+(1, 0) H(1, 0, 0, 0)T
+(1, 0, 0, 0)
+(0, 1) H(0, 1, 0, 0)T
+(0, 1, 0, 0)
+(1, 1) H(0, 0, 1, 0)T
+(0, 0, 1, 0)
+(1, 2) H(0, 0, 0, 1)T
+(0, 0, 0, 1)
+(2, 0) H(2, 0, 0, 0)T
+(2, 0, 0, 0)
+(0, 2) H(0, 2, 0, 0)T
+(0, 2, 0, 0)
+(2, 2) H(0, 0, 2, 0)T
+(0, 0, 2, 0)
+(2, 1) H(0, 0, 0, 2)T
+(0, 0, 0, 2)
+For the received vectors (1, 1, 1, 1) and (1, -1, 0, -1), we compute their respective syndromes:
+H(1, 1, 1, 1)T = (0, 1), H(1, -1, 0, -1)T = (0, 0).
+Then we decode them as:
+y = (1, 1, 1, 1) → ĉ = (1, 1, 1, 1) - (0, 1, 0, 0) = (1, 0, 1, 1),
+this would mean recovering from one error, and
+y = (1, -1, 0, -1) → ĉ = (1, -1, 0, -1) - (0, 0, 0, 0) = (1, -1, 0, -1),
+that is there was no error (or there were enough errors to send one codeword to
+another).
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 15 (*)}\addcontentsline{toc}{section}{Exercise 15 (*)}
+\begin{exercisebox}
+Let C be the code over F2 given by the generator matrix
+
+\begin{Verbatim}[fontsize=\small]
+1 0 0 0 1 0 1
+ 0 1 0 0 1 1 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+G=
+ 0 0 1 0 0 1 1  .
+0 0 0 1 1 1 1
+1. How many cosets of C are there?
+2. What is the minimum distance of C?
+\end{Verbatim}
+3. Construct a table of all syndromes. If possible, decode the following:
+
+• (1, 1, 0, 1, 0, 1, 0),
+
+• (0, 0, 1, 0, 0, 0, 0).
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+1. The number of cosets is 2n-k = 23 = 8.
+
+2. The minimum distance of C is 3, because there is a word of weight 3, e.g.
+
+(1, 0, 0, 0, 1, 0, 1). It is not possible to find a codeword of weight 1 or 2, since having a single information symbol to be non-zero creates at least two parities which are not zero. Alternatively, compute a parity check matrix:
+
+\begin{Verbatim}[fontsize=\small]
+1 1 0 1 1 0 0
+H =  0 1 1 1 0 1 0
+1 0 1 1 0 0 1
+H has a set of 3 linearly dependent columns, e.g., column 7,6 and 3. It
+has no set of 2 columns linearly dependent, since no column is repeated.
+3. A table of all syndromes is given by
+(0, 0, 0)
+(1, 0, 1)
+(1, 1, 0)
+(0, 1, 1)
+(1, 1, 1)
+(1, 0, 0)
+(0, 1, 0)
+(0, 0, 1)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+H(0, 0, 0, 0, 0, 0, 0)T
+H(1, 0, 0, 0, 0, 0, 0)T
+H(0, 1, 0, 0, 0, 0, 0)T
+H(0, 0, 1, 0, 0, 0, 0)T
+H(0, 0, 0, 1, 0, 0, 0)T
+H(0, 0, 0, 0, 1, 0, 0)T
+H(0, 0, 0, 0, 0, 1, 0)T
+H(0, 0, 0, 0, 0, 0, 1)T
+\end{Verbatim}
+If possible, decode the following:
+
+• (1, 1, 0, 1, 0, 1, 0), the syndrome is (1, 1, 0) and so the decoded codeword is (1, 0, 0, 1, 0, 1, 0).
+
+• (0, 0, 1, 0, 0, 0, 0), the sydnrome is (0, 1, 1) and the decoded codeword
+
+is (0, 0, 0, 0, 0, 0, 0). Since t = 1, there are unique coset leaders and decoding can be done.
+
+\end{solutionbox}
+\section*{Exercise 16}\addcontentsline{toc}{section}{Exercise 16}
+\begin{exercisebox}
+Consider the following generator matrix over F2 :
+
+\begin{Verbatim}[fontsize=\small]
+1 1 0 1 1 0
+G =  0 1 0 1 0 1  .
+1 1 1 0 0 0
+Justify all your answers.
+1. Write the matrix G in systematic form.
+2. What are the dimension k and the length n of the corresponding code C?
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+3. Compute a parity check matrix for this code C.
+4. Is this code C self-dual? self-orthogonal?
+5. Compute the minimum distance of C.
+6. Does C contain a codeword of weight 4?
+7. Suppose the decoder receives (1, 0, 0, 0, ∗, 1) where ∗ is an erased symbol.
+What is the codeword being sent?
+8. How many cosets of C are there?
+9. Construct a table of coset leaders and associated syndromes.
+10. One coset has weight 2, which coset is it and what are its coset leaders?
+11. If possible, decode the following received vectors:
+(a) (1, 1, 0, 1, 1, 0)
+(b) (1, 1, 0, 1, 1, 1)
+(c) (1, 1, 0, 0, 0, 1).
+If decoding is not possible, explain why.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+1. To write
+
+G =  0
+
+1
+
+in systematic form, we first add row 1 to row 3
+
+\begin{Verbatim}[fontsize=\small]
+1 1 0 1 1 0
+G →  0 1 0 1 0 1
+0 0 1 1 1 0
+and then add row 2 to row 1:
+\end{Verbatim}
+G →  0
+
+1  .
+
+2. The length n is 6, it is just the number of columns of G. Now for k, it is
+
+3 because we have three rows that are linearly independent.
+
+3. Since we have G in systematic form, we will use it to compute H:
+
+\begin{Verbatim}[fontsize=\small]
+0 1 1 1 0 0
+H =  1 0 1 0 1 0  .
+1 1 0 0 0 1
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+4. If we wanted the code to be self-orthogonal, we would need C to be inside
+its dual C ⊥ , and since C ⊥ is the set of vectors orthogonal to every vector
+in the code, this means that every c ∈ C must be orthogonal to every
+codeword, in particular to itself, so c = (0, 1, 1, 1, 0, 0) is not orthogonal
+to itself, so it cannot be in C ⊥ and thus the code is not self-orthogonal,
+thus not self-dual either.
+5. A generic codeword is of the form (x1 , x2 , x3 , x2 + x3 , x1 + x3 , x1 + x2 ).
+When x1 = 1 and x2 = x3 = 0, we get (1, 0, 0, 0, 1, 1), which has weight 3.
+To have a weight less than 3 is not possible: if only one data symbol is not
+zero, there are two parities which are not zero, and if two data symbols
+are not zero, there will at least be one parity symbol which is not zero.
+Therefore the Hamming distance is 3.
+6. Again a generic codeword is of the form (x1 , x2 , x3 , x2 +x3 , x1 +x3 , x1 +x2 ).
+We just showed above that a single data symbol which is not zero means a
+weight of 3. So let us try two data symbols which are not zero, say x1 = 0,
+x2 = x3 = 1, this gives the codeword (0, 1, 1, 0, 1, 1) which has weight 4.
+7. Suppose the decoder receives (1, 0, 0, 0, ∗, 1) where ∗ is an erased symbol.
+Since the Hamming distance of the code is 3, we can recover the codeword
+(1, 0, 0, 0, 1, 1).
+8. To count the number of cosets of C, we recall that |F62 | = 26 = |C|(number
+of cosets). Thus 26 = 23 · 23 and there are 8 cosets.
+9. To construct a table of coset leaders and associated syndromes, we first
+construct the syndromes. We know that there 8 syndromes of the form
+HxT , we first choose x to be a vector of weight either 0 or 1, this gives
+the following table:
+HxT
+H(0, 0, 0, 0, 0, 0)T
+H(1, 0, 0, 0, 0, 0)T
+H(0, 1, 0, 0, 0, 0)T
+H(0, 0, 1, 0, 0, 0)T
+H(0, 0, 0, 1, 0, 0)T
+H(0, 0, 0, 0, 1, 0)T
+H(0, 0, 0, 0, 0, 1)T
+H(?, ?, ?, ?, ?, ?)T
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+coset leader
+(0, 0, 0, 0, 0, 0)
+(1, 0, 0, 0, 0, 0)
+(0, 1, 0, 0, 0, 0)
+(0, 0, 1, 0, 0, 0)
+(0, 0, 0, 1, 0, 0)
+(0, 0, 0, 0, 1, 0)
+(0, 0, 0, 0, 0, 1)
+?
+\end{Verbatim}
+We note that since
+
+H =  1
+
+\begin{Verbatim}[fontsize=\small]
+x1
+   x2
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+0
+ x3
+  = x1  1  + . . . + x6  0  ,
+0
+ x4
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1
+ x5
+x6
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+HxT where xT is non-zero only in its ith coordinate means the syndrome
+is the ith column of H. Thus the missing syndrome in the table is (1, 1, 1)
+which could be obtained for example using x1 = 1 and x4 = 1 (the other
+xi are zero). We note that the corresponding coset necessarily has weight
+2, since all vectors of weight less than 2 are already in the other cosets.
+HxT
+coset leader
+(0, 0, 0) (0, 0, 0, 0, 0, 0)
+(0, 1, 1) (1, 0, 0, 0, 0, 0)
+(1, 0, 1) (0, 1, 0, 0, 0, 0)
+(1, 1, 0) (0, 0, 1, 0, 0, 0)
+(1, 0, 0) (0, 0, 0, 1, 0, 0)
+(0, 1, 0) (0, 0, 0, 0, 1, 0)
+(0, 0, 1) (0, 0, 0, 0, 0, 1)
+(1, 1, 1) (1, 0, 0, 1, 0, 0)
+10. One coset has weight 2, it is the coset (1, 0, 0, 1, 0, 0) + C. Its coset leaders
+are vectors of weight 2. We already know that (1, 0, 0, 1, 0, 0) has weight
+2, and generic vectors in this coset are of the form (x1 + 1, x2 , x3 , x2 + x3 +
+1, x1 + x3 , x1 + x2 ):
+(x1 , x2 , x3 )
+(0, 0, 0)
+(1, 0, 0)
+(0, 1, 0)
+(1, 1, 0)
+(0, 0, 1)
+(1, 0, 1)
+(0, 1, 1)
+(1, 1, 1)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+(x1 + 1, x2 , x3 , x2 + x3 + 1, x1 + x3 , x1 + x2 )
+(1, 0, 0, 1, 0, 0)
+(0, 0, 0, 1, 1, 1)
+(1, 1, 0, 0, 0, 1)
+(0, 1, 0, 0, 1, 0)
+(1, 0, 1, 0, 1, 0)
+(0, 0, 1, 0, 0, 1)
+(1, 1, 1, 1, 1, 1)
+(0, 1, 1, 1, 0, 0)
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+We see two other vectors of weight 2, namely (0, 1, 0, 0, 1, 0) and (0, 0, 1, 0, 0, 1).
+11. We received the following vectors:
+(a) (1, 1, 0, 1, 1, 0)
+(b) (1, 1, 0, 1, 1, 1)
+(c) (1, 1, 0, 0, 0, 1).
+We start by computing their syndromes:
+H(1, 1, 0, 1, 1, 0)T = (0, 0, 0)T , H(1, 1, 0, 1, 1, 1)T = (0, 0, 1)T , H(1, 1, 0, 0, 0, 1)T = (1, 1, 1)T .
+Then the decoded codeword is the received vector minus the coset leader,
+that is
+(1, 1, 0, 1, 1, 0) - (0, 0, 0, 0, 0, 0), (1, 1, 0, 1, 1, 1) - (0, 0, 0, 0, 0, 1),
+for (1, 1, 0, 0, 0, 1), we actually have several coset leaders, so the decoder
+cannot make a direct decision. For the other two cases:
+y = (1, 1, 0, 1, 1, 0) → ĉ = (1, 1, 0, 1, 1, 0),
+\end{Verbatim}
+this would correspond to a transmission with no error (or there are enough errors to actually swap a codeword with another), and y = (1, 1, 0, 1, 1, 1) → ĉ = (1, 1, 0, 1, 1, 0), this would correspond to a transmission with one error.
+
+\end{solutionbox}
+\section*{Exercise 17}\addcontentsline{toc}{section}{Exercise 17}
+\begin{exercisebox}
+Let C be an (n, 1) repetition code over F2 . Find the parameters n for which C is perfect.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+For C to be perfect, it needs to have parameters that match the
+Sphere Packing Bound:
+qn
+.
+
+n
+i
+i=0 i (q - 1)
+\end{Verbatim}
+SP B = Pt
+
+\begin{Verbatim}[fontsize=\small]
+Recall that dH (C) = n. For q = 2 and n odd, that
+ is n = 2t + 1 ( ⇐⇒ t =
+n
+n
+n-1
+b n-1
+c
+=
+),
+we
+have,
+recalling
+that
+=
+n-i :
+i
+t  
+X
+n
+(q - 1)i
+i
+i=0
+\end{Verbatim}
+=
+
+=
+
+=
+
+\begin{Verbatim}[fontsize=\small]
+!
+t 
+X
+n
++
+n-i
+i
+i=0
+i=0
+ !
+
+
+n
+t
+X
+1 X n
+n
++
+s
+2 i=0 i
+s=t+1
+
+
+n
+1X n
+= 2n-1
+2 i=0 i
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+t  
+X
+n
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+using the change of variable s = n - i in the second equality, and noticing that
+after this change of variables, the second sum contains all the terms between
+s = n and s = n - t = (2t + 1) - t = t + 1. In this case, the repetition code is
+thus perfect. The code is not perfect
+Pnfor q = 2 and n even, which can be seen
+from the formulas (we would have s=t ns and thus the term in s = t would
+repeat the term in i = t).
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 18}\addcontentsline{toc}{section}{Exercise 18}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Provide an example of two codes C1 and C2 such that
+C1 M = C2 , C1⊥ M 6= C2⊥ ,
+for M a monomial matrix.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+Suppose C1 has generator matrix [1, 1] and C2 has generator
+matrix [1, w] both over F4 . We build a monomial matrix
+
+
+1 0
+M=
+0 w
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+and check the condition C1 M = C2 :
+
+[1, 1]
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+
+= [1, w].
+w
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+Then C1⊥ has generator matrix [1, 1] and C2⊥ has generator matrix [w, 1], or
+equivalently, multiply the basis by w2 , [1, w2 ]. We have
+
+
+1 0
+[1, 1]
+= [1, w] 6= [1, w2 ].
+0 w
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 19}\addcontentsline{toc}{section}{Exercise 19}
+\begin{exercisebox}
+If x, y ∈ Fn2 , prove that wt(x + y) = wt(x) + wt(y) - 2wt(x ∩ y) where x ∩ y is the vector in Fn2 which has 1s precisely in the positions where both x and x have 1s.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+It is enough to look at a single coordinate. If x and y disagree on this coordinate, this means one has a zero and the other a one, thus summing these two coordinates will give one, which is indeed wt(x) + wt(y) (wt(x ∩ y) has a zero in this coordinate). Then if x and y agree on this coordinate, either they agree on zero, and both sides of the equality are zero, or they agree on one: then the left hand-side contains a zero (1 + 1 ≡ 0), while wt(x) + wt(y) counts two, which is cancelled out by -2wt(x ∩ y).
+
+\end{solutionbox}
+\section*{Exercise 20}\addcontentsline{toc}{section}{Exercise 20}
+\begin{exercisebox}
+Let C be a binary linear code. Show that if C is self-orthogonal and has a generator matrix such that each row has a weight divisible by 4, then every codeword of C has a weight divisible by 4.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+Consider two rows x and y of the generator matrix. Using Exercise 19, we know that wt(x + y) = wt(x) + wt(y) - 2wt(x ∩ y), and wt(x) ≡ wt(y) ≡ 0 (mod 4) since each weight is divisible by 4. Furthemore, the code is contained in its dual. This means that the inner product of x and y must be zero, therefore x and y need to agree on an even number of coordinates, which shows that 2wt(x ∩ y) ≡ 0 (mod 4). We just showed that the sum of two rows of the generator matrix has a weight divisible by 4. Now every codeword is obtained as a linear combination (that is for the binary case as a sum) of rows of the generator matrix. We can complete the proof by induction. Suppose it is true for l rows of the matrix, and we want to prove it is true for l + 1. We know that codewords obtained as the sum of l rows have a weight divisible by 4, let us call c such a codeword. Then suppose x is a new row of the generator matrix. Then wt(x + c) ≡ 0 using the same arguments as above.
+
+\end{solutionbox}
+\section*{Exercise 21}\addcontentsline{toc}{section}{Exercise 21}
+\begin{exercisebox}
+Show that the Golay code G12 is a (12, 6, 6) self-dual code and that the Golay code G11 has minimum distance 5.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+We recall that a generator matrix for G12 is G = [I6 , A] with
+
+\begin{Verbatim}[fontsize=\small]
+0 1 1 1 1 1
+  1 0 1 2 2 1
+\end{Verbatim}
+1 1 0 1 2 2
+
+\begin{Verbatim}[fontsize=\small]
+A=
+  1 2 1 0 1 2  .
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 2 2 1 0 1
+1 1 2 2 1 0
+The code has length 12 since there are 12 columns in G, it has dimension 6
+because G contains 6 rows that are linearly independent. We next show that
+G12 is self-orthogonal:
+• Every row is orthogonal to each other since: (1) row 1 contains 6 ones,
+and 6 ≡ 0 (mod 3), (2) for row 2, (1, 0, 1, 2, 2, 1) · (1, 0, 1, 2, 2, 1) = 11 ≡ 2
+(mod 3) so row 2 is orthogonal to itself, (3) other rows are shift of row 2.
+• The inner product between row 1 and row i for i ≥ 2 is 1 + 2 + 2 + 1 ≡ 0
+(mod 3).
+• The inner product between row 2 and row i for i ≥ 2 is 0 by inspection.
+• The inner product between row i and row j, i ≥ 3, j ≥ 4 is also 0, by
+shifing row i so as to obtain row 2, and use the same shift on row j.
+⊥
+Since every row of G is orthogonal to all rows of G, G12 ⊆ G12
+and since they
+have both dimensions 6, they are equal.
+We next look at the Hamming distance. We mimic the arguments done for
+the binary case. First we notice that the Hamming weight of every codeword c
+is divisible by 3, this is because wt(c) = c · c (mod 3), but c · c ≡ 0 (mod 3)
+since the code is self-dual. So the Hamming distance of the code is either 3
+or 6 (we have codewords of weight 6). We are thus left to rule out 3. Write
+c = (c1 , c2 ) with c1 , c2 ∈ F63 .
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+• wt(c1 ) = 0, wt(c2 ) = 3: impossible since wt(c1 ) = 0 implies c = 0.
+• wt(c1 ) = 1, wt(c2 ) = 2: impossible since wt(c1 ) = 1 implies c is one row
+of G, and none have weight 2.
+• wt(c1 ) = 2, wt(c2 ) = 1: impossible since wt(c1 ) = 2 implies c is a linear
+combination of two rows of G, but then this linear combination should
+cancel all coefficients but one in c2 , which cannot happen.
+• wt(c1 ) = 3, wt(c2 ) = 0: impossible since wt(c2 ) = 0 implies that there is
+a linear combination of 3 rows that cancel all coefficients in c2 .
+Finally, to show that the Golay code G11 has minimum distance 5, it is enough
+to notice that G12 has minimum distance 6, and that a codeword of minimum
+distance 6 is punctured in a non-zero coordinate.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 22}\addcontentsline{toc}{section}{Exercise 22}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+1. Let C be a code over Fq . Let C1 be the code obtained from C by puncturing
+on the right-most coordinate and then extending this punctured code on
+the right. Prove that C = C1 if and only if all codewords of C have
+the property that the sum of their coordinates is 0 (these codewords are
+sometimes called even-like).
+2. With C1 as above, prove that if C is self-orthogonal and contains the all-one
+codeword (1, . . . , 1) then C = C1 .
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. If C = C1 , then it means that the set of codewords obtained by (1) removing the last coordinate (codewords are now of the
+form (c1 , . . . , cn-1 )), and (2) adding as last coordinate minus the sum of
+the n - 1 coordinates (codewords are now of the form (c1 , . . . , cn-1 , -c1 -
+. . .-cn-1 )), is the set C. So it must have been that codewords were already
+of the form (c1 , . . . , cn-1 , -c1 - . . . - cn-1 )). Conversely, if codewords are
+of the form (c1 , . . . , cn-1 , -c1 - . . . - cn-1 ), then we will have C = C1 .
+2. If C is self-orthogonal, and (1, . . . , 1) ∈ C, then it must be that (1, . . . , 1) ∈
+C ⊥ , which means that (1, . . . , 1) · c ≡ 0 for all c ∈ C. But then this means
+that c1 + . . . + cn-1 + cn = 0 thus c1 + . . . , cn-1 = -cn . We then use the
+previous point to conclude.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 23 (*)}\addcontentsline{toc}{section}{Exercise 23 (*)}
+\begin{exercisebox}
+Does puncturing a binary (24, 12, 8) code (in any position) yield a perfect code? Justify your answer.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+If we puncture a (24, 12, 8) code, we are removing a column of
+the generator matrix, so the resulting code has dimenion 23. Since dH = 8, the
+dimension k = 12 does not change, and the new minimum distance is either 8
+or 7.
+Now for a code to be perfect, its parameters need to meet the Sphere Packing
+Bound, which, for a binary code is
+Pt
+\end{Verbatim}
+, t = b
+
+i=0 i
+
+\begin{Verbatim}[fontsize=\small]
+7-1
+8-1
+c = 3 or t = b
+c = 3.
+\end{Verbatim}
+We then compute P3
+
+i=0
+
+\begin{Verbatim}[fontsize=\small]
+=
+=
+=
+\end{Verbatim}
+i
+
+
+
+\begin{Verbatim}[fontsize=\small]
+1 + 23 + 23 · 11 + 23 · 11 · 7
+24 + 23 · 11 · 8
+=
+= 212 .
+3 + 23 · 11
+\end{Verbatim}
+Thus the punctured code is perfect.
+
+\end{solutionbox}
+\section*{Exercise 24}\addcontentsline{toc}{section}{Exercise 24}
+\begin{exercisebox}
+1. Does extending a binary (5, 3, 3) code yield a perfect code? Justify your
+
+answer.
+
+2. What is the geometric interpretation of a perfect code?
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. Extending a binary (5, 3, 3) code means that the resulting
+code will have a length of 6, and the minimum distance could remain 3 or
+go to 4. To check whether the code is perfect, one uses the Sphere Packing
+Bound:
+d-1
+c.
+, t = b
+Pt
+i=0 i
+Whether d = 3, 4, we have
+b
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+4-1
+3-1
+c = 1, b
+c=1
+\end{Verbatim}
+so the bound becomes
+
+
+
+\begin{Verbatim}[fontsize=\small]
+
+6 = 1+6
++ 1
+\end{Verbatim}
+so we do not get a perfect code.
+
+2. A perfect code reaches the Sphere Packing Bound. This means that the
+
+whole space containing q n elements is partitioned into q k (if the code is linear, or into the number of codewords in general) disjoint Hamming spheres, with as their centers codewords, and as their radius t.
+
+\end{solutionbox}
+\section*{Exercise 25 (*)}\addcontentsline{toc}{section}{Exercise 25 (*)}
+\begin{exercisebox}
+Construct, if possible, an (8, 4, 4) binary code using the (u|u + v) construction.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+Reed-Mueller codes are built using this construction, and they
+yield codes of length 2m , so we look at m = 3. They have minimum distance
+2m-r = 23-r , so take r = 1 to give a minimum Hamming distance of 4. We are
+left to check that we get the right dimension:
+   
++
+=1+3=4
+so an example is the Reed-Mueller code R(1, 3).
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 26}\addcontentsline{toc}{section}{Exercise 26}
+\begin{exercisebox}
+Prove that the (u|u + v) construction has minimum Hamming distance min\{2d1 , d2 \} if d1 , d2 are the minimum Hamming distances of C1 and C2 .
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+We look at generic codewords, of the form (u, u + v), u ∈ C1 , v ∈ C2 . Since both C1 , C2 are linear codes, they each contain the zero codeword.
+
+\begin{Verbatim}[fontsize=\small]
+When v = 0, we get the codeword (u, u), for u ∈ C1 , in which case the minimum
+Hamming distance is twice that of C1 , namely 2d1 :
+wt((u, u)) ≥ 2d1 ≥ min(2d1 , d2 ).
+When u = 0, we get the codeword (0, v), for v ∈ C2 , in which case the minimum
+Hamming distance is that of C2 , namely d2 :
+wt((0, v)) ≥ d2 ≥ min(2d1 , d2 ).
+This already gives us a minimum Hamming distance of min{2d1 , d2 }, though
+we still need to argue that when u, v are both not zero, we cannot decrease the
+found minimum distance. Then
+wt((u, u+v)) = wt(u)+wt(u+v) ≥ wt(u)+(wt(v)-wt(u)) ≥ wt(v) ≥ min(2d1 , d2 ).
+The inequality holds true since: in u+v, we look at v, it has some weight wt(v),
+now when we add u, whenever ui = -vi , the weight drops by 1, whenever ui 6= 0
+and vi = 0, the weight increases by 1, in all other cases, there is no change. So
+a bound is obtained by subtracting wt(u): when ui = -vi , the weight drops by
+1, when ui 6= 0 and vi = 0, the weight also drops by 1, in all other cases, either
+there is no change (when the coefficients of u is zero), or the weight drops by 1.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 27}\addcontentsline{toc}{section}{Exercise 27}
+\begin{exercisebox}
+1. Construct an extended binary Hamming code of length 8.
+
+2. Show that the binary Reed-Muller code R(1, 3) is equivalent to the extended binary Hamming of length 8.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+To construct an extended binary Hamming code of length 8, we start with a Hamming code of length 7. So we start with a parity check matrix (in systematic form or not):
+
+\begin{Verbatim}[fontsize=\small]
+0 1 1 1 1 0 0
+H =  1 0 1 1 0 1 0
+1 1 0 1 0 0 1
+and we compute the parity check matrix of the extended code:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 1 1 1 1 1 1 1
+  0 1 1 1 1 0 0 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+Ĥ =
+  1 0 1 1 0 1 0 0  .
+1 1 0 1 0 0 1 0
+The code R(1, 3) has for generator matrix:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 1 0 1 0 1
+  0 1 0 1 0 1 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+0 0 1 1 0 0 1
+0 0 0 0 1 1 1
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1
+ .
+1
+\end{Verbatim}
+We add row 3 and 4 to row 1, and permute column 4 and 5:
+
+\begin{Verbatim}[fontsize=\small]
+1 0 0 0 1 1
+1 0 0 1 0 1 1 0
+\end{Verbatim}
+0 1 0 1 0 1 0 1
+
+\begin{Verbatim}[fontsize=\small]
+→  0 1 0 0 1 1
+  0 0 1 0 1 0
+  0 0 1 1 0 0 1 1
+0 0 0 1 0 1
+0 0 0 0 1 1 1 1
+The corresponding parity check matrix is:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 1 1 0 1
+  1 1 0 1 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 1 1 0
+0 1 1 1 0
+\end{Verbatim}
+1
+
+1
+
+0
+
+0
+
+To see whether we get Ĥ, we sum row 1,2 and 3 and add the result to row 4:
+
+\begin{Verbatim}[fontsize=\small]
+1 1 1 0 1 0 0 0
+  1 1 0 1 0 1 0 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 1 1 0 0 1 0
+1 1 1 1 1 1 1 1
+and we notice that above the row of ones, we get as columns every possible
+binary representation between 0 and 7.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 28}\addcontentsline{toc}{section}{Exercise 28}
+\begin{exercisebox}
+Let r be an integer with 0 ≤ r ≤ m. Prove that R(i, m) ⊆ R(j, m), 0 ≤ i ≤ j ≤ m.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+We do a proof by induction on m. If m = 1, we need to prove
+that
+R(i, 1) ⊆ R(j, 1), 0 ≤ i ≤ j ≤ 1.
+For j = 1, R(1, 1) is the whole space so R(i, 1) is included in R(1, 1). For j = 0,
+i = 0 and we have equality.
+Assume by induction that R(i, m - 1) ⊆ R(j, m - 1), 0 < i ≤ j < m. Then
+R(i, m)
+\end{Verbatim}
+= \{(u, u + v), u ∈ R(i, m - 1), v ∈ R(i - 1, m - 1)\} ⊆
+
+\{(u, u + v), u ∈ R(j, m - 1), v ∈ R(j - 1, m - 1)\}
+
+\begin{Verbatim}[fontsize=\small]
+= R(j, m).
+This concludes the proof by induction for 0 < i. If i = 0, we only need to show
+that the all-one vector is in R(j, m) for j < m. Inductively, we assume that the
+all-one vector of length 2m-1 is in R(j, m - 1). Then the all-one vector of length
+2m is in R(j, m) as one choice for u is to take the all-one vector, with v = 0.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 29}\addcontentsline{toc}{section}{Exercise 29}
+\begin{exercisebox}
+Show that the covering radius of a linear (n, k)q code C is at most n - k.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+Since C is a linear code, take G the generator matrix of C in systematic form. This shows that the first k coordinates of any codeword can be any vector in Fkq . An arbitrary vector in Fnq will thus necessarily match a codeword on its first k coordinates, and it can differ in at most n-k, this means this vector is at distance at most n-k from a codeword, thus the covering radius of C is at most n - k.
+
+\end{solutionbox}
+\section*{Exercise 30}\addcontentsline{toc}{section}{Exercise 30}
+\begin{exercisebox}
+Is there a binary code with parameters (5, 3, 3)?
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+Using the Sphere Packing bound, we have that B2 (5, 3) ≤ 5 thus it is not possible to have k = 3, which would imply B2 (5, 3) = 23 = 8.
+
+\end{solutionbox}
+\section*{Exercise 31}\addcontentsline{toc}{section}{Exercise 31}
+\begin{exercisebox}
+Are there binary Hamming codes which are MDS?
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+Given r ≥ 2, binary Hamming codes have parameters n = 2r - 1,
+k = 2r - r - 1 and minimum Hamming distance d = 3. For a code to be MDS,
+we need d = n - k + 1, that is
+3 = 2r - 1 - (2r - r - 1) + 1 = r + 1
+so the only case is r = 2, but when r = 2, k = 1, n = 3 and d = 3 so it is a
+repetition code.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 32}\addcontentsline{toc}{section}{Exercise 32}
+\begin{exercisebox}
+Find a polynomial of degree 4 which is irreducible over F2 . List elements of the finite field F16 .
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+We know there is a single polynomial of degree 2 which is irreducible over F2 , namely X 2 + X + 1. We compute (X 2 + X + 1)2 = X 4 + X 2 + 1.
+Next we look for a generic polynomial of the form X 4 + p3 X 3 + p2 X 2 + p1 X + 1.
+Consider X 4 + X 3 + 1, evaluated in X = 0 and X = 1, the polynomial is not
+zero, so we cannot factor out a term of degree 1, but we cannot factor out a term
+of degree 2 either, so the polynomial is irreducible. We can use this polynomial
+to construct the finite field F16 , which can be described by
+F16 = {a0 + a1 w + a2 w2 + a3 w3 , a0 , a1 , a2 , a3 ∈ F2 }
+and w4 + w3 + 1 = 0.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 33 (Revision)}\addcontentsline{toc}{section}{Exercise 33 (Revision)}
+\begin{exercisebox}
+Consider the code C1 given by the following generator matrix over F4 :
+
+\begin{Verbatim}[fontsize=\small]
+1 0 0 1 w w
+G1 =  0 1 0 w 1 w  .
+0 0 1 w w 1
+\end{Verbatim}
+It is called the hexacode. Consider the code C2 given by the following generator matrix over F4 :
+
+\begin{Verbatim}[fontsize=\small]
+1 w 1 0 0 w
+G2 =  0 1 w 1 0 w  .
+0 0 1 w 1 w
+1. Is the code C2 equivalent to C1 ?
+2. Compute the minimum distance of the hexacode.
+3. Is the hexacode MDS?
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. We first put G2 in systematic form by adding row 3 to row
+1, then w times row 3 to row 2
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 0 1 w
+1 w 0 w 1 0
+1 w 1 0 0 w
+ 0 1 w 1 0 w  →  0 1 0 w w 1   →  ac0 1 0 w w
+0 0 1 w 1
+0 0 1 w 1 w
+0 0 1 w 1 w
+where the last matrix is obtained from the second matrix by adding w
+times row 2 to row 1. Then swapping columns 5 and 6 gives G1 thus both
+codes are equivalent.
+2. To compute the minimum distance of the hexacode, we could for example
+use the generic form of a codeword, then taking x1 = 1 and x2 = x3 = 0
+gives a weight of 4. We cannot get a weight of 3 since we cannot find a
+linear combination that cancels out two parities. Alternatively, remembering that the code is self-dual, we can look at the columns of the matrix,
+it has d = 4 linearly dependent columns, but no set of d - 1 = 3 linearly
+dependent columns.
+3. To know whether the hexacode is MDS, we need to check whether d =
+n - k + 1, that is 4 = 6 - 3 + 1. The code is thus MDS.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 34 (Revision)}\addcontentsline{toc}{section}{Exercise 34 (Revision)}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Consider the linear code over F3 given by the generator matrix
+
+
+1 0 2 0
+G=
+.
+1 1 2 2
+1. What is the dimension of this code?
+2. Give the systematic form of the generator matrix.
+3. What is the minimum Hamming distance of this code?
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+1. Since both rows of G are linearly independent (they are not
+
+multiples of each other), the dimension is k = 2.
+
+\begin{Verbatim}[fontsize=\small]
+w
+1
+w
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+2. Just subtract row 1 from row 2 to get:
+
+
+1 0 2 0
+.
+0 1 0 2
+3. Using the systematic generator matrix, a generic codeword is (x1 , x2 , 2x1 , 2x2 ).
+The minimum Hamming distance is 2. Indeed if x1 = 1, x2 = 0, we get
+(1, 0, 2, 0) which has weight 2. It is not possible to have a smaller weight,
+to have a nonzero codeword, either x1 or x2 is nonzero, therefore there
+are at least 2 nonzero entries.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 35}\addcontentsline{toc}{section}{Exercise 35}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Consider the [4, 2] linear code over F3 given by the generator matrix
+
+
+1 0 2 0
+G=
+1 1 2 2
+this is the same code seen in the previous example.
+1. Show using two different methods that this code is cyclic.
+2. Compute the generator polynomial of this code.
+3. Compute the check polynomial of this code.
+4. How many cyclic codes of length n = 4 are there over F3 ?
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. To show the code is cyclic, as a first method, we can just
+look at all codewords:
+(1, 0, 2, 0), (2, 0, 1, 0), (1, 1, 2, 2), (2, 2, 1, 1), (2, 1, 1, 2), (1, 2, 2, 1), (0, 2, 0, 1), (0, 1, 0, 2), (0, 0, 0, 0).
+So we start with (1, 0, 2, 0): (1, 0, 2, 0) 7→ (0, 1, 0, 2) 7→ (2, 0, 1, 0) 7→
+(0, 2, 0, 1). Let us see which codewords we get like that:
+(1, 0, 2, 0)X, (2, 0, 1, 0)X, (1, 1, 2, 2), (2, 2, 1, 1),
+(2, 1, 1, 2), (1, 2, 2, 1), (0, 2, 0, 1)X, (0, 1, 0, 2)X, (0, 0, 0, 0).
+So next we shift (1, 1, 2, 2): (1, 1, 2, 2) 7→ (2, 1, 1, 2) 7→ (2, 2, 1, 1) 7→ (1, 2, 2, 1).
+Let us see which codewords we added:
+(1, 0, 2, 0)X, (2, 0, 1, 0)X, (1, 1, 2, 2)X, (2, 2, 1, 1)X,
+(2, 1, 1, 2)X, (1, 2, 2, 1)X, (0, 2, 0, 1)X, (0, 1, 0, 2)X, (0, 0, 0, 0).
+So every shift of every codeword is in the codebook, therefore the code
+is cyclic. As second method, we could consider the generator matrix in
+systematic form computed in the previous exercise:
+
+
+1 0 2 0
+.
+0 1 0 2
+This matrix is obtained by a first row, and a second row which is a shift
+of the first row, therefore it is the generator matrix of a cyclic code.
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+2. To compute the generator polynomial of this code, we have also two
+methods. Since we have a list of codewords, we can find the monic
+polynomial of lowest degree: we have two polynomials of lowest degree,
+(1, 0, 2, 0) ↔ 1 + 2X 2 and (2, 0, 1, 0) ↔ 2 + X 2 , but only 2 + X 2 is monic,
+so it is the generator polynomial. The second method is since we have the
+generator matrix in systematic form, we can read the coefficients on the
+first line of the matrix: 1, 0, 2, 0. This gives the polynomial 1 + 2X 2 . It
+is not monic, so to get the monic polynomial with multiply by 2, which
+yields 2 + X 2 as it should be.
+3. The check polynomial of this code is the polynomial h(X) such that X 4 -
+1 = h(X)(2 + X 2 ). So h(X) is a polynomial of degree 2, which must be
+monic, so h(X) = X 2 + h0 . Then
+X 4 - 1 = X 2 (X 2 + 2) + h0 (X 2 + 2) = X 4 + 2X 2 + h0 X 2 + 2h0
+so h0 = -2 and indeed -4 ≡ -1 (mod 3).
+4. Cyclic codes of length n = 4 over F3 have a generator polynomial which
+divides X 4 - 1. So let us have a closer look at X 4 - 1 to see what are
+all its divisors. We already know that X 4 - 1 = (X 2 - 2)(X 2 + 2). Now
+modulo 3, we have 12 ≡ 1, 22 ≡ 1, so both 1 and 2 are roots of X 2 + 2 =
+(X - 1)(X - 2). This also shows that X 2 - 2 is irreducible, since no square
+modulo 3 is 2. Thus
+X 4 - 1 = (X 2 - 2)(X - 1)(X - 2).
+So now that we have all possible divisors of X 4 - 1, we can count cyclic
+codes by counting possible generator polynomials:
+• Technically the constant polynomial 1 is a divisor.
+• Then X - 1 and X - 2 for degree 1 polynomials.
+• Then X 2 - 2 and (X - 1)(X - 2) for degree 2 polynomials.
+• Then (X 2 - 2)(X - 1) and (X 2 - 2)(X - 2) for degree 3 polynomials.
+• Finally X 4 - 1 itself.
+So there are 8 possible cyclic codes, including the two trivial ones.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 36}\addcontentsline{toc}{section}{Exercise 36}
+\begin{exercisebox}
+Let C1 , C2 be two cyclic codes of length n, generated by g1 (X) and g2 (X) respectively. Show that C1 ∩ C2 is cyclic and find the generator polynomial of C1 ∩ C 2 .
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+First C1 ∩ C2 is a cyclic code. We have that 0 belongs to C1 ∩ C2 , also if c,c0 both are in C1 ∩ C2 , this means that c,c0 ∈ C1 , therefore so is their sum, and c,c0 ∈ C2 , so is their sum, therefore their sum is in C1 ∩ C2 and the code is linear. If c ∈ C1 ∩ C2 , then c ∈ C1 and so are all its shifts, but since c ∈ C2 , all its shifts are also in C2 and thus they are in the intersection.
+
+The generator polynomial is lcm(g1 (X), g2 (X)), that is we want to prove that C1 ∩ C2 = \{q(X)lcm(g1 (X), g2 (X)), deg q(X) < n - s\} where s is the degree of the lcm. Every codeword in the intersection is divisibly by both generator polynomials, and thus by the least common multiple, which shows the first inclusion. Conversely, every multiple of the least common multiple belongs to both codes, hence to their intersection, which shows the reverse inclusion.
+
+\end{solutionbox}
+\section*{Exercise 37}\addcontentsline{toc}{section}{Exercise 37}
+\begin{exercisebox}
+Find the generator matrix for the [7, 4] binary cyclic code C with generator polynomial X 3 + X 2 + 1. Prove that C is a Hamming code.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+A generator matrix is given by
+
+\begin{Verbatim}[fontsize=\small]
+1 0 1 1 0 0
+ 0 1 0 1 1 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+0 0 1 0 1 1
+0 0 0 1 0 1
+\end{Verbatim}
+0
+
+0
+
+In systematic form we have (add row 3 to row 1 and row 4 to row 1,2):
+
+\begin{Verbatim}[fontsize=\small]
+1 0 0 0 1 0 1
+1 0 1 1 0 0 0
+ 0 1 0 0 1 1 1
+ 0 1 0 1 1 0 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+0 0 1 0 1 1 0  →  0 0 1 0 1 1 0  .
+0 0 0 1 0 1 1
+0 0 0 1 0 1 1
+The parity check matrix is thus:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+0 1
+ 1 1
+1 0
+\end{Verbatim}
+0  .
+
+Since we have as columns every integer from 1 to 7 in binary representation, this is a binary Hamming code.
+
+\end{solutionbox}
+\section*{Exercise 38}\addcontentsline{toc}{section}{Exercise 38}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Consider the linear code over F3 given by the generator matrix
+
+
+1 0 2 0
+G=
+.
+1 1 2 2
+Compute the parity check matrix of G using two different methods.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+The first method is as usual:
+
+
+
+1 0 2 0
+G=
+→
+1 1 2 2
+so from the systematic form, we get
+
+H=
+\end{Verbatim}
+ .
+
+
+
+\begin{Verbatim}[fontsize=\small]
+We can check that
+
+T
+HG =
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+ 1
+0
+ 0
+1  2
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1
+  = 0.
+0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+For a different method, we first compute the check polynomial. A generator
+polynomial is given by g(X) = 1 + 2X 2 so the corresponding monic polynomial
+is X 2 + 2 = X 2 - 1. Thus the check polynomial is h(X) = X 2 + 1 since
+g(X)h(X) = (X 2 - 1)(X 2 + 1) = X 4 - 1. Finally we compute the reciprocal
+polynomial h[-1] (X): h(X -1 ) = X -2 + 1, so we multiply by X 2 to get:
+X 2 (X -2 + 1) = 1 + X 2 .
+Thus H is obtained putting the coefficients of h[-1] (X) on the first row and the
+other row is obtained by a cyclic shift:
+
+
+1 0 1 0
+H=
+.
+0 1 0 1
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 39 (*)}\addcontentsline{toc}{section}{Exercise 39 (*)}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Consider the polynomial X 15 - 1 over F2 . We have
+X 15 - 1
+\end{Verbatim}
+=
+
+(X 3 + 1)(X 4 + X + 1)(X 8 + X 4 + X 2 + X + 1)
+
+=
+
+(X 3 + 1)(X 4 + X + 1)(X 4 + X 3 + 1)(X 4 + X 3 + X 2 + X + 1).
+
+\begin{Verbatim}[fontsize=\small]
+1. Are all the four factors (X 3 + 1), (X 4 + X + 1), (X 4 + X 3 + 1), (X 4 +
+X 3 + X 2 + X + 1) of X 15 - 1 irreducible over F2 ? Justify your answer.
+2. How many cyclic codes of length n = 15 are there over F2 ?
+3. (a) Consider the generator polynomial g(X) = X 4 + X + 1. What is the
+dimension of the binary code C of length 15 that it generates?
+(b) Compute the corresponding check polynomial.
+(c) Compute the corresponding parity check matrix.
+(d) Consider the following families of codes: MDS codes, Hamming codes,
+Reed-Mueller codes, Golay codes, Reed-Solomon codes. The code C
+is equivalent to a code in one of these families, which one? Justify
+your answer.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. Out of the four factors (X 3 +1), (X 4 +X +1), (X 4 +X 3 +1),
+(X + X + X 2 + X + 1) of X 15 - 1, one is of degree 3, and three are
+of degree 4. To check for linear factors, it is enough to evaluate them
+in X = 0, 1. We observe that X 3 + 1 = 0 when X = 1, thus it is not
+irreducible, while all other polynomials evaluated in X = 0, 1 give 1. For
+polynomials of degree 4, we also need to check that they are not a product
+of irreducible polynomials of degree 2. Over F2 , we have only X 2 + X + 1,
+and (X 2 + X + 1)2 = X 4 + X 2 + 1, so the three polynomials of degree 4
+are irreducible.
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+2. The number of cyclic codes of length n = 15 over F2 is the number of divisors of X 15 - 1, which can be counted using the different ways to combine
+irreducible factors of X 15 - 1. We know from the above decomposition
+that there are 5 irreducible factors of X 15 - 1. We could take any one of
+them (5 choices), or any two of them (2 choose 5 choices), or any three of
+them (3 choose 5 choices), or any four of them (4 choose 5 choices), or we
+could take either 1 or X 15 - 1 itself. This gives a total of 25 = 32 cyclic
+codes of length n over F2 .
+3. (a) Consider the generator polynomial g(X) = X 4 + X + 1. The dimension of the binary code C of length 15 that it generates is given by
+n - deg(g) that is 15 - 4 = 11.
+(b) To get the corresponding check polynomial, we need h(X) such that
+g(X)h(X) = X 15 - 1. Using the above factorization, we have X 15 -
+1 = (X 3 + 1)(X 4 + X + 1)(X 8 + X 4 + X 2 + X + 1), thus h(X) =
+(X 3 + 1)(X 8 + X 4 + X 2 + X + 1) which is h(X) = X 11 + X 8 + X 7 +
+X 5 + X 3 + X 2 + X + 1.
+(c) To compute the corresponding parity check matrix, we just take
+the coefficients in h(X), starting from the highest coefficient, that
+is [1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1] and put them, with padding, on the
+row of a matrix H. Then every of the 4 rows of H is obtained by a
+circular shift of one to the right of this row:
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+1 0 0 1 1 0 1 0 1 1 1 1 0 0 0
+ 0 1 0 0 1 1 0 1 0 1 1 1 1 0 0
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+H=
+ 0 0 1 0 0 1 1 0 1 0 1 1 1 1 0
+0 0 0 1 0 0 1 1 0 1 0 1 1 1 1
+(d) The code C is equivalent to a Hamming code, indeed, the binary
+integer representation of all integers from 1 to 15 is present as the
+columns of H.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 40}\addcontentsline{toc}{section}{Exercise 40}
+\begin{exercisebox}
+Consider the [7, 4] binary cyclic code C with generator polynomial X 3 +X 2 +
+
+1. Give a bound on its minimum distance using the BCH bound.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+Since n = 7 and q = 2, C0 = {0}, then the cyclotomic coset C1
+is
+C1 = {1, 2, 22 = 4}, 23 = 8 ≡ 1 (mod 7).
+Then
+C3 = {3, 6, 12 ≡ 5}
+so we know Cs for every Cs , 0 ≤ s < 7, and each (apart C0 ) has 2 = δ - 1
+consecutive elements, so d ≥ δ = 3. We can also compute explicitly α such that
+α7 = 1 in F2t where t is the smallest positive integer such that n|2t - 1, so t = 3.
+Then choosing α such that α3 = α + 1, we have α6 = (α + 1)2 = α2 + 1 so
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+α9 = (α + 1)(α2 + 1) = α3 + α + α2 + 1 = α2 , and α9 + α6 = 1 and α3 is a root
+of X 3 + X 2 + 1 = 0. We have
+X 3 + X 2 + 1 = (X - α3 )(X - α5 )(X - α6 )
+for α a primitive 7th root of unity. Thus
+C3 = {3, 6, 5} = {3, 3q, 3q 2 }
+\end{Verbatim}
+(mod 7) = \{3, 6, 12\} (mod 7).
+
+\begin{Verbatim}[fontsize=\small]
+The defining set is C3 , it contains 2 = δ - 1 consecutive elements: S = {5, 6},
+thus d ≥ δ = 3 (and the minimum distance in this case happens to be 3 since it
+is a Hamming code as shown in a previous exercise).
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 41}\addcontentsline{toc}{section}{Exercise 41}
+\begin{exercisebox}
+\begin{Verbatim}[fontsize=\small]
+Consider the polynomial X 13 - 1 over F3 . We have
+X 13 - 1
+\end{Verbatim}
+=
+
+(X 4 + 2X 3 + 2X 2 + 1)(X 3 + X 2 + 2)(X 3 + X 2 + X + 2)(X 3 + 2X 2 + 2X + 2)
+
+\begin{Verbatim}[fontsize=\small]
+1. Are all the four factors (X 4 + 2X 3 + 2X 2 + 1), (X 3 + X 2 + 2), (X 3 + X 2 +
+X + 2), (X 3 + 2X 2 + 2X + 2) of X 13 - 1 irreducible over F3 ? Justify your
+answer.
+2. Would your answer change if instead of F3 , we consider the same four
+factors over F4 ? Justify your answer.
+3. How many cyclic codes of length n = 13 are there over F3 ?
+4. (a) Consider the generator polynomial g(X) = X 3 + X 2 + X + 2. What
+is the dimension of the ternary code C of length 13 that it generates?
+(b) Use the BCH bound to give a bound on the minimum Hamming
+distance of this code.
+\end{Verbatim}
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. Among the four factors (X 4 +2X 3 +2X 2 +1), (X 3 +X 2 +2),
+(X + X + X + 2), (X 3 + 2X 2 + 2X + 2) of X 13 - 1, only the first one
+has degree 4, and it has 1 as a root so it is reducible. All the others are
+irreducible over F3 because they never give 0 when evaluated in 0, 1, 2.
+2. If instead of F3 , we consider the same four factors over F4 , we have that
+1 still is a root of the first polynomial, and 0 becomes a root of all other
+polynomials.
+3. To count the number of cyclic codes of length n = 13 over F3 , we need
+to count the number of divisors of X 13 - 1. To do so, we first count
+the number of irreducible divisors, namely 5 by the above (we note that
+(X 4 + 2X 3 + 2X 2 + 1) = (X - 1)(X 3 + 2X + 2)), and we can combine
+them in any possible ways, that is we could take a single irreducible factor
+(1 choose 5), or combine two of them (2 choose 5), or combine three of
+them (3 choose 5), or combine four of them (4 choose 5), or take either 1
+or X 13 - 1 for a total of 25 .
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+4. (a) Given the generator polynomial g(X) = X 3 + X 2 + X + 2, the
+dimension of the ternary code C of length 13 that it generates is
+n - deg(g(X)) = 13 - 3 = 10.
+(b) Since n = 13 and q = 3, we compute
+C1 = {1, 3, 32 = 9, 33 = 27 ≡ 1
+\end{Verbatim}
+(mod n)\} = \{1, 3, 9\}.
+
+\begin{Verbatim}[fontsize=\small]
+Then Cs is obtained by multipliying every element of C1 by s:
+C2 = {2, 6, 5}, C4 = {4, 12, 10}, C7 = {7, 8, 11}, C0 = {0}.
+Now since g(X) has degree 3, it corresponds to C2 or C7 (then both
+have 2 consecutive elements) or to C1 or C4 (then both have 1 consecutive element). In the first case, we would have d ≥ 3, and in the
+second case d ≥ 2. If we want to figure out which, we need to find a
+primitive 13th root of unity in F33 . Using X 3 + 2X + 1 to generate
+this finite field, a root α is such that α2 is a primitive 13th root.
+Then (X - α2 )(X - α6 )(X - α18 ) = X 3 + X 2 + X + 2 and the right
+coset is C1 .
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 42}\addcontentsline{toc}{section}{Exercise 42}
+\begin{exercisebox}
+Is it possible to construct a Reed-Solomon code of dimension k = 4 and length 7 over F8 ? If yes, construct the code, if no, explain why.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+It is possible. Let α0 , α1 , . . . , α7 be the 8 elements of F8 . Then \{(f (α1 ), . . . , f (α7 )), f (X) = f0 + f1 X + f2 X 2 + f3 X 3 ∈ F8 [X]\} forms a Reed-Solomon over F8 . Since f (X) has degree 3, then code has dimension 4. Since we evaluate f in 7 elements, the code has length 7.
+
+\end{solutionbox}
+\section*{Exercise 43 (*)}\addcontentsline{toc}{section}{Exercise 43 (*)}
+\begin{exercisebox}
+1. Construct the finite field F9 .
+
+2. If possible, give an example of MDS code of length 12 and rate 1/2. Justify
+
+your answer.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. To construct the finite field F9 , we first find an irreducible
+polynomial over F3 of degree 2, say X 2 - 2. Since evaluated in 0, 1, 2 it is
+never 0, it is irreducible. Then F9 = {a0 + a1 w, a0 , a1 ∈ F3 }, w2 = 2.
+2. To get an example of MDS code of length 12 and rate 1/2, we have n = 12,
+k/n = k/12 = 1/2 so k = 6. Then we build a Reed-Solomon code over Fq
+as long as q ≥ 12. Then for α1 , . . . , α12 distinct elements of Fq , the code
+is given by
+{(f (α1 ), . . . , f (α12 ), deg(f (X)) ≤ 5, f (X) ∈ Fq [X]}.
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 44}\addcontentsline{toc}{section}{Exercise 44}
+\begin{exercisebox}
+1. Construct the finite field F8 .
+
+2. Over F8 , construct a Reed-Solomon code C of maximal length and rate
+
+1/2.
+
+3. What is the minimum Hamming distance of C?
+
+4. Compute explicitly a generator matrix.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+1. To construct the finite field F8 , we need an irreducible polynomial of degree 3 over F2 , say X 3 + X + 1. Then
+F8 = {a0 + a1 w + a2 w2 , a0 , a1 , a2 ∈ F2 }, w3 = w + 1.
+2. Over F8 , to construct a Reed-Solomon code C of maximal length and rate
+1/2, we can have at most n = 8 (the size of the field), thus k = 4. Then
+for α1 , . . . , α8 8 distinct elements of F8 , we have
+{(f (α1 ), . . . , f (α8 ), deg f (X) ≤ 3, f (X) ∈ F8 [X]}.
+3. The minimum Hamming distance of C is given by the Singleton bound,
+namely n - k + 1 = 8 - 4 + 1 = 5.
+4. A generator matrix is given by
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+α1 α2
+  2
+ α1 α22
+α13 α23
+\end{Verbatim}
+\begin{Verbatim}[fontsize=\small]
+...
+...
+...
+...
+\end{Verbatim}
+α8
+
+\begin{Verbatim}[fontsize=\small]
+α82
+α83
+\end{Verbatim}
+\end{solutionbox}
+\section*{Exercise 45}\addcontentsline{toc}{section}{Exercise 45}
+\begin{exercisebox}
+Give an example of MDS code of length 16 and rate 1/2.
+
+\end{exercisebox}
+\begin{solutionbox}
+\textbf{Solution.}
+
+\begin{Verbatim}[fontsize=\small]
+We need a finite field of size at least 16, we could take F24 . To
+have a rate of k/n = 1/2, we need k = 8. We denote by α1 , . . . α16 the elements
+of F24 . Then the Reed-Solomon code
+{(f (α1 ), . . . , f (α16 )), f (X) ∈ F24 [X], deg f (X) <= 7}
+is an MDS code with length 16 and rate 1/2
+\end{Verbatim}
+\end{solutionbox}
+\end{document}

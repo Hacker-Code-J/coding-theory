@@ -1,0 +1,93 @@
+\documentclass[11pt,openany]{article}
+
+\input{preamble}
+\input{tcolorbox}
+\input{theorem}
+\input{tikz}
+\input{commands}
+
+
+\usepackage{mathtools}
+\usepackage{tabularx}
+
+\DeclareMathOperator{\sgn}{sgn}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\Re}{\operatorname*{Re}}
+\renewcommand{\Im}{\operatorname*{Im}}
+\newcommand{\Mat}{\operatorname{Mat}}
+
+\newcommand{\Sym}{\mathrm{Sym}}
+\newcommand{\tr}{\operatorname{tr}}
+\renewcommand{\d}{\mathrm{d}} % For the exterior derivative 'd'
+\newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\spderiv}[3]{\frac{\partial^2 #1}{\partial #2\partial #3}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\restrict}[2]{{#1}\!\mid_{#2}}
+\newcommand{\Syz}{\operatorname{Syz}}
+
+\setstretch{1.25}
+
+\begin{document}
+\pagenumbering{arabic}
+\begin{center}
+\huge\textbf{Introduction to Coding theory
+}\\
+\vspace{0.5em}
+\large{Ji, Yonghyeon}\\
+\vspace{0.5em}
+\normalsize{\today}\\
+\end{center}
+
+\noindent 
+We cover the following topics in this note.
+\begin{itemize}
+%\item Syzygy
+\item TBA.
+\end{itemize}
+\hrule\vspace{12pt}
+%\tableofcontents
+
+%\begin{center}
+%	\begin{tabular}{>{\raggedright\arraybackslash}p{0.2\textwidth}| >{\raggedright\arraybackslash}p{0.75\textwidth}}
+%		\toprule[1.2pt]
+%		\textbf{Object} & \textbf{Meaning} \\
+%		\hline
+%		Generator & A building block from which the module or ideal is produced \\
+%		Relation & An expression showing that the generators are not independent \\
+%		Syzygy & A relation among generators \\
+%		First syzygy & A relation among the original generators \\
+%		Second syzygy & A relation among the first syzygies \\
+%		Free resolution & A layered record of generators, relations, relations among relations, etc.\\
+%		\bottomrule[1.2pt]
+%	\end{tabular}
+%\end{center}
+
+
+\newpage
+
+\vfill
+\begin{thebibliography}{9}
+	
+	\bibitem{guruswami2010coding}
+	Venkatesan Guruswami,
+	\emph{15-859V: Introduction to Coding Theory, Spring 2010},
+	Carnegie Mellon University.
+	\url{https://www.cs.cmu.edu/~venkatg/teaching/codingtheory/}.
+	Accessed: 2026-04-01.
+	
+	\bibitem{guruswami2014coding}
+	Venkatesan Guruswami,
+	\emph{15-859Y: Coding Theory, Fall 2014},
+	Carnegie Mellon University.
+	\url{https://www.cs.cmu.edu/~venkatg/teaching/codingtheory-au14/}.
+	Accessed: 2026-04-01.
+	
+	\bibitem{guruswami2018coding}
+	Venkatesan Guruswami,
+	\emph{15-859Y: Coding Theory, Fall 2018},
+	Carnegie Mellon University.
+	\url{https://www.cs.cmu.edu/~venkatg/teaching/au18-coding-theory/}.
+	Accessed: 2026-04-01.
+	
+\end{thebibliography}
+\end{document}
