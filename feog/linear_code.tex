@@ -1,0 +1,1385 @@
+\section{Linear Codes}
+\definecolor{accent}{HTML}{1F4E79}
+\definecolor{softaccent}{HTML}{EAF2F8}
+\definecolor{softgray}{HTML}{F6F7F9}
+\definecolor{successdraw}{HTML}{27AE60}
+\definecolor{successfill}{HTML}{EAFAF1}
+\definecolor{errordraw}{HTML}{C0392B}
+\definecolor{errorfill}{HTML}{FDEDEC}
+
+The fundamental problem of coding theory is to transmit information reliably across a noisy channel. 
+A sender begins with a message, usually represented as a vector
+\[
+\mathbf{x}=(x_1,\dots,x_k)\in \F_2^k,
+\]
+and applies an \emph{encoder}
+\[
+\Encode:\F_2^k \longrightarrow \F_2^n,
+\qquad
+\mathbf{x}\longmapsto \mathbf{c},
+\]
+where \(n\ge k\). 
+The vector \(\mathbf{c}\) is called the \emph{codeword}. 
+%The passage from length \(k\) to length \(n\) introduces redundancy, and this redundancy is precisely what makes error detection and error correction possible.
+
+During transmission, the codeword passes through a noisy channel. 
+The effect of the channel is modeled by adding an error vector $
+\mathbf{e}\in \F_2^n$
+to the transmitted codeword, so that the receiver obtains
+\[
+\mathbf{y}=\mathbf{c}\oplus\mathbf{e}\in\F_2^n.
+\]
+The vector \(\mathbf{y}\) is called the \emph{received vector}. 
+The purpose of the decoder is to recover the original message, or equivalently the transmitted codeword, from the corrupted vector \(\mathbf{y}\).
+
+\begin{center}
+	\includegraphics[width=\textwidth]{tikz/communication.pdf}
+\end{center}
+%Thus the overall communication process is modeled by
+%\[
+%\mathbf{x}
+%\;\xmapsto{\ \Encode\ }\;
+%\mathbf{c}
+%\;\xmapsto{\ \text{channel}\ }\;
+%\mathbf{y}=\mathbf{c}+\mathbf{e}
+%\;\xmapsto{\ \Decode\ }\;
+%\widehat{\mathbf{x}}.
+%\]
+%A good error-correcting code is one for which the decoder can still recover the original message whenever the error vector is not too large, in a sense measured by its Hamming weight. 
+%In particular, if the code is designed to correct up to \(t\) errors, then one expects
+%\[
+%\Decode(\mathbf{y})=\mathbf{x}
+%\qquad\text{whenever}\qquad
+%\wt(\mathbf{e})\le t.
+%\]
+A generic communication model has the form
+\[
+\vect{x}=(x_1,\dots,x_k)
+\xrightarrow{\text{encoder}}
+\underbrace{\vect{c}=(c_1,\dots,c_n)}_{\text{codeword}\; (n\geq k)}
+\xrightarrow{\text{noise }\vect e}
+\vect{y}=\vect{c}+\vect{e}
+\xrightarrow{\text{decoder}}
+\widehat{\vect{x}}=(\widehat x_1,\dots,\widehat x_k).
+\]
+
+\medskip
+
+\begin{center}
+\begin{tikzpicture}[scale=1,>=Stealth,
+	block/.style={
+		draw=accent,
+		thick,
+		fill=softaccent,
+		rounded corners=2mm,
+		minimum width=3.2cm,
+		minimum height=1cm,
+		align=center,
+		font=\sffamily,
+		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+	},
+	decision/.style={
+		diamond,
+		aspect=1.5, % Stretches the diamond horizontally to fit text
+		draw=accent,
+		thick,
+		fill=softgray,
+		align=center,
+		font=\sffamily\small,
+		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+	},
+	successblock/.style={
+		block,
+		draw=successdraw,
+		fill=successfill,
+		text=black!85
+	},
+	errorblock/.style={
+		block,
+		draw=errordraw,
+		fill=errorfill,
+		text=black!85
+	},
+	arrow/.style={
+		->,
+		thick,
+		accent,
+		rounded corners=2mm 
+	},
+	dashedarrow/.style={
+		->,
+		thick,
+		accent,
+		dashed, % Distinguishes evaluation logic from data flow
+		rounded corners=2mm 
+	}]
+	
+	% --- Main Pipeline Nodes ---
+	\node[block] (tx) at (0,0) {Data $\vect{x}$};
+	\node[block] (enc) at (6,0) {Encoder};
+	\node[block] (chan) at (10,-1) {Channel + noise};
+	\node[block] (dec) at (6,-2) {Decoder};
+	\node[block] (rx) at (0,-2) {Data $\hat{\vect{x}}$};
+	
+	% --- Evaluation Nodes ---
+	%	\node[decision] (comp) at (0,-6) {Is $\hat{\vect{x}} = \vect{x}?$};
+	%	\node[successblock] (succ) at (6,-5) {\textbf{Successful Decoding}\\$\hat{\vect{x}} = \vect{x}$};
+	%	\node[errorblock] (err) at (6,-7) {\textbf{Decoding Error}\\$\hat{\vect{x}} \neq \vect{x}$};
+	
+	% --- Main Pipeline Arrows ---
+	\draw[arrow] (tx) -- node[above, font=\small] {$\vect{x}\in\F_q^k$} (enc);
+	\draw[arrow] (enc) -| node[above right, font=\small, pos=0.25] {$\vect{c}\in\F_q^n$} (chan);
+	\draw[arrow] (chan) |- node[below right, font=\small, pos=0.75] {$\vect{y}=\vect{c}+\vect{e}\in\F_q^n$} (dec);
+	\draw[arrow] (dec) -- node[above, font=\small] {$\widehat{\vect{x}}\in\F_q^k$} (rx);
+	
+	% --- Evaluation Arrows ---
+	%	% Route from estimated data down to comparison
+	%	\draw[dashedarrow] (rx.south) -- node[right, font=\small] {Estimate} (comp.north);
+	
+	%	% Route from original data around the left side down to comparison
+	%	\draw[dashedarrow] (tx.west) -- node[above, font=\small] {Original} ++(-1.5,0) |- (comp.west);
+	
+	%	% Branching arrows from comparison to success/error
+	%	\draw[arrow] (comp.east) -- ++(1.5,0) |- (succ.west);
+	%	\draw[arrow] (comp.east) -- ++(1.5,0) |- (err.west);
+\end{tikzpicture}
+\end{center}
+\noindent
+
+
+\newpage
+
+\begin{example}[Repetition code]
+Let \(\Sigma\) be an alphabet. An \emph{encoding} is a map
+\[
+\fullfunction{\mathsf{Encode}}{\Sigma^k}{\Sigma^n}{(x_1,\dots,x_k)}{(c_1,\dots,c_n)}
+\] with \(n\ge k\). %The output vector \(\vect c=(c_1,\dots,c_n)\) is the transmitted codeword.
+\begin{center}
+	\begin{tikzpicture}[
+		>=Stealth,
+		% Style for single input symbols
+		symbol/.style={
+			circle, draw=accent, thick, fill=softgray,
+			minimum size=9mm, inner sep=0pt, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the output codeword arrays
+		block/.style={
+			rectangle, draw=accent, thick, fill=softaccent, rounded corners=2mm,
+			minimum width=3.8cm, minimum height=1.1cm, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the mapping arrows
+		maparrow/.style={
+			|->, thick, accent, shorten >=1.5mm, shorten <=1.5mm
+		},
+		labeltext/.style={
+			font=\small\sffamily, text=black!85
+		}
+		]
+		% --- General Formula Row ---
+		\node[symbol] (x1) at (0, 0) {$x_1$};
+		\node[block] (outX) at (5.5, 0) {$(x_1, \, x_1, \, \dots, \, x_1)$};
+		
+		\draw[maparrow] (x1) -- node[above, labeltext] {$\mathsf{Encode}$} (outX.west);
+		
+		% Brace under the general codeword to show length
+		\draw[thick, accent, decorate, decoration={brace, amplitude=5pt, mirror}]
+		([xshift=4mm, yshift=-2.5mm]outX.south west) -- 
+		([xshift=-4mm, yshift=-2.5mm]outX.south east)
+		node[midway, below=6pt, labeltext] {$n$ copies ($\in \Sigma^n$)};
+	\end{tikzpicture}
+\end{center}
+%If \(\Sigma=\{0,1\}\) then
+%\[
+%(0)\mapsto (0,0,\dots,0),
+%\qquad
+%(1)\mapsto (1,1,\dots,1).
+%\]
+When \(k=1\), a very simple encoding repeats the same symbol
+%\[
+%(x_1)\longmapsto (x_1,x_1,\dots,x_1)\in \Sigma^n.
+%\]
+\begin{center}
+	\begin{tikzpicture}[
+		>=Stealth,
+		% Style for single input symbols
+		symbol/.style={
+			circle, draw=accent, thick, fill=softgray,
+			minimum size=9mm, inner sep=0pt, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the output codeword arrays
+		block/.style={
+			rectangle, draw=accent, thick, fill=softaccent, rounded corners=2mm,
+			minimum width=3.8cm, minimum height=1.1cm, align=center, font=\normalsize,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		% Style for the mapping arrows
+		maparrow/.style={
+			|->, thick, accent, shorten >=1.5mm, shorten <=1.5mm
+		},
+		labeltext/.style={
+			font=\small\sffamily, text=black!85
+		},
+		header/.style={
+			font=\bfseries\sffamily, text=accent
+		}
+		]
+		% --- Binary Case: Input 0 ---
+		% Using white fill to contrast with the abstract case
+		\node[symbol, fill=white] (b0) at (0, -2.8) {$0$};
+		\node[block, fill=white] (out0) at (5.5, -2.8) {$(0, \, 0, \, \dots, \, 0)$};
+		
+		\draw[maparrow] (b0) -- (out0.west);
+		
+		% --- Binary Case: Input 1 ---
+		\node[symbol, fill=white] (b1) at (0, -4.3) {$1$};
+		\node[block, fill=white] (out1) at (5.5, -4.3) {$(1, \, 1, \, \dots, \, 1)$};
+		
+		\draw[maparrow] (b1) -- (out1.west);
+	\end{tikzpicture}
+\end{center}
+This is called the \emph{repetition code}. If one symbol is changed during transmission, we can still recover the original message by \emph{majority vote}. For instance,
+\[
+(0,0,0)\rightsquigarrow (0,1,0),
+\qquad
+(1,1,1)\rightsquigarrow (1,0,1).
+\]
+Since \(0\) appears most often in \((0,1,0)\), we decode it as \(0\), and since
+\(1\) appears most often in \((1,0,1)\), we decode it as \(1\).
+%More generally, if \(n\) is odd, then the repetition code can correct up to
+%\[
+%\left\lfloor \frac{n-1}{2}\right\rfloor
+%\]
+%errors, because the original symbol is still the majority symbol.
+
+\medskip
+
+\begin{center}
+	\definecolor{success}{HTML}{27AE60}
+	\begin{tikzpicture}[
+		>=Stealth,
+		block/.style={
+			rectangle, draw=accent, thick, fill=softaccent, rounded corners=2mm,
+			minimum width=2.2cm, minimum height=1cm, align=center, font=\large,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		decision/.style={
+			rectangle, draw=accent, thick, fill=softgray, rounded corners=2mm,
+			minimum width=3.2cm, minimum height=1.1cm, align=center, font=\sffamily\small,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		result/.style={
+			circle, draw=success, thick, fill=success!10, 
+			minimum size=10mm, inner sep=0pt, align=center, font=\Large\bfseries, text=success,
+			drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+		},
+		arrow/.style={
+			->, thick, accent
+		},
+		noisearrow/.style={
+			->, thick, errordraw, 
+			% The snake decoration mimics the \rightsquigarrow command
+			decorate, decoration={snake, amplitude=0.4mm, segment length=3mm, post length=1.5mm}
+		},
+		labeltext/.style={font=\small\sffamily, text=black!85},
+		header/.style={font=\bfseries\sffamily, text=accent}
+		]
+		
+		% --- Column Headers ---
+		\node[header] at (0, 1.5) {Original Data};
+		\node[header] at (4, 1.5) {Received};
+		\node[header] at (8.5, 1.5) {Decoder};
+		\node[header] at (12.8, 1.5) {Recovered Data};
+		
+		\node[block] (tx1) at (0, 0) {$0$};
+		
+		% The corrupted bit is highlighted in bold red
+		\node[block] (rx1) at (4, 0) {$(0, \textcolor{errordraw}{\mathbf{1}}, 0)$};
+		
+		\node[decision] (vote1) at (8.5, 0) {Two 0s, One 1\\[1mm] (\textbf{0 is the majority})};
+		\node[result] (out1) at (12.8, 0) {0};
+		
+		\draw[noisearrow] (tx1) -- node[above, font=\small\sffamily, text=errordraw] {error} (rx1);
+		\draw[arrow] (rx1) -- node[above, labeltext] {} (vote1);
+		\draw[arrow] (vote1) -- (out1);
+		
+		% --- Horizontal Divider ---
+		%	\draw[dashed, draw=gray!40, thick] (-1.5, -1.6) -- (14, -1.6);
+		
+		%	% ==========================================
+		% EXAMPLE 2: Sending 1s
+		% ==========================================
+		\node[block] (tx2) at (0, -3.2) {$1$};
+		
+		% The corrupted bit is highlighted in bold red
+		\node[block] (rx2) at (4, -3.2) {$(1, \textcolor{errordraw}{\mathbf{0}}, 1)$};
+		
+		\node[decision] (vote2) at (8.5, -3.2) {Two 1s, One 0\\[1mm] (\textbf{1 is the majority})};
+		\node[result] (out2) at (12.8, -3.2) {1};
+		
+		\draw[noisearrow] (tx2) -- node[above, font=\small\sffamily, text=errordraw] {error} (rx2);
+		\draw[arrow] (rx2) -- node[above, labeltext] {} (vote2);
+		\draw[arrow] (vote2) -- (out2);
+	\end{tikzpicture}
+\end{center}
+\end{example}
+
+\newpage
+\subsection{Definition of Linear Codes}
+\defbox[Linear Encoding]{\begin{definition}
+	A \textbf{linear encoding} over \(\F_q\) is a linear map
+	\[
+	\F_q^k \longrightarrow \F_q^n,
+	\qquad
+	\vect{x}\longmapsto \vect{c}.
+	\]
+\end{definition}}
+%\begin{remark}
+%Since the map is linear,
+%\begin{itemize}
+%	\item the sum of two codewords is again a codeword;
+%	\item any scalar multiple of a codeword is again a codeword.
+%\end{itemize}
+%\end{remark}
+
+\medskip
+
+\defbox[Linear Code]{\begin{definition}
+	%A linear subspace \(\code\subseteq \F_q^n\) is called a \textbf{linear code}.
+	A \textbf{code of length \(n\in \mathbb{Z}_{>0}\) over \(\F_q\)} is a subset \[
+	\code\subseteq \F_q^n.
+	\]
+	The elements of \(\code\) are called \textbf{codewords}. If \(\code\leq\F_q^n\), then \(\code\) is called a \textbf{linear code}.
+\end{definition}}
+\begin{center}
+\begin{tikzpicture}[
+	>=Stealth,
+	ambient/.style={
+		draw=accent, thick, fill=softgray, rounded corners=3mm, 
+		minimum width=5cm, minimum height=5cm,
+		drop shadow={opacity=0.15, shadow xshift=1mm, shadow yshift=-1mm}
+	},
+	labeltext/.style={text=black!85},
+	header/.style={font=\bfseries\sffamily\large, text=accent},
+	codeword/.style={circle, fill=accent, inner sep=1.5pt}
+	]
+	
+	% ==========================================
+	% PANEL 1: General Code (Arbitrary Subset)
+	% ==========================================
+	
+	% Ambient Space
+	\node[ambient] (space1) at (0,0) {};
+	\node[anchor=north west, labeltext] at (space1.north west) {\; Vector Space $\F_q^n$};
+	
+	% Arbitrary Subset (Blob)
+	\draw[draw=accent, thick, fill=softaccent, rotate around={20:(0,0)}] 
+	(0.2, -0.2) ellipse (1.6cm and 1cm) node[header, below=40pt] {Subset $\code\subseteq\F_q^n$};
+	
+	% Codewords inside the subset
+	\node[codeword, label={[labeltext, font=\small]below:$\vect{c}_1$}] at (-0.5, -0.3) {};
+	\node[codeword, label={[labeltext, font=\small]right:$\vect{c}_2$}] at (0.8, -0.6) {};
+	\node[codeword, label={[labeltext, font=\small]above:$\vect{c}_3$}] at (0.6, 0.4) {};
+	
+	% The zero vector is explicitly OUTSIDE the code to show it's not required
+	\node[circle, draw=accent, thick, inner sep=1.5pt, fill=white, label={[labeltext, font=\small]above:$\vect{0}$}] at (-1.5, 1) {};
+	
+	% ==========================================
+	% PANEL 2: Linear Code (Vector Subspace)
+	% ==========================================
+	
+	% Ambient Space
+	\node[ambient] (space2) at (7,0) {};
+	\node[anchor=north west, labeltext] at (space2.north west) {\; Vector Space $\F_q^n$};
+	
+	% Subspace (A plane passing through the origin)
+	\draw[draw=accent, thick, fill=softaccent] 
+	(4.75, -.9) -- (6.25, 1.5) -- (9.0, 1.2) -- (7.5, -1.2) -- cycle node[header, below right=20pt] {Subspace $\code\leq\F_q^n$};
+	
+	% The origin (MUST be in a linear code)
+	\node[codeword, label={[labeltext, font=\small]below right:$\vect{0}$}] (zero) at (7,0) {};
+	
+	% Codewords demonstrating linear combinations
+	\node[codeword, label={[labeltext, font=\small]left:$\vect{c}_1$}] (c1) at (6.2, 0.8) {};
+	\node[codeword, label={[labeltext, font=\small]right:$\vect{c}_2$}] (c2) at (8.1, 0.3) {};
+	
+	% Vector addition (c1 + c2)
+	\node[codeword, label={[labeltext, font=\small]above:$\vect{c}_1+\vect{c}_2$}] (c3) at (7.3, 1.1) {};
+	
+	% Dashed lines showing the parallelogram of vector addition
+	\draw[dashed, accent, thin] (c1) -- (c3);
+	\draw[dashed, accent, thin] (c2) -- (c3);
+	\draw[->, accent, thin, shorten >=2pt] (zero) -- (c1);
+	\draw[->, accent, thin, shorten >=2pt] (zero) -- (c2);
+\end{tikzpicture}
+\end{center}
+
+\begin{remark}
+If $\dim_{\F_q}(\code)=k$, then \(\code\) is called a \textbf{\([n,k]_q\)-code over \(\F_q\)}.
+\end{remark}
+%If \(\code\) is a linear code, then
+%\begin{itemize}
+%	\item the zero codeword \(\vect 0\) belongs to \(\code\);
+%	\item whenever \(\vect c\in \code\), also \(-\vect c\in \code\);
+%	\item every codeword is a linear combination of basis vectors of \(\code\).
+%\end{itemize}
+
+\probox[]{\begin{proposition}
+	If \(\code\) is an $\nkcode{n}{k}{q}$-code, then
+	\[
+	|\code|=q^k.
+	\]
+\end{proposition}}
+\begin{proof}
+Choose a basis \(\vect b_1,\dots,\vect b_k\) of \(\code\). Every codeword can be written uniquely as
+\[
+x_1\vect b_1+\cdots+x_k\vect b_k,
+\qquad x_i\in \F_q.
+\]
+Each \(x_i\) has \(q\) choices, and there are \(k\) independent coefficients. Therefore the number of codewords is \(q^k\).
+\end{proof}
+
+\newpage
+\subsection{Generator Matrices}
+\begin{note}
+	In linear algebra, a choice of bases for finite-dimensional vector spaces \(V\) and \(W\) identifies each linear transformation \(T:V\to W\) with a matrix.
+	
+	Accordingly, in coding theory, after choosing bases for \(\F_q^k\) and \(\F_q^n\), a linear encoding
+	\[
+	\Encode:\F_q^k\to\F_q^n
+	\]
+	is represented by a matrix \(\mathbf G\in \F_q^{n\times k}\). 
+%	This matrix is called a generator matrix of the corresponding linear code.
+\end{note}
+\begin{center}
+	\includegraphics[width=\textwidth]{tikz/communication-2.pdf}
+\end{center}
+\vfill
+\defbox[Generator Matrix]{\begin{definition}
+%	Let \(\code\) be an \(\nkcode{n}{k}{q}\)-code over \(\F_q\). 
+%	A \textbf{generator matrix} for \(\code\) is a \(k\times n\) matrix \(G\) whose rows form a basis of \(\code\).
+Let \(\code\) be an \(\nkcode{n}{k}{q}\)-code over \(\F_q\). A \hl{\textbf{generator matrix} for $\code$} is a \hl{$k\times n$ matrix $\vect{G}$} whose rows form a basis of \(\code\).
+\end{definition}}
+\vfill
+\begin{remark}
+If \(\vect{x}=(x_1,\dots,x_k)\in \F_q^k\), then encoding is given by \[
+\vect{c}=\vect{x}\vect{G}\in\F_q^{n}\qquad\text{with } \vect{G}\in\F_q^{k\times n}.
+\]
+\end{remark}
+%\begin{remark}
+%		If \(G\) is a generator matrix of \(\code\), then \(G\) defines a linear map
+%	\[
+%	T_G:\F_q^k \to \F_q^n,\qquad \mathbf{u}\mapsto \mathbf{u}G,
+%	\]
+%	whose image is exactly \(\code\). 
+%%	Since the rows of \(G\) are linearly independent, \(\operatorname{rank}(G)=k\), hence \(T_G\) is injective. Therefore \(\code\) may be identified with the image of the encoding map \(T_G\), and 
+%	Since the rows of \(G\) are linearly independent, \(\operatorname{rank}(G)=k\),
+%	each codeword has a unique expression as a linear combination of the rows of \(G\).
+%%	A generator matrix \(G \in M_{k\times n}(\F_q)\) may be regarded as the matrix of the linear transformation
+%%	\[
+%%	T_G:\F_q^k \longrightarrow \F_q^n,\qquad \mathbf{u}\longmapsto \mathbf{u}G,
+%%	\]
+%%	with respect to the standard bases. Since the rows of \(G\) form a basis of \(\code\), one has
+%%	\[
+%%	\operatorname{Img}(T_G)=\code
+%%	\qquad\text{and}\qquad
+%%	\operatorname{rank}(T_G)=k.
+%%	\]
+%%	In particular, \(T_G\) is injective, so every codeword \(c\in\code\) is represented uniquely in the form
+%%	\[
+%%	c=\mathbf{u}G
+%%	\]
+%%	for a unique message vector \(\mathbf{u}\in\F_q^k\). Thus a generator matrix realizes the code \(\code\) as the image of a \(k\)-dimensional message space inside \(\F_q^n\).
+	\begin{center}
+		\includegraphics[scale=1]{tikz/generator-matrix-1.pdf}
+	\end{center}
+%\end{remark}
+
+
+\newpage
+\subsubsection{Systematic form}
+A particularly convenient generator matrix has the form \[
+\mathbf{G}=[\mathbf{I}_k\mid \mathbf{A}],
+\]
+where \(\textbf{I}_k\) is the \(k\times k\) identity matrix and \(\textbf{A}\) is a \(k\times (n-k)\) matrix.
+\begin{center}
+	\includegraphics[width=\textwidth]{tikz/generator-matrix-2.pdf}
+\end{center}
+
+\defbox[Systematic Form]{\begin{definition}
+	A code is said to be in \textbf{systematic form} if it has a generator matrix of the form \[
+	\mathbf{G}=[\mathbf{I}_k\mid \mathbf{A}]
+	\]
+\end{definition}}
+\begin{remark}
+	In general, a linear code has many generator matrices, since different choices of a basis of the code give different matrices. Thus a generator matrix is not unique.
+	
+	However, if the code is written in \emph{systematic form} with the first \(k\) coordinate positions chosen as the information positions, then there is a unique generator matrix of the form
+	$\vect{G}=[\vect{I}_k\mid \vect{A}]$.
+%	Indeed, if
+%	\[
+%	\vect{G}=[\vect{I}_k\mid \vect{A}]
+%	\qquad\text{and}\qquad
+%	\vect{G}'=[\vect{I}_k\mid \vect{A}']
+%	\]
+%	are two such generator matrices for the same code, then \(\vect{G}'=\vect{U}\vect{G}\) for some \(\vect{U}\in GL_k(\F_q)\). Comparing the first \(k\) columns gives \[
+%	\vect{I}_k=\vect{U}\vect{I}_k=\vect{U},
+%	\]
+%	so \(\vect{U}=\vect{I}_k\). Hence \(\vect{G}'=\vect{G}\), and therefore \(\vect{A}'=\vect{A}\).
+%	Thus the uniqueness is not among all generator matrices of the code, but only among those in systematic form with the same fixed information coordinates.
+\end{remark}
+%\begin{remark}
+%There are many generator matrices. But there is a unique generator matrix of the form $G =\mathbf{G}=[\mathbf{I}_k\mid \mathbf{A}]$ where $\mathbf{I}_k$ is the identity matrix.
+%The code is said to be in systematic form.
+%\end{remark}
+
+\vspace{20pt}
+
+\lembox[]{\begin{lemma}
+	Let \(\vect{G},\vect{G}'\in \F_q^{k\times n}\) be generator matrices of the same linear code \(\code\leq \F_q^n\). Then 
+	there exists a matrix \[
+	\exists \vect{U}\in GL_k(\F_q)\quad
+	\text{such that}\quad
+	\vect{G}'=\vect{U}\vect{G}.
+	\]
+\end{lemma}}
+\begin{proof}
+	Let
+\[
+\vect{G}=\begin{pmatrix}
+	\text{---} & \vect{g}_1 & \text{---}\\
+	\text{---} & \vect{g}_2 & \text{---}\\
+	& \vdots & \\
+	\text{---} & \vec{g}_k & \text{---}
+\end{pmatrix},
+\qquad
+\vect{G}'=\begin{pmatrix}
+	\text{---} & \vect{g}_1' & \text{---}\\
+	\text{---} & \vect{g}_2' & \text{---}\\
+	& \vdots & \\
+	\text{---} & \vec{g}_k' & \text{---}
+\end{pmatrix}
+\in \F_q^{k\times n}
+\] be generator matrices of the same linear code \(\code\leq \F_q^n\). 
+%Since \(G\) and \(G'\) are generator matrices of the same code \(C\), 
+Then their rows are two bases of the same \(k\)-dimensional subspace \(\code\leq \F_q^n\), so each row of \(\vect{G}'\) is a linear combination of the rows of \(\vect{G}\). Thus, there exist scalars \(u_{ij}\in\F_q\) such that \begin{align*}
+	\vect{g}_1'&=u_{11}\vect{g}_1+u_{12}\vect{g}_2+\cdots+u_{1k}\vect{g}_k,\\
+	\vect{g}_2'&=u_{21}\vect{g}_1+u_{22}\vect{g}_2+\cdots+u_{2k}\vect{g}_k,\\
+	&\ \vdots\\
+	\vect{g}_k'&=u_{k1}\vect{g}_1+u_{k2}\vect{g}_2+\cdots+u_{kk}\vect{g}_k.
+\end{align*}
+Let $
+\vect{U}=(u_{ij})=
+%\begin{pmatrix}
+%	u_{11}&u_{12}&\cdots&u_{1k}\\
+%	u_{21}&u_{22}&\cdots&u_{2k}\\
+%	\vdots&\vdots&\ddots&\vdots\\
+%	u_{k1}&u_{k2}&\cdots&u_{kk}
+%\end{pmatrix}
+\in \F_q^{k\times k}.
+$ Then
+\[
+\vect{U}\vect{G}=
+\begin{pmatrix}
+	u_{11}&u_{12}&\cdots&u_{1k}\\
+	u_{21}&u_{22}&\cdots&u_{2k}\\
+	\vdots&\vdots&\ddots&\vdots\\
+	u_{k1}&u_{k2}&\cdots&u_{kk}
+\end{pmatrix}
+\begin{pmatrix}
+	\text{---} & \vect{g}_1 & \text{---}\\
+	\text{---} & \vect{g}_2 & \text{---}\\
+	& \vdots & \\
+	\text{---} & \vec{g}_k & \text{---}
+\end{pmatrix}
+=
+\begin{pmatrix}
+	\text{---} & (u_{11}\vect{g}_1+\cdots+u_{1k}\vect{g}_k) & \text{---} \\
+	\text{---} & (u_{21}\vect{g}_1+\cdots+u_{1k}\vect{g}_k) & \text{---} \\
+	& \vdots & \\
+	\text{---} & (u_{k1}\vect{g}_1+\cdots+u_{kk}\vect{g}_k) & \text{---}
+\end{pmatrix}=\begin{pmatrix}
+\text{---} & \vect{g}_1' & \text{---}\\
+\text{---} & \vect{g}_2' & \text{---}\\
+& \vdots & \\
+\text{---} & \vec{g}_k' & \text{---}
+\end{pmatrix}=\vect{G}'.
+\] So $\vect{G}'=\vect{U}\vect{G}.$ Similarly, since the rows of \(\vect{G}\) are also linear combinations of the rows of \(\vect{G}'\),
+\[
+\exists\vect{V}\in \F_q^{k\times k}\quad
+\text{such that}\quad \vect{G}=\vect{V}\vect{G}'.
+\] Since \(\vect{G}'=\vect{U}\vect{G}\), we have $\vect{G}=\vect{V}\vect{U}\vect{G}$. 
+Therefore $
+\vect{V}\vect{U}=\vect{I}_k.$
+Similarly, the equation \(\vect{G}'=\vect{U}\vect{G}=\vect{U}\vect{V}\vect{G}\) gives $
+\vect{U}\vect{V}=\vect{I}_k.$ Therefore \(\vect{U}\) is invertible, with inverse \(\vect{V}\). Hence
+$\vect{U},\vect{V}\in GL_k(\F_q)$.
+\end{proof}
+\vspace{30pt}
+\begin{note}[Uniqueness of Generator Matrices in Systematic Form]
+%	The lemma says that two generator matrices of the same code differ by an invertible row operation. Equivalently, generator matrices for a fixed code are precisely the matrices obtained from one another by left multiplication by elements of \(GL_k(\F_q)\).
+If $\vect{G}=[\vect{I}_k\mid \vect{A}]$ and $\vect{G}'=[\vect{I}_k\mid \vect{A}']$
+are two generator matrices for the same code, then \(\vect{G}'=\vect{U}\vect{G}\) for some \(\vect{U}\in GL_k(\F_q)\). Then \[
+\vect{G}'=\vect{U}\vect{G}\implies
+[\vect{I}_k\mid \vect{A}']=\vect{U}[\vect{I}_k\mid \vect{A}]
+\implies
+[\vect{I}_k\mid \vect{A}']=[\vect{U}\vect{I}_k\mid \vect{U}\vect{A}]
+\] so \(\vect{U}=\vect{I}_k\). Hence \(\vect{G}'=\vect{G}\), and therefore \(\vect{A}'=\vect{A}\).
+%	Thus the uniqueness is not among all generator matrices of the code, but only among those in systematic form with the same fixed information coordinates.
+\begin{center}
+	\includegraphics[width=\textwidth]{tikz/generator-matrix-5.pdf}
+\end{center}
+\end{note}
+
+%\newpage
+%\begin{remark}
+%Let \(\code\) be a $\nkcode{n}{k}{q}$-code over $\F_q$, and suppose that the first \(k\) coordinate positions are chosen as information coordinates. Consider the projection \[
+%\pi:\F_q^n\to \F_q^k,\qquad
+%(c_1,\dots,c_n)\longmapsto (c_1,\dots,c_k).
+%\]
+%If the code is in systematic form with respect to these coordinates, then the restricted map
+%\[
+%\pi|_{\code}:\code\to \F_q^k
+%\]
+%is an isomorphism. Hence there is a unique linear encoding map \[
+%T:\F_q^k\to \code(\leq \F_q^n)\quad\text{such that}\quad
+%\pi\circ T=\id_{\F_q^k}.
+%\]
+%In other words, for each message vector \(\vect{x}\in\F_q^k\), the codeword \(T(x)\) is the unique codeword whose first \(k\) coordinates are exactly \(x\).
+%
+%Now let \(\vect{e}_1,\dots,\vect{e}_k\) be the standard basis of \(\F_q^k\). Since \(T\) is uniquely determined, the vectors \[
+%T(\vect{e}_1),\dots,T(\vect{e}_k)\in C
+%\] are uniquely determined. But these are precisely the rows of the generator matrix of \(T\) in row-vector convention. Therefore there is a unique generator matrix of the form \[
+%\vect{G}=[\vect{I}_k\mid \vect{A}].
+%\]
+%The uniqueness here is not among all generator matrices of \(C\), but only among those written in systematic form with the same fixed information coordinates.
+%\end{remark}
+
+\newpage
+\begin{remark}
+Let the first \(k\) coordinates of the codeword are exactly the information symbols. If
+$\vect{x}=(x_1,\dots,x_k)$, then \[
+\vect{x}G=(x_1,\dots,x_k,c_{k+1},\dots,c_n).
+\]
+\begin{center}
+	\includegraphics[width=\textwidth]{tikz/generator-matrix-3.pdf}
+\end{center}
+So the information symbols appear in the transmitted codeword, followed by the parity symbols.
+\end{remark}
+
+\medskip
+
+\begin{note}
+	Let
+	$\vect{x}=\begin{pmatrix}
+		x_1\\
+		\vdots\\
+		x_k
+	\end{pmatrix}\in \F_q^k$ be the message vector, written as a column vector. 
+%	If the encoding is systematic, then the first \(k\) coordinates of the codeword are exactly the information symbols. Thus, 
+	With the column-vector convention, the encoding map is represented by a generator matrix \(\vect{G}\) such that
+	$\vect{G}\vect{x}=
+	\begin{pmatrix}
+		x_1\\
+		\vdots\\
+		x_k\\
+		c_{k+1}\\
+		\vdots\\
+		c_n
+	\end{pmatrix}.
+	$ \begin{center}
+		\includegraphics[width=\textwidth]{tikz/generator-matrix-4.pdf}
+	\end{center}
+%	In other words, the transmitted codeword contains the information symbols in its first \(k\) positions, followed by the parity symbols in the remaining \(n-k\) positions.
+\end{note}
+
+\newpage
+\subsubsection{Examples: Repetition Code and Single Parity-check Code}
+\begin{example}[Repetition code]
+	The \(\nkcode{n}{1}{q}\) repetition code is the linear code defined by
+	\[
+	\Encode:\F_q\longrightarrow \F_q^n,\qquad
+	(x_1)\longmapsto (x_1,x_1,\dots,x_1).
+	\]
+%	In other words, the unique information symbol is repeated in all \(n\) coordinate positions.
+	Its generator matrix is
+	\[
+	\mathbf{G}=[1\;1\;\cdots\;1]_{1\times n}.
+	\]
+	Indeed,
+	\[
+	(x_1)\mathbf{G}
+	=(x_1)[1\;1\;\cdots\;1]
+	=(x_1,x_1,\dots,x_1).
+	\]
+	Hence the code is
+	\[
+	\code=\{(a,a,\dots,a)\in\F_q^n:\ a\in\F_q\}\leq\F_q^n.
+	\]
+%	A parity-check matrix is
+%	\[
+%	\mathbf{H}=
+%	\begin{bmatrix}
+%		1 & -1 & 0 & \cdots & 0 \\
+%		1 & 0 & -1 & \cdots & 0 \\
+%		\vdots & \vdots & \vdots & \ddots & \vdots \\
+%		1 & 0 & 0 & \cdots & -1
+%	\end{bmatrix}_{(n-1)\times n},
+%	\]
+%	so that a vector \((c_1,\dots,c_n)\in\F_q^n\) is a codeword if and only if
+%	\[
+%	c_1=c_2=\cdots=c_n.
+%	\]
+%	
+%	Since any two distinct codewords differ in every coordinate position, the minimum distance is
+%	\[
+%	d=n.
+%	\]
+%	Therefore the repetition code detects up to \(n-1\) symbol errors and corrects up to
+%	\[
+%	\left\lfloor\frac{n-1}{2}\right\rfloor
+%	\]
+%	symbol errors.
+\end{example}
+
+\vspace{30pt}
+
+\begin{example}[Single Parity-check Code]
+	The single parity-check code \(\nkcode{n}{n-1}{q}\) is the linear code
+	\[
+	\code=\left\{(x_1,\dots,x_{n-1},\textstyle\sum_{i=1}^{n-1}x_i)\in \F_q^n:\ (x_1,\dots,x_k)\in\F_q^k\right\}\leq\F_q^n.
+	\]
+	Equivalently, it is defined by the encoding map
+	\[
+	\Encode:\F_q^{n-1}\longrightarrow \F_q^n,\qquad
+	(x_1,\dots,x_{n-1})\longmapsto (x_1,\dots,x_k,\textstyle\sum_{i=1}^{n-1}x_i).
+	\]
+	A generator matrix in systematic form is
+	\[
+	\mathbf{G}=
+	\begin{bmatrix}
+		1 & 0 & \cdots & 0 & 1 \\
+		0 & 1 & \cdots & 0 & 1 \\
+		\vdots & \vdots & \ddots & \vdots & \vdots \\
+		0 & 0 & \cdots & 1 & 1
+	\end{bmatrix}_{k\times n}
+	=
+	\begin{bmatrix}
+		& 1 \\
+		\mathbf{I}_k & \vdots \\
+		& 1
+	\end{bmatrix}
+	=
+	[\mathbf{I}_k\mid \vect{1}],
+	\]
+	where \(\vect{1}\in\F_q^k\) denotes the column vector all of whose entries are \(1\).
+	Indeed, for \(\vect{x}=(x_1,\dots,x_k)\in\F_q^k\),
+	\[
+	\vect{x}\mathbf{G}
+	=
+	(x_1,\dots,x_k)
+	\begin{bmatrix}
+		& 1 \\
+		\mathbf{I}_k & \vdots \\
+		& 1
+	\end{bmatrix}
+	=
+	(x_1,\dots,x_k,x_1+\cdots+x_k).
+	\]
+	Hence the first \(n-1\) coordinates are the information symbols, and the last coordinate is their parity symbol.
+%	A parity-check matrix is
+%	\[
+%	\mathbf{H}=
+%	\begin{bmatrix}
+%		-1 & -1 & \cdots & -1 & 1
+%	\end{bmatrix},
+%	\]
+%	so a vector \((c_1,\dots,c_n)\in\F_q^n\) is a codeword if and only if
+%	\[
+%	c_n-\sum_{i=1}^k c_i=0.
+%	\]
+%	In particular, the code has minimum distance \(d=2\). Therefore it detects any single-symbol error, but it does not uniquely correct any nonzero number of symbol errors.
+\end{example}
+
+
+%
+%\section{Worked exercises on linearity}
+%
+%\subsection{A codebook that is not linear}
+%
+%\begin{exercise}
+%	Consider the codebook of length \(4\) over \(\F_2\):
+%	\[
+%	\{(1,0,0,0),\ (0,1,0,1),\ (1,1,0,1),\ (0,0,0,1)\}.
+%	\]
+%	Is this a linear code? If so, provide a generator matrix.
+%\end{exercise}
+%
+%%\begin{solution}
+%%	This codebook is \emph{not} linear.
+%%	
+%%	First, a linear code must contain the zero vector \((0,0,0,0)\), but this vector is not in the codebook.
+%%	
+%%	Second, linear codes must be closed under addition. In \(\F_2\),
+%%	\[
+%%	(1,1,0,1)+(0,0,0,1)=(1,1,0,0),
+%%	\]
+%%	and this vector also does not belong to the codebook. Therefore the set is not a linear code.
+%%\end{solution}
+%
+%\subsection{A codebook that is linear}
+%
+%\begin{exercise}
+%	Consider the following codebook of length \(5\) over \(\F_2\):
+%	\begin{align*}
+%		&(0,0,0,0,0),\ (1,0,0,1,0),\ (0,1,0,1,1),\ (1,1,0,0,1),\\
+%		&(0,0,1,0,1),\ (1,0,1,1,1),\ (0,1,1,1,0),\ (1,1,1,0,0).
+%	\end{align*}
+%	Is this a linear code? If so, provide a generator matrix.
+%\end{exercise}
+%
+%%\begin{solution}
+%%	Yes, this is a linear code. Notice that the first three coordinates run through all vectors of \(\F_2^3\):
+%%	\[
+%%	(0,0,0),(1,0,0),(0,1,0),(1,1,0),(0,0,1),(1,0,1),(0,1,1),(1,1,1).
+%%	\]
+%%	This strongly suggests a systematic generator matrix of the form
+%%	\[
+%%	G=
+%%	\begin{bmatrix}
+%%		1&0&0&a_{11}&a_{12}\\
+%%		0&1&0&a_{21}&a_{22}\\
+%%		0&0&1&a_{31}&a_{32}
+%%	\end{bmatrix}.
+%%	\]
+%%	We read off the last two coordinates from the codewords corresponding to the basis vectors:
+%%	\[
+%%	(1,0,0)\mapsto (1,0,0,1,0),
+%%	\]
+%%	so the first row is \((1,0,0,1,0)\);
+%%	\[
+%%	(0,1,0)\mapsto (0,1,0,1,1),
+%%	\]
+%%	so the second row is \((0,1,0,1,1)\);
+%%	\[
+%%	(0,0,1)\mapsto (0,0,1,0,1),
+%%	\]
+%%	so the third row is \((0,0,1,0,1)\).
+%%	
+%%	Hence a generator matrix is
+%%	\[
+%%	G=
+%%	\begin{bmatrix}
+%%		1&0&0&1&0\\
+%%		0&1&0&1&1\\
+%%		0&0&1&0&1
+%%	\end{bmatrix}.
+%%	\]
+%%	Now every codeword is of the form \(\vect{x}G\) with \(\vect{x}\in\F_2^3\), so the codebook is indeed linear.
+%%\end{solution}
+
+\newpage
+\subsection{Parity-check Matrices}
+
+A linear code can be described either by its generators or by the linear equations that all codewords satisfy.
+
+\defbox[Parity-check Matrix]{\begin{definition}
+Let \(\code\) be an \(\nkcode{n}{k}{q}\)-code. A matrix \(H\in\F_q^{(n-k)\times n}\) is called a \textbf{parity-check matrix} for \(\code\) if
+\[
+\code=\{\vect{v}\in \F_q^n : H\vect{v}\transpose=0\}.
+\] Thus codewords are exactly the vectors satisfying a system of \(n-k\) homogeneous linear equations.
+\end{definition}}
+%\begin{remark}
+%\end{remark}
+
+\medskip
+
+\subsubsection{Parity-check Matrix from a Systematic Generator Matrix}
+\begin{note}
+Suppose \[
+\vec{G}=[\vec{I}_k\mid \vec{A}],
+\]
+is a generator matrix in systematic form, where \(\vect{A}\in\F_q^{k\times (n-k)}\).
+Then define
+\[
+\vect{H}=[-\vect{A}\transpose\mid \vect{I}_{n-k}].
+\]
+\end{note}
+
+\medskip
+
+\probox[Parity-check Matrix of a Systematic Generator Matrix]{\begin{proposition}
+	Let \(\code\) be an \(\nkcode{n}{k}{q}\)-code, and suppose that \(\code\) is generated by the systematic generator matrix \[
+	\vect{G}=[\vect{I}_k\mid \vect{A}]\in \F_q^{{k\times n}},
+	\] where \(\vect{A}\in \F_q^{k\times (n-k)}\). Then
+	\[
+	\vec{H}=[-\vect{A}^{\transpose}\mid \vect{I}_{n-k}]\in \F_q^{(n-k)\times n}
+	\]
+	is a parity-check matrix of \(\code\).
+\end{proposition}}
+
+
+\begin{proposition}[Parity-check matrix of a systematic generator matrix]
+	Let \(C\) be an \(\nkcode{n}{k}{q}\)-code, and suppose that \(C\) is generated by the systematic generator matrix
+	\[
+	G=[I_k\mid A]\in M_{k\times n}(\F_q),
+	\]
+	where \(A\in M_{k\times (n-k)}(\F_q)\). Then
+	\[
+	H=[-A^{\transpose}\mid I_{n-k}]\in M_{(n-k)\times n}(\F_q)
+	\]
+	is a parity-check matrix of \(C\).
+\end{proposition}
+
+\begin{proof}
+	By definition, it suffices to show that
+	\[
+	GH^{\transpose}=0.
+	\]
+	Now
+	\[
+	H^{\transpose}=
+	\begin{bmatrix}
+		-A\\
+		I_{n-k}
+	\end{bmatrix},
+	\]
+	so
+	\[
+	GH^{\transpose}
+	=
+	[I_k\mid A]
+	\begin{bmatrix}
+		-A\\
+		I_{n-k}
+	\end{bmatrix}
+	=
+	I_k(-A)+AI_{n-k}
+	=
+	-A+A
+	=
+	0.
+	\]
+%	Hence every row of \(G\) is orthogonal to every row of \(H\). Therefore every codeword \(c\in C=\Row(G)\) satisfies
+%	\[
+%	Hc^{\transpose}=0,
+%	\]
+%	so \(C\subseteq \Ker(H)\).
+%	
+%	On the other hand, since \(H\) contains the identity block \(I_{n-k}\), its rows are linearly independent. Thus
+%	\[
+%	\rank(H)=n-k.
+%	\]
+%	It follows that
+%	\[
+%	\dim \Ker(H)=n-\rank(H)=n-(n-k)=k.
+%	\]
+%	Because \(C\subseteq \Ker(H)\) and both spaces have dimension \(k\), we conclude that
+%	\[
+%	C=\Ker(H).
+%	\]
+%	Therefore \(H\) is a parity-check matrix of \(C\).
+\end{proof}
+
+
+%\begin{proposition}
+%	If \(G=[I_k\mid A]\), then \(H=[-A\transpose\mid I_{n-k}]\) is a parity-check matrix for the code generated by \(G\).
+%\end{proposition}
+%
+%\begin{proof}
+%	First compute
+%	\[
+%	G\transpose=
+%	\begin{bmatrix}
+%		I_k\\
+%		A\transpose
+%	\end{bmatrix}.
+%	\]
+%	Therefore
+%	\[
+%	HG\transpose = [-A\transpose\mid I_{n-k}]
+%	\begin{bmatrix}
+%		I_k\\
+%		A\transpose
+%	\end{bmatrix}
+%	= -A\transpose + A\transpose = 0.
+%	\]
+%	If \(\vect{c}\in \code\), then \(\vect{c}=\vect{x}G\) for some \(\vect{x}\in \F_q^k\). Taking transposes,
+%	\[
+%	\vect{c}\transpose = G\transpose\vect{x}\transpose.
+%	\]
+%	Hence
+%	\[
+%	H\vect{c}\transpose = HG\transpose\vect{x}\transpose = 0.
+%	\]
+%	So every codeword lies in the kernel of the linear map \(\vect v\mapsto H\vect v\transpose\).
+%	
+%	Now \(H\) has rank \(n-k\) because its last \(n-k\) columns form the identity matrix. Therefore its kernel has dimension
+%	\[
+%	n-(n-k)=k.
+%	\]
+%	But \(\code\) is already a \(k\)-dimensional subspace contained in this kernel, so they must be equal:
+%	\[
+%	\code = \ker(H).
+%	\]
+%	Thus \(H\) is a parity-check matrix for \(\code\).
+%\end{proof}
+%
+%\subsection{Example: parity-check matrix of the repetition code}
+%
+%For the \((n,1)\) repetition code, the generator matrix in systematic form is
+%\[
+%G=[1\mid 1\;1\;\cdots\;1].
+%\]
+%Hence \(A\) is the row vector of all ones, so a parity-check matrix is
+%\[
+%H=[-A\transpose\mid I_{n-1}]
+%=
+%\begin{bmatrix}
+%	-1 & 1 & 0 & \cdots & 0 \\
+%	-1 & 0 & 1 & \cdots & 0 \\
+%	\vdots & \vdots & \vdots & \ddots & \vdots \\
+%	-1 & 0 & 0 & \cdots & 1
+%\end{bmatrix}.
+%\]
+%Over \(\F_2\), we have \(-1=1\), so this becomes
+%\[
+%H=
+%\begin{bmatrix}
+%	1 & 1 & 0 & \cdots & 0 \\
+%	1 & 0 & 1 & \cdots & 0 \\
+%	\vdots & \vdots & \vdots & \ddots & \vdots \\
+%	1 & 0 & 0 & \cdots & 1
+%\end{bmatrix}.
+%\]
+%These equations force all coordinates to be equal, exactly as expected for the repetition code.
+
+
+
+\newpage
+\begin{flushleft}\color{blue}
+\begin{note}[Linear Code as Short Exact Sequence]
+	A linear \([n,k]_q\) code is most naturally described by a short exact sequence \[
+	0 \longrightarrow \F_q^k \xrightarrow{\;\mathsf{Encode}\;} \F_q^n \xrightarrow{\;H\;} \F_q^{\,n-k} \longrightarrow 0,
+	%\qquad
+	%C=\operatorname{im}(\mathsf{Enc})=\ker(H).
+	\]
+	A message \(\vect x\in \F_q^k\) is encoded as
+	\[
+	\vect c=\mathsf{Enc}(\vect x)\in C.
+	\]
+	After transmission through the channel, one receives
+	\[
+	\vect y=\vect c+\vect e \in \F_q^n,
+	\]
+	where \(\vect e\in \F_q^n\) is the error vector. Applying the parity-check map yields
+	\[
+	H(\vect y)=H(\vect c+\vect e)=H(\vect e),
+	\]
+	since \(H(\vect c)=0\) for every \(\vect c\in C\).
+	
+	Thus decoding may be viewed as follows: from the syndrome \(H(\vect y)\), choose an error estimate \(\widehat{\vect e}\) with the same syndrome, typically of smallest Hamming weight, and define
+	\[
+	\widehat{\vect c}=\vect y-\widehat{\vect e}\in C.
+	\]
+	Then recover the message by
+	\[
+	\widehat{\vect x}=\mathsf{Enc}^{-1}(\widehat{\vect c}).
+	\]
+	Hence error correction is the procedure of moving the received word from its ambient coset in \(\F_q^n/C\) back to the code \(C=\ker(H)\), and then inverting the encoding map.
+	
+	%A linear \([n,k]_q\) code is most naturally described by a short exact sequence
+	%\[
+	%0 \longrightarrow \F_q^k \xrightarrow{\;\mathsf{Enc}\;} \F_q^n \xrightarrow{\;\mathsf{Syn}\;} \F_q^{\,n-k} \longrightarrow 0,
+	%\]
+	%whose image \(C=\operatorname{im}(\mathsf{Enc})\) is the code and whose kernel satisfies
+	%\[
+	%C=\ker(\mathsf{Syn}).
+	%\]
+	%If a message \(\vect x\in \F_q^k\) is transmitted, the corresponding codeword is
+	%\[
+	%\vect c=\mathsf{Enc}(\vect x)\in C.
+	%\]
+	%After the channel introduces an error vector \(\vect e\in \F_q^n\), the received word becomes
+	%\[
+	%\vect y=\vect c+\vect e.
+	%\]
+	%Applying the syndrome map yields
+	%\[
+	%\mathsf{Syn}(\vect y)=\mathsf{Syn}(\vect e),
+	%\]
+	%because \(\mathsf{Syn}(\vect c)=0\). Hence the decoder uses the syndrome of \(\vect y\) to determine an error estimate \(\widehat{\vect e}\), then forms
+	%\[
+	%\widehat{\vect c}=\vect y-\widehat{\vect e}\in C,
+	%\]
+	%and finally recovers
+	%\[
+	%\widehat{\vect x}=\mathsf{Enc}^{-1}(\widehat{\vect c}).
+	%\]
+	%Thus error correction is the process of returning the received word from its ambient coset in \(\F_q^n/C\) back to the kernel \(C\) of the syndrome map.
+\end{note}
+\end{flushleft}
+
+\newpage
+\probox[Cardinality of the matrix space \(\mathrm{Mat}_m(\F_q)\)]{\begin{proposition}
+	Let \(m,n\in \mathbb{Z}_{>0}\), and let \(q\) be a prime power. The number of \(m\times n\) matrices over the finite field \(\F_q\) is \[
+	\bigl|\mathrm{Mat}_{m\times n}(\F_q)\bigr|=q^{mn}.
+	\]
+	In particular, $\bigl|\mathrm{Mat}_m(\F_q)\bigr|=q^{m^2}$.
+\end{proposition}}
+\begin{remark}
+	Let
+	\[
+	A=
+	\begin{pmatrix}
+		| & | & & |\\
+		\textbf{v}_1 & \textbf{v}_2 & \cdots & \textbf{v}_m\\
+		| & | & & |
+	\end{pmatrix}
+	\in \mathrm{Mat}_{m\times m}(\F_q),
+	\]
+	where \(\textbf{v}_i\in \F_q^m\) are the columns of \(A\). Then \(A\) is invertible if and only if its columns are linearly independent.
+	\begin{center}
+		\includegraphics[width=\textwidth]{tikz/HW1-invertible.pdf}
+	\end{center}
+\end{remark}
+
+\medskip
+
+\begin{observation}[Computation of \(|GL_2(\F_q)|\)]
+	\; \begin{center}
+		\begin{minipage}{.49\textwidth}
+			A \(2\times 2\) matrix has the form
+			\[
+			A=\begin{pmatrix}
+				a & b\\
+				c & d
+			\end{pmatrix},
+			\qquad a,b,c,d\in \F_q.
+			\] Write the columns as
+			\[
+			\textbf{v}_1=\begin{pmatrix} a\\ c \end{pmatrix},
+			\qquad
+			\textbf{v}_2=\begin{pmatrix} b\\ d \end{pmatrix}.
+			\]
+		\end{minipage}
+		\begin{minipage}{.49\textwidth}\centering
+			\includegraphics[width=.8\textwidth]{tikz/HW1-card-gl_2.pdf}
+		\end{minipage}
+	\end{center}
+	\begin{enumerate}[(i)]
+		\item The vector \(\textbf{v}_1\) can be any nonzero vector in \(\F_q^2\). Hence there are
+		$q^2-1$ choices.
+		\item Since \(\Span(\textbf{v}_1)=\set{\lambda\textbf{v}_1:\lambda\in\F_q}\) has exactly \(q\) elements, there are
+		$q^2-q$ choices for \(\textbf{v}_2\).
+	\end{enumerate}
+	Multiplying these choices, we obtain
+	\[
+	|GL_2(\F_q)|=(q^2-1)(q^2-q).
+	\]
+\end{observation}
+
+\medskip
+
+\begin{observation}[Computation of \(|GL_3(\F_q)|\)]
+\; \begin{center}
+	\includegraphics[scale=1.3]{tikz/HW1-card-gl_3.pdf}
+\end{center}
+\end{observation}
+	
+\medskip
+
+\begin{observation}[Computation of \(|GL_4(\F_q)|\)]
+\; \begin{center}
+	\includegraphics[scale=1.3]{tikz/HW1-card-gl_4.pdf}
+\end{center}
+\end{observation}
+
+\vspace{20pt}
+
+%\newpage
+\thmbox[Counting invertible matrices over a finite field \(\F_q\)]{\begin{theorem}
+	Let \(m,n\in \mathbb{Z}_{>0}\), and let \(q\) be a prime power.
+	The number of invertible \(m\times m\) matrices over \(\F_q\) is \[
+	|\GL_m(\F_q)| = (q^m-1)(q^m-q)(q^m-q^2)\cdots(q^m-q^{m-1}).
+	\]
+	Equivalently, $\displaystyle |\GL_m(\F_q)| = \prod_{i=0}^{m-1}(q^m-q^i)$.
+\end{theorem}}
+
+\medskip
+	
+\begin{remark}
+	Recall that \[
+	|\Mat_m(\F_q)|=q^{m^2},
+	\quad\text{and}\quad
+	|GL_m(\F_q)|=\prod_{i=0}^{m-1}(q^m-q^i),
+\]
+and hence \begin{align*}
+\frac{|GL_m(\F_q)|}{|\Mat_m(\F_q)|} =
+\frac{\prod_{i=0}^{m-1}(q^m-q^i)}{q^{m^2}}
+&= \frac{1}{q^{m^2}}\left[(q^m-1)(q^m-q)(q^m-q^2)\cdots(q^m-q^{m-1})\right] \\
+&= \frac{1}{q^{m^2}}\left[q^m\Bigg(1-\frac{1}{q^m}\Bigg)\Bigg(1-\frac{1}{q^{m-1}}\Bigg)\Bigg(1-\frac{1}{q^{m-2}}\Bigg)\cdots\Bigg(1-\frac{1}{q^{1}}\Bigg)\right]\\
+&= \Bigg(1-\frac{1}{q^m}\Bigg)\Bigg(1-\frac{1}{q^{m-1}}\Bigg)\Bigg(1-\frac{1}{q^{m-2}}\Bigg)\cdots\Bigg(1-\frac{1}{q^{1}}\Bigg)\\
+&=\prod_{j=1}^{m}(1-q^{-j}).
+\end{align*}
+
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{c c c c}
+	\toprule
+	\rowcolor{gray!8}
+	\(m\) & \(\lvert \Mat_m(\F_q)\rvert\) & \(\lvert GL_m(\F_q)\rvert\) & \(\dfrac{\lvert GL_m(\F_q)\rvert}{\lvert \Mat_m(\F_q)\rvert}\) \\
+	\midrule
+	\(1\) & \(q\) & \(q-1\) & \(1-q^{-1}\) \\
+	\rowcolor{gray!8}
+	\(2\) & \(q^4\) & \((q^2-1)(q^2-q)\) & \((1-q^{-1})(1-q^{-2})\) \\
+	\(3\) & \(q^9\) & \((q^3-1)(q^3-q)(q^3-q^2)\) & \((1-q^{-1})(1-q^{-2})(1-q^{-3})\) \\
+	\rowcolor{gray!8}
+	\(4\) & \(q^{16}\) & \((q^4-1)(q^4-q)(q^4-q^2)(q^4-q^3)\) & \((1-q^{-1})(1-q^{-2})(1-q^{-3})(1-q^{-4})\) \\
+	\(\vdots\) & \(\vdots\) & \(\vdots\) & \(\vdots\) \\
+	\rowcolor{gray!8}
+	\(m\) & \(q^{m^2}\) & \(\displaystyle\prod_{i=0}^{m-1}(q^m-q^i)\) & \(\displaystyle\prod_{j=1}^{m}(1-q^{-j})\) \\
+	\bottomrule
+\end{tabular}}
+\end{center}
+\end{remark}
+	
+\medskip
+	
+\begin{example}[Invertible binary matrices]
+For \(q=2\), we have
+\[
+|\Mat_m(\F_2)|=2^{m^2},
+\qquad
+\frac{|GL_m(\F_2)|}{|\Mat_m(\F_2)|}
+=
+\prod_{j=1}^{m}(1-2^{-j}).
+\] 	\begin{center}
+\renewcommand{\arraystretch}{1}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}c c c c}
+	\toprule
+	%		\rowcolor{gray!8}
+	\(m\) & \(\lvert \Mat_m(\F_2)\rvert\) & \(\lvert GL_m(\F_2)\rvert\) & \(\dfrac{\lvert GL_m(\F_2)\rvert}{\lvert \Mat_m(\F_2)\rvert}\) \\
+	\midrule
+	\(1\) & \(2\) & \(1\) & \(0.500000\) \\
+	\(2\) & \(16\) & \(6\) & \(0.375000\) \\ %\rowcolor{gray!8}
+	\(3\) & \(512\) & \(168\) & \(0.328125\) \\
+	\(4\) & \(65,536\) & \(20,160\) & \(0.307617\) \\ %\rowcolor{gray!8}
+	\(\vdots\) & \(\vdots\) & \(\vdots\) & \(\vdots\) \\
+	\(20\) & \(-\) & \(-\) & \(0.288788\) \\
+	\bottomrule
+\end{tabular*}
+\end{center}
+		
+\begin{lstlisting}[style=sagemath, numbers=none]
+q = 2
+
+print(f"{'m':>2} {'|Mat_m(F_q)|':>15} {'|GL_m(F_q)|':>15} {'ratio':>12}")
+print("-" * 48)
+
+for m in range(1, 7):
+	Mat = q^(m^2)
+	GL = prod(q^m - q^i for i in range(m))
+	ratio = GL / Mat
+	print(f"{m:>2} {Mat:>15} {GL:>15} {ratio.n():>12.6f}")
+\end{lstlisting}
+\begin{lstlisting}
+m    |Mat_m(F_q)|     |GL_m(F_q)|        ratio
+------------------------------------------------
+1               2               1     0.500000
+2              16               6     0.375000
+3             512             168     0.328125
+4           65536           20160     0.307617
+5        33554432         9999360     0.298004
+6     68719476736     20158709760     0.293348
+\end{lstlisting}
+\end{example}
+
+\medskip
+
+\probox[]{\begin{proposition}
+	Let \(q\ge 2\) be fixed, and define
+	\[
+	a_m:=\frac{|GL_m(\F_q)|}{|\Mat_m(\F_q)|}
+	=
+	\prod_{j=1}^{m}(1-q^{-j}).
+	\]
+	Then the sequence \(\langle a_m\rangle_{m\ge 1}\) converges as \(m\to\infty\). In other words, there exists $\lim\limits_{n\to\infty}\prod_{j=1}^{m}(1-q^{-j})\in\R$. %Moreover, its limit is positive.
+\end{proposition}}
+
+\begin{proof}
+	For every \(j\ge 1\),
+	\[
+	q\ge 2\implies q^j\ge 2^j>1\implies
+	0<\frac{1}{q^j}<1.
+	\]
+	Therefore
+	\[
+	0<\frac{1}{q^j}<1\implies 
+	-1<-\frac{1}{q^j}<0\implies 0<1-\frac{1}{q^j}<1.
+	\]
+	It follows that for each \(m\ge 1\),
+	\[
+	a_m=\prod_{j=1}^{m}(1-q^{-j})>0.
+	\]
+	So the sequence \(\langle a_m\rangle\) is bounded below by \(0\). Moreover,
+	\[
+	a_{m+1}
+	=
+	\prod_{j=1}^{m+1}(1-q^{-j})
+	=
+	\left[\prod_{j=1}^{m}(1-q^{-j})\right]\cdot(1-q^{-(m+1)})
+	=
+	a_m(1-q^{-(m+1)}).
+	\]
+	Since \(0<1-q^{-(m+1)}<1\), we obtain $
+	a_{m+1}<a_m.$ Thus \(\langle a_m\rangle\) is decreasing. Therefore \(\langle a_m\rangle\) is a monotone decreasing sequence which is bounded below. Hence it converges.
+\end{proof}
+	
+\medskip
+
+\begin{example}
+For small prime $q$, the limit is approximately \begin{align*}
+q=2: && \prod_{j=1}^{\infty}(1-2^{-j})&\approx0.288788095\\
+q=3: && \prod_{j=1}^{\infty}(1-3^{-j})&\approx0.560126077\\
+q=5: && \prod_{j=1}^{\infty}(1-5^{-j})&\approx0.760332795
+\end{align*}
+\begin{center}
+\begin{minipage}[t]{.62\textwidth}
+\begin{lstlisting}[style=sagemath, numbers=none]
+q = 2
+r = 3
+s = 5
+R = RealField(100)
+
+L = prod(R(1) - R(q)^(-j) for j in range(1, 100))
+M = prod(R(1) - R(r)^(-j) for j in range(1, 100))
+N = prod(R(1) - R(s)^(-j) for j in range(1, 100))
+
+print(L)
+print(M)
+print(N)
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[t]{.35\textwidth}
+\begin{lstlisting}
+0.28878809508660242127889972193
+0.56012607792794894496979224331
+0.76033279587123242010148829629
+\end{lstlisting}
+\end{minipage}
+\end{center}
+	\end{example}
+
+
+\newpage
+\subsection{Weights and Distances}
+
+
+
+
+
+

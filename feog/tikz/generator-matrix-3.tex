@@ -1,0 +1,94 @@
+\documentclass[tikz,border=15pt]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{decorations.pathreplacing, calc, shadows, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newpxtext,newpxmath}
+\usepackage{sectsty}
+% Define colors to separate Information from Parity
+\definecolor{accent}{RGB}{20, 80, 180}       % Blue for Message/Information
+\definecolor{softaccent}{RGB}{230, 240, 255} 
+\definecolor{parity}{RGB}{210, 80, 30}       % Orange for Parity Redundancy
+\definecolor{softparity}{RGB}{255, 235, 225} 
+
+\newcommand{\vect}[1]{\mathbf{#1}}
+
+\begin{document}
+\begin{tikzpicture}[
+	>=Stealth,
+	font=\sffamily,
+	% Styles for the matrix and vector blocks
+	infoblock/.style={draw=accent, thick, fill=softaccent, rounded corners=2pt},
+	parityblock/.style={draw=parity, thick, fill=softparity, rounded corners=2pt},
+	labeltext/.style={font=\small, text=black!80},
+	mathsym/.style={font=\Large\bfseries, text=black!80}
+	]
+	
+	% ==========================================
+	% 1. MESSAGE VECTOR (x)
+	% ==========================================
+	% Expanded width to fit the coordinates
+	\draw[infoblock, drop shadow={opacity=0.15}] (-2.2, -0.45) rectangle (2.2, 0.45);
+	\node[text=accent!80!black] at (0, 0.1) {$\vect{x} = (x_1, \dots, x_k)$};
+	\node[text=accent!80!black, font=\scriptsize] at (0, -0.25) {$1 \times k$};
+	\node[labeltext, font=\small\bfseries, text=accent] at (0, 0.85) {Message Vector};
+	
+	% Multiplication sign
+	\node[mathsym] at (3.0, 0) {$\times$};
+	
+	% ==========================================
+	% 2. GENERATOR MATRIX (G = [I_k | A])
+	% ==========================================
+	% Identity Matrix I_k
+	\draw[infoblock, drop shadow={opacity=0.15}] (3.8, -1.5) rectangle (6.8, 1.5);
+	\node[text=accent!80!black, font=\Large] at (5.3, 0.2) {$\mathbf{I}_k$};
+	\node[text=accent!80!black, font=\scriptsize] at (5.3, -0.4) {$k \times k$};
+	
+	% Faint diagonal line to visually suggest the Identity matrix of 1s
+	\draw[accent, very thin, dashed] (4.0, 1.3) -- (6.6, -1.3);
+	\node[text=accent, font=\tiny, fill=softaccent, inner sep=1pt] at (4.4, 0.9) {$1$};
+	\node[text=accent, font=\tiny, fill=softaccent, inner sep=1pt] at (6.2, -0.9) {$1$};
+	
+	% Parity Matrix A
+	\draw[parityblock, drop shadow={opacity=0.15}] (6.8, -1.5) rectangle (8.8, 1.5);
+	\node[text=parity!80!black, font=\Large] at (7.8, 0.2) {$\mathbf{A}$};
+	\node[text=parity!80!black, font=\scriptsize] at (7.8, -0.4) {$k \times (n-k)$};
+	
+	% Top brace labeling the full Generator Matrix G
+	\draw[decorate, decoration={brace, amplitude=6pt}, thick] (3.8, 1.7) -- (8.8, 1.7);
+	\node[labeltext, font=\small\bfseries] at (6.3, 2.2) {Generator Matrix $\mathbf{G}$};
+	
+	% Equals sign
+	\node[mathsym] at (9.8, 0) {$=$};
+	
+	% ==========================================
+	% 3. CODEWORD VECTOR (c = [x | xA])
+	% ==========================================
+	% Structural parentheses and comma for the coordinate tuple
+	\node[mathsym] at (10.7, 0) {$($};
+	\node[mathsym] at (19.3, 0) {$)$};
+	\node[mathsym] at (15.0, -0.15) {$,$};
+	
+	% Info bits [x]: Center at 13.0, Width=4, Height=0.9
+	\draw[infoblock, drop shadow={opacity=0.15}] (11.0, -0.45) rectangle (15.0, 0.45);
+	\node[text=accent!80!black] at (13.0, 0.1) {$x_1, \dots, x_k$};
+	\node[text=accent!80!black, font=\scriptsize] at (13.0, -0.25) {$1 \times k$};
+	
+	% Parity bits [xA]: Center at 17.0, Width=4, Height=0.9
+	\draw[parityblock, drop shadow={opacity=0.15}] (15.0, -0.45) rectangle (19.0, 0.45);
+	\node[text=parity!80!black] at (17.0, 0.1) {$c_{k+1}, \dots, c_n$};
+	\node[text=parity!80!black, font=\scriptsize] at (17.0, -0.25) {$1 \times (n-k)$};
+	
+	% Top brace labeling the final Codeword c
+	\draw[decorate, decoration={brace, amplitude=6pt}, thick] (11.0, 0.7) -- (19.0, 0.7);
+	\node[labeltext, font=\small\bfseries] at (15.0, 1.2) {Systematic Codeword $\vect{c}=\vect{x}\mathbf{G}$};
+	
+	% Bottom braces breaking down Information vs. Parity
+	\draw[decorate, decoration={brace, amplitude=5pt, mirror}, thick, accent] (11.0, -0.6) -- (15.0, -0.6);
+	\node[text=accent, font=\scriptsize\bfseries] at (13.0, -1.0) {Information Symbols};
+	
+	\draw[decorate, decoration={brace, amplitude=5pt, mirror}, thick, parity] (15.0, -0.6) -- (19.0, -0.6);
+	\node[text=parity, font=\scriptsize\bfseries] at (17.0, -1.0) {Parity Symbols};
+	
+\end{tikzpicture}
+\end{document}

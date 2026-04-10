@@ -6,6 +6,52 @@
 \input{tikz}
 \input{commands}
 
+\lstset{
+	basicstyle=\footnotesize\ttfamily,
+	breaklines=true,
+	frame=single,
+	columns=fullflexible,
+	captionpos=b,
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+	numbers=none,
+	tabsize=4,
+	keepspaces=true,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false
+}
+
+\lstdefinelanguage{SageMath}{
+	language=Python,
+	morekeywords={
+		var, plot, list_plot, matrix, vector, identity_matrix,
+		random_matrix, GF, QQ, RR, ZZ, prod, factor, expand,
+		show, graphics_array
+	},
+	sensitive=true,
+	morecomment=[l]\#,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinestyle{sagemath}{
+	language=SageMath,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue},
+	commentstyle=\color{green!50!black},
+	stringstyle=\color{red!60!black},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=8pt,
+	frame=single,
+	breaklines=true,
+	columns=fullflexible,
+	keepspaces=true,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false
+}
 
 \usepackage{mathtools}
 \usepackage{tabularx}
@@ -62,7 +108,8 @@ We cover the following topics in this note.
 %\section{Introduction}
 
 \newpage
-\input{error-correcting-code}
+\input{linear_code}
+%\input{error-correcting-code}
 %\input{linear code}
 
 \newpage
@@ -126,28 +173,31 @@ We cover the following topics in this note.
 %\end{enumerate}
 
 %\vfill
-%\begin{thebibliography}{9}
-%	
-%	% If you want to cite the whole coding theory collection:
-%	\bibitem{oggier-coding-site}
-%	F.~Oggier,
-%	\emph{Teaching Material: Coding Theory},
-%	feog.github.io.
-%	Available: \url{https://feog.github.io/}.
-%	Accessed: 2026-04-01.
-%	
-%	% If you want to cite one specific note:
-%	\bibitem{oggier-coding-intro}
-%	F.~Oggier,
-%	\emph{Coding Theory: Introduction}.
-%	Available: \url{https://feog.github.io/1-coding.pdf}.
-%	Accessed: 2026-04-01.
-%	
-%	\bibitem{oggier-coding-linear}
-%	F.~Oggier,
-%	\emph{Coding Theory: Linear Codes}.
-%	Available: \url{https://feog.github.io/2-coding.pdf}.
-%	Accessed: 2026-04-01.
-%	
-%\end{thebibliography}
+\begin{thebibliography}{9}
+	
+	% If you want to cite the whole coding theory collection:
+	\bibitem{oggier-coding-site}
+	F.~Oggier,
+	\emph{Teaching Material: Coding Theory},
+	feog.github.io.
+	Available: \url{https://feog.github.io/}.
+	Accessed: 2026-04-01.
+	
+	% If you want to cite one specific note:
+	\bibitem{oggier-coding-intro}
+	F.~Oggier,
+	\emph{Coding Theory: Introduction}.
+	Available: \url{https://feog.github.io/1-coding.pdf}.
+	Accessed: 2026-04-01.
+	
+	\bibitem{oggier-coding-linear}
+	F.~Oggier,
+	\emph{Coding Theory: Linear Codes}.
+	Available: \url{https://feog.github.io/2-coding.pdf}.
+	Accessed: 2026-04-01.
+	
+	\bibitem{fund-ecc}
+	W. Cary Huffman and Vera Pless. \emph{Fundamentals of error-correcting codes}.
+	Cambridge University Press, 2003.
+\end{thebibliography}
 \end{document}

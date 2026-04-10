@@ -504,36 +504,36 @@ If \(\code\) is an $\nkcode{n}{k}{q}$-code, then
 \end{proof}
 
 \newpage
-%\begin{flushleft}\color{blue}
-%\begin{note}[Linear Code as Short Exact Sequence]
-%A linear \([n,k]_q\) code is most naturally described by a short exact sequence \[
-%0 \longrightarrow \F_q^k \xrightarrow{\;\mathsf{Encode}\;} \F_q^n \xrightarrow{\;H\;} \F_q^{\,n-k} \longrightarrow 0,
-%%\qquad
-%%C=\operatorname{im}(\mathsf{Enc})=\ker(H).
-%\]
-%A message \(\vect x\in \F_q^k\) is encoded as
-%\[
-%\vect c=\mathsf{Enc}(\vect x)\in C.
-%\]
-%After transmission through the channel, one receives
-%\[
-%\vect y=\vect c+\vect e \in \F_q^n,
-%\]
-%where \(\vect e\in \F_q^n\) is the error vector. Applying the parity-check map yields
-%\[
-%H(\vect y)=H(\vect c+\vect e)=H(\vect e),
-%\]
-%since \(H(\vect c)=0\) for every \(\vect c\in C\).
+\begin{flushleft}\color{blue}
+\begin{note}[Linear Code as Short Exact Sequence]
+A linear \([n,k]_q\) code is most naturally described by a short exact sequence \[
+0 \longrightarrow \F_q^k \xrightarrow{\;\mathsf{Encode}\;} \F_q^n \xrightarrow{\;H\;} \F_q^{\,n-k} \longrightarrow 0,
+%\qquad
+%C=\operatorname{im}(\mathsf{Enc})=\ker(H).
+\]
+A message \(\vect x\in \F_q^k\) is encoded as
+\[
+\vect c=\mathsf{Enc}(\vect x)\in C.
+\]
+After transmission through the channel, one receives
+\[
+\vect y=\vect c+\vect e \in \F_q^n,
+\]
+where \(\vect e\in \F_q^n\) is the error vector. Applying the parity-check map yields
+\[
+H(\vect y)=H(\vect c+\vect e)=H(\vect e),
+\]
+since \(H(\vect c)=0\) for every \(\vect c\in C\).
 
-%Thus decoding may be viewed as follows: from the syndrome \(H(\vect y)\), choose an error estimate \(\widehat{\vect e}\) with the same syndrome, typically of smallest Hamming weight, and define
-%\[
-%\widehat{\vect c}=\vect y-\widehat{\vect e}\in C.
-%\]
-%Then recover the message by
-%\[
-%\widehat{\vect x}=\mathsf{Enc}^{-1}(\widehat{\vect c}).
-%\]
-%Hence error correction is the procedure of moving the received word from its ambient coset in \(\F_q^n/C\) back to the code \(C=\ker(H)\), and then inverting the encoding map.
+Thus decoding may be viewed as follows: from the syndrome \(H(\vect y)\), choose an error estimate \(\widehat{\vect e}\) with the same syndrome, typically of smallest Hamming weight, and define
+\[
+\widehat{\vect c}=\vect y-\widehat{\vect e}\in C.
+\]
+Then recover the message by
+\[
+\widehat{\vect x}=\mathsf{Enc}^{-1}(\widehat{\vect c}).
+\]
+Hence error correction is the procedure of moving the received word from its ambient coset in \(\F_q^n/C\) back to the code \(C=\ker(H)\), and then inverting the encoding map.
 
 %A linear \([n,k]_q\) code is most naturally described by a short exact sequence
 %\[
@@ -564,6 +564,14 @@ If \(\code\) is an $\nkcode{n}{k}{q}$-code, then
 %\widehat{\vect x}=\mathsf{Enc}^{-1}(\widehat{\vect c}).
 %\]
 %Thus error correction is the process of returning the received word from its ambient coset in \(\F_q^n/C\) back to the kernel \(C\) of the syndrome map.
-%\end{note}
-%\end{flushleft}
-%
+\end{note}
+\end{flushleft}
+
+\newpage
+\subsection{How to Correct Errors}
+
+
+
+
+
+
