@@ -78,9 +78,13 @@
 
 \newcommand{\nkcode}[3]{[#1,#2]_{#3}}
 \newcommand{\nkdcode}[4]{[#1,#2,#3]_{#4}}
+\newcommand{\nkq}{\nkcode{n}{k}{q}}
 \newcommand{\Encode}{\operatorname{Encode}}
 \newcommand{\Decode}{\operatorname{Decode}}
 \newcommand{\wt}{\operatorname{wt}}
+
+\newcommand{\ideal}[1]{\langle #1\rangle}
+\newcommand{\ol}[1]{\overline{#1}}
 
 \setstretch{1.25}
 
@@ -107,8 +111,8 @@ We cover the following topics in this note.
 %\newpage
 %\section{Introduction}
 
-\newpage
-\input{linear_code}
+\newpage\input{linear_code}
+\newpage\input{cyclic_code}
 %\input{error-correcting-code}
 %\input{linear code}
 

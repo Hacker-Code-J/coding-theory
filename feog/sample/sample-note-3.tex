@@ -1,0 +1,1471 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tikz-cd}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{enumitem}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	citecolor=blue,
+	urlcolor=blue
+}
+
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
+
+%------------------------------------------------
+% theorem environments
+%------------------------------------------------
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+%------------------------------------------------
+% macros
+%------------------------------------------------
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\mSpec}{\operatorname{mSpec}}
+\newcommand{\Frac}{\operatorname{Frac}}
+\newcommand{\Ker}{\operatorname{Ker}}
+%\newcommand{\Im}{\operatorname{Im}}
+\newcommand{\Ann}{\operatorname{Ann}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\kk}[1]{\kappa\!\left(#1\right)}
+
+\newcommand{\ideal}[1]{\langle #1\rangle}
+\newcommand{\ol}[1]{\overline{#1}}
+
+%------------------------------------------------
+\begin{document}
+	
+	\begin{center}
+		{\LARGE \textbf{Quotient Rings, Spectra, and Cyclic Codes}}\\[0.5em]
+		{\large A comparative lecture note based on $\Z$, $\C[x]$, and $\F_q[x]/\ideal{x^n-1}$}
+	\end{center}
+	
+	\tableofcontents
+	
+	\section{Introduction}
+	
+	The purpose of these notes is to explain, in one unified framework, the following themes:
+	
+	\begin{enumerate}[label=\textbf{(\arabic*)}]
+		\item the ideal correspondence between a ring \(R\) and a quotient \(R/I\);
+		
+		\item the geometric meaning of this correspondence through spectra, especially for
+		\[
+		R=\Z
+		\qquad\text{and}\qquad
+		R=\C[x];
+		\]
+		
+		\item the interpretation of an element of a ring as a regular function on \(\Spec(R)\), and the distinction between this and a tangent-bundle section;
+		
+		\item the application of the same idea to cyclic codes through the quotient ring
+		\[
+		\F_q[x]/\ideal{x^n-1}.
+		\]
+	\end{enumerate}
+	
+	The central algebraic philosophy is:
+	
+	\begin{quote}
+		Passing from \(R\) to \(R/I\) means forcing every element of \(I\) to become zero.  
+		Therefore only those ideals of \(R\) that already contain \(I\) survive in the quotient.
+	\end{quote}
+	
+	In the cyclic-code setting, the quotient
+	\[
+	\F_q[x]/\ideal{x^n-1}
+	\]
+	has an additional feature: as an \(\F_q\)-vector space it is naturally identified with \(\F_q^n\), and multiplication by \(x\) becomes cyclic shift of coordinates. Because of this, ideals of the quotient ring become cyclic codes.
+	
+	\section{The ideal correspondence for a quotient ring}
+	
+	We begin with the universal algebraic statement.
+	
+	\begin{theorem}[Ideal correspondence]\label{thm:ideal-correspondence}
+		Let \(R\) be a ring, let \(I\triangleleft R\) be an ideal, and let
+		\[
+		\pi:R\to R/I
+		\]
+		be the quotient map. Then the assignment
+		\[
+		J' \longmapsto \pi^{-1}(J')
+		\]
+		defines an inclusion-preserving bijection
+		\[
+		\{\text{ideals of }R/I\}
+		\longleftrightarrow
+		\{\text{ideals }J\triangleleft R \text{ such that } I\subseteq J\}.
+		\]
+		Its inverse is given by
+		\[
+		J \longmapsto J/I.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Let \(J'\triangleleft R/I\). Then \(\pi^{-1}(J')\) is an ideal of \(R\). Since \(\pi(I)=0\), we have
+		\[
+		I\subseteq \pi^{-1}(J').
+		\]
+		
+		Conversely, if \(J\triangleleft R\) and \(I\subseteq J\), then
+		\[
+		J/I=\{\ol{x}\in R/I:x\in J\}
+		\]
+		is an ideal of \(R/I\).
+		
+		Now we verify that the two constructions are inverse.
+		
+		First, let \(J\triangleleft R\) with \(I\subseteq J\). Then
+		\[
+		\pi^{-1}(J/I)=J.
+		\]
+		Indeed, \(\pi(x)\in J/I\) if and only if \(x\in J\).
+		
+		Second, let \(J'\triangleleft R/I\). Then
+		\[
+		\pi^{-1}(J')/I=J'.
+		\]
+		Indeed, every element of \(J'\) is represented by an element of \(\pi^{-1}(J')\), and conversely every class from \(\pi^{-1}(J')\) lies in \(J'\).
+		
+		Thus the correspondence is bijective. Inclusion-preservation is immediate.
+	\end{proof}
+	
+	\begin{remark}
+		A useful slogan is
+		\[
+		\boxed{
+			\text{ideals of }R/I
+			\;\;\text{are exactly}\;\;
+			\text{ideals of }R\text{ containing }I.
+		}
+		\]
+	\end{remark}
+	
+	\section{First model: the quotient \(\Z\to \Z/(n)\)}
+	
+	We now specialize to \(R=\Z\).
+	
+	\subsection{Ideals of \(\Z\)}
+	
+	Every ideal of \(\Z\) has the form
+	\[
+	(m)=m\Z
+	\]
+	for a unique integer \(m\ge 0\).
+	
+	Let us consider the quotient
+	\[
+	\pi:\Z\to \Z/(n).
+	\]
+	
+	\begin{proposition}\label{prop:Z-quotient}
+		The ideals of \(\Z/(n)\) are in bijection with the ideals \((d)\subseteq \Z\) satisfying
+		\[
+		(n)\subseteq (d).
+		\]
+		Equivalently, they are in bijection with the positive divisors \(d\) of \(n\).
+	\end{proposition}
+	
+	\begin{proof}
+		By Theorem \ref{thm:ideal-correspondence}, the ideals of \(\Z/(n)\) correspond to the ideals of \(\Z\) containing \((n)\). Since every ideal of \(\Z\) is of the form \((d)\), we must determine when
+		\[
+		(n)\subseteq (d).
+		\]
+		This happens if and only if \(d\mid n\).
+	\end{proof}
+	
+	\begin{example}
+		Take \(n=12\). Then the positive divisors of \(12\) are
+		\[
+		1,\ 2,\ 3,\ 4,\ 6,\ 12.
+		\]
+		Hence the ideals of \(\Z/(12)\) are
+		\[
+		(1)/(12),\ (2)/(12),\ (3)/(12),\ (4)/(12),\ (6)/(12),\ (12)/(12).
+		\]
+		For example,
+		\[
+		(4)/(12)=\{\ol{0},\ol{4},\ol{8}\}\subseteq \Z/(12).
+		\]
+	\end{example}
+	
+	Thus quotienting by \((12)\) preserves exactly the ideal structure compatible with the relation \(12=0\).
+	
+	\section{Second model: the quotient \(\C[x]\to \C[x]/\ideal{g(x)}\)}
+	
+	We now turn to the polynomial ring \(\C[x]\).
+	
+	\subsection{Ideals of \(\C[x]\)}
+	
+	Since \(\C[x]\) is a principal ideal domain, every ideal is of the form
+	\[
+	(f(x))
+	\]
+	for some polynomial \(f(x)\in \C[x]\).
+	
+	Let
+	\[
+	\pi:\C[x]\to \C[x]/\ideal{g(x)}
+	\]
+	be the quotient map.
+	
+	\begin{proposition}\label{prop:Cx-quotient}
+		The ideals of \(\C[x]/\ideal{g(x)}\) are in bijection with the ideals \((f(x))\subseteq \C[x]\) satisfying
+		\[
+		(g(x))\subseteq (f(x)).
+		\]
+		Equivalently, they are in bijection with the divisors of \(g(x)\), up to multiplication by a nonzero constant.
+	\end{proposition}
+	
+	\begin{proof}
+		By Theorem \ref{thm:ideal-correspondence}, the ideals of \(\C[x]/(g)\) correspond to the ideals of \(\C[x]\) containing \((g)\). Since every ideal is principal, we consider ideals \((f)\) such that
+		\[
+		(g)\subseteq (f).
+		\]
+		In a PID, this is equivalent to \(f\mid g\).
+	\end{proof}
+	
+	\begin{example}
+		Let
+		\[
+		g(x)=x^2(x-1).
+		\]
+		Then the monic divisors of \(g(x)\) are
+		\[
+		1,\quad x,\quad x^2,\quad x-1,\quad x(x-1),\quad x^2(x-1).
+		\]
+		Therefore the ideals of
+		\[
+		\C[x]/\ideal{x^2(x-1)}
+		\]
+		are precisely
+		\[
+		(1)/(g),\ (x)/(g),\ (x^2)/(g),\ (x-1)/(g),\ (x(x-1))/(g),\ (g)/(g).
+		\]
+	\end{example}
+	
+	This is the exact polynomial analogue of the integer case:
+	\[
+	\boxed{
+		\text{divisors of }n
+		\longleftrightarrow
+		\text{ideals of }\Z/(n),
+		\qquad
+		\text{divisors of }g(x)
+		\longleftrightarrow
+		\text{ideals of }\C[x]/(g(x)).
+	}
+	\]
+	
+	\section{The geometric meaning: spectra and closed subspaces}
+	
+	We now reinterpret the quotient construction geometrically.
+	
+	\subsection{From quotients to closed immersions}
+	
+	The quotient map
+	\[
+	R\to R/I
+	\]
+	induces a map
+	\[
+	\Spec(R/I)\to \Spec(R).
+	\]
+	Its image is the closed subset
+	\[
+	V(I)=\{\mathfrak p\in \Spec(R): I\subseteq \mathfrak p\}.
+	\]
+	Thus there is a natural homeomorphism
+	\[
+	\Spec(R/I)\cong V(I)\subseteq \Spec(R).
+	\]
+	
+	\begin{remark}
+		The quotient ring \(R/I\) is therefore the coordinate ring of the closed subspace cut out by the equation \(I=0\).
+	\end{remark}
+	
+	\subsection{Points and residue fields}
+	
+	Let \(x\in \Spec(R)\), corresponding to a prime ideal \(\mathfrak p_x\). Its residue field is
+	\[
+	\kk{x} = \Frac(R_{\mathfrak p_x}/\mathfrak p_xR_{\mathfrak p_x}).
+	\]
+	If \(\mathfrak p_x\) is maximal, then
+	\[
+	\kk{x}\cong R/\mathfrak p_x.
+	\]
+	
+	There is a canonical morphism
+	\[
+	\Spec(\kk{x})\to \Spec(R)
+	\]
+	whose image is the point \(x\).
+	
+	\begin{remark}
+		It is essential to distinguish two kinds of maps:
+		
+		\begin{enumerate}[label=\textbf{(\alph*)}]
+			\item the quotient-induced map
+			\[
+			\Spec(R/I)\to \Spec(R),
+			\]
+			which cuts out a closed subspace;
+			
+			\item the residue-field map
+			\[
+			\Spec(\kk{x})\to \Spec(R),
+			\]
+			which picks out a single point.
+		\end{enumerate}
+	\end{remark}
+	
+	\section{The spectrum of \(\Z\)}
+	
+	The prime ideals of \(\Z\) are:
+	\[
+	(0)
+	\qquad\text{and}\qquad
+	(p)\ \text{for each prime }p.
+	\]
+	
+	Thus \(\Spec(\Z)\) has one generic point \((0)\) and one closed point \((p)\) for each prime \(p\).
+	
+	\subsection{Residue fields}
+	
+	At the generic point,
+	\[
+	\kk{(0)}=\Q.
+	\]
+	At a closed point \((p)\),
+	\[
+	\kk{(p)}\cong \Z/(p)\cong \F_p.
+	\]
+	
+	Therefore each prime \(p\) gives a morphism
+	\[
+	\Spec(\F_p)\to \Spec(\Z).
+	\]
+	
+	\begin{remark}
+		The coproduct
+		\[
+		\coprod_{p\text{ prime}}\Spec(\F_p)\to \Spec(\Z)
+		\]
+		captures all closed points, but it omits the generic point. The full family of point maps is
+		\[
+		\coprod_{x\in \Spec(\Z)}\Spec(\kk{x})\to \Spec(\Z).
+		\]
+	\end{remark}
+	
+	\subsection{Example: \(\Spec(\Z/(12))\)}
+	
+	Now let
+	\[
+	\Z\to \Z/(12).
+	\]
+	Then
+	\[
+	\Spec(\Z/(12))\cong V(12)\subseteq \Spec(\Z).
+	\]
+	Set-theoretically,
+	\[
+	V(12)=\{(2),(3)\},
+	\]
+	because the prime ideals containing \((12)\) are exactly \((2)\) and \((3)\).
+	
+	Thus quotienting by \(12\) cuts out the closed points corresponding to the prime divisors of \(12\).
+	
+	\section{The spectrum of \(\C[x]\)}
+	
+	The prime ideals of \(\C[x]\) are:
+	\[
+	(0)
+	\qquad\text{and}\qquad
+	(x-\alpha)\ \text{for each }\alpha\in \C.
+	\]
+	
+	Thus \(\Spec(\C[x])\) has one generic point \((0)\) and one closed point \((x-\alpha)\) for each complex number \(\alpha\).
+	
+	\subsection{Residue fields}
+	
+	At the generic point,
+	\[
+	\kk{(0)}=\C(x).
+	\]
+	At a closed point \((x-\alpha)\),
+	\[
+	\kk{(x-\alpha)}\cong \C[x]/(x-\alpha)\cong \C.
+	\]
+	
+	Thus each \(\alpha\in\C\) gives a morphism
+	\[
+	\Spec(\C)\to \Spec(\C[x]).
+	\]
+	
+	Equivalently,
+	\[
+	\coprod_{\alpha\in \C}\Spec\!\bigl(\C[x]/(x-\alpha)\bigr)\to \Spec(\C[x])
+	\]
+	describes all closed points.
+	
+	\begin{remark}
+		Again this closed-point coproduct omits the generic point. The complete family is
+		\[
+		\coprod_{x\in \Spec(\C[x])}\Spec(\kk{x})\to \Spec(\C[x]).
+		\]
+	\end{remark}
+	
+	\subsection{Example: \(\Spec(\C[x]/(g(x)))\)}
+	
+	Let
+	\[
+	\C[x]\to \C[x]/(g(x)).
+	\]
+	Then
+	\[
+	\Spec(\C[x]/(g(x)))\cong V(g)\subseteq \Spec(\C[x]).
+	\]
+	
+	If
+	\[
+	g(x)=\prod_{i=1}^r (x-\alpha_i)^{e_i},
+	\]
+	then set-theoretically
+	\[
+	V(g)=\{(x-\alpha_1),\dots,(x-\alpha_r)\}.
+	\]
+	Thus quotienting by \((g)\) cuts out the roots of \(g(x)\).
+	
+	\begin{proposition}[Squarefree case]\label{prop:squarefree-Cx}
+		If
+		\[
+		g(x)=\prod_{i=1}^r (x-\alpha_i)
+		\]
+		has distinct roots, then
+		\[
+		\C[x]/(g(x))
+		\cong
+		\prod_{i=1}^r \C[x]/(x-\alpha_i)
+		\cong
+		\prod_{i=1}^r \C.
+		\]
+		Consequently,
+		\[
+		\Spec(\C[x]/(g(x)))
+		\cong
+		\coprod_{i=1}^r \Spec(\C).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		The ideals \((x-\alpha_i)\) are pairwise comaximal. The Chinese remainder theorem gives
+		\[
+		\C[x]/\left(\prod_{i=1}^r (x-\alpha_i)\right)
+		\cong
+		\prod_{i=1}^r \C[x]/(x-\alpha_i).
+		\]
+		Each factor is isomorphic to \(\C\).
+	\end{proof}
+	
+	\section{Elements of a ring as functions on \texorpdfstring{$\Spec(R)$}{Spec(R)}}
+	
+	A point that is often left implicit is the following:
+	
+	\begin{quote}
+		An element of a ring \(R\) is not, in general, a function with values in one fixed field.  
+		Rather, it is a function whose value at a point \(x\in \Spec(R)\) lies in the residue field \(\kk{x}\).
+	\end{quote}
+	
+	\subsection{The general construction}
+	
+	Let \(R\) be a ring and let \(a\in R\). For each point
+	\[
+	x\in \Spec(R),
+	\]
+	corresponding to a prime ideal \(\mathfrak p_x\), the image of \(a\) in the residue field
+	\[
+	\kk{x}
+	\]
+	is denoted by
+	\[
+	a(x)\in \kk{x}.
+	\]
+	
+	Thus \(a\) defines a pointwise rule
+	\[
+	x\longmapsto a(x)\in \kk{x}.
+	\]
+	Equivalently, \(a\) determines a section of the projection
+	\[
+	\coprod_{x\in \Spec(R)} \kk{x}\longrightarrow \Spec(R).
+	\]
+	
+	\begin{remark}
+		So the correct geometric statement is:
+		\[
+		\boxed{
+			a\in R
+			\quad\leadsto\quad
+			\bigl(x\mapsto a(x)\in \kk{x}\bigr).
+		}
+		\]
+		In particular, an element of \(R\) is not naturally a function
+		\[
+		\Spec(R)\to R
+		\]
+		or even a function to a single field. Its codomain varies from point to point.
+	\end{remark}
+	
+	\subsection{The case \texorpdfstring{$R=\C[x]$}{R=C[x]}}
+	
+	Let
+	\[
+	f(x)\in \C[x].
+	\]
+	Then \(f\) defines a function on \(\Spec(\C[x])\) in the above sense.
+	
+	\begin{itemize}
+		\item At a closed point \((x-\alpha)\), one has
+		\[
+		f \longmapsto f(\alpha)\in \C \cong \kk{(x-\alpha)}.
+		\]
+		
+		\item At the generic point \((0)\), one has
+		\[
+		f \longmapsto f(x)\in \C(x)=\kk{(0)}.
+		\]
+	\end{itemize}
+	
+	Thus a polynomial is a regular function on \(\Spec(\C[x])\), whose value at each closed point is the usual complex number \(f(\alpha)\), but whose value at the generic point lies in the rational function field \(\C(x)\).
+	
+	\begin{remark}
+		If one restricts only to closed points, then one recovers the usual classical picture
+		\[
+		\alpha\longmapsto f(\alpha),\qquad \alpha\in \C.
+		\]
+		So the usual polynomial function on \(\C\) is only the closed-point part of the full \(\Spec\)-picture.
+	\end{remark}
+	
+	\subsection{The closed-point evaluation section for \texorpdfstring{$\C[x]$}{C[x]}}
+	
+	Let \(f\in \C[x]\). For each closed point \((x-\alpha)\in \Spec(\C[x])\), the image of \(f\) in the residue field at that point is
+	\[
+	f \bmod (x-\alpha)\in \C[x]/(x-\alpha)\cong \C.
+	\]
+	Thus \(f\) determines a section over the closed points
+	\[
+	s_f:\{\text{closed points of }\Spec(\C[x])\}\longrightarrow
+	\coprod_{\alpha\in\C}\C[x]/(x-\alpha),
+	\]
+	defined by
+	\[
+	s_f\bigl((x-\alpha)\bigr)=f \bmod (x-\alpha).
+	\]
+	Under the natural identification
+	\[
+	\C[x]/(x-\alpha)\cong \C,
+	\]
+	this is exactly the usual evaluation map
+	\[
+	(x-\alpha)\longmapsto f(\alpha).
+	\]
+	
+	However, this description only involves the closed points of \(\Spec(\C[x])\).  
+	To include the generic point \((0)\), one must pass to the full residue-field picture:
+	\[
+	\widetilde f:\Spec(\C[x])\longrightarrow \coprod_{x\in \Spec(\C[x])}\kk{x},
+	\qquad
+	x\longmapsto f(x)\in \kk{x}.
+	\]
+	Here
+	\[
+	\widetilde f((x-\alpha))=f(\alpha)\in \C,
+	\qquad
+	\widetilde f((0))=f(x)\in \C(x).
+	\]
+	Thus the usual polynomial function \(\alpha\mapsto f(\alpha)\) is the closed-point part of the full regular-function interpretation of \(f\) on \(\Spec(\C[x])\).
+	
+	\subsection{The case \texorpdfstring{$R=\Z$}{R=Z}}
+	
+	Now let \(n\in \Z\). Then \(n\) defines a function on \(\Spec(\Z)\) in the same sense.
+	
+	\begin{itemize}
+		\item At a closed point \((p)\), where \(p\) is prime,
+		\[
+		n \longmapsto n \bmod p \in \F_p \cong \kk{(p)}.
+		\]
+		
+		\item At the generic point \((0)\),
+		\[
+		n \longmapsto n\in \Q=\kk{(0)}.
+		\]
+	\end{itemize}
+	
+	So an integer may be viewed as a function assigning to each prime \(p\) its residue modulo \(p\), together with its value in the generic fiber \(\Q\).
+	
+	\subsection{The closed-point evaluation section for \texorpdfstring{$\Z$}{Z}}
+	
+	Let \(n\in \Z\). For each closed point \((p)\in \Spec(\Z)\), where \(p\) is prime, the image of \(n\) in the residue field is
+	\[
+	n \bmod p \in \Z/(p)\cong \F_p.
+	\]
+	Thus \(n\) determines a section over the closed points
+	\[
+	s_n:\{\text{closed points of }\Spec(\Z)\}\longrightarrow
+	\coprod_{p\text{ prime}} \Z/(p),
+	\]
+	defined by
+	\[
+	s_n\bigl((p)\bigr)=n \bmod p.
+	\]
+	
+	To include the generic point \((0)\), one uses the full residue-field picture
+	\[
+	\widetilde n:\Spec(\Z)\longrightarrow \coprod_{x\in \Spec(\Z)}\kk{x},
+	\qquad
+	x\longmapsto n(x)\in \kk{x},
+	\]
+	where
+	\[
+	\widetilde n((p))=n\bmod p\in \F_p,
+	\qquad
+	\widetilde n((0))=n\in \Q.
+	\]
+	So an integer may be viewed as a function assigning to each prime \(p\) its residue modulo \(p\), together with its value in the generic fiber \(\Q\).
+	
+	\subsection{Quotients as restricting the domain of definition}
+	
+	Let
+	\[
+	\pi:R\to R/I.
+	\]
+	Then an element of \(R/I\) is a regular function on
+	\[
+	\Spec(R/I)\cong V(I)\subseteq \Spec(R).
+	\]
+	In other words, quotienting by \(I\) means restricting from all of \(\Spec(R)\) to the closed subspace on which the elements of \(I\) vanish.
+	
+	\begin{example}
+		Let
+		\[
+		g(x)=\prod_{i=1}^r (x-\alpha_i)
+		\]
+		with distinct roots. Then
+		\[
+		\C[x]/(g(x))\cong \prod_{i=1}^r \C,
+		\]
+		so an element of \(\C[x]/(g(x))\) may be viewed literally as a tuple
+		\[
+		(c_1,\dots,c_r),
+		\qquad c_i\in \C,
+		\]
+		that is, as a function on the finite set of roots \(\{\alpha_1,\dots,\alpha_r\}\).
+	\end{example}
+	
+	\section{Regular functions versus tangent-bundle sections}
+	
+	In the previous section, we interpreted an element \(a\in R\) as a pointwise assignment
+	\[
+	x\longmapsto a(x)\in \kk{x},
+	\qquad x\in \Spec(R),
+	\]
+	where \(\kk{x}\) is the residue field at the point \(x\).
+	
+	It is important to understand that these are \emph{not} sections of the tangent bundle.  
+	Rather, they are sections of the \emph{structure sheaf}.
+	
+	The tangent-bundle analogue exists, but it is a different object.
+	
+	\subsection{The manifold analogy}
+	
+	Let \(M\) be a smooth manifold. A smooth function
+	\[
+	f\in C^\infty(M)
+	\]
+	assigns to each point \(p\in M\) a scalar value
+	\[
+	f(p)\in \mathbb{R}.
+	\]
+	
+	By contrast, a vector field
+	\[
+	v\in \Gamma(M,TM)
+	\]
+	assigns to each point \(p\in M\) a tangent vector
+	\[
+	v(p)\in T_pM.
+	\]
+	
+	Thus already in differential geometry one distinguishes:
+	
+	\[
+	\text{function: }p\mapsto f(p)\in \mathbb{R},
+	\qquad
+	\text{vector field: }p\mapsto v(p)\in T_pM.
+	\]
+	
+	\subsection{Scheme-theoretic version}
+	
+	Now let \(X=\Spec(R)\).
+	
+	\begin{itemize}
+		\item A \emph{regular function} on \(X\) is a section of the structure sheaf
+		\[
+		\mathcal{O}_X.
+		\]
+		Globally,
+		\[
+		\Gamma(X,\mathcal O_X)=R.
+		\]
+		Thus an element \(a\in R\) is a global regular function.
+		
+		\item A \emph{vector field} on \(X\) is a section of the tangent sheaf
+		\[
+		\mathcal T_X.
+		\]
+		Globally,
+		\[
+		\Gamma(X,\mathcal T_X)
+		\]
+		is generally a different \(R\)-module.
+	\end{itemize}
+	
+	So the earlier pointwise interpretation
+	\[
+	a\in R
+	\quad\leadsto\quad
+	\bigl(x\mapsto a(x)\in \kk{x}\bigr)
+	\]
+	should be understood as the pointwise picture for a section of \(\mathcal O_X\), not of \(\mathcal T_X\).
+	
+	\begin{remark}
+		Thus the correct analogy is
+		\[
+		\boxed{
+			\text{regular function} \leftrightarrow \text{section of }\mathcal O_X,
+			\qquad
+			\text{vector field} \leftrightarrow \text{section of }\mathcal T_X.
+		}
+		\]
+	\end{remark}
+	
+	\subsection{Tangent spaces at points}
+	
+	Let \(x\in X=\Spec(R)\) correspond to a prime ideal \(\mathfrak p_x\).  
+	The Zariski tangent space at \(x\) is
+	\[
+	T_xX
+	=
+	\operatorname{Hom}_{\kk{x}}\!\left(\mathfrak m_x/\mathfrak m_x^2,\kk{x}\right),
+	\]
+	where \(\mathfrak m_x\) is the maximal ideal of the local ring \(\mathcal O_{X,x}\).
+	
+	A vector field therefore assigns, at each point \(x\), an element of \(T_xX\), just as a regular function assigns an element of \(\kk{x}\).
+	
+	So pointwise, one has the comparison
+	
+	\[
+	\begin{array}{c|c}
+		\text{type of section} & \text{fiber over }x \\
+		\hline
+		\text{regular function} & \kk{x} \\
+		\text{vector field} & T_xX
+	\end{array}
+	\]
+	
+	\subsection{Example: \texorpdfstring{$X=\Spec(\C[x])$}{X=Spec(C[x])}}
+	
+	Let
+	\[
+	X=\Spec(\C[x]).
+	\]
+	This is the affine line \(\mathbb A^1_\C\).
+	
+	\paragraph{Regular functions.}
+	A polynomial
+	\[
+	f(x)\in \C[x]
+	\]
+	defines a global section of \(\mathcal O_X\).  
+	At a closed point \((x-\alpha)\), its value is
+	\[
+	f(\alpha)\in \C\cong \kk{(x-\alpha)}.
+	\]
+	At the generic point \((0)\), its value is
+	\[
+	f(x)\in \C(x)=\kk{(0)}.
+	\]
+	
+	\paragraph{Tangent vectors.}
+	At a closed point \((x-\alpha)\), the tangent space is
+	\[
+	T_{(x-\alpha)}X
+	\cong
+	\operatorname{Hom}_\C\!\left((x-\alpha)/(x-\alpha)^2,\C\right).
+	\]
+	Since \((x-\alpha)/(x-\alpha)^2\) is one-dimensional over \(\C\), we obtain
+	\[
+	T_{(x-\alpha)}X\cong \C.
+	\]
+	
+	\paragraph{Vector fields.}
+	The tangent sheaf on the affine line is generated by \(\frac{d}{dx}\), so
+	\[
+	\Gamma(X,\mathcal T_X)\cong \C[x]\frac{d}{dx}.
+	\]
+	Hence a global vector field has the form
+	\[
+	g(x)\frac{d}{dx},
+	\qquad g(x)\in \C[x].
+	\]
+	
+	Thus:
+	
+	\begin{itemize}
+		\item \(f(x)\in \C[x]\) is a regular function;
+		\item \(g(x)\frac{d}{dx}\) is a tangent-bundle section.
+	\end{itemize}
+	
+	\begin{remark}
+		This is the most useful concrete comparison:
+		\[
+		\boxed{
+			f(x)\in \Gamma(X,\mathcal O_X),
+			\qquad
+			f(x)\frac{d}{dx}\in \Gamma(X,\mathcal T_X).
+		}
+		\]
+		So the tangent-bundle analogue of a polynomial \(f(x)\) is not \(f(x)\) itself, but \(f(x)\frac{d}{dx}\).
+	\end{remark}
+	
+	\subsection{Example: \texorpdfstring{$X=\Spec(\C[x]/(g(x)))$}{X=Spec(C[x]/(g(x)))}}
+	
+	Now let
+	\[
+	X=\Spec(\C[x]/(g(x))).
+	\]
+	
+	If \(g(x)\) is squarefree, then \(X\) is a finite reduced set of points. In that case, each local ring is a field, so the tangent spaces are zero:
+	\[
+	T_xX=0
+	\qquad
+	\text{for all closed points }x.
+	\]
+	Geometrically, this means that a finite reduced set of points has no infinitesimal directions.
+	
+	If \(g(x)\) has repeated roots, then \(X\) is nonreduced, and tangent spaces may become nonzero. For example,
+	\[
+	X=\Spec\!\bigl(\C[x]/((x-\alpha)^2)\bigr)
+	\]
+	has only one closed point, but it carries nontrivial infinitesimal structure. In particular, its tangent space at that point is nonzero.
+	
+	Thus tangent spaces detect nilpotent or infinitesimal thickening that the underlying topological space alone does not see.
+	
+	\section{The cyclic-code quotient ring}
+	
+	We now pass to the finite-field setting relevant to coding theory.
+	
+	Fix a finite field \(\F_q\) and a positive integer \(n\). Define
+	\[
+	A:=\F_q[x]/\ideal{x^n-1}.
+	\]
+	
+	\begin{proposition}\label{prop:cyclic-ring-ideals}
+		The ideals of \(A\) are exactly the ideals
+		\[
+		\ideal{\ol{g(x)}}\subseteq A
+		\]
+		where \(g(x)\) runs through the monic divisors of \(x^n-1\).
+	\end{proposition}
+	
+	\begin{proof}
+		By Theorem \ref{thm:ideal-correspondence}, the ideals of \(A\) correspond to ideals of \(\F_q[x]\) containing \((x^n-1)\). Since \(\F_q[x]\) is a PID, every ideal is of the form \((g(x))\), and
+		\[
+		(x^n-1)\subseteq (g(x))
+		\quad\Longleftrightarrow\quad
+		g(x)\mid x^n-1.
+		\]
+	\end{proof}
+	
+	This is formally identical to the earlier two examples:
+	\[
+	\text{ideals of }\Z/(n)\leftrightarrow \text{divisors of }n,
+	\]
+	\[
+	\text{ideals of }\C[x]/(g)\leftrightarrow \text{divisors of }g,
+	\]
+	\[
+	\text{ideals of }\F_q[x]/(x^n-1)\leftrightarrow \text{divisors of }x^n-1.
+	\]
+	
+	\section{The cyclic-code ring as a ring of functions}
+	
+	Let
+	\[
+	A=\F_q[x]/\ideal{x^n-1}.
+	\]
+	Then an element
+	\[
+	\ol{a(x)}\in A
+	\]
+	is a regular function on
+	\[
+	\Spec(A)=V(x^n-1)\subseteq \Spec(\F_q[x]).
+	\]
+	
+	\subsection{Closed-point evaluation section for the cyclic-code ring}
+	
+	Factor
+	\[
+	x^n-1=\prod_{i=1}^r f_i(x)^{e_i}
+	\]
+	into distinct monic irreducible polynomials \(f_i(x)\in \F_q[x]\). Then the closed points of \(\Spec(A)\) are the prime ideals
+	\[
+	\mathfrak m_i=\ideal{f_i(x)}/\ideal{x^n-1}\subseteq A.
+	\]
+	The residue field at \(\mathfrak m_i\) is
+	\[
+	\kk{\mathfrak m_i}
+	\cong
+	A/\mathfrak m_i
+	\cong
+	\F_q[x]/\ideal{f_i(x)}.
+	\]
+	
+	Now let \(\ol{a(x)}\in A\). Then \(\ol{a(x)}\) determines a section over the closed points
+	\[
+	s_{\ol{a}}:\{\mathfrak m_1,\dots,\mathfrak m_r\}
+	\longrightarrow
+	\coprod_{i=1}^r \F_q[x]/\ideal{f_i(x)},
+	\]
+	defined by
+	\[
+	s_{\ol{a}}(\mathfrak m_i)=a(x)\bmod f_i(x).
+	\]
+	
+	Thus an element of the cyclic-code ring may be viewed as a function assigning to each closed point of \(V(x^n-1)\) its residue modulo the corresponding irreducible factor \(f_i(x)\).
+	
+	More generally, the full regular-function interpretation is
+	\[
+	\widetilde a:\Spec(A)\longrightarrow \coprod_{y\in \Spec(A)}\kk{y},
+	\qquad
+	y\longmapsto \ol{a(x)}(y)\in \kk{y}.
+	\]
+	
+	\begin{remark}
+		So the exact analogue of
+		\[
+		(x-\alpha)\longmapsto f(\alpha)
+		\]
+		for \(\C[x]\) is
+		\[
+		\mathfrak m_i\longmapsto a(x)\bmod f_i(x)
+		\]
+		for the cyclic-code ring.
+	\end{remark}
+	
+	\subsection{Squarefree case}
+	
+	If \(x^n-1\) is squarefree, then by the Chinese remainder theorem,
+	\[
+	A\cong \prod_{i=1}^r \F_q[x]/\ideal{f_i(x)}.
+	\]
+	Hence in this case an element of \(A\) is literally a tuple
+	\[
+	\bigl(a(x)\bmod f_1(x),\dots,a(x)\bmod f_r(x)\bigr).
+	\]
+	
+	Thus the cyclic-code ring is, in the squarefree case, literally a ring of functions on a finite set of closed points with values in the appropriate residue fields.
+	
+	\section{From the quotient ring to the vector space \(\F_q^n\)}
+	
+	Every residue class in \(A\) has a unique representative of degree \(<n\):
+	\[
+	a_0+a_1x+\cdots+a_{n-1}x^{n-1}.
+	\]
+	Hence there is a natural \(\F_q\)-linear isomorphism
+	\[
+	\Phi:A\to \F_q^n,
+	\qquad
+	\Phi\!\left(\ol{a_0+a_1x+\cdots+a_{n-1}x^{n-1}}\right)
+	=
+	(a_0,a_1,\dots,a_{n-1}).
+	\]
+	
+	Therefore
+	\[
+	A\cong \F_q^n
+	\]
+	as \(\F_q\)-vector spaces.
+	
+	\subsection{Multiplication by \(x\) becomes cyclic shift}
+	
+	Let
+	\[
+	f(x)=a_0+a_1x+\cdots+a_{n-1}x^{n-1}.
+	\]
+	Then in \(A\),
+	\[
+	x f(x)
+	=
+	a_0x+a_1x^2+\cdots+a_{n-2}x^{n-1}+a_{n-1}x^n.
+	\]
+	Since
+	\[
+	x^n\equiv 1\pmod{x^n-1},
+	\]
+	we obtain
+	\[
+	x f(x)\equiv a_{n-1}+a_0x+\cdots+a_{n-2}x^{n-1}.
+	\]
+	Thus under \(\Phi\), multiplication by \(x\) becomes the cyclic shift
+	\[
+	(a_0,a_1,\dots,a_{n-1})
+	\longmapsto
+	(a_{n-1},a_0,\dots,a_{n-2}).
+	\]
+	
+	\section{Cyclic codes as ideals}
+	
+	\begin{definition}
+		A \emph{cyclic code} of length \(n\) over \(\F_q\) is an \(\F_q\)-linear subspace
+		\[
+		C\subseteq \F_q^n
+		\]
+		such that for every
+		\[
+		(c_0,c_1,\dots,c_{n-1})\in C,
+		\]
+		its cyclic shift
+		\[
+		(c_{n-1},c_0,\dots,c_{n-2})
+		\]
+		also belongs to \(C\).
+	\end{definition}
+	
+	\begin{theorem}[Cyclic codes are ideals]\label{thm:cyclic-codes-ideals}
+		Under the identification
+		\[
+		\Phi:\F_q[x]/\ideal{x^n-1}\xrightarrow{\sim}\F_q^n,
+		\]
+		the cyclic codes of length \(n\) over \(\F_q\) are exactly the ideals of
+		\[
+		\F_q[x]/\ideal{x^n-1}.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Let \(C\subseteq \F_q^n\) be a cyclic code. Since \(C\) is an \(\F_q\)-subspace, \(\Phi^{-1}(C)\subseteq A\) is closed under addition and scalar multiplication. Since \(C\) is closed under cyclic shift and multiplication by \(x\) corresponds to cyclic shift, \(\Phi^{-1}(C)\) is closed under multiplication by \(x\).
+		
+		Now let
+		\[
+		a(x)=a_0+a_1x+\cdots+a_mx^m\in \F_q[x]
+		\]
+		and let \(c\in \Phi^{-1}(C)\). Then
+		\[
+		a(x)c
+		=
+		a_0c+a_1(xc)+\cdots+a_m(x^m c).
+		\]
+		Each term lies in \(\Phi^{-1}(C)\), so \(a(x)c\in \Phi^{-1}(C)\). Hence \(\Phi^{-1}(C)\) is an ideal of \(A\).
+		
+		Conversely, if \(J\triangleleft A\) is an ideal, then \(J\) is an \(\F_q\)-subspace and is stable under multiplication by \(x\). Under \(\Phi\), this means \(\Phi(J)\subseteq \F_q^n\) is an \(\F_q\)-subspace closed under cyclic shift, i.e. a cyclic code.
+	\end{proof}
+	
+	Combining Theorem \ref{thm:cyclic-codes-ideals} with Proposition \ref{prop:cyclic-ring-ideals}, we obtain:
+	
+	\begin{corollary}[Classification of cyclic codes]
+		Every cyclic code of length \(n\) over \(\F_q\) has the form
+		\[
+		C=\ideal{\ol{g(x)}}\subseteq \F_q[x]/\ideal{x^n-1}
+		\]
+		for a unique monic divisor \(g(x)\mid x^n-1\).
+	\end{corollary}
+	
+	The polynomial \(g(x)\) is called the \emph{generator polynomial} of the code.
+	
+	\section{Dimension and basis}
+	
+	Let
+	\[
+	C=\ideal{\ol{g(x)}}\subseteq \F_q[x]/\ideal{x^n-1},
+	\qquad
+	x^n-1=g(x)h(x).
+	\]
+	
+	\begin{theorem}\label{thm:dimension}
+		If \(\deg g=r\), then
+		\[
+		\dim_{\F_q} C = n-r.
+		\]
+		Moreover, the vectors corresponding to
+		\[
+		\ol{g(x)},\ \ol{xg(x)},\ \ol{x^2g(x)},\ \dots,\ \ol{x^{n-r-1}g(x)}
+		\]
+		form a basis of \(C\).
+	\end{theorem}
+	
+	\begin{proof}
+		Consider the \(\F_q\)-linear map
+		\[
+		\psi:\{m(x)\in \F_q[x]: \deg m<n-r\}\to C,
+		\qquad
+		m(x)\mapsto \ol{m(x)g(x)}.
+		\]
+		
+		First, \(\psi\) is injective. Indeed, if \(\ol{m(x)g(x)}=0\), then
+		\[
+		x^n-1=g(x)h(x)\mid m(x)g(x).
+		\]
+		Since \(\F_q[x]\) is a domain, this implies \(h(x)\mid m(x)\). But
+		\[
+		\deg m < n-r = \deg h,
+		\]
+		so \(m(x)=0\).
+		
+		Second, \(\psi\) is surjective. Any element of \(C\) has the form \(\ol{a(x)g(x)}\). Divide \(a(x)\) by \(h(x)\):
+		\[
+		a(x)=q(x)h(x)+r(x),
+		\qquad
+		\deg r<\deg h=n-r.
+		\]
+		Then
+		\[
+		a(x)g(x)=q(x)h(x)g(x)+r(x)g(x)=q(x)(x^n-1)+r(x)g(x),
+		\]
+		hence
+		\[
+		\ol{a(x)g(x)}=\ol{r(x)g(x)}.
+		\]
+		So \(\psi\) is surjective.
+		
+		Therefore \(\psi\) is an isomorphism. Its domain has basis
+		\[
+		1,x,\dots,x^{n-r-1},
+		\]
+		and transporting that basis through \(\psi\) gives the desired basis of \(C\).
+	\end{proof}
+	
+	\section{Parity-check polynomial}
+	
+	The complementary factor
+	\[
+	h(x)=\frac{x^n-1}{g(x)}
+	\]
+	is called the \emph{parity-check polynomial}.
+	
+	\begin{theorem}[Kernel description]\label{thm:parity-check}
+		Let
+		\[
+		\mu_h:A\to A,
+		\qquad
+		f\mapsto fh.
+		\]
+		Then
+		\[
+		C=\Ker(\mu_h).
+		\]
+		Equivalently,
+		\[
+		C=\{\,c(x)\in A : c(x)h(x)=0\,\}.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		If \(c(x)\in C\), then
+		\[
+		c(x)=m(x)g(x)
+		\]
+		for some \(m(x)\in \F_q[x]\). Hence in \(A\),
+		\[
+		c(x)h(x)=m(x)g(x)h(x)=m(x)(x^n-1)=0.
+		\]
+		So \(C\subseteq \Ker(\mu_h)\).
+		
+		Conversely, suppose \(c(x)h(x)=0\) in \(A\). Then
+		\[
+		x^n-1=g(x)h(x)\mid c(x)h(x)
+		\]
+		in \(\F_q[x]\). Since \(\F_q[x]\) is a domain and \(h(x)\neq 0\), it follows that
+		\[
+		g(x)\mid c(x).
+		\]
+		Hence \(c(x)\in C\).
+	\end{proof}
+	
+	\begin{remark}
+		There is a useful symmetry:
+		\[
+		C=\Im(\mu_g)=\Ker(\mu_h).
+		\]
+		Thus \(g(x)\) describes the code as an image, while \(h(x)\) describes it as a kernel.
+	\end{remark}
+	
+	\section{Regular functions versus tangent-bundle sections for the cyclic-code ring}
+	
+	Now let
+	\[
+	A=\F_q[x]/\ideal{x^n-1},
+	\qquad
+	X=\Spec(A).
+	\]
+	
+	As explained above, an element \(\ol{a(x)}\in A\) is a regular function on \(X\), that is, a section of \(\mathcal O_X\). Pointwise it assigns values
+	\[
+	y\longmapsto \ol{a(x)}(y)\in \kk{y},
+	\qquad y\in X.
+	\]
+	
+	At the same time, every element of \(A\) has a unique representative
+	\[
+	a_0+a_1x+\cdots+a_{n-1}x^{n-1},
+	\]
+	so
+	\[
+	A\cong \F_q^n
+	\]
+	as an \(\F_q\)-vector space.
+	
+	Thus an element of the cyclic-code ring has two interpretations:
+	
+	\begin{itemize}
+		\item as a regular function on the closed subscheme
+		\[
+		V(x^n-1)\subseteq \Spec(\F_q[x]);
+		\]
+		\item as a word
+		\[
+		(a_0,a_1,\dots,a_{n-1})\in \F_q^n.
+		\]
+	\end{itemize}
+	
+	If \(x^n-1\) is squarefree, then \(X\) is a finite reduced scheme, so its tangent spaces at closed points vanish. If \(x^n-1\) has repeated irreducible factors, then \(X\) is nonreduced, and tangent spaces may be nonzero. Thus tangent spaces detect the nilpotent structure that is invisible at the level of the underlying set of points.
+	
+	\section{The spectrum of the cyclic-code ring}
+	
+	The quotient map
+	\[
+	\F_q[x]\to \F_q[x]/\ideal{x^n-1}
+	\]
+	induces a closed immersion
+	\[
+	\Spec\!\left(\F_q[x]/\ideal{x^n-1}\right)\hookrightarrow \Spec(\F_q[x]),
+	\]
+	whose image is
+	\[
+	V(x^n-1).
+	\]
+	
+	If
+	\[
+	x^n-1=\prod_{i=1}^r f_i(x)^{e_i}
+	\]
+	is the factorization into monic irreducibles, then the points of this closed subspace are the primes
+	\[
+	(f_1),\dots,(f_r).
+	\]
+	
+	\begin{remark}
+		Topologically, only the distinct irreducible factors matter. Scheme-theoretically, the exponents \(e_i\) remain visible through nilpotents.
+	\end{remark}
+	
+	If \(x^n-1\) is squarefree, then the Chinese remainder theorem gives
+	\[
+	\F_q[x]/\ideal{x^n-1}
+	\cong
+	\prod_{i=1}^r \F_q[x]/\ideal{f_i(x)}.
+	\]
+	Therefore
+	\[
+	\Spec\!\left(\F_q[x]/\ideal{x^n-1}\right)
+	\cong
+	\coprod_{i=1}^r \Spec\!\left(\F_q[x]/\ideal{f_i(x)}\right).
+	\]
+	
+	This is the exact finite-field analogue of Proposition \ref{prop:squarefree-Cx}.
+	
+	\section{A small worked example}
+	
+	Take \(q=2\) and \(n=3\). Then
+	\[
+	x^3-1=x^3+1=(x+1)(x^2+x+1)
+	\]
+	in \(\F_2[x]\).
+	
+	The monic divisors of \(x^3-1\) are
+	\[
+	1,\qquad x+1,\qquad x^2+x+1,\qquad x^3+1.
+	\]
+	Hence there are four cyclic codes of length \(3\) over \(\F_2\).
+	
+	\begin{enumerate}[label=\textbf{(\arabic*)}]
+		\item \(g(x)=1\). Then
+		\[
+		C=\ideal{\ol{1}}=\F_2[x]/\ideal{x^3-1}\cong \F_2^3.
+		\]
+		
+		\item \(g(x)=x+1\). Then \(\deg g=1\), so \(\dim C=2\). This is the even-weight code:
+		\[
+		\{000,\ 011,\ 101,\ 110\}.
+		\]
+		
+		\item \(g(x)=x^2+x+1\). Then \(\deg g=2\), so \(\dim C=1\). This is the repetition code:
+		\[
+		\{000,\ 111\}.
+		\]
+		
+		\item \(g(x)=x^3+1=x^3-1\). Then
+		\[
+		C=0.
+		\]
+	\end{enumerate}
+	
+	\section{Full comparison tables}
+	
+	We now collect the three worlds side by side.
+	
+	\subsection*{Table A: ring-theoretic comparison}
+	
+	\begin{longtable}{@{}p{0.24\textwidth}p{0.22\textwidth}p{0.22\textwidth}p{0.24\textwidth}@{}}
+		\toprule
+		\textbf{Theme} & \(\boldsymbol{\Z}\) & \(\boldsymbol{\C[x]}\) & \(\boldsymbol{\F_q[x]}\) / cyclic-code case \\ \midrule
+		Ambient ring \(R\) & \(\Z\) & \(\C[x]\) & \(\F_q[x]\) \\
+		Typical quotient \(R/I\) & \(\Z/(n)\) & \(\C[x]/(g(x))\) & \(\F_q[x]/(x^n-1)\) \\
+		Ideals of \(R\) & \((m)\) & \((f(x))\) & \((f(x))\) \\
+		Ideals of \(R/I\) correspond to & ideals of \(\Z\) containing \((n)\) & ideals of \(\C[x]\) containing \((g)\) & ideals of \(\F_q[x]\) containing \((x^n-1)\) \\
+		Equivalent divisibility condition & \(d\mid n\) & \(f\mid g\) & \(g\mid x^n-1\) \\
+		Quotient ideals classified by & divisors of \(n\) & divisors of \(g(x)\) & divisors of \(x^n-1\) \\
+		Meaning of quotient & force \(n=0\) & force \(g(x)=0\) & force \(x^n=1\) \\
+		\bottomrule
+	\end{longtable}
+	
+	\subsection*{Table B: spectral comparison}
+	
+	\begin{longtable}{@{}p{0.22\textwidth}p{0.22\textwidth}p{0.22\textwidth}p{0.26\textwidth}@{}}
+		\toprule
+		\textbf{Theme} & \(\boldsymbol{\Spec(\Z)}\) & \(\boldsymbol{\Spec(\C[x])}\) & \(\boldsymbol{\Spec(\F_q[x])}\) \\ \midrule
+		Generic point & \((0)\) & \((0)\) & \((0)\) \\
+		Closed points & \((p)\), \(p\) prime & \((x-\alpha)\), \(\alpha\in\C\) & \((f)\), \(f\) irreducible \\
+		Residue field at generic point & \(\Q\) & \(\C(x)\) & \(\F_q(x)\) \\
+		Residue field at a closed point & \(\F_p\) & \(\C\) & \(\F_q[x]/(f)\) \\
+		Closed-point coproduct map & \(\coprod_p \Spec(\F_p)\to \Spec(\Z)\) & \(\coprod_{\alpha\in\C}\Spec(\C)\to \Spec(\C[x])\) & \(\coprod_{f\ \mathrm{irr}}\Spec(\F_q[x]/(f))\to \Spec(\F_q[x])\) \\
+		What this coproduct sees & all closed points & all closed points & all closed points \\
+		What it misses & generic point & generic point & generic point \\
+		Element of the ring as a function & \(n\mapsto \bigl((p)\mapsto n\bmod p,\ (0)\mapsto n\in\Q\bigr)\) & \(f\mapsto \bigl((x-\alpha)\mapsto f(\alpha),\ (0)\mapsto f(x)\in\C(x)\bigr)\) & \(a(x)\mapsto \bigl((f)\mapsto a(x)\bmod f,\ (0)\mapsto a(x)\in\F_q(x)\bigr)\) \\
+		\bottomrule
+	\end{longtable}
+	
+	\subsection*{Table C: quotients as closed subspaces}
+	
+	\begin{longtable}{@{}p{0.24\textwidth}p{0.22\textwidth}p{0.22\textwidth}p{0.24\textwidth}@{}}
+		\toprule
+		\textbf{Theme} & \(\boldsymbol{\Z/(n)}\) & \(\boldsymbol{\C[x]/(g)}\) & \(\boldsymbol{\F_q[x]/(x^n-1)}\) \\ \midrule
+		Closed subset \(V(I)\) & \(V(n)\) & \(V(g)\) & \(V(x^n-1)\) \\
+		Set-theoretic description & prime divisors of \(n\) & roots of \(g\) & irreducible factors of \(x^n-1\) \\
+		Squarefree decomposition & CRT over pairwise coprime prime powers & \(\C[x]/(g)\cong \prod \C\) if \(g\) squarefree & \(\F_q[x]/(x^n-1)\cong \prod \F_q[x]/(f_i)\) if squarefree \\
+		Topology sees & distinct prime divisors & distinct roots & distinct irreducible factors \\
+		Scheme structure remembers & prime powers & repeated roots & repeated irreducible powers \\
+		\bottomrule
+	\end{longtable}
+	
+	\subsection*{Table D: coding-theoretic interpretation}
+	
+	\begin{longtable}{@{}p{0.35\textwidth}p{0.57\textwidth}@{}}
+		\toprule
+		\textbf{Theme} & \textbf{Cyclic-code meaning} \\ \midrule
+		Ring & \(A=\F_q[x]/(x^n-1)\) \\
+		Geometric meaning of \(A\) & coordinate ring of the closed subscheme \(V(x^n-1)\subseteq \Spec(\F_q[x])\) \\
+		Element of \(A\) as a function & a regular function on \(V(x^n-1)\), i.e. a section \(x\mapsto a(x)\in \kk{x}\) over points of \(V(x^n-1)\) \\
+		Element of \(A\) as a closed-point function & \(\ol{a(x)}\mapsto \bigl(\mathfrak m_i\mapsto a(x)\bmod f_i(x)\in \F_q[x]/(f_i)\bigr)\) \\
+		Vector-space identification & \(A\cong \F_q^n\) \\
+		Typical element of \(A\) & \(\ol{a_0+a_1x+\cdots+a_{n-1}x^{n-1}}\) \\
+		Corresponding vector & \((a_0,a_1,\dots,a_{n-1})\) \\
+		Multiplication by \(x\) & cyclic shift of coordinates \\
+		Ideal of \(A\) & \(\F_q\)-subspace stable under cyclic shift \\
+		Coding name & cyclic code \\
+		Classification & monic divisors \(g(x)\mid x^n-1\) \\
+		Code generated by \(g\) & \(C=\ideal{\ol{g(x)}}\subseteq A\) \\
+		Generator polynomial & \(g(x)\) \\
+		Parity-check polynomial & \(h(x)=\dfrac{x^n-1}{g(x)}\) \\
+		Image description & \(C=\Im(\mu_g)\) \\
+		Kernel description & \(C=\Ker(\mu_h)\) \\
+		\bottomrule
+	\end{longtable}
+	
+	\subsection*{Table E: regular functions versus tangent-bundle sections}
+	
+	\begin{longtable}{@{}p{0.28\textwidth}p{0.3\textwidth}p{0.3\textwidth}@{}}
+		\toprule
+		\textbf{Theme} & \textbf{Regular function} & \textbf{Vector field / tangent-bundle section} \\ \midrule
+		Bundle/sheaf & \(\mathcal O_X\) & \(\mathcal T_X\) \\
+		Global sections on \(X=\Spec(R)\) & \(\Gamma(X,\mathcal O_X)=R\) & \(\Gamma(X,\mathcal T_X)\) \\
+		Fiber over a point \(x\) & \(\kk{x}\) & \(T_xX\) \\
+		Pointwise value & \(a(x)\in \kk{x}\) & \(v(x)\in T_xX\) \\
+		For \(X=\Spec(\C[x])\) & \(f(x)\in \C[x]\) & \(g(x)\frac{d}{dx}\in \C[x]\frac{d}{dx}\) \\
+		For \(X=\Spec(\C[x]/(g))\), \(g\) squarefree & function on finitely many reduced points & zero tangent spaces at closed points \\
+		For \(X=\Spec(\F_q[x]/(x^n-1))\) & word in \(\F_q^n\) / regular function on \(V(x^n-1)\) & tangent directions detect repeated irreducible factors of \(x^n-1\) \\
+		\bottomrule
+	\end{longtable}
+	
+	\section{Final summary}
+	
+	The three main examples are governed by the same principle.
+	
+	\begin{itemize}
+		\item In \(\Z/(n)\), ideals are controlled by divisors of \(n\).
+		
+		\item In \(\C[x]/(g(x))\), ideals are controlled by divisors of \(g(x)\).
+		
+		\item In \(\F_q[x]/(x^n-1)\), ideals are controlled by divisors of \(x^n-1\).
+	\end{itemize}
+	
+	The only extra feature in the third case is that
+	\[
+	\F_q[x]/(x^n-1)\cong \F_q^n
+	\]
+	as a vector space, and multiplication by \(x\) becomes cyclic shift. Therefore the ideals of the quotient ring are exactly the cyclic codes.
+	
+	Also, an element of a ring is best understood as a regular function on the spectrum:
+	\[
+	a\in R
+	\quad\leadsto\quad
+	\bigl(x\mapsto a(x)\in \kk{x}\bigr).
+	\]
+	This is a section of the structure sheaf, not of the tangent bundle. The tangent-bundle analogue is a vector field, i.e. a section of the tangent sheaf.
+	
+	\begin{center}
+		\[
+		\boxed{
+			\text{cyclic code}
+			\;=\;
+			\text{ideal of }\F_q[x]/\ideal{x^n-1}
+			\;=\;
+			\text{subspace of }\F_q^n\text{ invariant under cyclic shift}.
+		}
+		\]
+	\end{center}
+	
+\end{document}

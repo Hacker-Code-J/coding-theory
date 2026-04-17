@@ -1,0 +1,946 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	citecolor=blue,
+	urlcolor=blue
+}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+%------------------------------------------------
+% Theorem environments
+%------------------------------------------------
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+%------------------------------------------------
+% Macros
+%------------------------------------------------
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\mSpec}{\operatorname{mSpec}}
+\newcommand{\im}{\operatorname{Im}}
+\newcommand{\Ann}{\operatorname{Ann}}
+\newcommand{\Ker}{\operatorname{Ker}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\id}{\operatorname{id}}
+
+\newcommand{\ideal}[1]{\langle #1\rangle}
+\newcommand{\ol}[1]{\overline{#1}}
+\newcommand{\kk}[1]{\kappa\!\left(#1\right)}
+
+%------------------------------------------------
+\begin{document}
+	
+	\begin{center}
+		{\LARGE \textbf{Quotient Rings, Spectra, and Cyclic Codes}}\\[0.5em]
+		{\large From $\Z$ and $\C[x]$ to $\F_q[x]/\ideal{x^n-1}$}
+	\end{center}
+	
+	\tableofcontents
+	
+	\section{Introduction}
+	
+	These notes have three goals.
+	
+	\begin{enumerate}[label=\textbf{(\arabic*)}]
+		\item To understand the ideal correspondence between a ring $R$ and its quotient
+		\[
+		R \longrightarrow R/I.
+		\]
+		
+		\item To interpret this correspondence geometrically through spectra, first in the familiar examples
+		\[
+		\Z \qquad\text{and}\qquad \C[x].
+		\]
+		
+		\item To apply the same idea to the quotient ring
+		\[
+		\F_q[x]/\ideal{x^n-1}
+		\]
+		and explain why its ideals are exactly the cyclic codes of length $n$ over $\F_q$.
+	\end{enumerate}
+	
+	The central philosophy is the following:
+	
+	\begin{quote}
+		Passing from $R$ to $R/I$ means forcing the elements of $I$ to become zero.  
+		Therefore only those ideals of $R$ that already contain $I$ survive in the quotient.
+	\end{quote}
+	
+	In the cyclic-code setting, the additional feature is that the quotient ring
+	\[
+	\F_q[x]/\ideal{x^n-1}
+	\]
+	is naturally identified with the vector space $\F_q^n$, and multiplication by $x$ becomes cyclic shift of coordinates. This turns ring-theoretic ideals into coding-theoretic cyclic codes.
+	
+	\section{The ideal correspondence for a quotient ring}
+	
+	We begin with the basic algebraic fact.
+	
+	\begin{theorem}[Ideal correspondence]\label{thm:ideal-correspondence}
+		Let $R$ be a ring, let $I \triangleleft R$ be an ideal, and let
+		\[
+		\pi:R\longrightarrow R/I
+		\]
+		be the quotient map. Then the assignment
+		\[
+		J' \longmapsto \pi^{-1}(J')
+		\]
+		defines an inclusion-preserving bijection
+		\[
+		\{\text{ideals of }R/I\}
+		\longleftrightarrow
+		\{\text{ideals }J\triangleleft R \text{ such that } I\subseteq J\}.
+		\]
+		Its inverse is given by
+		\[
+		J \longmapsto J/I.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Let $J' \triangleleft R/I$. Then $\pi^{-1}(J')$ is an ideal of $R$. Since $\pi(I)=0$, we have
+		\[
+		I \subseteq \pi^{-1}(J').
+		\]
+		
+		Conversely, let $J \triangleleft R$ with $I\subseteq J$. Then
+		\[
+		J/I=\{\ol{x}\in R/I : x\in J\}
+		\]
+		is an ideal of $R/I$.
+		
+		Now we check that these constructions are inverse to one another.
+		
+		If $J \triangleleft R$ with $I\subseteq J$, then
+		\[
+		\pi^{-1}(J/I)=J.
+		\]
+		Indeed, $\pi(x)\in J/I$ if and only if $x\in J$.
+		
+		If $J' \triangleleft R/I$, then
+		\[
+		\pi^{-1}(J')/I=J'.
+		\]
+		Indeed, every element of $J'$ has the form $\ol{x}$ with $x\in \pi^{-1}(J')$.
+		
+		Thus the correspondence is bijective, and it is plainly inclusion-preserving. 
+	\end{proof}
+	
+	\begin{remark}
+		This theorem is often summarized by the slogan
+		\[
+		\text{ideals of }R/I
+		\quad\leftrightarrow\quad
+		\text{ideals of }R\text{ containing }I.
+		\]
+	\end{remark}
+	
+	\section{First model: the quotient $\Z \to \Z/12\Z$}
+	
+	The ring $\Z$ is the simplest principal ideal domain. Every ideal has the form
+	\[
+	(m)=m\Z
+	\]
+	for some integer $m\ge 0$.
+	
+	Now consider the quotient map
+	\[
+	\pi:\Z\longrightarrow \Z/12\Z.
+	\]
+	
+	\begin{proposition}
+		The ideals of $\Z/12\Z$ correspond exactly to the ideals $(m)\subseteq \Z$ such that
+		\[
+		(12)\subseteq (m).
+		\]
+		Equivalently, they correspond exactly to the positive divisors of $12$.
+	\end{proposition}
+	
+	\begin{proof}
+		By Theorem \ref{thm:ideal-correspondence}, the ideals of $\Z/12\Z$ correspond to the ideals of $\Z$ containing $(12)$. Since every ideal of $\Z$ is of the form $(m)$, this means
+		\[
+		(12)\subseteq (m).
+		\]
+		This inclusion holds if and only if $m$ divides $12$.
+	\end{proof}
+	
+	Thus the ideals of $\Z/12\Z$ correspond to
+	\[
+	1,\ 2,\ 3,\ 4,\ 6,\ 12.
+	\]
+	More explicitly, the corresponding ideals downstairs are
+	\[
+	(1)/(12)=\Z/12\Z,
+	\]
+	\[
+	(2)/(12),\quad (3)/(12),\quad (4)/(12),\quad (6)/(12),
+	\]
+	and
+	\[
+	(12)/(12)=0.
+	\]
+	
+	\begin{example}
+		The ideal $(4)/(12)$ consists of the residue classes
+		\[
+		\{\,\ol{0},\ol{4},\ol{8}\,\}\subseteq \Z/12\Z.
+		\]
+		It is the image of the upstairs ideal $(4)\subseteq \Z$.
+	\end{example}
+	
+	The moral is clear:
+	
+	\begin{quote}
+		Passing from $\Z$ to $\Z/12\Z$ means forcing $12=0$.  
+		Therefore only those ideals of $\Z$ compatible with the relation $12=0$ remain visible.
+	\end{quote}
+	
+	\section{Second model: the quotient $\C[x]\to \C[x]/\ideal{g(x)}$}
+	
+	The polynomial ring $\C[x]$ is also a principal ideal domain, so every ideal has the form
+	\[
+	(f(x))
+	\]
+	for some polynomial $f(x)\in \C[x]$.
+	
+	Let
+	\[
+	\pi:\C[x]\longrightarrow \C[x]/\ideal{g(x)}
+	\]
+	be the quotient map.
+	
+	\begin{proposition}
+		The ideals of $\C[x]/\ideal{g(x)}$ correspond exactly to the ideals $(f(x))\subseteq \C[x]$ satisfying
+		\[
+		(g(x))\subseteq (f(x)).
+		\]
+		Equivalently, they correspond exactly to the divisors of $g(x)$, up to nonzero scalar multiples.
+	\end{proposition}
+	
+	\begin{proof}
+		By Theorem \ref{thm:ideal-correspondence}, the ideals of the quotient correspond to ideals of $\C[x]$ containing $(g(x))$. Since $\C[x]$ is a PID, those ideals are exactly the ideals $(f(x))$ such that
+		\[
+		(g(x))\subseteq (f(x)).
+		\]
+		In a PID, the inclusion
+		\[
+		(g)\subseteq (f)
+		\]
+		holds if and only if $f$ divides $g$.
+	\end{proof}
+	
+	\begin{example}
+		Let
+		\[
+		g(x)=x^2(x-1).
+		\]
+		Then the monic divisors of $g(x)$ are
+		\[
+		1,\quad x,\quad x^2,\quad x-1,\quad x(x-1),\quad x^2(x-1).
+		\]
+		Hence the ideals of
+		\[
+		\C[x]/\ideal{x^2(x-1)}
+		\]
+		are precisely
+		\[
+		(1)/(g),\quad (x)/(g),\quad (x^2)/(g),\quad (x-1)/(g),\quad (x(x-1))/(g),\quad (g)/(g).
+		\]
+	\end{example}
+	
+	Thus the polynomial case is perfectly parallel to the integer case:
+	
+	\[
+	\text{divisors of }12
+	\quad\longleftrightarrow\quad
+	\text{ideals of }\Z/12\Z,
+	\]
+	\[
+	\text{divisors of }g(x)
+	\quad\longleftrightarrow\quad
+	\text{ideals of }\C[x]/\ideal{g(x)}.
+	\]
+	
+	\section{Spectra, points, and residue fields}
+	
+	We now reinterpret the quotient construction geometrically.
+	
+	\subsection{Closed subsets cut out by ideals}
+	
+	Let $R$ be a ring and $I\triangleleft R$. The quotient map
+	\[
+	R\longrightarrow R/I
+	\]
+	induces a map of spectra
+	\[
+	\Spec(R/I)\longrightarrow \Spec(R).
+	\]
+	Its image is the closed subset
+	\[
+	V(I)=\{\mathfrak p\in \Spec(R): I\subseteq \mathfrak p\}.
+	\]
+	Hence there is a canonical homeomorphism
+	\[
+	\Spec(R/I)\cong V(I)
+	\]
+	where $V(I)$ carries the subspace topology from $\Spec(R)$.
+	
+	Thus quotienting by $I$ corresponds geometrically to restricting to the closed subspace cut out by the equation $I=0$.
+	
+	\subsection{Points and residue fields}
+	
+	For a point $x\in \Spec(R)$, represented by a prime ideal $\mathfrak p_x$, the residue field is
+	\[
+	\kk{x}=\operatorname{Frac}(R_{\mathfrak p_x}/\mathfrak p_xR_{\mathfrak p_x}).
+	\]
+	Equivalently, if $\mathfrak p_x$ is maximal, then simply
+	\[
+	\kk{x}\cong R/\mathfrak p_x.
+	\]
+	
+	There is a canonical map
+	\[
+	\Spec(\kk{x})\longrightarrow \Spec(R)
+	\]
+	whose image is the point $x$.
+	
+	\begin{remark}
+		It is important not to confuse the quotient map
+		\[
+		R\to R/I
+		\]
+		with the family of point maps
+		\[
+		\Spec(\kk{x})\to \Spec(R).
+		\]
+		The quotient map cuts out a closed subset. The residue-field maps describe the individual points of the space.
+	\end{remark}
+	
+	\section{The spectrum of $\Z$}
+	
+	The points of $\Spec(\Z)$ are:
+	
+	\begin{itemize}
+		\item the generic point $(0)$;
+		\item the closed points $(p)$ for prime integers $p$.
+	\end{itemize}
+	
+	At a closed point $(p)$, the residue field is
+	\[
+	\kk{(p)}\cong \Z_{(p)}/p\Z_{(p)}\cong \F_p.
+	\]
+	So each closed point gives a map
+	\[
+	\Spec(\F_p)\longrightarrow \Spec(\Z).
+	\]
+	
+	At the generic point $(0)$, the residue field is
+	\[
+	\kk{(0)}=\Q.
+	\]
+	So there is also a map
+	\[
+	\Spec(\Q)\longrightarrow \Spec(\Z).
+	\]
+	
+	\begin{remark}
+		The family
+		\[
+		\coprod_{p\text{ prime}}\Spec(\F_p)\longrightarrow \Spec(\Z)
+		\]
+		captures all closed points, but it does \emph{not} include the generic point. To include every point, one should write
+		\[
+		\coprod_{x\in \Spec(\Z)}\Spec(\kk{x})\longrightarrow \Spec(\Z).
+		\]
+	\end{remark}
+	
+	\subsection{A quotient example}
+	
+	Consider the quotient
+	\[
+	\Z\longrightarrow \Z/12\Z.
+	\]
+	Then
+	\[
+	\Spec(\Z/12\Z)\cong V(12)\subseteq \Spec(\Z).
+	\]
+	Set-theoretically,
+	\[
+	V(12)=\{(2),(3)\},
+	\]
+	because the prime ideals containing $(12)$ are exactly $(2)$ and $(3)$.
+	
+	Thus quotienting by $(12)$ removes everything except the closed points lying over the prime divisors of $12$.
+	
+	\section{The spectrum of $\C[x]$}
+	
+	The prime ideals of $\C[x]$ are:
+	
+	\begin{itemize}
+		\item the generic point $(0)$;
+		\item the closed points $(x-\alpha)$ for $\alpha\in \C$.
+	\end{itemize}
+	
+	At a closed point $(x-\alpha)$, the residue field is
+	\[
+	\kk{(x-\alpha)}\cong \C[x]/(x-\alpha)\cong \C.
+	\]
+	So each closed point gives a map
+	\[
+	\Spec(\C)\longrightarrow \Spec(\C[x]).
+	\]
+	
+	At the generic point $(0)$, the residue field is
+	\[
+	\kk{(0)}=\C(x).
+	\]
+	
+	\begin{remark}
+		The family
+		\[
+		\coprod_{\alpha\in \C}\Spec(\C)\longrightarrow \Spec(\C[x])
+		\]
+		captures all closed points, but omits the generic point. The complete pointwise description is
+		\[
+		\coprod_{x\in \Spec(\C[x])}\Spec(\kk{x})\longrightarrow \Spec(\C[x]).
+		\]
+	\end{remark}
+	
+	\subsection{A quotient example}
+	
+	Let $g(x)\in \C[x]$ and consider
+	\[
+	\C[x]\longrightarrow \C[x]/\ideal{g(x)}.
+	\]
+	Then
+	\[
+	\Spec(\C[x]/\ideal{g(x)})\cong V(g)\subseteq \Spec(\C[x]).
+	\]
+	
+	If
+	\[
+	g(x)=\prod_{i=1}^r (x-\alpha_i)^{e_i},
+	\]
+	then, set-theoretically,
+	\[
+	V(g)=\{(x-\alpha_1),\dots,(x-\alpha_r)\}.
+	\]
+	
+	Thus quotienting by $\ideal{g(x)}$ cuts out the roots of $g(x)$ as points of the affine line.
+	
+	\begin{proposition}[Squarefree case and Chinese remainder theorem]
+		Suppose
+		\[
+		g(x)=\prod_{i=1}^r (x-\alpha_i)
+		\]
+		has distinct roots. Then
+		\[
+		\C[x]/\ideal{g(x)}
+		\cong
+		\prod_{i=1}^r \C[x]/\ideal{x-\alpha_i}
+		\cong
+		\prod_{i=1}^r \C.
+		\]
+		Consequently,
+		\[
+		\Spec(\C[x]/\ideal{g(x)})
+		\cong
+		\coprod_{i=1}^r \Spec(\C).
+		\]
+	\end{proposition}
+	
+	\begin{proof}
+		Since the ideals $(x-\alpha_i)$ are pairwise comaximal, the Chinese remainder theorem gives
+		\[
+		\C[x]/\ideal{\prod_{i=1}^r(x-\alpha_i)}
+		\cong
+		\prod_{i=1}^r \C[x]/\ideal{x-\alpha_i}.
+		\]
+		Each factor is canonically isomorphic to $\C$.
+	\end{proof}
+	
+	\begin{remark}
+		If $g(x)$ has repeated factors, then the underlying topological space still consists of the roots of $g$, but the quotient ring remembers the multiplicities through nilpotent elements.
+	\end{remark}
+	
+	\section{The cyclic-code quotient ring}
+	
+	We now turn to coding theory.
+	
+	Fix a finite field $\F_q$ and a positive integer $n$. Define
+	\[
+	A:=\F_q[x]/\ideal{x^n-1}.
+	\]
+	By the ideal correspondence, the ideals of $A$ are exactly the ideals of $\F_q[x]$ containing $\ideal{x^n-1}$.
+	
+	Since $\F_q[x]$ is a PID, every such ideal has the form $\ideal{g(x)}$ where
+	\[
+	g(x)\mid x^n-1.
+	\]
+	Hence:
+	
+	\begin{proposition}\label{prop:ideals-of-cyclic-ring}
+		The ideals of $\F_q[x]/\ideal{x^n-1}$ are exactly the ideals
+		\[
+		\ideal{\ol{g(x)}}
+		\subseteq
+		\F_q[x]/\ideal{x^n-1},
+		\]
+		where $g(x)$ runs through the monic divisors of $x^n-1$.
+	\end{proposition}
+	
+	This is formally identical to the earlier examples:
+	
+	\[
+	\text{ideals of }\Z/12\Z
+	\leftrightarrow
+	\text{divisors of }12,
+	\]
+	\[
+	\text{ideals of }\C[x]/\ideal{g(x)}
+	\leftrightarrow
+	\text{divisors of }g(x),
+	\]
+	\[
+	\text{ideals of }\F_q[x]/\ideal{x^n-1}
+	\leftrightarrow
+	\text{divisors of }x^n-1.
+	\]
+	
+	\section{From the quotient ring to the vector space $\F_q^n$}
+	
+	Every class in $A$ has a unique representative of degree $<n$, namely
+	\[
+	a_0+a_1x+\cdots+a_{n-1}x^{n-1}.
+	\]
+	Hence there is a natural $\F_q$-linear isomorphism
+	\[
+	\Phi:A\longrightarrow \F_q^n,
+	\qquad
+	\Phi\!\left(\ol{a_0+a_1x+\cdots+a_{n-1}x^{n-1}}\right)
+	=
+	(a_0,a_1,\dots,a_{n-1}).
+	\]
+	
+	Thus, as an $\F_q$-vector space,
+	\[
+	A\cong \F_q^n.
+	\]
+	
+	\subsection{Multiplication by $x$ becomes cyclic shift}
+	
+	Consider the element
+	\[
+	f(x)=a_0+a_1x+\cdots+a_{n-1}x^{n-1}.
+	\]
+	Then in $A$,
+	\[
+	x f(x)
+	=
+	a_0x+a_1x^2+\cdots+a_{n-2}x^{n-1}+a_{n-1}x^n.
+	\]
+	Since
+	\[
+	x^n\equiv 1 \pmod{x^n-1},
+	\]
+	we obtain
+	\[
+	x f(x)\equiv a_{n-1}+a_0x+a_1x^2+\cdots+a_{n-2}x^{n-1}.
+	\]
+	Therefore under $\Phi$, multiplication by $x$ corresponds to the cyclic shift
+	\[
+	(a_0,a_1,\dots,a_{n-1})
+	\longmapsto
+	(a_{n-1},a_0,\dots,a_{n-2}).
+	\]
+	
+	This is the fundamental bridge between algebra and coding theory.
+	
+	\section{Cyclic codes as ideals}
+	
+	We now give the main theorem.
+	
+	\begin{definition}
+		A \emph{cyclic code} of length $n$ over $\F_q$ is an $\F_q$-linear subspace
+		\[
+		C\subseteq \F_q^n
+		\]
+		such that whenever
+		\[
+		(c_0,c_1,\dots,c_{n-1})\in C,
+		\]
+		the cyclic shift
+		\[
+		(c_{n-1},c_0,\dots,c_{n-2})
+		\]
+		also belongs to $C$.
+	\end{definition}
+	
+	\begin{theorem}[Cyclic codes are ideals]\label{thm:cyclic-ideal}
+		Under the identification
+		\[
+		\Phi:\F_q[x]/\ideal{x^n-1}\xrightarrow{\sim}\F_q^n,
+		\]
+		the cyclic codes of length $n$ over $\F_q$ are exactly the ideals of
+		\[
+		\F_q[x]/\ideal{x^n-1}.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		Let $C\subseteq \F_q^n$ be a cyclic code. Since $C$ is an $\F_q$-subspace, the set
+		\[
+		\Phi^{-1}(C)\subseteq A
+		\]
+		is closed under addition and scalar multiplication. Since $C$ is closed under cyclic shift and multiplication by $x$ corresponds to cyclic shift, $\Phi^{-1}(C)$ is closed under multiplication by $x$.
+		
+		Now let
+		\[
+		a(x)=a_0+a_1x+\cdots+a_mx^m\in \F_q[x]
+		\]
+		and let $c\in \Phi^{-1}(C)$. Then
+		\[
+		a(x)c
+		=
+		a_0c+a_1(xc)+\cdots+a_m(x^m c).
+		\]
+		Each term lies in $\Phi^{-1}(C)$, so $a(x)c$ also lies in $\Phi^{-1}(C)$. Thus $\Phi^{-1}(C)$ is an ideal of $A$.
+		
+		Conversely, let $J\triangleleft A$ be an ideal. Then $J$ is in particular an $\F_q$-subspace of $A$, and since $J$ is stable under multiplication by $x$, its image $\Phi(J)\subseteq \F_q^n$ is stable under cyclic shift. Hence $\Phi(J)$ is a cyclic code.
+	\end{proof}
+	
+	Combining this theorem with Proposition \ref{prop:ideals-of-cyclic-ring}, we obtain the classification of cyclic codes.
+	
+	\begin{corollary}[Classification of cyclic codes]
+		Every cyclic code of length $n$ over $\F_q$ is of the form
+		\[
+		C=\ideal{\ol{g(x)}}\subseteq \F_q[x]/\ideal{x^n-1},
+		\]
+		for a unique monic divisor $g(x)$ of $x^n-1$.
+	\end{corollary}
+	
+	The polynomial $g(x)$ is called the \emph{generator polynomial} of the cyclic code.
+	
+	\section{Dimension and basis of a cyclic code}
+	
+	Let
+	\[
+	C=\ideal{\ol{g(x)}}\subseteq \F_q[x]/\ideal{x^n-1},
+	\]
+	and write
+	\[
+	x^n-1=g(x)h(x).
+	\]
+	Set
+	\[
+	r=\deg g.
+	\]
+	
+	\begin{theorem}\label{thm:dimension-basis}
+		The cyclic code $C$ has dimension
+		\[
+		\dim_{\F_q} C = n-r.
+		\]
+		Moreover, the vectors corresponding to
+		\[
+		\ol{g(x)},\ \ol{xg(x)},\ \ol{x^2g(x)},\ \dots,\ \ol{x^{n-r-1}g(x)}
+		\]
+		form a basis of $C$.
+	\end{theorem}
+	
+	\begin{proof}
+		Define an $\F_q$-linear map
+		\[
+		\psi:\{m(x)\in \F_q[x]: \deg m < n-r\}\longrightarrow C,
+		\qquad
+		m(x)\longmapsto \ol{m(x)g(x)}.
+		\]
+		
+		We first show that $\psi$ is injective. Suppose
+		\[
+		\ol{m(x)g(x)}=0
+		\]
+		in $A$. Then
+		\[
+		x^n-1=g(x)h(x)\mid m(x)g(x)
+		\]
+		in $\F_q[x]$. Since $\F_q[x]$ is an integral domain, this implies
+		\[
+		h(x)\mid m(x).
+		\]
+		But
+		\[
+		\deg m < n-r = \deg h,
+		\]
+		so $m(x)=0$.
+		
+		Next we show that $\psi$ is surjective. Any element of $C$ has the form
+		\[
+		\ol{a(x)g(x)}
+		\]
+		for some $a(x)\in \F_q[x]$. Divide $a(x)$ by $h(x)$:
+		\[
+		a(x)=q(x)h(x)+r(x),
+		\qquad
+		\deg r < \deg h = n-r.
+		\]
+		Then
+		\[
+		a(x)g(x)=q(x)h(x)g(x)+r(x)g(x)=q(x)(x^n-1)+r(x)g(x),
+		\]
+		so in the quotient ring,
+		\[
+		\ol{a(x)g(x)}=\ol{r(x)g(x)}.
+		\]
+		Hence every codeword lies in the image of $\psi$.
+		
+		Therefore $\psi$ is an isomorphism onto $C$. Its domain has dimension $n-r$, with basis
+		\[
+		1,x,\dots,x^{n-r-1}.
+		\]
+		Transporting this basis through $\psi$ gives the desired basis of $C$.
+	\end{proof}
+	
+	\section{Parity-check polynomial}
+	
+	Let
+	\[
+	C=\ideal{\ol{g(x)}}\subseteq A,
+	\qquad
+	x^n-1=g(x)h(x).
+	\]
+	The polynomial $h(x)$ is called the \emph{parity-check polynomial} of the cyclic code.
+	
+	\begin{theorem}[Kernel description]\label{thm:parity-check}
+		Let
+		\[
+		\mu_h:A\longrightarrow A,
+		\qquad
+		f\longmapsto fh.
+		\]
+		Then
+		\[
+		C=\Ker(\mu_h).
+		\]
+		Equivalently,
+		\[
+		C=\{\,c(x)\in A : c(x)h(x)=0\,\}.
+		\]
+	\end{theorem}
+	
+	\begin{proof}
+		If $c(x)\in C$, then
+		\[
+		c(x)=m(x)g(x)
+		\]
+		for some $m(x)$. Hence
+		\[
+		c(x)h(x)=m(x)g(x)h(x)=m(x)(x^n-1)=0
+		\]
+		in $A$. Thus $C\subseteq \Ker(\mu_h)$.
+		
+		Conversely, suppose $c(x)h(x)=0$ in $A$. Then
+		\[
+		x^n-1=g(x)h(x)\mid c(x)h(x)
+		\]
+		in $\F_q[x]$. Since $\F_q[x]$ is an integral domain and $h(x)\neq 0$, we conclude that
+		\[
+		g(x)\mid c(x).
+		\]
+		Hence $c(x)\in \ideal{\ol{g(x)}}=C$.
+	\end{proof}
+	
+	This theorem explains the name \emph{parity-check polynomial}: multiplication by $h(x)$ gives a linear condition that exactly characterizes the code.
+	
+	\begin{remark}
+		There is a perfect formal symmetry:
+		\[
+		C=\im(\mu_g)=\Ker(\mu_h).
+		\]
+		Thus the generator polynomial $g(x)$ describes the code as an image, while the parity-check polynomial $h(x)$ describes the code as a kernel.
+	\end{remark}
+	
+	\section{The spectrum of the cyclic-code ring}
+	
+	Geometrically, the quotient map
+	\[
+	\F_q[x]\longrightarrow \F_q[x]/\ideal{x^n-1}
+	\]
+	induces a closed immersion
+	\[
+	\Spec\!\left(\F_q[x]/\ideal{x^n-1}\right)
+	\hookrightarrow
+	\Spec(\F_q[x]).
+	\]
+	Its image is
+	\[
+	V(x^n-1).
+	\]
+	
+	If
+	\[
+	x^n-1=\prod_{i=1}^r f_i(x)^{e_i}
+	\]
+	is the factorization into monic irreducibles, then the points of this spectrum correspond to the prime ideals
+	\[
+	(f_1),\dots,(f_r).
+	\]
+	
+	\begin{remark}
+		Topologically, only the distinct irreducible factors matter.  
+		Scheme-theoretically, the exponents $e_i$ are still present through nilpotent structure.
+	\end{remark}
+	
+	If $x^n-1$ is squarefree, then the Chinese remainder theorem yields
+	\[
+	\F_q[x]/\ideal{x^n-1}
+	\cong
+	\prod_{i=1}^r \F_q[x]/\ideal{f_i(x)}.
+	\]
+	Hence
+	\[
+	\Spec\!\left(\F_q[x]/\ideal{x^n-1}\right)
+	\cong
+	\coprod_{i=1}^r \Spec\!\left(\F_q[x]/\ideal{f_i(x)}\right).
+	\]
+	
+	This is the finite-field analogue of the squarefree decomposition for $\C[x]/\ideal{g(x)}$.
+	
+	\section{A small worked example}
+	
+	Take $q=2$ and $n=3$. Then
+	\[
+	x^3-1=x^3+1=(x+1)(x^2+x+1)
+	\]
+	in $\F_2[x]$.
+	
+	The monic divisors of $x^3-1$ are
+	\[
+	1,\qquad x+1,\qquad x^2+x+1,\qquad x^3+1.
+	\]
+	Hence there are exactly four cyclic codes of length $3$ over $\F_2$.
+	
+	\begin{enumerate}[label=\textbf{(\arabic*)}]
+		\item $g(x)=1$. Then
+		\[
+		C=\ideal{\ol{1}}=\F_2[x]/\ideal{x^3-1}\cong \F_2^3.
+		\]
+		
+		\item $g(x)=x+1$. Then $\deg g=1$, so $C$ has dimension $2$. Its basis is
+		\[
+		\ol{x+1},\qquad \ol{x(x+1)}=\ol{x^2+x}.
+		\]
+		As vectors, these are
+		\[
+		(1,1,0),\qquad (0,1,1).
+		\]
+		Thus the code is
+		\[
+		\{000,\ 011,\ 101,\ 110\},
+		\]
+		the even-weight code.
+		
+		\item $g(x)=x^2+x+1$. Then $\deg g=2$, so $C$ has dimension $1$. Its basis vector is
+		\[
+		\ol{x^2+x+1}\leftrightarrow (1,1,1).
+		\]
+		Thus the code is
+		\[
+		\{000,\ 111\},
+		\]
+		the repetition code.
+		
+		\item $g(x)=x^3+1=x^3-1$. Then
+		\[
+		C=\ideal{\ol{x^3-1}}=0.
+		\]
+	\end{enumerate}
+	
+	This example is the exact analogue of the ideals of $\Z/12\Z$: divisors upstairs classify ideals downstairs.
+	
+	\section{A final dictionary}
+	
+	We close with a compact dictionary that summarizes the whole discussion.
+	
+	\subsection*{Algebra}
+	
+	\[
+	\begin{array}{c|c|c}
+		\text{Ring} & \text{Quotient} & \text{Ideals downstairs} \\
+		\hline
+		\Z & \Z/(12) & \text{divisors of }12 \\
+		\C[x] & \C[x]/\ideal{g(x)} & \text{divisors of }g(x) \\
+		\F_q[x] & \F_q[x]/\ideal{x^n-1} & \text{divisors of }x^n-1
+	\end{array}
+	\]
+	
+	\subsection*{Geometry}
+	
+	\[
+	\Spec(R/I)\cong V(I)\subseteq \Spec(R).
+	\]
+	
+	For $R=\Z$, quotienting by $(12)$ cuts out the points $(2)$ and $(3)$.
+	
+	For $R=\C[x]$, quotienting by $(g)$ cuts out the roots of $g$.
+	
+	For $R=\F_q[x]$, quotienting by $(x^n-1)$ cuts out the closed subscheme $V(x^n-1)$.
+	
+	\subsection*{Coding theory}
+	
+	\[
+	A=\F_q[x]/\ideal{x^n-1}\cong \F_q^n.
+	\]
+	Multiplication by $x$ corresponds to cyclic shift. Therefore
+	\[
+	\text{ideals of }A
+	\quad\Longleftrightarrow\quad
+	\text{cyclic codes of length }n.
+	\]
+	
+	If
+	\[
+	x^n-1=g(x)h(x),
+	\]
+	then the cyclic code generated by $g(x)$ satisfies
+	\[
+	C=\ideal{\ol{g(x)}}=\im(\mu_g)=\Ker(\mu_h).
+	\]
+	
+	\begin{center}
+		\[
+		\boxed{
+			\text{cyclic code}
+			\;=\;
+			\text{ideal of }\F_q[x]/\ideal{x^n-1}
+			\;=\;
+			\text{subspace of }\F_q^n\text{ stable under cyclic shift}.
+		}
+		\]
+	\end{center}
+	
+\end{document}
