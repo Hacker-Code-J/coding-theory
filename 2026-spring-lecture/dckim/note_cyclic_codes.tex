@@ -1,0 +1,2872 @@
+% Converted from note_cyclic_codes.md via pandoc and lightly normalized for XeLaTeX.
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  oneside]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{Noto Serif CJK KR}
+  \setsansfont[]{Noto Sans CJK KR}
+  \setmonofont[]{NanumGothicCoding}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+\babelprovide[main,import]{korean}
+\ifPDFTeX
+\else
+\babelfont{rm}[]{Noto Serif CJK KR}
+\fi
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\usepackage{kotex}
+\usepackage{bookmark}
+\setmonofont{NanumGothicCoding}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdflang={ko-KR},
+  colorlinks=true,
+  linkcolor={Maroon},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\section{순환 부호 (Cyclic
+Code)}\label{uxc21cuxd658-uxbd80uxd638-cyclic-code}
+
+\textbf{목차}
+
+\textbf{배경} -
+\hyperref[uxc21cuxd658-uxbd80uxd638uxc758-uxc5f0uxad6c-uxc5eduxc0ac]{순환
+부호의 연구 역사}
+
+\textbf{I. 기본 개념 --- 순환 부호의 정의와 동기} -
+\hyperref[uxc21cuxd658-uxbd80uxd638uxb780-uxbb34uxc5c7uxc778uxac00]{순환
+부호란 무엇인가?} -
+\hyperref[uxc21cuxd658-uxc774uxb3d9-uxbd88uxbcc0uxc131uxc740-uxc65c-uxad6cuxd604uxc5d0-uxc720uxb9acuxd55cuxac00]{순환
+이동 불변성은 왜 구현에 유리한가?}
+
+\textbf{II. 다항식 표현 --- 벡터에서 다항식으로} -
+\hyperref[uxc21cuxd658-uxbd80uxd638uxb97c-uxb2e4uxd56duxc2dduxc73cuxb85c-uxc5b4uxb5bbuxac8c-uxd45cuxd604uxd558uxb294uxac00]{순환
+부호를 다항식으로 어떻게 표현하는가?}
+
+\textbf{III. 대수적 구조 --- 알고 보니 이데알이다} -
+\hyperref[uxc21cuxd658-uxbd80uxd638uxc758-uxb300uxc218uxc801-uxad6cuxc870uxb294-uxbb34uxc5c7uxc778uxac00]{순환
+부호의 대수적 구조는 무엇인가?} -
+\hyperref[uxbaabuxd658uxc758-uxc774uxb370uxc54c-uxac1cuxc218uxc640-uxc0dduxc131-uxb2e4uxd56duxc2dduxc758-uxacb0uxc815]{몫환의
+이데알 개수와 생성 다항식의 결정}
+
+\textbf{IV. 생성 다항식과 패리티 검사 다항식} -
+\hyperref[uxc0dduxc131-uxb2e4uxd56duxc2dduxc774uxb780-uxbb34uxc5c7uxc774uxace0-uxc5b4uxb5a4-uxc131uxc9c8uxc744-uxac00uxc9c0uxb294uxac00]{생성
+다항식이란 무엇이고, 어떤 성질을 가지는가?} -
+\hyperref[uxd328uxb9acuxd2f0-uxac80uxc0ac-uxb2e4uxd56duxc2dduxc774uxb780-uxbb34uxc5c7uxc778uxac00]{패리티
+검사 다항식이란 무엇인가?}
+
+\textbf{V. 행렬 표현과 인코딩} -
+\hyperref[uxc0dduxc131-uxd589uxb82cuxc740-uxc5b4uxb5bbuxac8c-uxb9ccuxb4dcuxb294uxac00]{생성
+행렬은 어떻게 만드는가?} -
+\hyperref[uxd328uxb9acuxd2f0-uxac80uxc0ac-uxd589uxb82cuxc740-uxc5b4uxb5bbuxac8c-uxb9ccuxb4dcuxb294uxac00]{패리티
+검사 행렬은 어떻게 만드는가?} -
+\hyperref[uxbe44uxccb4uxacc4uxc801-uxc778uxcf54uxb529uxacfc-uxccb4uxacc4uxc801-uxc778uxcf54uxb529uxc758-uxcc28uxc774uxb294-uxbb34uxc5c7uxc778uxac00]{비체계적
+인코딩과 체계적 인코딩의 차이는 무엇인가?} -
+\hyperref[uxccb4uxacc4uxc801-uxc778uxcf54uxb529uxc740-uxad6cuxccb4uxc801uxc73cuxb85c-uxc5b4uxb5bbuxac8c-uxc218uxd589uxd558uxb294uxac00]{체계적
+인코딩은 구체적으로 어떻게 수행하는가?}
+
+\textbf{VI. 디코딩과 오류 정정} -
+\hyperref[uxc2e0uxb4dcuxb86csyndromeuxc774uxb780-uxbb34uxc5c7uxc774uxace0-uxc624uxb958-uxac80uxcd9cuxc740-uxc5b4uxb5bbuxac8c-uxd558uxb294uxac00]{신드롬(Syndrome)이란
+무엇이고, 오류 검출은 어떻게 하는가?} -
+\hyperref[uxc21cuxd658-uxbd80uxd638uxc758-uxb514uxcf54uxb529uxbcf5uxd638-uxacfcuxc815uxc740-uxc5b4uxb5bbuxac8c-uxb418uxb294uxac00]{순환
+부호의 디코딩(복호) 과정은 어떻게 되는가?} -
+\hyperref[uxc21cuxd658-uxbd80uxd638uxc758-uxc624uxb958-uxc815uxc815-uxb2a5uxb825uxc740-uxc5b4uxb5bbuxac8c-uxacb0uxc815uxb418uxb294uxac00]{순환
+부호의 오류 정정 능력은 어떻게 결정되는가?}
+
+\textbf{VII. 응용과 확장} -
+\hyperref[uxc21cuxd658-uxbd80uxd638uxac00-uxc2e4uxbb34uxc5d0uxc11c-uxc911uxc694uxd55c-uxc774uxc720uxb294-uxbb34uxc5c7uxc778uxac00]{순환
+부호가 실무에서 중요한 이유는 무엇인가?} -
+\hyperref[uxb300uxd45cuxc801uxc778-uxc21cuxd658-uxbd80uxd638uxc5d0uxb294-uxc5b4uxb5a4-uxac83uxb4e4uxc774-uxc788uxb294uxac00]{대표적인
+순환 부호에는 어떤 것들이 있는가?} -
+\hyperref[uxc900uxc21cuxd658-uxbd80uxd638uxc640-uxc591uxc790uxb0b4uxc131uxc554uxd638hqcuxb294-uxbb34uxc5c7uxc778uxac00]{준순환
+부호와 양자내성암호(HQC)는 무엇인가?}
+
+\textbf{부록} - \hyperref[uxc5f0uxc2b5uxbb38uxc81c]{연습문제} -
+\hyperref[sagemath-uxc2e4uxc2b5-uxcf54uxb4dc]{SageMath 실습 코드}
+
+\textbf{참고문헌} - \hyperref[uxcc38uxace0uxbb38uxd5cc]{참고문헌}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{순환 부호의 연구
+역사}\label{uxc21cuxd658-uxbd80uxd638uxc758-uxc5f0uxad6c-uxc5eduxc0ac}
+
+순환 부호는 부호 이론(Coding Theory) 전체의 발전과 밀접하게 얽혀 있다.
+아래는 선형 부호 및 순환 부호의 주요 이정표를 시간순으로 정리한 것이다.
+
+\subsubsection{1948 --- 부호 이론의
+탄생}\label{uxbd80uxd638-uxc774uxb860uxc758-uxd0c4uxc0dd}
+
+Claude Shannon이 논문 \emph{A Mathematical Theory of Communication}
+{[}1{]}을 발표하여 정보 이론을 창시하였다. 채널 부호화 정리(Channel
+Coding Theorem)를 통해 잡음이 있는 채널에서도 오류 확률을 임의로 낮출 수
+있는 부호가 존재함을 증명하였으나, 구체적인 부호 구성법은 제시하지
+않았다. 이 정리가 이후 수십 년간 ``좋은 부호를 어떻게 만들 것인가''라는
+연구의 출발점이 되었다.
+
+\subsubsection{1950 --- Hamming 부호}\label{hamming-uxbd80uxd638}
+
+Richard Hamming이 단일 오류 정정이 가능한 \([2^r - 1,\ 2^r - 1 - r]_2\)
+선형 부호를 제안하였다 {[}2{]}. 이것은 최초의 체계적인 오류 정정 부호로,
+특정 파라미터에서 순환 부호 구조를 가진다. 본 문서의 \([7, 4]_2\) 부호가
+대표적인 예이다.
+
+\subsubsection{1954 --- Reed-Muller
+부호}\label{reed-muller-uxbd80uxd638}
+
+Irving Reed와 David Muller가 독립적으로 다중 오류 정정이 가능한
+Reed-Muller 부호를 발표하였다 {[}3{]}{[}4{]}. 이 부호는 불 함수(Boolean
+Function)의 대수적 구조에 기반하며, 1969년 Mariner 9 화성 탐사선의 사진
+전송에 실제로 사용되었다.
+
+\subsubsection{1957 --- 순환 부호의 대수적
+기초}\label{uxc21cuxd658-uxbd80uxd638uxc758-uxb300uxc218uxc801-uxae30uxcd08}
+
+Eugene Prange가 순환 부호의 개념을 처음으로 형식화하고, 다항식 몫환
+\(\mathbb{F}_q[X]/ \langle X^n - 1 \rangle\)의 이데알 구조와의 대응을
+확립하였다 {[}5{]}. 이 연구가 본 문서의 ``순환 부호의 대수적 구조'' 및
+``몫환의 이데알 개수'' 절에서 다루는 대수적 구조의 원형이다.
+
+\subsubsection{1959--1960 --- BCH 부호}\label{bch-uxbd80uxd638}
+
+Alexis Hocquenghem(1959) {[}6{]}과 Raj Bose, Dwijendra
+Ray-Chaudhuri(1960) {[}7{]}가 독립적으로
+BCH(Bose--Chaudhuri--Hocquenghem) 부호를 발견하였다. 갈루아 확대체
+위에서 생성 다항식의 근을 지정함으로써 설계 거리(designed distance)를
+보장하는 최초의 체계적 방법론이었다. 본 문서의 ``순환 부호의 오류 정정
+능력'' 절에서 다루는 BCH 한계 정리가 이 결과에 해당한다.
+
+\subsubsection{1960 --- Reed-Solomon
+부호}\label{reed-solomon-uxbd80uxd638}
+
+Irving Reed와 Gustave Solomon이 비이진 체 위의 순환 부호인
+Reed-Solomon(RS) 부호를 제안하였다 {[}8{]}. 심볼 단위 오류 정정에
+탁월하여 CD, DVD, QR코드, 심우주 통신 등에 광범위하게 적용되었다.
+
+\subsubsection{1961 --- Peterson의 디코딩
+알고리즘}\label{petersonuxc758-uxb514uxcf54uxb529-uxc54cuxace0uxb9acuxc998}
+
+W. Wesley Peterson이 BCH 부호의 대수적 디코딩 절차를 체계화하고, 저서
+\emph{Error-Correcting Codes}를 출간하였다 {[}9{]}. 이 책은 순환 부호
+이론의 최초의 종합 교과서로 평가된다.
+
+\subsubsection{1968 --- Berlekamp-Massey
+알고리즘}\label{berlekamp-massey-uxc54cuxace0uxb9acuxc998}
+
+Elwyn Berlekamp {[}10{]}과 James Massey {[}11{]}가 오류 위치 다항식을
+효율적으로 구하는 반복 알고리즘을 개발하였다. 이 알고리즘은 BCH/RS
+부호의 실용적 디코딩을 가능하게 한 핵심 기술이며, 본 문서의 ``순환
+부호의 디코딩'' 절에서 언급한 대수적 디코딩의 근간이다.
+
+\subsubsection{1970년대 --- CRC의 산업
+표준화}\label{uxb144uxb300-crcuxc758-uxc0b0uxc5c5-uxd45cuxc900uxd654}
+
+순환 부호의 오류 검출 특화 버전인 CRC(Cyclic Redundancy Check)가 이더넷,
+통신 프로토콜, 저장 매체 등의 산업 표준으로 채택되었다. LFSR 기반의
+초고속 하드웨어 구현이 가능하다는 점이 표준화의 핵심 동력이었다.
+
+\subsubsection{1977 --- Goppa 부호와 McEliece 암호
+시스템}\label{goppa-uxbd80uxd638uxc640-mceliece-uxc554uxd638-uxc2dcuxc2a4uxd15c}
+
+V. D. Goppa가 대수기하학적 부호(Algebraic Geometry Code)의 기초를 놓았고
+{[}12{]}, Robert McEliece가 Goppa 부호를 기반으로 최초의 부호 기반
+공개키 암호 시스템을 제안하였다 {[}13{]}. 이 시스템은 양자 컴퓨터에도
+안전한 것으로 알려져 있으며, 본 문서의 ``준순환 부호와
+양자내성암호(HQC)'' 절에서 다루는 현대 양자내성암호의 이론적 원형이다.
+
+\subsubsection{1990년대 이후 --- 현대적
+발전}\label{uxb144uxb300-uxc774uxd6c4-uxd604uxb300uxc801-uxbc1cuxc804}
+
+1993년 Turbo 부호 {[}14{]}, 1996년 LDPC 부호의 재발견 {[}15{]} 등 반복
+디코딩(Iterative Decoding) 기반의 용량 접근 부호(Capacity-Approaching
+Code)가 등장하면서 부호 이론의 패러다임이 크게 전환되었다. 그러나 순환
+부호는 하드웨어 효율성과 대수적 구조의 명확성 덕분에 플래시 메모리, 위성
+통신, 양자내성암호 등의 분야에서 여전히 핵심적인 역할을 수행하고 있다.
+
+\subsubsection{연구 접근 방향의
+전환}\label{uxc5f0uxad6c-uxc811uxadfc-uxbc29uxd5a5uxc758-uxc804uxd658}
+
+순환 부호의 역사에서 주목할 점은, 연구의 접근 방향이 시대에 따라
+전환되었다는 것이다.
+
+\textbf{초기 (1950년대): 공학적 필요 → 대수적 구조의 발견}
+
+\begin{verbatim}
+"순환 이동해도 부호어인 부호를 만들면 LFSR로 구현할 수 있다"
+    → 순환 이동에 닫힌 선형 부호를 탐색 (Prange, 1957)
+    → 수학적으로 분석해보니 F_q[X]/<X^n-1>의 이데알과 동치
+    → 기존 대수학(이데알 이론)을 그대로 활용 가능
+\end{verbatim}
+
+이 시기에는 원하는 공학적 성질(순환 이동 불변성, 하드웨어 효율성)이 먼저
+있었고, 그 성질을 엄밀하게 기술하다 보니 이데알 구조와 자연스럽게 연결된
+것이다.
+
+\textbf{전환기 (1959년\textasciitilde): 대수적 구조 → 원하는 성능의 부호
+설계}
+
+\begin{verbatim}
+"갈루아 확대체에서 생성 다항식의 근을 지정하면 최소 거리를 보장할 수 있다"
+    → BCH 부호 (Hocquenghem 1959, Bose-Ray-Chaudhuri 1960)
+    → Reed-Solomon 부호 (Reed-Solomon 1960)
+    → 설계 거리 δ를 미리 지정하여 t-오류 정정 능력을 제어
+\end{verbatim}
+
+이 시점부터는 대수적 구조를 적극적으로 활용하여 ``원하는 오류 정정
+능력을 가진 부호''를 체계적으로 설계하는 방향으로 전환되었다.
+
+\textbf{현대 (1970년대\textasciitilde): 양방향 상호작용}
+
+\begin{verbatim}
+대수적 구조 ←→ 공학적 응용
+    → CRC: 순환 구조의 하드웨어 효율성 활용 (오류 검출)
+    → Goppa/McEliece: 부호 이론 → 공개키 암호 시스템
+    → HQC: 준순환 구조 → 양자내성암호의 키 크기 축소
+\end{verbatim}
+
+현대에는 대수적 구조와 공학적 응용이 양방향으로 영향을 주고받으며
+발전하고 있다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{순환 부호란
+무엇인가?}\label{uxc21cuxd658-uxbd80uxd638uxb780-uxbb34uxc5c7uxc778uxac00}
+
+순환 부호(Cyclic Code)는 선형 블록 부호(Linear Block Code)의 특수한
+부분집합으로, \textbf{선형성}과 \textbf{순환 이동 불변성}이라는 두 가지
+핵심 성질을 동시에 만족하는 오류 정정 부호이다.
+
+길이가 \(n\)인 선형 부호 \(\mathcal{C}\)가 다음 두 조건을 모두 만족하면
+순환 부호라 한다:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{선형성 (Linearity)}: 임의의 두 부호어
+  \(\mathbf{c}_1, \mathbf{c}_2 \in \mathcal{C}\)에 대해
+  \(\mathbf{c}_1 + \mathbf{c}_2 \in \mathcal{C}\)
+\item
+  \textbf{순환 이동 불변성 (Cyclic Shift Property)}: 부호어
+  \(\mathbf{c} = (c_0, c_1, \dots, c_{n-1}) \in \mathcal{C}\)이면,
+  오른쪽으로 한 칸 순환 이동시킨 벡터
+  \(\mathbf{c}^{\ggg 1}= (c_{n-1}, c_0, c_1, \dots, c_{n-2})\)도 반드시
+  \(\mathcal{C}\)에 속한다.
+\end{enumerate}
+
+두 칸, 세 칸, \ldots{} 임의의 \(i\)칸 순환 이동한 벡터도 모두 유효한
+부호어가 된다.
+
+\subsubsection{예제 1.1: 순환 이동
+확인}\label{uxc608uxc81c-1.1-uxc21cuxd658-uxc774uxb3d9-uxd655uxc778}
+
+\([7, 4]_2\) 이진 순환 부호에서 \(\mathbf{c} = (1, 0, 0, 1, 0, 1, 1)\)이
+부호어라면: - 1칸 순환 이동:
+\(\mathbf{c}^{\ggg 1} = (1, 1, 0, 0, 1, 0, 1)\) → 부호어 - 2칸 순환
+이동: \(\mathbf{c}^{\ggg 2} = (1, 1, 1, 0, 0, 1, 0)\) → 부호어 - 3칸
+순환 이동: \(\mathbf{c}^{\ggg 3} = (0, 1, 1, 1, 0, 0, 1)\) → 부호어
+
+이 모든 벡터가 부호 공간 \(\mathcal{C}\)에 속해야 한다.
+
+\subsubsection{예제 1.2: 순환 부호인지
+판별하기}\label{uxc608uxc81c-1.2-uxc21cuxd658-uxbd80uxd638uxc778uxc9c0-uxd310uxbcc4uxd558uxae30}
+
+다음 부호가 순환 부호인지 확인해 보자. \(n = 4\)이고 부호어 집합이
+다음과 같다고 하자:
+\[\mathcal{C} = \{(0,0,0,0),\ (1,0,1,0),\ (0,1,0,1),\ (1,1,1,1)\}\]
+
+\begin{itemize}
+\tightlist
+\item
+  선형성 검사:
+  \((1,0,1,0) \oplus (0,1,0,1) = (1,1,1,1) \in \mathcal{C}\) OK (다른
+  조합도 확인 가능)
+\item
+  순환 이동 검사:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \((1,0,1,0)\)을 1칸 이동 → \((0,1,0,1) \in \mathcal{C}\) OK
+  \item
+    \((0,1,0,1)\)을 1칸 이동 → \((1,0,1,0) \in \mathcal{C}\) OK
+  \item
+    \((1,1,1,1)\)을 1칸 이동 → \((1,1,1,1) \in \mathcal{C}\) OK
+  \end{itemize}
+\end{itemize}
+
+따라서 이 부호는 순환 부호이다.
+
+\subsubsection{예제 1.3: 순환 부호가 아닌
+경우}\label{uxc608uxc81c-1.3-uxc21cuxd658-uxbd80uxd638uxac00-uxc544uxb2cc-uxacbduxc6b0}
+
+\(n = 4\)이고 부호어 집합:
+\[\mathcal{C}' = \{(0,0,0,0),\ (1,1,0,0),\ (0,0,1,1),\ (1,1,1,1)\}\]
+
+\begin{itemize}
+\tightlist
+\item
+  \((1,1,0,0)\)을 1칸 순환 이동 → \((0,1,1,0)\) → \(\mathcal{C}'\)에
+  속하지 않음 X
+\end{itemize}
+
+따라서 이 부호는 선형 부호이지만 순환 부호는 \textbf{아닙니다}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{순환 이동 불변성은 왜 구현에
+유리한가?}\label{uxc21cuxd658-uxc774uxb3d9-uxbd88uxbcc0uxc131uxc740-uxc65c-uxad6cuxd604uxc5d0-uxc720uxb9acuxd55cuxac00}
+
+순환 부호가 처음 연구된 동기는 순수 대수학이 아니라 \textbf{하드웨어
+구현의 효율성}이었다. 1950년대 Prange {[}5{]}가 순환 부호를 형식화한
+핵심 이유는, 순환 이동에 닫혀있는 부호가 시프트 레지스터(Shift
+Register)만으로 인코딩과 오류 검출을 수행할 수 있다는 관찰이었다.
+
+\subsubsection{일반 선형 부호의
+문제점}\label{uxc77cuxbc18-uxc120uxd615-uxbd80uxd638uxc758-uxbb38uxc81cuxc810}
+
+일반 \([n, k]_q\) 선형 부호에서 인코딩은 메시지 벡터 \(\mathbf{m}\)과
+생성 행렬 \(G\)의 행렬 곱 \(\mathbf{c} = \mathbf{m} \cdot G\)로
+수행된다. 이 연산은:
+
+\begin{itemize}
+\tightlist
+\item
+  \(k \times n\) 크기의 행렬 \(G\)를 메모리에 저장해야 한다
+\item
+  \(k \cdot n\)번의 곱셈과 덧셈이 필요하다
+\item
+  전체 메시지 블록이 도착할 때까지 기다려야 연산을 시작할 수 있다
+\end{itemize}
+
+예를 들어 \([31, 21]_2\) 부호라면 \(21 \times 31 = 651\)개의 행렬 원소를
+저장하고, 매 블록마다 651번의 \(\text{GF}(2)\) 연산을 수행해야 한다.
+
+\subsubsection{순환 부호의 해결책: 시프트
+레지스터}\label{uxc21cuxd658-uxbd80uxd638uxc758-uxd574uxacb0uxcc45-uxc2dcuxd504uxd2b8-uxb808uxc9c0uxc2a4uxd130}
+
+순환 부호에서는 모든 부호어가 생성 다항식 \(g(X)\)의 배수이고, 인코딩은
+다항식 나눗셈(나머지 계산)으로 귀결된다. 다항식 나눗셈은 LFSR(Linear
+Feedback Shift Register) 회로로 구현할 수 있는데, 이 회로는:
+
+\begin{itemize}
+\tightlist
+\item
+  \(g(X)\)의 차수 \(r = n - k\)개의 \textbf{1비트 레지스터(플립플롭)}만
+  필요하다
+\item
+  데이터 비트가 들어올 때마다 \textbf{1클럭에 1비트씩} 실시간 처리한다
+\item
+  마지막 비트가 통과하는 순간 레지스터에 남은 값이 곧 패리티(또는
+  신드롬)이다
+\end{itemize}
+
+\([31, 21]_2\) 부호라면 레지스터 10개와 XOR 게이트 몇 개면 끝이다.
+
+\subsubsection{\texorpdfstring{예제: 행렬 곱 vs LFSR --- \([7, 4]_2\)
+부호
+비교}{예제: 행렬 곱 vs LFSR --- {[}7, 4{]}\_2 부호 비교}}\label{uxc608uxc81c-uxd589uxb82c-uxacf1-vs-lfsr-7-4_2-uxbd80uxd638-uxbe44uxad50}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+항목
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+일반 선형 부호 (행렬 곱)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+순환 부호 (LFSR)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+저장 공간 & \(G \in GF(2)^{4 \times 7} \to 28\)비트 &
+\(g(X)= 1 + X + X^3 \to\) 4비트 (계수: \([1,1,0,1]\)) \\
+연산량 (1블록) & \(4 \times 7 = 28\)회 AND/XOR & \(7\)클럭 (비트당 1회
+XOR) \\
+처리 방식 & 블록 전체 도착 후 일괄 처리 & 비트 단위
+실시간(On-the-fly) \\
+지연(Latency) & 블록 길이에 비례 & 거의 0 \\
+회로 복잡도 & \(k\)-입력 XOR 트리 \(n\)개 & \(r\)개 플립플롭 + XOR
+게이트 \\
+\end{longtable}
+
+\subsubsection{상세 분석: 왜 7클럭이 소요되는가? (비체계적 인코딩
+기준)}\label{uxc0c1uxc138-uxbd84uxc11d-uxc65c-7uxd074uxb7eduxc774-uxc18cuxc694uxb418uxb294uxac00-uxbe44uxccb4uxacc4uxc801-uxc778uxcf54uxb529-uxae30uxc900}
+
+비체계적 인코딩 \(c(X) = m(X)g(X)\)은 수학적으로 두 다항식의
+\textbf{컨벌루션(Convolution)} 연산이다. \([7, 4]_2\) 부호에서 메시지는
+4비트(\(k=4\)), 생성 다항식은 차수가 3이므로 4개의
+계수(\(r+1 = n-k+1 = 4\))를 가지며, 결과로 나오는 부호어는
+7비트(\(n=7\))가 된다.
+
+하드웨어(시리얼 곱셈기) 관점에서 비트가 처리되는 과정을 클럭 단위로
+분해하면 다음과 같다.
+
+\paragraph{1. 다항식 곱셈의 계수
+전개}\label{uxb2e4uxd56duxc2dd-uxacf1uxc148uxc758-uxacc4uxc218-uxc804uxac1c}
+
+\(m(X) = m_0 + m_1 X + m_2 X^2 + m_3 X^3\),
+\(g(X) = g_0 + g_1 X + g_2 X^2 + g_3 X^3\) (예: \(1 + X + X^3\) 이면
+\(g_2=0\))
+
+부호어 \(c(X) = \sum_{k=0}^{6} c_k X^k\)의 각 계수 \(c_k\)는 다음과 같이
+결정됩니다: - \(c_0 = m_0 g_0\) - \(c_1 = m_0 g_1 + m_1 g_0\) -
+\(c_2 = m_0 g_2 + m_1 g_1 + m_2 g_0\) -
+\(c_3 = m_0 g_3 + m_1 g_2 + m_2 g_1 + m_3 g_0\) -
+\(c_4 = m_1 g_3 + m_2 g_2 + m_3 g_1\) - \(c_5 = m_2 g_3 + m_3 g_2\) -
+\(c_6 = m_3 g_3\)
+
+\paragraph{2. 클럭별 동작 분석 (시리얼
+처리)}\label{uxd074uxb7eduxbcc4-uxb3d9uxc791-uxbd84uxc11d-uxc2dcuxb9acuxc5bc-uxcc98uxb9ac}
+
+시리얼 통신 환경에서는 매 클럭마다 메시지 비트가 입력되고, 동시에 부호어
+비트가 하나씩 출력됩니다.
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2632}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2632}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2632}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2105}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+클럭
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+입력 (Input)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+출력 (Output)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+설명
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{1} & \(m_0\) & \(c_0\) & \(m_0\)가 들어오자마자 첫 번째 비트
+출력 \\
+\textbf{2} & \(m_1\) & \(c_1\) & \(m_1\)과 입력되어 있던 \(m_0\)가
+곱셈기 회로를 통과하며 출력 \\
+\textbf{3} & \(m_2\) & \(c_2\) & \\
+\textbf{4} & \(m_3\) & \(c_3\) & 메시지 입력 완료. 하지만 연산 결과(꼬리
+부분)가 아직 다 안 나옴 \\
+\textbf{5} & \(0\) (Shift) & \(c_4\) & 피드의 0을 넣어 나머지 연산
+결과값들을 밀어냄 \\
+\textbf{6} & \(0\) (Shift) & \(c_5\) & \\
+\textbf{7} & \(0\) (Shift) & \(c_6\) & 마지막 비트 출력 완료 \\
+\end{longtable}
+
+\paragraph{3. 하드웨어 구조 (ASCII
+Art)}\label{uxd558uxb4dcuxc6e8uxc5b4-uxad6cuxc870-ascii-art}
+
+시리얼 곱셈기(Serial Multiplier)는 생성 다항식 \(g(X)\)의 계수에 따라
+다음과 같이 구성됩니다. 아래는 \(g(X) = 1 + X + X^3\)
+(\(g_0=1, g_1=1, g_2=0, g_3=1\))의 경우를 도식화한 것입니다.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{       메시지 입력 m\_k (Input)}
+\NormalTok{        |}
+\NormalTok{        +{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+}
+\NormalTok{        |               |               |               |}
+\NormalTok{       (x) g0=1        (x) g1=1        (x) g2=0        (x) g3=1}
+\NormalTok{        |               |               |               |}
+\NormalTok{        v               v               v               v}
+\NormalTok{ 0 {-}{-}\textgreater{}(+){-}{-}{-}{-}[ D0 ]{-}{-}{-}{-}(+){-}{-}{-}{-}[ D1 ]{-}{-}{-}{-}(+){-}{-}{-}{-}[ D2 ]{-}{-}{-}{-}(+){-}{-}{-}{-}\textgreater{} 부호어 출력 c\_k (Output)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{동작 원리:} 1. \textbf{클럭 1\textasciitilde4 (Input Phase)}:
+메시지 비트 \(m_0, m_1, m_2, m_3\)가 순차적으로 입력됩니다. 매 클럭마다
+입력 비트는 각 계수 \(g_i\)와 곱해지고, 지연 소자(D, Flip-flop)에 저장된
+이전 값들과 더해져 \(c_0, c_1, c_2, c_3\)가 즉시 출력됩니다. 2.
+\textbf{클럭 5\textasciitilde7 (Flush Phase)}: 모든 메시지 비트가 입력된
+후, 입력단을 0으로 고정하고 시프트를 3번 더 수행합니다. 이때 지연
+소자(\(D_0, D_1, D_2\))에 남아 있던 중간 연산 값들이 차례로 밀려
+나오면서 나머지 부호어 비트 \(c_4, c_5, c_6\)가 출력됩니다. 3.
+\textbf{결과}: 총 7클럭이 지나면 모든 레지스터가 0으로 비워지고(Flush),
+완성된 7비트 부호어 전체가 전송됩니다.
+
+\textbf{결론}: 메시지 비트 수(\(k=4\))만큼 데이터를 밀어 넣은 후, 생성
+다항식의 차수(\(n-k=3\))만큼 추가로 시프트하여 연산을 마무리해야 하므로
+총 \textbf{\(4 + 3 = 7\) 클럭}이 소요됩니다. 이는 정확히 부호어의 길이
+\textbf{\(n\)}과 일치합니다.
+
+\paragraph{4. 시점별 동작 상세 (Step-by-Step
+Visualization)}\label{uxc2dcuxc810uxbcc4-uxb3d9uxc791-uxc0c1uxc138-step-by-step-visualization}
+
+메시지 \(\mathbf{m} = (1, 1, 0, 1)\)을 \([7, 4]_2\)
+부호(\(g(X)=1+X+X^3\))로 인코딩하는 과정을 한 단계씩 추적합니다. 각
+클럭에서의 레지스터 상태와 연산 결과를 확인할 수 있습니다.
+
+\textbf{{[}초기 상태{]}} 모든 레지스터(D)는 0으로 시작합니다.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  Input m\_k: {-}}
+\NormalTok{  Registers: [ D0:0 ] [ D1:0 ] [ D2:0 ]}
+\NormalTok{  Output c\_k: {-}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{{[}클럭 1{]}} 첫 번째 정보 비트 \textbf{\(m_0 = 1\)} 입력 -
+\(c_0 = m_0 g_0 \oplus 0 = 1 \cdot 1 \oplus 0 = \mathbf{1}\) - 레지스터
+갱신:
+\(D_0 \leftarrow m_0 g_1 \oplus 0 = 1, \ D_1 \leftarrow m_0 g_2 \oplus 0 = 0, \ D_2 \leftarrow m_0 g_3 = 1\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  Input m\_k: 1}
+\NormalTok{       |}
+\NormalTok{       v (x1)   (x1)   (x0)   (x1)   \textless{}{-}{-} g 계수 곱셈}
+\NormalTok{       |   |      |      |      |}
+\NormalTok{  0 {-}{-}(+){-}{-}[ D0 ]{-}{-}(+){-}{-}[ D1 ]{-}{-}(+){-}{-}[ D2 ]{-}{-}(+){-}{-}\textgreater{} Output c\_0: 1}
+\NormalTok{           (New:1)      (New:0)      (New:1)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{{[}클럭 2{]}} 두 번째 정보 비트 \textbf{\(m_1 = 1\)} 입력 -
+\(c_1 = m_1 g_0 \oplus D_0 = 1 \cdot 1 \oplus 1 = \mathbf{0}\) -
+레지스터 갱신:
+\(D_0 \leftarrow m_1 g_1 \oplus D_1 = 1 \oplus 0 = 1, \ D_1 \leftarrow m_1 g_2 \oplus D_2 = 0 \oplus 1 = 1, \ D_2 \leftarrow m_1 g_3 = 1\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  Input m\_k: 1}
+\NormalTok{       |}
+\NormalTok{       v}
+\NormalTok{  0 {-}{-}(+){-}{-}[ D0:1 ]{-}{-}(+){-}{-}[ D1:0 ]{-}{-}(+){-}{-}[ D2:1 ]{-}{-}(+){-}{-}\textgreater{} Output c\_1: 0}
+\NormalTok{           (New:1)        (New:1)        (New:1)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{{[}클럭 3{]}} 세 번째 정보 비트 \textbf{\(m_2 = 0\)} 입력 -
+\(c_2 = m_2 g_0 \oplus D_0 = 0 \cdot 1 \oplus 1 = \mathbf{1}\) -
+레지스터 갱신:
+\(D_0 \leftarrow m_2 g_1 \oplus D_1 = 0 \oplus 1 = 1, \ D_1 \leftarrow m_2 g_2 \oplus D_2 = 0 \oplus 1 = 1, \ D_2 \leftarrow m_2 g_3 = 0\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  Input m\_k: 0}
+\NormalTok{       |}
+\NormalTok{       v}
+\NormalTok{  0 {-}{-}(+){-}{-}[ D0:1 ]{-}{-}(+){-}{-}[ D1:1 ]{-}{-}(+){-}{-}[ D2:1 ]{-}{-}(+){-}{-}\textgreater{} Output c\_2: 1}
+\NormalTok{           (New:1)        (New:1)        (New:0)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{{[}클럭 4{]}} 네 번째 정보 비트 \textbf{\(m_3 = 1\)} 입력 (입력
+완료) - \(c_3 = m_3 g_0 \oplus D_0 = 1 \cdot 1 \oplus 1 = \mathbf{0}\) -
+레지스터 갱신:
+\(D_0 \leftarrow m_3 g_1 \oplus D_1 = 1 \oplus 1 = 0, \ D_1 \leftarrow m_3 g_2 \oplus D_2 = 0 \oplus 0 = 0, \ D_2 \leftarrow m_3 g_3 = 1\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  Input m\_k: 1}
+\NormalTok{       |}
+\NormalTok{       v}
+\NormalTok{  0 {-}{-}(+){-}{-}[ D0:1 ]{-}{-}(+){-}{-}[ D1:1 ]{-}{-}(+){-}{-}[ D2:0 ]{-}{-}(+){-}{-}\textgreater{} Output c\_3: 0}
+\NormalTok{           (New:0)        (New:0)        (New:1)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{{[}클럭 5{]}} Flush 시작 (\textbf{입력 = 0}) -
+\(c_4 = 0 \cdot g_0 \oplus D_0 = \mathbf{0}\) - 레지스터 갱신:
+\(D_0 \leftarrow 0 \oplus D_1 = 0, \ D_1 \leftarrow 0 \oplus D_2 = 1, \ D_2 \leftarrow 0 = 0\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  Input m\_k: 0}
+\NormalTok{       |}
+\NormalTok{       v}
+\NormalTok{  0 {-}{-}(+){-}{-}[ D0:0 ]{-}{-}(+){-}{-}[ D1:0 ]{-}{-}(+){-}{-}[ D2:1 ]{-}{-}(+){-}{-}\textgreater{} Output c\_4: 0}
+\NormalTok{           (New:0)        (New:1)        (New:0)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{{[}클럭 6{]}} Flush 2회차 (\textbf{입력 = 0}) -
+\(c_5 = 0 \cdot g_0 \oplus D_0 = \mathbf{0}\) - 레지스터 갱신:
+\(D_0 \leftarrow 0 \oplus D_1 = 1, \ D_1 \leftarrow 0 \oplus D_2 = 0, \ D_2 \leftarrow 0 = 0\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  Input m\_k: 0}
+\NormalTok{       |}
+\NormalTok{       v}
+\NormalTok{  0 {-}{-}(+){-}{-}[ D0:0 ]{-}{-}(+){-}{-}[ D1:1 ]{-}{-}(+){-}{-}[ D2:0 ]{-}{-}(+){-}{-}\textgreater{} Output c\_5: 0}
+\NormalTok{           (New:1)        (New:0)        (New:0)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{{[}클럭 7{]}} 마지막 비트 출력 (\textbf{입력 = 0}) -
+\(c_6 = 0 \cdot g_0 \oplus D_0 = \mathbf{1}\) - 레지스터가 모두 비워짐
+(Flush 완료)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  Input m\_k: 0}
+\NormalTok{       |}
+\NormalTok{       v}
+\NormalTok{  0 {-}{-}(+){-}{-}[ D0:1 ]{-}{-}(+){-}{-}[ D1:0 ]{-}{-}(+){-}{-}[ D2:0 ]{-}{-}(+){-}{-}\textgreater{} Output c\_6: 1}
+\NormalTok{           (New:0)        (New:0)        (New:0)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{최종 결과}: 출력된 비트들을 순서대로 모으면 부호어 벡터
+\(\mathbf{c} = (\mathbf{1, 0, 1, 0, 0, 0, 1})\)이 됩니다. 이는 다항식
+곱셈 \(c(X) = (1+X+X^3)(1+X+X^3) = 1 + X^2 + X^6\)의 결과와 정확히
+일치합니다.
+
+\subsubsection{왜 ``순환''이 시프트 레지스터를 가능하게
+하는가}\label{uxc65c-uxc21cuxd658uxc774-uxc2dcuxd504uxd2b8-uxb808uxc9c0uxc2a4uxd130uxb97c-uxac00uxb2a5uxd558uxac8c-uxd558uxb294uxac00}
+
+핵심은 \textbf{순환 이동 = \(X\) 곱셈 (mod \(X^n - 1\))}이라는 대응이다.
+
+시프트 레지스터의 기본 동작은 ``모든 비트를 한 칸씩 밀고, 피드백을 넣는
+것''이다. 이것은 정확히 다항식에 \(X\)를 곱하고 \(g(X)\)로 나머지를
+취하는 연산과 동일하다. 순환 부호가 아닌 일반 선형 부호에서는 이 대응이
+성립하지 않으므로, 시프트 레지스터만으로는 인코딩/디코딩을 수행할 수
+없다.
+
+정리하면:
+
+\begin{verbatim}
+순환 이동 불변성
+    → 부호어 = g(X)의 배수
+    → 인코딩 = 다항식 나눗셈
+    → LFSR로 구현 가능
+    → 저장 공간 O(n-k), 연산 O(n), 실시간 처리
+\end{verbatim}
+
+이것이 1950년대에 순환 부호가 주목받은 이유이며, CRC가 이더넷·USB 등
+거의 모든 통신 프로토콜의 오류 검출 표준으로 채택된 근본적인 이유이다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{순환 부호를 다항식으로 어떻게
+표현하는가?}\label{uxc21cuxd658-uxbd80uxd638uxb97c-uxb2e4uxd56duxc2dduxc73cuxb85c-uxc5b4uxb5bbuxac8c-uxd45cuxd604uxd558uxb294uxac00}
+
+길이 \(n\)인 벡터 \(\mathbf{c} = (c_0, c_1, \dots, c_{n-1})\)를 다항식
+변수 \(X\)를 사용하여 \((n-1)\)차 이하의 다항식으로 매핑한다:
+
+\[c(X) = c_0 + c_1 X + c_2 X^2 + \dots + c_{n-1} X^{n-1}\]
+
+이 표현에서 \textbf{오른쪽으로 한 칸 순환 이동}은 수학적으로 다음과
+정확히 일치한다:
+
+\[\text{순환 이동} \longleftrightarrow X \cdot c(X) \pmod{X^n - 1}\]
+
+따라서 순환 부호의 모든 연산은 \textbf{다항식 몫환(Quotient Ring)}
+\(R_n = \mathbb{F}_q[X]/ \langle X^n - 1 \rangle\) 위에서 이루어진다.
+
+\subsubsection{예제 2.1: 벡터 ↔ 다항식
+변환}\label{uxc608uxc81c-2.1-uxbca1uxd130-uxb2e4uxd56duxc2dd-uxbcc0uxd658}
+
+\(n = 7\)일 때: \textbar{} 벡터 \textbar{} 다항식 \textbar{}
+\textbar------\textbar--------\textbar{} \textbar{}
+\((1, 0, 1, 1, 0, 0, 0)\) \textbar{} \(1 + X^2 + X^3\) \textbar{}
+\textbar{} \((0, 1, 0, 0, 1, 1, 0)\) \textbar{} \(X + X^4 + X^5\)
+\textbar{} \textbar{} \((1, 1, 1, 1, 1, 1, 1)\) \textbar{}
+\(1 + X + X^2 + X^3 + X^4 + X^5 + X^6\) \textbar{}
+
+\subsubsection{예제 2.2: 순환 이동의 다항식
+연산}\label{uxc608uxc81c-2.2-uxc21cuxd658-uxc774uxb3d9uxc758-uxb2e4uxd56duxc2dd-uxc5f0uxc0b0}
+
+\(n = 7\), \(c(X) = 1 + X^2 + X^3\)일 때 1칸 순환 이동을 계산한다:
+
+\[X \cdot c(X) = X + X^3 + X^4\]
+
+\(\deg(X \cdot c(X)) = 4 < 7\)이므로 \(\bmod (X^7 - 1)\)을 취해도 변하지
+않는다. 벡터로 변환하면: \((0, 1, 0, 1, 1, 0, 0)\) --- 원래 벡터
+\((1, 0, 1, 1, 0, 0, 0)\)을 오른쪽으로 1칸 이동한 것과 일치한다.
+
+\subsubsection{예제 2.3: 최고차항이 넘어가는 경우의 순환
+이동}\label{uxc608uxc81c-2.3-uxcd5cuxace0uxcc28uxd56duxc774-uxb118uxc5b4uxac00uxb294-uxacbduxc6b0uxc758-uxc21cuxd658-uxc774uxb3d9}
+
+\(n = 7\), \(c(X) = X^4 + X^5 + X^6\)일 때 1칸 순환 이동:
+
+\[X \cdot c(X) = X^5 + X^6 + X^7\]
+
+\(X^7 \equiv 1 \pmod{X^7 - 1}\)이므로:
+
+\[X \cdot c(X) \bmod (X^7 - 1) = 1 + X^5 + X^6\]
+
+벡터:
+\((0, 0, 0, 0, 1, 1, 1) \xrightarrow{\text{1칸 이동}} (1, 0, 0, 0, 0, 1, 1)\)
+OK
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{생성 다항식이란 무엇이고, 어떤 성질을
+가지는가?}\label{uxc0dduxc131-uxb2e4uxd56duxc2dduxc774uxb780-uxbb34uxc5c7uxc774uxace0-uxc5b4uxb5a4-uxc131uxc9c8uxc744-uxac00uxc9c0uxb294uxac00}
+
+모든 순환 부호는 부호 공간 내에서 \textbf{차수가 가장 낮고 최고차항의
+계수가 1인(Monic) 유일한 다항식} \(g(X)\)에 의해 완전히 결정된다. 이를
+\textbf{생성 다항식(Generator Polynomial)}이라 한다.
+
+\textbf{핵심 성질:} - \(g(X)\)는 반드시 \(X^n - 1\)의
+\textbf{인수(Factor)}여야 한다: \(X^n - 1 = g(X) \cdot h(X)\) -
+\(g(X)\)의 차수를 \(r = n - k\)라 하면, 부호의 차원(정보 비트 수)은
+\(k\)이다. - 모든 부호어 \(c(X)\)는 \(g(X)\)의 배수이다:
+\(c(X) = m(X) \cdot g(X)\)
+
+\textbf{비체계적 인코딩}: 메시지 다항식 \(m(X)\) (차수 \(\leq k-1\))에
+\(g(X)\)를 곱한다: \[c(X) = m(X) \cdot g(X)\]
+
+\subsubsection{\texorpdfstring{예제 3.1: \(X^7 - 1\)의 인수분해와 가능한
+생성
+다항식}{예제 3.1: X\^{}7 - 1의 인수분해와 가능한 생성 다항식}}\label{uxc608uxc81c-3.1-x7---1uxc758-uxc778uxc218uxbd84uxd574uxc640-uxac00uxb2a5uxd55c-uxc0dduxc131-uxb2e4uxd56duxc2dd}
+
+\(\text{GF}(2)\) 위에서 \(X^7 + 1\) (이진 체에서 \(-1 = 1\))을
+인수분해하면:
+
+\[X^7 + 1 = (1 + X)(1 + X + X^3)(1 + X^2 + X^3)\]
+
+이 세 기약다항식(Irreducible Polynomial)의 조합으로 만들 수 있는
+\(X^7 + 1\)의 인수들이 곧 가능한 생성 다항식이다:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3103}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1724}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3103}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2069}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\(g(X)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\deg(g)\) = \(n-k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\([n, k]_2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+부호어 수 \(2^k\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(1 + X\) & 1 & \([7, 6]_2\) & 64 \\
+\(1 + X + X^3\) & 3 & \([7, 4]_2\) & 16 \\
+\(1 + X^2 + X^3\) & 3 & \([7, 4]_2\) & 16 \\
+\((1+X)(1+X+X^3) = 1 + X^2 + X^3 + X^4\) & 4 & \([7, 3]_2\) & 8 \\
+\((1+X)(1+X^2+X^3) = 1 + X + X^2 + X^4\) & 4 & \([7, 3]_2\) & 8 \\
+\((1+X+X^3)(1+X^2+X^3) = 1 + X + X^2 + X^3 + X^4 + X^5 + X^6\) & 6 &
+\([7, 1]_2\) & 2 \\
+\(X^7 + 1\) & 7 & \([7, 0]_2\) & 1 (자명) \\
+\end{longtable}
+
+\subsubsection{\texorpdfstring{예제 3.2: 비체계적 인코딩 ---
+\([7, 4]_2\)
+부호}{예제 3.2: 비체계적 인코딩 --- {[}7, 4{]}\_2 부호}}\label{uxc608uxc81c-3.2-uxbe44uxccb4uxacc4uxc801-uxc778uxcf54uxb529-7-4_2-uxbd80uxd638}
+
+\(g(X) = 1 + X + X^3\), 메시지 \(\mathbf{m} = (1, 1, 0, 1)\), 즉
+\(m(X) = 1 + X + X^3\)
+
+\[
+\begin{aligned}
+c(X) 
+&= m(X) \cdot g(X) \\
+&= (1 + X + X^3)(1 + X + X^3) \\
+&= 1 + X + X^3 + X + X^2 + X^4 + X^3 + X^4 + X^6 \\
+&= 1 + (1+1)X + X^2 + (1+1)X^3 + (1+1)X^4 + X^6 \\
+&= 1 + X^2 + X^6
+\end{aligned}
+\]
+
+부호어 벡터: \(\mathbf{c} = (1, 0, 1, 0, 0, 0, 1)\)
+
+\textbf{검증}: \(c(X)\)가 \(g(X)\)의 배수인지 확인 →
+\((1 + X^2 + X^6) \div (1 + X + X^3)\)의 나머지가 \(0\)이면 정상 OK
+
+\subsubsection{예제 3.3: 비체계적 인코딩 --- 다른
+메시지}\label{uxc608uxc81c-3.3-uxbe44uxccb4uxacc4uxc801-uxc778uxcf54uxb529-uxb2e4uxb978-uxba54uxc2dcuxc9c0}
+
+\(g(X) = 1 + X + X^3\), 메시지 \(\mathbf{m} = (0, 1, 0, 0)\), 즉
+\(m(X) = X\)
+
+\[c(X) = X \cdot (1 + X + X^3) = X + X^2 + X^4\]
+
+부호어 벡터: \(\mathbf{c} = (0, 1, 1, 0, 1, 0, 0)\)
+
+이것은 \(g(X)\)의 계수를 오른쪽으로 1칸 시프트한 것과 동일하다 --- 생성
+행렬의 두 번째 행에 해당한다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{패리티 검사 다항식이란
+무엇인가?}\label{uxd328uxb9acuxd2f0-uxac80uxc0ac-uxb2e4uxd56duxc2dduxc774uxb780-uxbb34uxc5c7uxc778uxac00}
+
+\(X^n - 1\)을 생성 다항식 \(g(X)\)로 나눈 몫을 \textbf{패리티 검사
+다항식(Parity Check Polynomial)} \(h(X)\)라 한다:
+
+\[h(X) = \frac{X^n - 1}{g(X)}\]
+
+\(h(X)\)의 차수는 \(k\)이며, 다항식 \(v(X)\)가 유효한 부호어인지
+확인하려면:
+
+\[v(X) \cdot h(X) \equiv 0 \pmod{X^n - 1}\]
+
+을 검사한다.
+
+\subsubsection{\texorpdfstring{예제 4.1: \([7, 4]_2\) 부호의 패리티 검사
+다항식}{예제 4.1: {[}7, 4{]}\_2 부호의 패리티 검사 다항식}}\label{uxc608uxc81c-4.1-7-4_2-uxbd80uxd638uxc758-uxd328uxb9acuxd2f0-uxac80uxc0ac-uxb2e4uxd56duxc2dd}
+
+\(g(X) = 1 + X + X^3\)일 때:
+
+\[h(X) = \frac{X^7 + 1}{1 + X + X^3} = 1 + X + X^2 + X^4\]
+
+\textbf{검증}: \(g(X) \cdot h(X) = (1 + X + X^3)(1 + X + X^2 + X^4)\)를
+\(\text{GF}(2)\)에서 전개:
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+& \(1\) & \(X\) & \(X^2\) & \(X^4\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(1\) & \(1\) & \(X\) & \(X^2\) & \(X^4\) \\
+\(X\) & \(X\) & \(X^2\) & \(X^3\) & \(X^5\) \\
+\(X^3\) & \(X^3\) & \(X^4\) & \(X^5\) & \(X^7\) \\
+\end{longtable}
+
+합산 (\(\text{GF}(2)\)에서 같은 항은 소거):
+\[= 1 + (1+1)X + (1+1)X^2 + (1+1)X^3 + (1+1)X^4 + (1+1)X^5 + X^7 = 1 + X^7 = X^7 + 1\]
+
+\subsubsection{예제 4.2: 부호어 유효성
+검사}\label{uxc608uxc81c-4.2-uxbd80uxd638uxc5b4-uxc720uxd6a8uxc131-uxac80uxc0ac}
+
+\(c(X) = X + X^2 + X^4\) (예제 3.3의 부호어)에 대해:
+
+\[c(X) \cdot h(X) = (X + X^2 + X^4)(1 + X + X^2 + X^4)\]
+
+항별 곱: - \(X \cdot (1 + X + X^2 + X^4) = X + X^2 + X^3 + X^5\) -
+\(X^2 \cdot (1 + X + X^2 + X^4) = X^2 + X^3 + X^4 + X^6\) -
+\(X^4 \cdot (1 + X + X^2 + X^4) = X^4 + X^5 + X^6 + X^8\)
+
+합산 (\(\text{GF}(2)\)): - \(X^1\): 1번 → \(X\) - \(X^2\): 2번 → \(0\) -
+\(X^3\): 2번 → \(0\) - \(X^4\): 2번 → \(0\) - \(X^5\): 2번 → \(0\) -
+\(X^6\): 2번 → \(0\) - \(X^8\): 1번 → \(X^8\)
+
+결과: \(X + X^8\)
+
+\(\bmod (X^7 + 1)\): \(X^8 \equiv X\)이므로 \(X + X = 0\) OK --- 유효한
+부호어이다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{생성 행렬은 어떻게
+만드는가?}\label{uxc0dduxc131-uxd589uxb82cuxc740-uxc5b4uxb5bbuxac8c-uxb9ccuxb4dcuxb294uxac00}
+
+생성 다항식 \(g(X) = g_0 + g_1 X + \dots + g_{n-k} X^{n-k}\)의 계수를
+행마다 오른쪽으로 한 칸씩 시프트하여 \(k \times n\) 크기의 생성 행렬
+\(G\)를 구성한다:
+
+\[G = \begin{bmatrix}
+g_0 & g_1 & g_2 & \dots & g_{n-k} & 0 & \dots & 0 \\
+0 & g_0 & g_1 & \dots & g_{n-k-1} & g_{n-k} & \dots & 0 \\
+\vdots & & \ddots & & & & \ddots & \vdots \\
+0 & \dots & 0 & g_0 & g_1 & \dots & \dots & g_{n-k}
+\end{bmatrix}\]
+
+\(G\)의 \(i\)번째 행(\(i = 0, 1, \dots, k-1\))은 다항식
+\(X^i \cdot g(X)\)의 계수 벡터에 해당한다.
+
+\begin{quote}
+\textbf{왜 이 구조가 유효한 생성 행렬인가?} 1. \(g(X)\)는 부호어이고,
+순환 이동 불변성에 의해 \(Xg(X), X^2g(X), \dots, X^{k-1}g(X)\)도 모두
+부호어이다. 2. 이들의 최고차항 차수가 각각 \(n-k, n-k+1, \dots, n-1\)로
+모두 다르므로 \textbf{일차 독립}이다. 3. \(k\)차원 부호 공간에서
+\(k\)개의 일차 독립 벡터를 찾았으므로 이들이 \textbf{기저(Basis)}를
+형성한다.
+\end{quote}
+
+\subsubsection{\texorpdfstring{예제 5.1: \([7, 4]_2\) 순환 부호의 생성
+행렬}{예제 5.1: {[}7, 4{]}\_2 순환 부호의 생성 행렬}}\label{uxc608uxc81c-5.1-7-4_2-uxc21cuxd658-uxbd80uxd638uxc758-uxc0dduxc131-uxd589uxb82c}
+
+\(g(X) = 1 + X + X^3\), 계수 벡터: \((1, 1, 0, 1)\)
+
+\[G = \begin{bmatrix}
+1 & 1 & 0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 & 1 & 0 & 1
+\end{bmatrix}\]
+
+각 행의 의미: - 행 0: \(g(X) = 1 + X + X^3\) - 행 1:
+\(Xg(X) = X + X^2 + X^4\) - 행 2: \(X^2g(X) = X^2 + X^3 + X^5\) - 행 3:
+\(X^3g(X) = X^3 + X^4 + X^6\)
+
+\subsubsection{예제 5.2: 생성 행렬을 이용한
+인코딩}\label{uxc608uxc81c-5.2-uxc0dduxc131-uxd589uxb82cuxc744-uxc774uxc6a9uxd55c-uxc778uxcf54uxb529}
+
+메시지 \(\mathbf{m} = (1, 0, 1, 1)\)을 인코딩:
+
+\[\mathbf{c} = \mathbf{m} \cdot G = (1, 0, 1, 1) \begin{bmatrix}
+1 & 1 & 0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 & 1 & 0 & 1
+\end{bmatrix}\]
+
+\(\text{GF}(2)\)에서 계산: -
+\(c_0 = 1 \cdot 1 + 0 \cdot 0 + 1 \cdot 0 + 1 \cdot 0 = 1\) -
+\(c_1 = 1 \cdot 1 + 0 \cdot 1 + 1 \cdot 0 + 1 \cdot 0 = 1\) -
+\(c_2 = 1 \cdot 0 + 0 \cdot 1 + 1 \cdot 1 + 1 \cdot 0 = 1\) -
+\(c_3 = 1 \cdot 1 + 0 \cdot 0 + 1 \cdot 1 + 1 \cdot 1 = 1\) -
+\(c_4 = 1 \cdot 0 + 0 \cdot 1 + 1 \cdot 0 + 1 \cdot 1 = 1\) -
+\(c_5 = 1 \cdot 0 + 0 \cdot 0 + 1 \cdot 1 + 1 \cdot 0 = 1\) -
+\(c_6 = 1 \cdot 0 + 0 \cdot 0 + 1 \cdot 0 + 1 \cdot 1 = 1\)
+
+\[\mathbf{c} = (1, 1, 1, 1, 1, 1, 1)\]
+
+\textbf{검증}: \(c(X) = 1 + X + X^2 + X^3 + X^4 + X^5 + X^6\). 이것이
+\(g(X)\)의 배수인지 확인:
+\((1 + X + X^2 + X^3 + X^4 + X^5 + X^6) \div (1 + X + X^3)\)의 나머지 =
+\(0\) OK
+
+\subsubsection{\texorpdfstring{예제 5.3: \((7, 3)\) 순환 부호의 생성
+행렬}{예제 5.3: (7, 3) 순환 부호의 생성 행렬}}\label{uxc608uxc81c-5.3-7-3-uxc21cuxd658-uxbd80uxd638uxc758-uxc0dduxc131-uxd589uxb82c}
+
+\(g(X) = 1 + X^2 + X^3 + X^4\), \(k = 3\)
+
+\[G = \begin{bmatrix}
+1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+0 & 1 & 0 & 1 & 1 & 1 & 0 \\
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\end{bmatrix}\]
+
+메시지 \(\mathbf{m} = (1, 1, 0)\):
+\[\mathbf{c} = (1, 1, 0) \cdot G = (1, 1, 1, 0, 0, 1, 0)\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{패리티 검사 행렬은 어떻게
+만드는가?}\label{uxd328uxb9acuxd2f0-uxac80uxc0ac-uxd589uxb82cuxc740-uxc5b4uxb5bbuxac8c-uxb9ccuxb4dcuxb294uxac00}
+
+패리티 검사 다항식 \(h(X) = h_0 + h_1 X + \dots + h_k X^k\)의 계수를
+\textbf{역순으로 뒤집은} 후 시프트하여 \((n-k) \times n\) 크기의 패리티
+검사 행렬 \(H\)를 구성한다:
+
+\[H = \begin{bmatrix}
+h_k & h_{k-1} & \dots & h_0 & 0 & \dots & 0 \\
+0 & h_k & h_{k-1} & \dots & h_0 & \dots & 0 \\
+\vdots & & \ddots & & & \ddots & \vdots \\
+0 & \dots & 0 & h_k & h_{k-1} & \dots & h_0
+\end{bmatrix}\]
+
+이 행렬은 \(G H^T = 0\) (직교 조건)을 만족한다.
+
+\begin{quote}
+\textbf{왜 계수를 역순으로 뒤집는가?}
+
+\(g(X)h(X) = X^n - 1 \equiv 0 \pmod{X^n - 1}\)에서,
+\(c(X) = m(X)g(X)\)인 부호어에 \(h(X)\)를 곱하면:
+\[c(X)h(X) = m(X) \cdot g(X) \cdot h(X) = m(X)(X^n - 1) \equiv 0\]
+
+이 다항식 곱의 특정 차수 계수들이 0이 되는 조건을 벡터 내적으로
+표현하면, \(h(X)\)의 계수를 역순으로 배치한 벡터와 부호어 벡터의 내적이
+0이 된다. 이것이 패리티 검사 방정식 \(H\mathbf{c}^T = 0\)과 정확히
+일치한다.
+\end{quote}
+
+\subsubsection{\texorpdfstring{예제 6.1: \([7, 4]_2\) 순환 부호의 패리티
+검사
+행렬}{예제 6.1: {[}7, 4{]}\_2 순환 부호의 패리티 검사 행렬}}\label{uxc608uxc81c-6.1-7-4_2-uxc21cuxd658-uxbd80uxd638uxc758-uxd328uxb9acuxd2f0-uxac80uxc0ac-uxd589uxb82c}
+
+\(h(X) = 1 + X + X^2 + X^4\), 계수: \((1, 1, 1, 0, 1)\)
+
+역순: \((1, 0, 1, 1, 1)\) →
+\(h_4 = 1, h_3 = 0, h_2 = 1, h_1 = 1, h_0 = 1\)
+
+\[H = \begin{bmatrix}
+1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+0 & 1 & 0 & 1 & 1 & 1 & 0 \\
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\end{bmatrix}\]
+
+\subsubsection{\texorpdfstring{예제 6.2: 직교성 검증
+\(GH^T = 0\)}{예제 6.2: 직교성 검증 GH\^{}T = 0}}\label{uxc608uxc81c-6.2-uxc9c1uxad50uxc131-uxac80uxc99d-ght-0}
+
+\(G\)의 첫 번째 행 \((1, 1, 0, 1, 0, 0, 0)\)과 \(H\)의 첫 번째 행
+\((1, 0, 1, 1, 1, 0, 0)\)의 내적:
+\[1 \cdot 1 + 1 \cdot 0 + 0 \cdot 1 + 1 \cdot 1 + 0 \cdot 1 + 0 \cdot 0 + 0 \cdot 0 = 1 + 1 = 0 \pmod{2}\]
+
+\(G\)의 첫 번째 행과 \(H\)의 두 번째 행 \((0, 1, 0, 1, 1, 1, 0)\)의
+내적: \[0 + 1 + 0 + 1 + 0 + 0 + 0 = 0 \pmod{2}\] (나머지 조합도 모두 0이
+된다.)
+
+\subsubsection{예제 6.3: 패리티 검사 행렬을 이용한 오류
+검출}\label{uxc608uxc81c-6.3-uxd328uxb9acuxd2f0-uxac80uxc0ac-uxd589uxb82cuxc744-uxc774uxc6a9uxd55c-uxc624uxb958-uxac80uxcd9c}
+
+수신 벡터 \(\mathbf{v} = (1, 1, 1, 1, 1, 1, 1)\) (예제 5.2의 부호어)에
+대해:
+
+\[H \mathbf{v}^T = \begin{bmatrix}
+1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+0 & 1 & 0 & 1 & 1 & 1 & 0 \\
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\end{bmatrix} \begin{bmatrix} 1\\1\\1\\1\\1\\1\\1 \end{bmatrix} = \begin{bmatrix} 0\\0\\0 \end{bmatrix}\]
+
+(각 행의 1의 개수가 4개이므로 \(\text{GF}(2)\)에서 합은 0) → 오류 없음 OK
+
+수신 벡터에 오류가 있는 경우: \(\mathbf{v}' = (0, 1, 1, 1, 1, 1, 1)\)
+(첫 비트 반전)
+
+\[H \mathbf{v}'^T = \begin{bmatrix} 1\\0\\0 \end{bmatrix} \neq \mathbf{0}\]
+
+→ 신드롬이 \((1, 0, 0)\)으로 오류 검출됨 OK
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{비체계적 인코딩과 체계적 인코딩의 차이는
+무엇인가?}\label{uxbe44uxccb4uxacc4uxc801-uxc778uxcf54uxb529uxacfc-uxccb4uxacc4uxc801-uxc778uxcf54uxb529uxc758-uxcc28uxc774uxb294-uxbb34uxc5c7uxc778uxac00}
+
+두 방식 모두 유효한 부호어를 생성하지만, 부호어 내에서 원본 메시지의
+위치가 다르다.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1132}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4906}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3962}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+구분
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+비체계적 (Non-systematic)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+체계적 (Systematic)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+인코딩 방법 & \(c(X) = m(X) \cdot g(X)\) &
+\(c(X) = p(X) + X^{n-k}m(X)\) \\
+메시지 위치 & 부호어 전체에 섞여 있음 & 부호어의 특정 위치에 그대로
+보존 \\
+디코딩 편의성 & 나눗셈 필요 & 패리티 비트만 떼어내면 됨 \\
+실무 사용 & 드묾 & 대부분의 통신 시스템에서 사용 \\
+\end{longtable}
+
+\subsubsection{예제 7.1: 같은 메시지의 두 가지 인코딩
+비교}\label{uxc608uxc81c-7.1-uxac19uxc740-uxba54uxc2dcuxc9c0uxc758-uxb450-uxac00uxc9c0-uxc778uxcf54uxb529-uxbe44uxad50}
+
+\(g(X) = 1 + X + X^3\), 메시지 \(\mathbf{m} = (1, 0, 1, 1)\)
+
+\textbf{비체계적}:
+\(c(X) = m(X) \cdot g(X) = (1 + X^2 + X^3)(1 + X + X^3)\)
+
+전개: - \(1 \cdot (1 + X + X^3) = 1 + X + X^3\) -
+\(X^2 \cdot (1 + X + X^3) = X^2 + X^3 + X^5\) -
+\(X^3 \cdot (1 + X + X^3) = X^3 + X^4 + X^6\)
+
+합산:
+\(1 + X + X^2 + (1+1+1)X^3 + X^4 + X^5 + X^6 = 1 + X + X^2 + X^3 + X^4 + X^5 + X^6\)
+
+부호어: \((1, 1, 1, 1, 1, 1, 1)\) --- 메시지 \((1, 0, 1, 1)\)이 어디에
+있는지 바로 알 수 없음
+
+\textbf{체계적} (Q8에서 상세히 다룸): 부호어
+\((1, 0, 0, \mathbf{1, 0, 1, 1})\) --- 뒤쪽 4비트가 원본 메시지 그대로
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{체계적 인코딩은 구체적으로 어떻게
+수행하는가?}\label{uxccb4uxacc4uxc801-uxc778uxcf54uxb529uxc740-uxad6cuxccb4uxc801uxc73cuxb85c-uxc5b4uxb5bbuxac8c-uxc218uxd589uxd558uxb294uxac00}
+
+체계적 인코딩은 3단계로 수행된다:
+
+\textbf{Step 1. 메시지 시프트}: \(m(X)\)에 \(X^{n-k}\)를 곱하여 높은
+차수 쪽으로 이동 \[X^{n-k} \cdot m(X)\]
+
+\textbf{Step 2. 나머지 계산}: 시프트된 다항식을 \(g(X)\)로 나누어 나머지
+\(p(X)\)를 구함 \[p(X) = X^{n-k} m(X) \bmod g(X)\]
+
+\textbf{Step 3. 부호어 합성}: 시프트된 메시지와 나머지를 더함
+\[c(X) = p(X) + X^{n-k} m(X)\]
+
+결과적으로 부호어는
+\([\text{패리티 } (n-k) \text{비트} \mid \text{메시지 } k \text{비트}]\)
+구조를 가진다.
+
+\begin{quote}
+\textbf{왜 이것이 유효한 부호어인가?} \(c(X) = p(X) + X^{n-k}m(X)\)에서
+\(p(X) = X^{n-k}m(X) \bmod g(X)\)이므로:
+\[c(X) = X^{n-k}m(X) - p(X) + 2p(X)\] \(\text{GF}(2)\)에서
+\(2p(X) = 0\)이고, \(X^{n-k}m(X) - p(X)\)는 \(g(X)\)로 나누어 떨어지므로
+\(c(X)\)는 \(g(X)\)의 배수이다. OK
+\end{quote}
+
+\subsubsection{\texorpdfstring{예제 8.1: \([7, 4]_2\) 체계적 인코딩 ---
+메시지
+\((1, 0, 1, 1)\)}{예제 8.1: {[}7, 4{]}\_2 체계적 인코딩 --- 메시지 (1, 0, 1, 1)}}\label{uxc608uxc81c-8.1-7-4_2-uxccb4uxacc4uxc801-uxc778uxcf54uxb529-uxba54uxc2dcuxc9c0-1-0-1-1}
+
+\(g(X) = 1 + X + X^3\), \(n-k = 3\), \(m(X) = 1 + X^2 + X^3\)
+
+\textbf{Step 1.} \(X^3 m(X) = X^3 + X^5 + X^6\)
+
+\textbf{Step 2.} \((X^6 + X^5 + X^3) \div (X^3 + X + 1)\):
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+단계 & 피제수 & 몫 항 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & \(X^6 + X^5 + X^3\) & \(X^3\) \\
+& \(-(X^6 + X^4 + X^3)\) & \\
+& \(= X^5 + X^4\) & \\
+2 & \(X^5 + X^4\) & \(X^2\) \\
+& \(-(X^5 + X^3 + X^2)\) & \\
+& \(= X^4 + X^3 + X^2\) & \\
+3 & \(X^4 + X^3 + X^2\) & \(X\) \\
+& \(-(X^4 + X^2 + X)\) & \\
+& \(= X^3 + X\) & \\
+4 & \(X^3 + X\) & \(1\) \\
+& \(-(X^3 + X + 1)\) & \\
+& \(= 1\) & \\
+\end{longtable}
+
+몫: \(X^3 + X^2 + X + 1\), 나머지: \(p(X) = 1\)
+
+\textbf{Step 3.} \(c(X) = 1 + X^3 + X^5 + X^6\)
+
+\[\mathbf{c} = (\underbrace{1, 0, 0}_{\text{패리티}},\ \underbrace{1, 0, 1, 1}_{\text{메시지}})\]
+
+\subsubsection{\texorpdfstring{예제 8.2: \([7, 4]_2\) 체계적 인코딩 ---
+메시지
+\((1, 1, 0, 0)\)}{예제 8.2: {[}7, 4{]}\_2 체계적 인코딩 --- 메시지 (1, 1, 0, 0)}}\label{uxc608uxc81c-8.2-7-4_2-uxccb4uxacc4uxc801-uxc778uxcf54uxb529-uxba54uxc2dcuxc9c0-1-1-0-0}
+
+\(m(X) = 1 + X\)
+
+\textbf{Step 1.} \(X^3 m(X) = X^3 + X^4\)
+
+\textbf{Step 2.} \((X^4 + X^3) \div (X^3 + X + 1)\): -
+\(X^4 + X^3 - X(X^3 + X + 1) = X^4 + X^3 - X^4 - X^2 - X = X^3 + X^2 + X\)
+- \(X^3 + X^2 + X - 1 \cdot (X^3 + X + 1) = X^2 + 1\)
+
+나머지: \(p(X) = X^2 + 1\), 즉 패리티 벡터 \((1, 0, 1)\)
+
+\textbf{Step 3.}
+\(c(X) = (1 + X^2) + (X^3 + X^4) = 1 + X^2 + X^3 + X^4\)
+
+\[\mathbf{c} = (\underbrace{1, 0, 1}_{\text{패리티}},\ \underbrace{1, 1, 0, 0}_{\text{메시지}})\]
+
+\subsubsection{\texorpdfstring{예제 8.3: \([7, 4]_2\) 체계적 인코딩 ---
+메시지
+\((0, 0, 0, 1)\)}{예제 8.3: {[}7, 4{]}\_2 체계적 인코딩 --- 메시지 (0, 0, 0, 1)}}\label{uxc608uxc81c-8.3-7-4_2-uxccb4uxacc4uxc801-uxc778uxcf54uxb529-uxba54uxc2dcuxc9c0-0-0-0-1}
+
+\(m(X) = X^3\)
+
+\textbf{Step 1.} \(X^3 \cdot X^3 = X^6\)
+
+\textbf{Step 2.} \(X^6 \div (X^3 + X + 1)\): -
+\(X^6 - X^3(X^3 + X + 1) = X^6 - X^6 - X^4 - X^3 = X^4 + X^3\) -
+\(X^4 + X^3 - X(X^3 + X + 1) = X^3 + X^2 + X\) -
+\(X^3 + X^2 + X - (X^3 + X + 1) = X^2 + 1\)
+
+나머지: \(p(X) = X^2 + 1\), 패리티 \((1, 0, 1)\)
+
+\textbf{Step 3.} \(c(X) = (1 + X^2) + X^6 = 1 + X^2 + X^6\)
+
+\[\mathbf{c} = (\underbrace{1, 0, 1}_{\text{패리티}},\ \underbrace{0, 0, 0, 1}_{\text{메시지}})\]
+
+\subsubsection{\texorpdfstring{예제 8.4: \([7, 4]_2\) 전체 체계적 부호어
+테이블}{예제 8.4: {[}7, 4{]}\_2 전체 체계적 부호어 테이블}}\label{uxc608uxc81c-8.4-7-4_2-uxc804uxccb4-uxccb4uxacc4uxc801-uxbd80uxd638uxc5b4-uxd14cuxc774uxbe14}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+메시지 \((m_0 m_1 m_2 m_3)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(m(X)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+패리티 \((p_0 p_1 p_2)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+부호어 \((p_0 p_1 p_2 m_0 m_1 m_2 m_3)\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(0000\) & \(0\) & \(000\) & \(0000000\) \\
+\(1000\) & \(1\) & \(110\) & \(1101000\) \\
+\(0100\) & \(X\) & \(011\) & \(0110100\) \\
+\(1100\) & \(1+X\) & \(101\) & \(1011100\) \\
+\(0010\) & \(X^2\) & \(111\) & \(1110010\) \\
+\(1010\) & \(1+X^2\) & \(001\) & \(0011010\) \\
+\(0110\) & \(X+X^2\) & \(100\) & \(1000110\) \\
+\(1110\) & \(1+X+X^2\) & \(010\) & \(0101110\) \\
+\(0001\) & \(X^3\) & \(101\) & \(1010001\) \\
+\(1001\) & \(1+X^3\) & \(011\) & \(0111001\) \\
+\(0101\) & \(X+X^3\) & \(110\) & \(1100101\) \\
+\(1101\) & \(1+X+X^3\) & \(000\) & \(0001101\) \\
+\(0011\) & \(X^2+X^3\) & \(010\) & \(0100011\) \\
+\(1011\) & \(1+X^2+X^3\) & \(100\) & \(1001011\) \\
+\(0111\) & \(X+X^2+X^3\) & \(001\) & \(0010111\) \\
+\(1111\) & \(1+X+X^2+X^3\) & \(111\) & \(1111111\) \\
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{신드롬(Syndrome)이란 무엇이고, 오류 검출은 어떻게
+하는가?}\label{uxc2e0uxb4dcuxb86csyndromeuxc774uxb780-uxbb34uxc5c7uxc774uxace0-uxc624uxb958-uxac80uxcd9cuxc740-uxc5b4uxb5bbuxac8c-uxd558uxb294uxac00}
+
+수신된 다항식 \(v(X)\)를 생성 다항식 \(g(X)\)로 나눈 \textbf{나머지}가
+신드롬(Syndrome) \(s(X)\)이다:
+
+\[s(X) = v(X) \bmod g(X)\]
+
+\begin{itemize}
+\tightlist
+\item
+  \(s(X) = 0\): 오류 미검출 (유효한 부호어)
+\item
+  \(s(X) \neq 0\): 오류 발생 확인
+\end{itemize}
+
+\begin{quote}
+\textbf{핵심 원리}: 수신 다항식 \(v(X) = c(X) + e(X)\)에서 \(c(X)\)는
+\(g(X)\)의 배수이므로: \[s(X) = v(X) \bmod g(X) = e(X) \bmod g(X)\]
+신드롬은 \textbf{오류 패턴 \(e(X)\)에만 의존}하고 원본 메시지와는
+무관하다.
+\end{quote}
+
+\subsubsection{예제 9.1: 오류 없는 수신 --- 신드롬 =
+0}\label{uxc608uxc81c-9.1-uxc624uxb958-uxc5c6uxb294-uxc218uxc2e0-uxc2e0uxb4dcuxb86c-0}
+
+부호어 \(c(X) = 1 + X^3 + X^5 + X^6\)이 그대로 수신됨.
+
+\((X^6 + X^5 + X^3 + 1) \div (X^3 + X + 1)\):
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+단계 & 피제수 & 몫 항 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & \(X^6 + X^5 + X^3 + 1\) & \(X^3\) \\
+& \(-(X^6 + X^4 + X^3)\) & \\
+& \(= X^5 + X^4 + 1\) & \\
+2 & \(X^5 + X^4 + 1\) & \(X^2\) \\
+& \(-(X^5 + X^3 + X^2)\) & \\
+& \(= X^4 + X^3 + X^2 + 1\) & \\
+3 & \(X^4 + X^3 + X^2 + 1\) & \(X\) \\
+& \(-(X^4 + X^2 + X)\) & \\
+& \(= X^3 + X + 1\) & \\
+4 & \(X^3 + X + 1\) & \(1\) \\
+& \(-(X^3 + X + 1)\) & \\
+& \(= 0\) & \\
+\end{longtable}
+
+\textbf{신드롬}: \(s(X) = 0\) → 오류 없음 OK
+
+\subsubsection{\texorpdfstring{예제 9.2: 단일 비트 오류 --- 위치
+\(X^2\)}{예제 9.2: 단일 비트 오류 --- 위치 X\^{}2}}\label{uxc608uxc81c-9.2-uxb2e8uxc77c-uxbe44uxd2b8-uxc624uxb958-uxc704uxce58-x2}
+
+수신: \(v(X) = 1 + X^2 + X^3 + X^5 + X^6\) (원래 부호어에 \(X^2\) 위치
+오류 추가)
+
+오류 다항식: \(e(X) = X^2\)
+
+\((X^6 + X^5 + X^3 + X^2 + 1) \div (X^3 + X + 1)\):
+
+나눗셈 과정은 예제 9.1과 동일하게 진행하되, \(X^2\) 항이 추가되어
+있으므로:
+
+\textbf{신드롬}: \(s(X) = X^2\), 벡터 \((0, 0, 1)\)
+
+\(s(X) \neq 0\)이므로 오류 검출됨. 신드롬 값 \(X^2\)는 오류 위치
+\(X^2\)와 대응한다.
+
+\subsubsection{\texorpdfstring{예제 9.3: \([7, 4]_2\) 부호의 전체 신드롬
+테이블 (단일
+오류)}{예제 9.3: {[}7, 4{]}\_2 부호의 전체 신드롬 테이블 (단일 오류)}}\label{uxc608uxc81c-9.3-7-4_2-uxbd80uxd638uxc758-uxc804uxccb4-uxc2e0uxb4dcuxb86c-uxd14cuxc774uxbe14-uxb2e8uxc77c-uxc624uxb958}
+
+단일 비트 오류 \(e(X) = X^i\)에 대한 신드롬 \(s(X) = X^i \bmod g(X)\):
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+오류 위치 \(i\) & \(e(X)\) & \(s(X) = e(X) \bmod (1+X+X^3)\) & 신드롬
+벡터 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & \(1\) & \(1\) & \((1, 0, 0)\) \\
+1 & \(X\) & \(X\) & \((0, 1, 0)\) \\
+2 & \(X^2\) & \(X^2\) & \((0, 0, 1)\) \\
+3 & \(X^3\) & \(X^3 \bmod g(X) = 1 + X\) & \((1, 1, 0)\) \\
+4 & \(X^4\) & \(X^4 \bmod g(X) = X + X^2\) & \((0, 1, 1)\) \\
+5 & \(X^5\) & \(X^5 \bmod g(X) = 1 + X + X^2\) & \((1, 1, 1)\) \\
+6 & \(X^6\) & \(X^6 \bmod g(X) = 1 + X^2\) & \((1, 0, 1)\) \\
+\end{longtable}
+
+7개의 신드롬이 모두 서로 다르므로, 이 부호는 \textbf{모든 단일 비트
+오류를 정정}할 수 있다.
+
+\subsubsection{예제 9.4: 신드롬을 이용한 오류 정정
+과정}\label{uxc608uxc81c-9.4-uxc2e0uxb4dcuxb86cuxc744-uxc774uxc6a9uxd55c-uxc624uxb958-uxc815uxc815-uxacfcuxc815}
+
+수신 벡터: \(\mathbf{v} = (1, 0, 1, 1, 0, 1, 1)\)
+
+\textbf{Step 1.} 신드롬 계산: \(v(X) = 1 + X^2 + X^3 + X^5 + X^6\)
+
+\(v(X) \bmod g(X)\)를 계산하면 \(s(X) = X^2\) → 신드롬 벡터
+\((0, 0, 1)\)
+
+\textbf{Step 2.} 신드롬 테이블 조회: \((0, 0, 1)\)은 오류 위치
+\(i = 2\)에 대응
+
+\textbf{Step 3.} 오류 정정:
+\(\hat{c}(X) = v(X) + X^2 = 1 + X^3 + X^5 + X^6\)
+
+정정된 부호어: \(\hat{\mathbf{c}} = (1, 0, 0, 1, 0, 1, 1)\)
+
+\textbf{Step 4.} 메시지 추출 (체계적 부호): 뒤쪽 4비트 →
+\(\mathbf{m} = (1, 0, 1, 1)\) OK
+
+\subsubsection{예제 9.5: 2비트 오류의
+경우}\label{uxc608uxc81c-9.5-2uxbe44uxd2b8-uxc624uxb958uxc758-uxacbduxc6b0}
+
+수신: \(\mathbf{v} = (0, 1, 0, 1, 0, 1, 1)\) (위치 0과 1에 동시 오류)
+
+\(e(X) = 1 + X\), 신드롬:
+\(s(X) = (1 + X) \bmod (1 + X + X^3) = 1 + X\), 벡터 \((1, 1, 0)\)
+
+신드롬 테이블에서 \((1, 1, 0)\)은 위치 3의 단일 오류에 대응한다. 따라서
+수신기는 위치 3을 ``정정''하려 하지만, 실제로는 위치 0과 1에 오류가
+있으므로 \textbf{오정정(Miscorrection)}이 발생한다.
+
+이것이 \([7, 4]_2\) 부호의 한계이다: 최소 거리 \(d_{\min} = 3\)이므로
+\textbf{1비트 오류 정정} 또는 \textbf{2비트 오류 검출}만 가능하다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{순환 부호의 디코딩(복호) 과정은 어떻게
+되는가?}\label{uxc21cuxd658-uxbd80uxd638uxc758-uxb514uxcf54uxb529uxbcf5uxd638-uxacfcuxc815uxc740-uxc5b4uxb5bbuxac8c-uxb418uxb294uxac00}
+
+순환 부호의 디코딩은 부호의 특성(단순 순환 부호, BCH 부호, RS 부호 등)에
+따라 세부적인 구현이 다르지만, 공통적으로 다음 4단계의 핵심 과정을
+거친다.
+
+\subsubsection{Step 1: 신드롬 계산 (Syndrome
+Calculation)}\label{step-1-uxc2e0uxb4dcuxb86c-uxacc4uxc0b0-syndrome-calculation}
+
+수신 다항식 \(v(X) = c(X) + e(X)\)를 파악하고, 생성 다항식 \(g(X)\)로
+나누어 나머지를 구한다. \[s(X) = v(X) \bmod g(X)\] 이 과정은 수신되는
+비트 스트림을 LFSR(Linear Feedback Shift Register) 회로에 순차적으로
+입력하여 매우 빠르게(실시간으로) 처리할 수 있다.
+
+\subsubsection{Step 2: 오류 패턴 탐색 (Error Pattern
+Search)}\label{step-2-uxc624uxb958-uxd328uxd134-uxd0d0uxc0c9-error-pattern-search}
+
+계산된 신드롬 \(s(X)\)를 바탕으로 실제 발생한 오류 다항식 \(e(X)\)를
+찾아낸다. 여기에서 순환 부호만의 특수한 기법들이 사용된다. -
+\textbf{룩업 테이블 (Syndrome Table)}: 짧은 블록 부호(예: Golay 코드,
+작은 Hamming 코드)에서는 미리 배정된 신드롬-오류 패턴 테이블을 이용해
+\(e(X)\)를 직접 찾는다. - \textbf{메깃 디코더 (Meggitt Decoder)}:
+하드웨어 구현에 매우 친화적인 방식이다. 신드롬 레지스터를 1클럭씩
+회전(Shift)시키면서 특정 조건(최상위 비트에 오류가 있는 패턴)이
+만족되는지 회로를 통해 감지한다. 조건이 맞으면 해당 비트를 반전시켜
+정정한다. - \textbf{대수적 디코딩 (Algebraic Decoding)}: 다중 오류를
+정정할 수 있는 BCH 부호나 Reed-Solomon 부호에서는 룩업 테이블 적용이
+불가능하다. 이 경우에는 \textbf{Berlekamp-Massey 알고리즘} 등을 사용하여
+오류 위치 다항식을 구성하고, \textbf{Chien Search}를 통해 오류 위치를
+특정하며, \textbf{Forney 알고리즘}을 통해 오류 값을 직접 계산한다.
+
+\subsubsection{Step 3: 오류 정정 (Error
+Correction)}\label{step-3-uxc624uxb958-uxc815uxc815-error-correction}
+
+찾아낸 오류 패턴 \(\hat{e}(X)\)를 수신 벡터 \(v(X)\)에서 감산하여 정정된
+부호어 \(\hat{c}(X)\)를 획득한다. 모듈로-2 덧셈(XOR)을 사용하는 이진
+부호의 경우 감산은 덧셈과 동일하다.
+\[\hat{c}(X) = v(X) - \hat{e}(X) \quad (\text{또는 이진 체에서 } v(X) + \hat{e}(X))\]
+
+\subsubsection{Step 4: 메시지 추출 (Message
+Extraction)}\label{step-4-uxba54uxc2dcuxc9c0-uxcd94uxcd9c-message-extraction}
+
+정상적인 부호어 \(\hat{c}(X)\)를 얻은 뒤, 원본 메시지 \(m(X)\)를
+복원한다. - \textbf{체계적(Systematic) 부호}: 부호어의 특정 위치(대개
+끝부분)에 위치한 메시지 비트들만 추출하면 된다. 실무에서는 주로 이
+방법을 사용한다. - \textbf{비체계적(Non-systematic) 부호}:
+\(\hat{c}(X)\)를 \(g(X)\)로 나누어 그 몫을 계산함으로써 \(m(X)\)를
+얻는다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{순환 부호의 오류 정정 능력은 어떻게
+결정되는가?}\label{uxc21cuxd658-uxbd80uxd638uxc758-uxc624uxb958-uxc815uxc815-uxb2a5uxb825uxc740-uxc5b4uxb5bbuxac8c-uxacb0uxc815uxb418uxb294uxac00}
+
+순환 부호도 선형 부호의 일종이므로, 오류 정정 능력은 \textbf{최소
+거리(Minimum Distance) \(d_{\min}\)}에 의해 결정된다. 순환 부호에만
+특화된 별도의 오류 정정 공식은 없으며, 모든 선형 부호에 공통으로
+적용되는 다음 관계를 따른다.
+
+\subsubsection{\texorpdfstring{핵심 정리: \(t\)-오류 정정
+능력}{핵심 정리: t-오류 정정 능력}}\label{uxd575uxc2ec-uxc815uxb9ac-t-uxc624uxb958-uxc815uxc815-uxb2a5uxb825}
+
+최소 거리가 \(d_{\min}\)인 부호는 최대 \(t\)개의 오류를 정정할 수 있다:
+
+\[t = \left\lfloor \frac{d_{\min} - 1}{2} \right\rfloor\]
+
+또한 오류 \textbf{검출}만 수행하는 경우에는 최대 \(d_{\min} - 1\)개의
+오류를 검출할 수 있다.
+
+\subsubsection{예제 11.1: 대표적인 순환 부호의 오류 정정
+능력}\label{uxc608uxc81c-11.1-uxb300uxd45cuxc801uxc778-uxc21cuxd658-uxbd80uxd638uxc758-uxc624uxb958-uxc815uxc815-uxb2a5uxb825}
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+부호 & \([n, k]\) & \(d_{\min}\) & 정정 능력 \(t\) & 검출 능력 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\([7, 4]\) 순환 부호 (Hamming) & \([7, 4]_2\) & \(3\) & \(1\) & \(2\) \\
+\([15, 7]\) BCH 부호 & \([15, 7]\) & \(5\) & \(2\) & \(4\) \\
+\([23, 12]\) Golay 부호 & \([23, 12]\) & \(7\) & \(3\) & \(6\) \\
+\([15, 5]\) BCH 부호 & \([15, 5]\) & \(7\) & \(3\) & \(6\) \\
+\([31, 21]\) BCH 부호 & \([31, 21]\) & \(5\) & \(2\) & \(4\) \\
+\end{longtable}
+
+\subsubsection{일반 순환 부호의
+한계}\label{uxc77cuxbc18-uxc21cuxd658-uxbd80uxd638uxc758-uxd55cuxacc4}
+
+일반적인 순환 부호에서는 생성 다항식 \(g(X)\)만으로 \(d_{\min}\)을
+이론적으로 바로 구하는 공식이 존재하지 않는다. 부호어를 직접 열거하거나
+대수적 방법으로 계산해야 한다.
+
+\subsubsection{BCH 한계 (BCH Bound): 설계 거리의
+보장}\label{bch-uxd55cuxacc4-bch-bound-uxc124uxacc4-uxac70uxb9acuxc758-uxbcf4uxc7a5}
+
+순환 부호의 하위 클래스인 \textbf{BCH 부호}에는 최소 거리의 하한을
+보장하는 유명한 정리가 있다.
+
+\begin{quote}
+\textbf{BCH 한계 정리}: \(\alpha\)를 \(\text{GF}(q^m)\)에서
+\(X^n - 1 = 0\)의 원시 \(n\)-차 단위근이라 하자. 생성 다항식 \(g(X)\)가
+연속 \(\delta - 1\)개의 거듭제곱근
+\[\alpha^b,\ \alpha^{b+1},\ \dots,\ \alpha^{b+\delta-2}\] 을 근으로
+가지면, 부호의 최소 거리는 다음을 만족한다: \[d_{\min} \geq \delta\]
+\end{quote}
+
+여기서 \(\delta\)를 \textbf{설계 거리(Designed Distance)}라 부른다. 이
+정리 덕분에 BCH 부호를 설계할 때 원하는 오류 정정 능력 \(t\)를 미리
+지정할 수 있다: \(\delta = 2t + 1\)이 되도록 연속근의 개수를 선택하면
+된다.
+
+\subsubsection{예제 11.2: BCH 한계
+적용}\label{uxc608uxc81c-11.2-bch-uxd55cuxacc4-uxc801uxc6a9}
+
+\((15, 7)\) 이진 BCH 부호에서 \(\alpha\)를 \(\text{GF}(2^4)\)의 원시
+15차 단위근이라 하면, 생성 다항식이
+\(\alpha, \alpha^2, \alpha^3, \alpha^4\)를 근으로 가집니다 (연속 4개,
+\(b=1\)).
+
+\[\delta = 4 + 1 = 5 \quad \Rightarrow \quad d_{\min} \geq 5 \quad \Rightarrow \quad t \geq 2\]
+
+실제로 이 부호의 \(d_{\min} = 5\)이므로 BCH 한계가 정확히 달성된다.
+
+\subsubsection{예제 11.3: 일반 순환 부호 vs BCH
+부호}\label{uxc608uxc81c-11.3-uxc77cuxbc18-uxc21cuxd658-uxbd80uxd638-vs-bch-uxbd80uxd638}
+
+\([7, 4]_2\) 순환 부호에서 \(g(X) = 1 + X + X^3\)의 경우: -
+\(\text{GF}(2^3)\)에서 \(\alpha\)를 \(X^7 + 1\)의 원시근이라 하면,
+\(g(\alpha) = 0\), \(g(\alpha^2) = 0\)이므로 \(\alpha, \alpha^2\)가
+연속근 (2개, \(b=1\)) - BCH 한계: \(\delta = 3\), 즉 \(d_{\min} \geq 3\)
+- 실제 \(d_{\min} = 3\)이므로 한계가 정확히 달성됨 - 이 부호는 사실
+\([7, 4]_2\) Hamming 부호이자 BCH 부호이기도 하다
+
+이처럼 BCH 부호는 설계 단계에서 오류 정정 능력을 제어할 수 있다는 점이
+일반 순환 부호 대비 큰 장점이며, 실무에서 BCH/RS 부호가 선호되는 핵심
+이유이다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{순환 부호의 대수적 구조는
+무엇인가?}\label{uxc21cuxd658-uxbd80uxd638uxc758-uxb300uxc218uxc801-uxad6cuxc870uxb294-uxbb34uxc5c7uxc778uxac00}
+
+순환 부호는 다항식 몫환(Quotient Ring)
+\(R_n = \mathbb{F}_q[X]/ \langle X^n - 1 \rangle\)의 \textbf{주
+아이디얼(Principal Ideal)}이다.
+
+이것은 다음을 의미한다: 1. 순환 부호 \(\mathcal{C}\)는 환 \(R_n\)의
+아이디얼(Ideal)이다. 2. 이 아이디얼은 단 하나의 원소 \(g(X)\)로
+생성된다: \(\mathcal{C} = \langle g(X) \rangle\)
+
+\subsubsection{증명 개요}\label{uxc99duxba85-uxac1cuxc694}
+
+\textbf{Step 1: \(\mathcal{C}\)가 아이디얼임을 보임}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{덧셈 닫힘}: 선형성에 의해
+  \(a(X), b(X) \in \mathcal{C} \Rightarrow a(X) + b(X) \in \mathcal{C}\)
+\item
+  \textbf{흡수성}: 임의의 \(r(X) \in R_n\)과 \(c(X) \in \mathcal{C}\)에
+  대해 \(r(X) \cdot c(X) \in \mathcal{C}\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    순환 이동 불변성: \(X \cdot c(X) \in \mathcal{C}\)
+  \item
+    반복 적용: \(X^2 c(X), X^3 c(X), \dots \in \mathcal{C}\)
+  \item
+    선형성: \(r(X) = \sum a_i X^i\)이므로
+    \(r(X)c(X) = \sum a_i X^i c(X) \in \mathcal{C}\)
+  \end{itemize}
+\end{itemize}
+
+\textbf{Step 2: 주 아이디얼임을 보임}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mathcal{C}\)에서 차수가 가장 낮은 monic 다항식을 \(g(X)\)라 정의
+\item
+  임의의 \(c(X) \in \mathcal{C}\)에 대해 나눗셈 알고리즘 적용:
+  \(c(X) = q(X)g(X) + r(X)\), \(\deg(r) < \deg(g)\)
+\item
+  \(r(X) = c(X) - q(X)g(X) \in \mathcal{C}\)이고,
+  \(\deg(r) < \deg(g)\)이면 \(g(X)\)의 최소 차수 조건에 모순
+\item
+  따라서 \(r(X) = 0\), 즉 모든 \(c(X) = q(X)g(X)\)
+\item
+  결론: \(\mathcal{C} = \langle g(X) \rangle\)
+\end{itemize}
+
+\subsubsection{예제 10.1: 아이디얼 구조
+확인}\label{uxc608uxc81c-10.1-uxc544uxc774uxb514uxc5bc-uxad6cuxc870-uxd655uxc778}
+
+\([7, 4]_2\) 부호에서 \(g(X) = 1 + X + X^3\):
+
+\begin{itemize}
+\tightlist
+\item
+  \(g(X) \in \mathcal{C}\) OK
+\item
+  \(X \cdot g(X) = X + X^2 + X^4 \in \mathcal{C}\) OK (순환 이동)
+\item
+  \((1 + X) \cdot g(X) = (1 + X)(1 + X + X^3) = 1 + X^2 + X^3 + X^4 \in \mathcal{C}\)
+  OK (흡수성)
+\end{itemize}
+
+\subsubsection{\texorpdfstring{예제 10.2: \(g(X)\)가 \(X^n - 1\)의
+인수임을
+확인}{예제 10.2: g(X)가 X\^{}n - 1의 인수임을 확인}}\label{uxc608uxc81c-10.2-gxuxac00-xn---1uxc758-uxc778uxc218uxc784uxc744-uxd655uxc778}
+
+\(g(X) = 1 + X + X^3\)이 \(X^7 + 1\)을 나누는지 확인:
+
+\[X^7 + 1 = (1 + X + X^3)(1 + X + X^2 + X^4) = g(X) \cdot h(X)\]
+
+나머지가 0이므로 \(g(X) \mid (X^7 + 1)\) OK
+
+이것은 필수 조건이다: 생성 다항식은 반드시 \(X^n - 1\)의 인수여야 한다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{몫환의 이데알 개수와 생성 다항식의
+결정}\label{uxbaabuxd658uxc758-uxc774uxb370uxc54c-uxac1cuxc218uxc640-uxc0dduxc131-uxb2e4uxd56duxc2dduxc758-uxacb0uxc815}
+
+앞 절에서 순환 부호가 몫환
+\(R_n = \mathbb{F}_q[X]/ \langle X^n - 1 \rangle\)의 주 이데알(Principal
+Ideal)과 정확히 일대일 대응함을 보았다. 이로부터 자연스럽게 두 가지
+질문이 따라온다: (1) 이데알은 총 몇 개인가? (2) 각 이데알을 정의하는
+생성 다항식은 어떻게 결정되는가?
+
+\subsubsection{핵심 정리: 이데알의
+개수}\label{uxd575uxc2ec-uxc815uxb9ac-uxc774uxb370uxc54cuxc758-uxac1cuxc218}
+
+\(R_n\)의 모든 이데알은 \(X^n - 1\)의 monic 인수 \(g(X)\)가 생성하는 주
+이데알 \(\langle g(X) \rangle\)이다.
+
+\begin{quote}
+\textbf{증명.}
+
+\(R_n = \mathbb{F}_q[X]/ \langle X^n - 1 \rangle\)의 임의의 이데알
+\(I\)에 대해, \(I\)가 어떤 monic \(g(X) \mid (X^n - 1)\)에 의해
+\(I = \langle g(X) \rangle\)로 표현됨을 보인다.
+
+\textbf{Step 1. 자연스러운 전사 준동형사상 구성.} 표준 사영(canonical
+projection) \(\pi : \mathbb{F}_q[X] \to R_n\),
+\(f(X) \mapsto f(X) + \langle X^n - 1 \rangle\)을 생각하자. \(\pi\)는 환
+전사 준동형사상이고, \(\ker(\pi) = \langle X^n - 1 \rangle\)이다.
+
+\textbf{Step 2. 대응 정리(Correspondence Theorem) 적용.} 환의 대응
+정리에 의해, \(R_n\)의 이데알 \(I\)와
+\(\langle X^n - 1 \rangle \subseteq J\)를 만족하는 \(\mathbb{F}_q[X]\)의
+이데알 \(J\) 사이에 일대일 대응이 존재한다:
+\[I = J / \langle X^n - 1 \rangle, \quad J = \pi^{-1}(I)\]
+
+\textbf{Step 3. \(\mathbb{F}_q[X]\)는 주 이데알 정역(PID)이다.}
+\(\mathbb{F}_q[X]\)는 유클리드 정역이므로 모든 이데알이 주 이데알이다.
+따라서 \(J = \langle g(X) \rangle\)인 monic 다항식 \(g(X)\)가 유일하게
+존재한다.
+
+\textbf{Step 4. \(g(X)\)가 \(X^n - 1\)의 인수임을 보임.}
+\(\langle X^n - 1 \rangle \subseteq \langle g(X) \rangle\)이므로
+\(g(X) \mid (X^n - 1)\)이다.
+
+\textbf{Step 5. 역방향 --- \(X^n - 1\)의 모든 monic 인수가 이데알을
+생성함.} 역으로, \(g(X) \mid (X^n - 1)\)이면
+\(\langle X^n - 1 \rangle \subseteq \langle g(X) \rangle\)이므로 대응
+정리에 의해
+\(\langle g(X) \rangle = \langle g(X) \rangle / \langle X^n - 1 \rangle\)은
+\(R_n\)의 이데알이다.
+
+\textbf{결론.} \(R_n\)의 이데알과 \(X^n - 1\)의 monic 인수 사이에 일대일
+대응이 성립한다:
+\[g(X) \mid (X^n - 1) \quad \longleftrightarrow \quad \langle g(X) \rangle \text{은 } R_n\text{의 이데알}\]
+\(\blacksquare\)
+\end{quote}
+
+따라서 \textbf{\(R_n\)의 이데알 개수 = \(\mathbb{F}_q[X]\) 위에서
+\(X^n - 1\)의 monic 인수의 개수}이다.
+
+\(\gcd(n, q) = 1\)인 경우 (즉, \(X^n - 1\)이 중복근을 갖지 않는 경우),
+\(X^n - 1\)이 \(\mathbb{F}_q[X]\) 위에서 \(s\)개의 서로 다른
+기약다항식의 곱으로 분해된다면:
+
+\[X^n - 1 = f_1(X) \cdot f_2(X) \cdots f_s(X)\]
+
+각 기약인수를 ``포함하거나 포함하지 않거나'' 독립적으로 선택할 수
+있으므로, monic 인수의 총 개수는:
+
+\[\text{이데알의 개수} = 2^s\]
+
+이 \(2^s\)개에는 \(g(X) = 1\)인 자명한 전체 환(= \(\mathbb{F}_q^n\)
+전체)과 \(g(X) = X^n - 1\)인 영 이데알(= \(\{\mathbf{0}\}\))이 모두
+포함된다.
+
+\begin{quote}
+\textbf{왜 \(2^s\)인가?} \(X^n - 1\)의 monic 인수는 기약인수
+\(f_1, f_2, \dots, f_s\)의 부분집합 \(S \subseteq \{1, 2, \dots, s\}\)에
+대해 \(g_S(X) = \prod_{i \in S} f_i(X)\)로 유일하게 결정된다. 부분집합의
+개수가 \(2^s\)이므로 인수도 \(2^s\)개이다. 이것은 인수 격자(Divisor
+Lattice)와 멱집합(Power Set) 사이의 동형에 해당한다.
+\end{quote}
+
+\subsubsection{생성 다항식의 결정
+절차}\label{uxc0dduxc131-uxb2e4uxd56duxc2dduxc758-uxacb0uxc815-uxc808uxcc28}
+
+각 이데알(= 순환 부호)을 정의하는 생성 다항식 \(g(X)\)는 다음 절차로
+결정된다:
+
+\textbf{Step 1.} \(X^n - 1\)을 \(\mathbb{F}_q[X]\) 위에서 기약다항식으로
+완전히 인수분해한다.
+
+\textbf{Step 2.} 기약인수들의 모든 부분집합 조합의 곱이 각각 하나의 생성
+다항식 \(g(X)\)가 된다.
+
+\textbf{Step 3.} 각 \(g(X)\)가 정의하는 순환 부호의 파라미터는
+\((n,\ n - \deg g(X))\)이다.
+
+\subsubsection{\texorpdfstring{예제 13.1: \(n = 7\), \(\mathbb{F}_2\)
+위의 전체 이데알
+열거}{예제 13.1: n = 7, \textbackslash mathbb\{F\}\_2 위의 전체 이데알 열거}}\label{uxc608uxc81c-13.1-n-7-mathbbf_2-uxc704uxc758-uxc804uxccb4-uxc774uxb370uxc54c-uxc5f4uxac70}
+
+예제 3.1에서 \(X^7 + 1 = (1 + X)(1 + X + X^3)(1 + X^2 + X^3)\)이므로
+기약인수 \(s = 3\)개이다.
+
+이데알의 개수: \(2^3 = 8\)개
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+부분집합 \(S\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(g(X) = \prod_{i \in S} f_i(X)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\deg(g)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\([n, k]\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+부호어 수 \(2^k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+비고
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(\emptyset\) & \(1\) & 0 & \((7, 7)\) & 128 & 전체 환 (자명) \\
+\(\{1\}\) & \(1 + X\) & 1 & \((7, 6)\) & 64 & 단순 패리티 검사 \\
+\(\{2\}\) & \(1 + X + X^3\) & 3 & \([7, 4]_2\) & 16 & Hamming
+\((7,4)\) \\
+\(\{3\}\) & \(1 + X^2 + X^3\) & 3 & \([7, 4]_2\) & 16 & \\
+\(\{1, 2\}\) & \(1 + X^2 + X^3 + X^4\) & 4 & \((7, 3)\) & 8 & \\
+\(\{1, 3\}\) & \(1 + X + X^2 + X^4\) & 4 & \((7, 3)\) & 8 & \\
+\(\{2, 3\}\) & \(1 + X + X^2 + X^3 + X^4 + X^5 + X^6\) & 6 & \((7, 1)\)
+& 2 & 반복 부호 \\
+\(\{1, 2, 3\}\) & \(X^7 + 1\) & 7 & \((7, 0)\) & 1 & 영 이데알 (자명) \\
+\end{longtable}
+
+이 8개의 이데알은 포함 관계에 의해 \textbf{격자(Lattice)} 구조를
+형성한다: \(g_1(X) \mid g_2(X)\)이면
+\(\langle g_2(X) \rangle \subseteq \langle g_1(X) \rangle\)이다. 즉,
+생성 다항식의 차수가 클수록 부호의 차원은 작아지고, 이데알은 더 작은
+부분공간이 된다.
+
+\subsubsection{\texorpdfstring{예제 13.2: \(n = 15\), \(\mathbb{F}_2\)
+위의 이데알
+개수}{예제 13.2: n = 15, \textbackslash mathbb\{F\}\_2 위의 이데알 개수}}\label{uxc608uxc81c-13.2-n-15-mathbbf_2-uxc704uxc758-uxc774uxb370uxc54c-uxac1cuxc218}
+
+연습문제 2에서
+\(X^{15} + 1 = (1+X)(1+X+X^2)(1+X+X^4)(1+X^3+X^4)(1+X+X^2+X^3+X^4)\)이므로
+기약인수 \(s = 5\)개이다.
+
+이데알의 개수: \(2^5 = 32\)개
+
+이 32개의 이데알 중에서 차수 4인 생성 다항식을 갖는 \((15, 11)\) 부호만
+해도 여러 개가 존재한다 --- 차수 4인 기약인수 하나를 선택하거나, 차수가
+합쳐서 4가 되는 기약인수 조합을 선택하면 된다.
+
+\subsubsection{예제 13.3: 이데알 격자와 포함
+관계}\label{uxc608uxc81c-13.3-uxc774uxb370uxc54c-uxaca9uxc790uxc640-uxd3ecuxd568-uxad00uxacc4}
+
+\(n = 7\)에서 이데알 간의 포함 관계를 격자 다이어그램으로 나타내면:
+
+\begin{verbatim}
+        <1> = R_7  (전체 환, k=7)
+       / |  \
+   <f₁> <f₂> <f₃>   (k=6, 4, 4)
+     |\ / \ /|
+  <f₁f₂> <f₁f₃> <f₂f₃>  (k=3, 3, 1)
+       \  |  /
+      <f₁f₂f₃> = <0>  (영 이데알, k=0)
+\end{verbatim}
+
+위로 갈수록 이데알이 크고(부호어가 많고), 아래로 갈수록 이데알이
+작다(부호어가 적지만 오류 정정 능력이 높다).
+
+\subsubsection{\texorpdfstring{\(\gcd(n, q) \neq 1\)인 경우의
+주의사항}{\textbackslash gcd(n, q) \textbackslash neq 1인 경우의 주의사항}}\label{gcdn-q-neq-1uxc778-uxacbduxc6b0uxc758-uxc8fcuxc758uxc0acuxd56d}
+
+\(\gcd(n, q) \neq 1\)이면 \(X^n - 1\)이 \(\mathbb{F}_q[X]\) 위에서
+중복근을 가진다. 예를 들어 연습문제 6의 \(X^6 + 1\) over
+\(\mathbb{F}_2\)에서는 \(\gcd(6, 2) = 2\)이므로:
+
+\[X^6 + 1 = (1 + X)^2 (1 + X + X^2)^2\]
+
+이 경우 기약인수 \(f_i(X)\)의 거듭제곱 \(f_i(X)^{e_i}\)에서
+\(0 \leq e_i' \leq e_i\)를 각각 독립적으로 선택할 수 있으므로, monic
+인수의 개수는:
+
+\[\prod_{i=1}^{s} (e_i + 1)\]
+
+위 예에서는 \((2+1)(2+1) = 9\)개의 이데알이 존재한다. 이는
+\(2^s = 4\)보다 많다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{순환 부호가 실무에서 중요한 이유는
+무엇인가?}\label{uxc21cuxd658-uxbd80uxd638uxac00-uxc2e4uxbb34uxc5d0uxc11c-uxc911uxc694uxd55c-uxc774uxc720uxb294-uxbb34uxc5c7uxc778uxac00}
+
+순환 부호의 가장 큰 실무적 장점은 \textbf{LFSR(Linear Feedback Shift
+Register)}을 이용한 초고속 실시간 하드웨어 구현이 가능하다는 점이다.
+
+\subsubsection{LFSR 구조의
+원리}\label{lfsr-uxad6cuxc870uxc758-uxc6d0uxb9ac}
+
+일반 선형 블록 부호는 인코딩 시 거대한 행렬 곱셈이 필요하지만, 순환
+부호의 다항식 나눗셈은 LFSR 회로로 극도로 가볍게 구현된다:
+
+\begin{itemize}
+\tightlist
+\item
+  \(g(X)\)의 차수 \(r\)개의 \textbf{플립플롭(Flip-flop)} (1비트 저장소)
+\item
+  다항식 계수에 맞춘 몇 개의 \textbf{XOR 게이트}
+\item
+  이것만으로 회로 구성 완료
+\end{itemize}
+
+\subsubsection{실시간 처리의
+장점}\label{uxc2e4uxc2dcuxac04-uxcc98uxb9acuxc758-uxc7a5uxc810}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+일반 선형 부호
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+순환 부호 (LFSR)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+전체 블록을 버퍼에 저장 후 행렬 곱셈 & 비트 단위 실시간(On-the-fly)
+처리 \\
+대용량 메모리 필요 & 레지스터 \(r\)개만 필요 \\
+높은 지연(Latency) & 거의 0에 가까운 지연 \\
+복잡한 병렬 연산 게이트 & 단순한 직렬 XOR 회로 \\
+\end{longtable}
+
+\subsubsection{실전 예시: CRC와 네트워크
+전송}\label{uxc2e4uxc804-uxc608uxc2dc-crcuxc640-uxb124uxd2b8uxc6ccuxd06c-uxc804uxc1a1}
+
+USB, 이더넷(Ethernet) 등에서 기가비트급 데이터 스트림의 무결성을 검사할
+때:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{메모리 불필요}: 데이터를 모아둘 필요 없이 비트가 들어오는 대로
+  처리
+\item
+  \textbf{On-the-fly 연산}: 시스템 클럭에 맞춰 LFSR에 1비트씩 입력
+\item
+  \textbf{즉시 결과}: 마지막 비트가 통과하는 순간, LFSR에 남은
+  \(r\)비트가 곧 패리티/신드롬
+\end{enumerate}
+
+\subsubsection{\texorpdfstring{예제 11.1: \(g(X) = 1 + X + X^3\)에 대한
+LFSR 인코더
+동작}{예제 11.1: g(X) = 1 + X + X\^{}3에 대한 LFSR 인코더 동작}}\label{uxc608uxc81c-11.1-gx-1-x-x3uxc5d0-uxb300uxd55c-lfsr-uxc778uxcf54uxb354-uxb3d9uxc791}
+
+체계적 인코딩용 LFSR은 \(g(X) = 1 + X + X^3\)의 계수에 따라 구성된다.
+3개의 플립플롭 \([R_0, R_1, R_2]\)를 사용하며, 피드백은 입력 비트와
+\(R_2\) (최상위 레지스터)의 XOR로 계산된다. \(g(X)\)에서 \(X^0\)과
+\(X^1\)의 계수가 1이므로, 피드백 값이 \(R_0\)과 \(R_1\)에 XOR로
+더해진다.
+
+메시지 비트 \((1, 0, 1, 1)\)을 \textbf{높은 차수부터}
+(\(m_3, m_2, m_1, m_0\) 순서로) 입력한다:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1304}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2391}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1522}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1522}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1522}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+클럭
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+입력 비트
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+피드백 \(= \text{입력} \oplus R_2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R_0\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R_1\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R_2\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+초기 & - & - & 0 & 0 & 0 \\
+1 & \(m_3 = 1\) & \(1 \oplus 0 = 1\) & 1 & 0 & 0 \\
+2 & \(m_2 = 1\) & \(1 \oplus 0 = 1\) & 1 & 1 & 0 \\
+3 & \(m_1 = 0\) & \(0 \oplus 0 = 0\) & 0 & 1 & 1 \\
+4 & \(m_0 = 1\) & \(1 \oplus 1 = 0\) & 0 & 0 & 1 \\
+\end{longtable}
+
+4클럭 후 레지스터 상태: \((R_0, R_1, R_2) = (0, 0, 1)\)
+
+\begin{quote}
+\textbf{검증}: 예제 8.1에서 \(m(X) = 1 + X^2 + X^3\)의 체계적 인코딩
+나머지는 \(p(X) = 1\), 즉 패리티 벡터 \((1, 0, 0)\)이었다. LFSR의 출력
+비트 순서는 회로 구성 방식(MSB-first vs LSB-first, 레지스터 번호 매핑)에
+따라 달라지며, 위 결과 \((0, 0, 1)\)을 역순으로 읽으면 \((1, 0, 0)\)과
+일치한다.
+\end{quote}
+
+\begin{quote}
+\textbf{참고}: LFSR 회로의 구체적인 동작은 피드백 연결 방식과 비트 입력
+순서에 따라 달라진다. 핵심은 \(n-k\)개의 레지스터와 몇 개의 XOR
+게이트만으로 다항식 나눗셈을 실시간 수행할 수 있다는 점이다.
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{대표적인 순환 부호에는 어떤 것들이
+있는가?}\label{uxb300uxd45cuxc801uxc778-uxc21cuxd658-uxbd80uxd638uxc5d0uxb294-uxc5b4uxb5a4-uxac83uxb4e4uxc774-uxc788uxb294uxac00}
+
+순환 부호의 특성을 가지는 주요 부호들:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2609}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2609}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4783}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+부호
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+특징
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+주요 응용
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{CRC} (Cyclic Redundancy Check) & 오류 검출 전용, 다양한 생성
+다항식 표준 & 이더넷, USB, ZIP, 저장 매체 \\
+\textbf{BCH 부호} & 갈루아 확대체에서 근을 지정하여 오류 정정 능력 보장
+& 플래시 메모리, 위성 통신 \\
+\textbf{Reed-Solomon (RS) 부호} & 비이진 순환 부호, 심볼 단위 오류 정정
+& CD/DVD/블루레이, QR코드, 심우주 통신 \\
+\textbf{일부 Hamming 부호} & 특정 파라미터에서 순환 부호 형태 가능 & ECC
+메모리 \\
+\end{longtable}
+
+\subsubsection{예제 15.1: CRC-8 생성
+다항식}\label{uxc608uxc81c-15.1-crc-8-uxc0dduxc131-uxb2e4uxd56duxc2dd}
+
+CRC-8 표준: \(g(X) = X^8 + X^2 + X + 1\)
+
+\begin{itemize}
+\tightlist
+\item
+  부호 길이: 가변 (메시지 길이에 따라)
+\item
+  패리티 비트: 8비트
+\item
+  용도: 센서 네트워크, 임베디드 시스템
+\end{itemize}
+
+\subsubsection{예제 15.2: CRC-32
+(이더넷)}\label{uxc608uxc81c-15.2-crc-32-uxc774uxb354uxb137}
+
+\(g(X) = X^{32} + X^{26} + X^{23} + X^{22} + X^{16} + X^{12} + X^{11} + X^{10} + X^8 + X^7 + X^5 + X^4 + X^2 + X + 1\)
+
+\begin{itemize}
+\tightlist
+\item
+  32비트 패리티로 최대 \(2^{32} - 1\) 길이의 프레임 보호
+\item
+  모든 이더넷 프레임의 FCS(Frame Check Sequence)에 사용
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{준순환 부호와 양자내성암호(HQC)는
+무엇인가?}\label{uxc900uxc21cuxd658-uxbd80uxd638uxc640-uxc591uxc790uxb0b4uxc131uxc554uxd638hqcuxb294-uxbb34uxc5c7uxc778uxac00}
+
+순환 부호의 대수적 성질은 현대 암호학, 특히 \textbf{양자내성암호(PQC:
+Post-Quantum Cryptography)}의 핵심 기반으로 활용된다.
+
+\subsubsection{준순환 부호 (Quasi-Cyclic Code,
+QC)}\label{uxc900uxc21cuxd658-uxbd80uxd638-quasi-cyclic-code-qc}
+
+순환 부호가 \textbf{1칸 시프트}에 대해 닫혀있다면, 준순환 부호는
+\textbf{\(l\)칸 시프트}에 대해 닫혀있는 일반화된 구조이다.
+
+\begin{itemize}
+\tightlist
+\item
+  부호어 길이 \(n = m \cdot l\)일 때, \(l\)칸 순환 시프트한 결과가
+  부호어 공간에 보존
+\item
+  \(l = 1\)이면 순환 부호와 동일
+\item
+  생성/패리티 검사 행렬이 \(m \times m\) \textbf{순환 행렬
+  블록(Circulant Block)}들로 구성
+\end{itemize}
+
+\subsubsection{HQC (Hamming Quasi-Cyclic)에서의
+활용}\label{hqc-hamming-quasi-cyclicuxc5d0uxc11cuxc758-uxd65cuxc6a9}
+
+양자 컴퓨터의 쇼어 알고리즘에 안전한 공개키 캡슐화 메커니즘(KEM)인 HQC는
+준순환 부호를 핵심적으로 활용한다.
+
+\textbf{기존 문제}: McEliece 암호 시스템은 보안성은 뛰어나지만 공개키
+크기가 \textasciitilde1MB로 방대
+
+\textbf{HQC의 해결책}: 준순환 구조를 채택하여:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{공개키 크기 감소}: 순환 행렬은 첫 번째 행(다항식 1개)만으로
+  전체 행렬 복원 가능 → 수 KB 수준으로 축소
+\item
+  \textbf{고속 연산}: 다항식 환
+  \(\mathbb{F}_2[X]/\langle X^n - 1 \rangle\) 위의 연산으로 FFT 등 고속
+  알고리즘 적용 가능
+\item
+  \textbf{증명 가능한 안전성}: 결정적 신드롬 디코딩 문제(DSDP)와의
+  수학적 동치(Reduction) 성립 → 양자 컴퓨터로도 효율적 공격 불가
+\end{enumerate}
+
+\subsubsection{예제 16.1: 순환 행렬 블록의
+구조}\label{uxc608uxc81c-16.1-uxc21cuxd658-uxd589uxb82c-uxbe14uxb85duxc758-uxad6cuxc870}
+
+첫 번째 행이 \((1, 0, 1, 1)\)인 \(4 \times 4\) 순환 행렬:
+
+\[C = \begin{bmatrix}
+1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 0 \\
+0 & 1 & 1 & 1
+\end{bmatrix}\]
+
+각 행은 이전 행을 오른쪽으로 1칸 순환 이동한 것이다. 따라서 \textbf{첫
+행 하나만 저장하면 전체 행렬을 복원}할 수 있다 --- 이것이 공개키 크기를
+획기적으로 줄이는 원리이다.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{연습문제}\label{uxc5f0uxc2b5uxbb38uxc81c}
+
+\subsubsection{연습 1. 순환 부호
+판별}\label{uxc5f0uxc2b5-1.-uxc21cuxd658-uxbd80uxd638-uxd310uxbcc4}
+
+다음 부호가 순환 부호인지 판별하시오. (\(n = 5\))
+
+\[\mathcal{C} = \{00000,\ 10110,\ 01011,\ 11101,\ 01101,\ 10011,\ 00111,\ 11010,\ 11001,\ 00101, \dots\}\]
+
+\textbf{힌트}: 각 부호어를 1칸 순환 이동시켜 결과가 부호어 집합에
+속하는지 확인하라.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{연습 2. 생성 다항식
+찾기}\label{uxc5f0uxc2b5-2.-uxc0dduxc131-uxb2e4uxd56duxc2dd-uxcc3euxae30}
+
+\(\text{GF}(2)\) 위에서 \(X^{15} + 1\)의 기약다항식 인수분해가 다음과
+같을 때:
+
+\[X^{15} + 1 = (1+X)(1+X+X^2)(1+X+X^4)(1+X^3+X^4)(1+X+X^2+X^3+X^4)\]
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  \((15, 11)\) 순환 부호를 만들 수 있는 차수 4인 생성 다항식을 모두
+  나열하시오.
+\item
+  \(g(X) = 1 + X + X^4\)를 생성 다항식으로 사용할 때, 대응하는 패리티
+  검사 다항식 \(h(X)\)를 구하시오.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{연습 3. 체계적 인코딩
+실습}\label{uxc5f0uxc2b5-3.-uxccb4uxacc4uxc801-uxc778uxcf54uxb529-uxc2e4uxc2b5}
+
+\([7, 4]_2\) 순환 부호, \(g(X) = 1 + X + X^3\)에 대해 다음 메시지들을
+체계적으로 인코딩하시오:
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  \(\mathbf{m} = (0, 1, 1, 0)\)
+\item
+  \(\mathbf{m} = (1, 1, 1, 1)\)
+\item
+  각 결과가 예제 8.4의 부호어 테이블과 일치하는지 확인하시오.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{연습 4. 신드롬 계산과 오류
+정정}\label{uxc5f0uxc2b5-4.-uxc2e0uxb4dcuxb86c-uxacc4uxc0b0uxacfc-uxc624uxb958-uxc815uxc815}
+
+\([7, 4]_2\) 순환 부호에서 다음 수신 벡터에 대해 신드롬을 계산하고, 단일
+비트 오류가 있다면 정정하시오:
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  \(\mathbf{v} = (1, 1, 0, 1, 0, 0, 0)\)
+\item
+  \(\mathbf{v} = (0, 1, 1, 0, 1, 0, 1)\)
+\item
+  \(\mathbf{v} = (1, 0, 1, 1, 1, 0, 0)\)
+\end{enumerate}
+
+\textbf{힌트}: 예제 9.3의 신드롬 테이블을 활용하라.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{연습 5. 생성 행렬과 패리티 검사
+행렬}\label{uxc5f0uxc2b5-5.-uxc0dduxc131-uxd589uxb82cuxacfc-uxd328uxb9acuxd2f0-uxac80uxc0ac-uxd589uxb82c}
+
+\(g(X) = 1 + X^2 + X^3\)을 생성 다항식으로 하는 \([7, 4]_2\) 순환 부호에
+대해:
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  비체계적 생성 행렬 \(G\)를 구하시오.
+\item
+  패리티 검사 다항식 \(h(X)\)를 구하시오.
+\item
+  패리티 검사 행렬 \(H\)를 구하시오.
+\item
+  \(GH^T = 0\)임을 검증하시오.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{연습 6. 대수적 구조
+이해}\label{uxc5f0uxc2b5-6.-uxb300uxc218uxc801-uxad6cuxc870-uxc774uxd574}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item
+  \(\text{GF}(2)\) 위에서 \(X^6 + 1\)을 인수분해하시오.
+\end{enumerate}
+
+\begin{quote}
+\textbf{주의}: \(\gcd(6, 2) = 2 \neq 1\)이므로 \(X^6 + 1\)은
+\(\text{GF}(2)\) 위에서 중복근을 가진다 (즉, 제곱인수가 존재한다). 이
+경우 표준적인 순환 부호 이론의 일부 성질(예: \(X^n - 1\)의 서로 다른
+기약인수로의 분해)이 그대로 적용되지 않을 수 있음에 유의하시오. 인수분해
+결과에서 중복인수를 확인하시오.
+\end{quote}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{1}
+\item
+  위 인수분해를 바탕으로, \(X^6 + 1\)의 인수가 될 수 있는 다항식들을
+  나열하고, 대응하는 \([n, k]\) 파라미터를 구하시오.
+\item
+  차원이 가장 큰 부호의 생성 다항식과 최소 거리를 구하시오.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{연습 7. 종합
+문제}\label{uxc5f0uxc2b5-7.-uxc885uxd569-uxbb38uxc81c}
+
+\((15, 7)\) BCH 부호의 생성 다항식이
+\(g(X) = 1 + X^4 + X^6 + X^7 + X^8\)일 때:
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  이 부호가 순환 부호임을 확인하시오 (\(g(X)\)가 \(X^{15} + 1\)을
+  나누는지 검증).
+\item
+  메시지 \(\mathbf{m} = (1, 0, 0, 0, 0, 0, 1)\)을 체계적으로
+  인코딩하시오.
+\item
+  인코딩된 부호어의 신드롬이 0임을 확인하시오.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{SageMath 실습
+코드}\label{sagemath-uxc2e4uxc2b5-uxcf54uxb4dc}
+
+아래 SageMath 코드를 실행하면 본 문서에서 다룬 순환 부호의 핵심 개념들을
+직접 확인할 수 있다.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ============================================================}
+\CommentTok{\# 순환 부호 (Cyclic Code) — SageMath 실습 코드}
+\CommentTok{\# 본 문서(Cyclic\_Codes.md)의 예제들을 검증한다.}
+\CommentTok{\# ============================================================}
+
+\NormalTok{F }\OperatorTok{=}\NormalTok{ GF(}\DecValTok{2}\NormalTok{)}
+\NormalTok{R.}\OperatorTok{\textless{}}\NormalTok{X}\OperatorTok{\textgreater{}} \OperatorTok{=}\NormalTok{ PolynomialRing(F)}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 1. X\^{}7 + 1 인수분해 (예제 3.1)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"1. X\^{}7 + 1 의 GF(2) 위 인수분해"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\NormalTok{f }\OperatorTok{=}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{7} \OperatorTok{+} \DecValTok{1}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"X\^{}7 + 1 = }\SpecialCharTok{\{}\NormalTok{factor(f)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 세 기약다항식}
+\NormalTok{p1 }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}
+\NormalTok{p2 }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}
+\NormalTok{p3 }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"기약다항식 확인:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  (1+X)(1+X+X\^{}3)(1+X\^{}2+X\^{}3) = }\SpecialCharTok{\{}\NormalTok{p1 }\OperatorTok{*}\NormalTok{ p2 }\OperatorTok{*}\NormalTok{ p3}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  X\^{}7 + 1 과 일치: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}OK\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ p1 }\OperatorTok{*}\NormalTok{ p2 }\OperatorTok{*}\NormalTok{ p3 }\OperatorTok{==}\NormalTok{ f }\ControlFlowTok{else} \StringTok{\textquotesingle{}X\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 가능한 모든 생성 다항식 나열}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"가능한 생성 다항식 g(X)과 대응하는 [n, k]:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{50}\NormalTok{)}
+\NormalTok{irreducibles }\OperatorTok{=}\NormalTok{ [p1, p2, p3]}
+\ImportTok{from}\NormalTok{ itertools }\ImportTok{import}\NormalTok{ combinations}
+\NormalTok{all\_divisors }\OperatorTok{=}\NormalTok{ [R(}\DecValTok{1}\NormalTok{)]}
+\ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{):}
+    \ControlFlowTok{for}\NormalTok{ combo }\KeywordTok{in}\NormalTok{ combinations(irreducibles, r):}
+\NormalTok{        prod }\OperatorTok{=}\NormalTok{ R(}\DecValTok{1}\NormalTok{)}
+        \ControlFlowTok{for}\NormalTok{ p }\KeywordTok{in}\NormalTok{ combo:}
+\NormalTok{            prod }\OperatorTok{*=}\NormalTok{ p}
+\NormalTok{        all\_divisors.append(prod)}
+\NormalTok{all\_divisors.append(f)}
+\NormalTok{all\_divisors.sort(key}\OperatorTok{=}\KeywordTok{lambda}\NormalTok{ p: p.degree())}
+
+\ControlFlowTok{for}\NormalTok{ g }\KeywordTok{in}\NormalTok{ all\_divisors:}
+\NormalTok{    deg }\OperatorTok{=}\NormalTok{ g.degree()}
+\NormalTok{    k }\OperatorTok{=} \DecValTok{7} \OperatorTok{{-}}\NormalTok{ deg}
+    \ControlFlowTok{if} \DecValTok{0} \OperatorTok{\textless{}=}\NormalTok{ k }\OperatorTok{\textless{}=} \DecValTok{7}\NormalTok{:}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  g(X) = }\SpecialCharTok{\{}\NormalTok{g}\SpecialCharTok{\}}\SpecialStringTok{,  deg = }\SpecialCharTok{\{}\NormalTok{deg}\SpecialCharTok{\}}\SpecialStringTok{,  (7, }\SpecialCharTok{\{}\NormalTok{k}\SpecialCharTok{\}}\SpecialStringTok{),  부호어 수 = }\SpecialCharTok{\{}\DecValTok{2}\OperatorTok{\^{}}\NormalTok{k}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 2. (7,4) 순환 부호 생성 — g(X) = 1 + X + X\^{}3}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"2. [7, 4]\_2 순환 부호: g(X) = 1 + X + X\^{}3"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\NormalTok{g }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}
+\NormalTok{n }\OperatorTok{=} \DecValTok{7}
+\NormalTok{k }\OperatorTok{=}\NormalTok{ n }\OperatorTok{{-}}\NormalTok{ g.degree()}
+
+\CommentTok{\# SageMath 내장 순환 부호 생성}
+\NormalTok{C }\OperatorTok{=}\NormalTok{ codes.CyclicCode(generator\_pol}\OperatorTok{=}\NormalTok{g, length}\OperatorTok{=}\NormalTok{n)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"부호 파라미터: [}\SpecialCharTok{\{}\NormalTok{C}\SpecialCharTok{.}\NormalTok{length()}\SpecialCharTok{\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{C}\SpecialCharTok{.}\NormalTok{dimension()}\SpecialCharTok{\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{C}\SpecialCharTok{.}\NormalTok{minimum\_distance()}\SpecialCharTok{\}}\SpecialStringTok{]"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"생성 다항식: g(X) = }\SpecialCharTok{\{}\NormalTok{g}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 패리티 검사 다항식 (예제 4.1)}
+\NormalTok{h }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\DecValTok{7} \OperatorTok{+} \DecValTok{1}\NormalTok{) }\OperatorTok{//}\NormalTok{ g}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"패리티 검사 다항식: h(X) = }\SpecialCharTok{\{}\NormalTok{h}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"검증: g(X) * h(X) = }\SpecialCharTok{\{}\NormalTok{g }\OperatorTok{*}\NormalTok{ h}\SpecialCharTok{\}}\SpecialStringTok{  (== X\^{}7+1: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}OK\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ g }\OperatorTok{*}\NormalTok{ h }\OperatorTok{==}\NormalTok{ f }\ControlFlowTok{else} \StringTok{\textquotesingle{}X\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 3. 생성 행렬과 패리티 검사 행렬}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"3. 생성 행렬 G 와 패리티 검사 행렬 H"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\CommentTok{\# 비체계적 생성 행렬: 행 i = X\^{}i * g(X)의 계수}
+\NormalTok{G }\OperatorTok{=}\NormalTok{ Matrix(F, k, n)}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k):}
+\NormalTok{    poly }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{i }\OperatorTok{*}\NormalTok{ g) }\OperatorTok{\%}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{n }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
+\NormalTok{        G[i, j] }\OperatorTok{=}\NormalTok{ poly[j]}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"비체계적 생성 행렬 G:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(G)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 패리티 검사 행렬: h(X)의 계수를 역순으로 뒤집어 시프트}
+\NormalTok{h\_coeffs }\OperatorTok{=}\NormalTok{ [h[k }\OperatorTok{{-}}\NormalTok{ j] }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k }\OperatorTok{+} \DecValTok{1}\NormalTok{)]  }\CommentTok{\# 역순 계수}
+\NormalTok{H }\OperatorTok{=}\NormalTok{ Matrix(F, n }\OperatorTok{{-}}\NormalTok{ k, n)}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k):}
+    \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k }\OperatorTok{+} \DecValTok{1}\NormalTok{):}
+\NormalTok{        H[i, i }\OperatorTok{+}\NormalTok{ j] }\OperatorTok{=}\NormalTok{ h\_coeffs[j]}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"패리티 검사 행렬 H:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(H)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 직교성 검증 (예제 6.2)}
+\NormalTok{product }\OperatorTok{=}\NormalTok{ G }\OperatorTok{*}\NormalTok{ H.transpose()}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"G * H\^{}T = 0 검증: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}OK\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ product }\OperatorTok{==} \DecValTok{0} \ControlFlowTok{else} \StringTok{\textquotesingle{}X\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(G }\OperatorTok{*}\NormalTok{ H.transpose())}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 4. 비체계적 인코딩 (예제 3.2, 3.3)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"4. 비체계적 인코딩: c(X) = m(X) * g(X)"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\NormalTok{test\_messages\_nonsys }\OperatorTok{=}\NormalTok{ [}
+\NormalTok{    (}\StringTok{"(1,1,0,1)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+\NormalTok{    (}\StringTok{"(0,1,0,0)"}\NormalTok{, X),}
+\NormalTok{    (}\StringTok{"(1,0,1,1)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+\NormalTok{]}
+
+\ControlFlowTok{for}\NormalTok{ label, m\_poly }\KeywordTok{in}\NormalTok{ test\_messages\_nonsys:}
+\NormalTok{    c\_poly }\OperatorTok{=}\NormalTok{ (m\_poly }\OperatorTok{*}\NormalTok{ g) }\OperatorTok{\%}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{n }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
+\NormalTok{    c\_vec }\OperatorTok{=}\NormalTok{ vector(F, [c\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  m = }\SpecialCharTok{\{}\NormalTok{label}\SpecialCharTok{\}}\SpecialStringTok{,  m(X) = }\SpecialCharTok{\{}\NormalTok{m\_poly}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  c(X) = }\SpecialCharTok{\{}\NormalTok{c\_poly}\SpecialCharTok{\}}\SpecialStringTok{,  c = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \CommentTok{\# g(X)의 배수인지 확인}
+\NormalTok{    remainder }\OperatorTok{=}\NormalTok{ c\_poly }\OperatorTok{\%}\NormalTok{ g}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  c(X) mod g(X) = }\SpecialCharTok{\{}\NormalTok{remainder}\SpecialCharTok{\}}\SpecialStringTok{  (}\SpecialCharTok{\{}\StringTok{\textquotesingle{}OK g(X)의 배수\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ remainder }\OperatorTok{==} \DecValTok{0} \ControlFlowTok{else} \StringTok{\textquotesingle{}X\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 5. 체계적 인코딩 (예제 8.1\textasciitilde{}8.3)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"5. 체계적 인코딩: c(X) = X\^{}(n{-}k)*m(X) + [X\^{}(n{-}k)*m(X) mod g(X)]"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\KeywordTok{def}\NormalTok{ systematic\_encode(m\_poly, g, n, k):}
+    \CommentTok{"""체계적 인코딩 수행"""}
+\NormalTok{    r }\OperatorTok{=}\NormalTok{ n }\OperatorTok{{-}}\NormalTok{ k}
+\NormalTok{    shifted }\OperatorTok{=}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{r }\OperatorTok{*}\NormalTok{ m\_poly}
+\NormalTok{    \_, p }\OperatorTok{=}\NormalTok{ shifted.quo\_rem(g)  }\CommentTok{\# 나머지 = 패리티}
+\NormalTok{    c\_poly }\OperatorTok{=}\NormalTok{ shifted }\OperatorTok{+}\NormalTok{ p}
+\NormalTok{    c\_vec }\OperatorTok{=}\NormalTok{ vector(F, [c\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+    \ControlFlowTok{return}\NormalTok{ c\_poly, p, c\_vec}
+
+\NormalTok{test\_messages }\OperatorTok{=}\NormalTok{ [}
+\NormalTok{    (}\StringTok{"(1,0,1,1)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+\NormalTok{    (}\StringTok{"(1,1,0,0)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X),}
+\NormalTok{    (}\StringTok{"(0,0,0,1)"}\NormalTok{, X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+\NormalTok{    (}\StringTok{"(0,1,1,0)"}\NormalTok{, X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2}\NormalTok{),}
+\NormalTok{    (}\StringTok{"(1,1,1,1)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+\NormalTok{]}
+
+\ControlFlowTok{for}\NormalTok{ label, m\_poly }\KeywordTok{in}\NormalTok{ test\_messages:}
+\NormalTok{    c\_poly, p, c\_vec }\OperatorTok{=}\NormalTok{ systematic\_encode(m\_poly, g, n, k)}
+\NormalTok{    p\_vec }\OperatorTok{=}\NormalTok{ vector(F, [p[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k)])}
+\NormalTok{    m\_vec }\OperatorTok{=}\NormalTok{ vector(F, [m\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k)])}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  m = }\SpecialCharTok{\{}\NormalTok{label}\SpecialCharTok{\}}\SpecialStringTok{,  m(X) = }\SpecialCharTok{\{}\NormalTok{m\_poly}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  패리티 p(X) = }\SpecialCharTok{\{}\NormalTok{p}\SpecialCharTok{\}}\SpecialStringTok{,  p = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(p\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  부호어 c = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  구조 확인: [패리티|메시지] = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(p\_vec)}\SpecialCharTok{\}}\SpecialStringTok{|}\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(m\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \CommentTok{\# 유효성 검증}
+\NormalTok{    remainder }\OperatorTok{=}\NormalTok{ c\_poly }\OperatorTok{\%}\NormalTok{ g}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  c(X) mod g(X) = }\SpecialCharTok{\{}\NormalTok{remainder}\SpecialCharTok{\}}\SpecialStringTok{  (}\SpecialCharTok{\{}\StringTok{\textquotesingle{}OK\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ remainder }\OperatorTok{==} \DecValTok{0} \ControlFlowTok{else} \StringTok{\textquotesingle{}X\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 6. 전체 체계적 부호어 테이블 (예제 8.4)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"6. (7,4) 전체 체계적 부호어 테이블 (16개)"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\StringTok{\textquotesingle{}메시지\textquotesingle{}}\SpecialCharTok{:\textless{}12\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}m(X)\textquotesingle{}}\SpecialCharTok{:\textless{}20\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}패리티\textquotesingle{}}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}부호어\textquotesingle{}}\SpecialCharTok{:\textless{}16\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}wH\textquotesingle{}}\SpecialCharTok{:\textgreater{}4\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{65}\NormalTok{)}
+
+\NormalTok{V4 }\OperatorTok{=}\NormalTok{ VectorSpace(F, }\DecValTok{4}\NormalTok{)}
+\NormalTok{codeword\_set }\OperatorTok{=} \BuiltInTok{set}\NormalTok{()}
+
+\ControlFlowTok{for}\NormalTok{ m\_vec }\KeywordTok{in}\NormalTok{ V4:}
+\NormalTok{    m\_poly }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(F(m\_vec[i]) }\OperatorTok{*}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{i }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k))}
+\NormalTok{    c\_poly, p, c\_vec }\OperatorTok{=}\NormalTok{ systematic\_encode(m\_poly, g, n, k)}
+\NormalTok{    p\_vec }\OperatorTok{=}\NormalTok{ [p[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k)]}
+\NormalTok{    wH }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(}\BuiltInTok{int}\NormalTok{(c\_vec[i]) }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n))}
+\NormalTok{    codeword\_set.add(}\BuiltInTok{tuple}\NormalTok{(c\_vec))}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(m\_vec)}\SpecialCharTok{!s:\textless{}12\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{str}\NormalTok{(m\_poly)}\SpecialCharTok{:\textless{}20\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{str}\NormalTok{(p\_vec)}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec)}\SpecialCharTok{!s:\textless{}16\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{wH}\SpecialCharTok{:\textgreater{}4\}}\SpecialStringTok{"}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{총 부호어 수: }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(codeword\_set)}\SpecialCharTok{\}}\SpecialStringTok{ (기대값: }\SpecialCharTok{\{}\DecValTok{2}\OperatorTok{\^{}}\NormalTok{k}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 7. 순환 이동 불변성 검증}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"7. 순환 이동 불변성 검증"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\KeywordTok{def}\NormalTok{ cyclic\_shift(v, n):}
+    \CommentTok{"""벡터 v를 오른쪽으로 1칸 순환 이동"""}
+\NormalTok{    v }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(v)}
+    \ControlFlowTok{return} \BuiltInTok{tuple}\NormalTok{([v[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]] }\OperatorTok{+}\NormalTok{ v[:}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
+
+\NormalTok{cyclic\_ok }\OperatorTok{=} \VariableTok{True}
+\ControlFlowTok{for}\NormalTok{ cw }\KeywordTok{in}\NormalTok{ codeword\_set:}
+\NormalTok{    shifted }\OperatorTok{=}\NormalTok{ cw}
+    \ControlFlowTok{for}\NormalTok{ s }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, n):}
+\NormalTok{        shifted }\OperatorTok{=}\NormalTok{ cyclic\_shift(shifted, n)}
+        \ControlFlowTok{if}\NormalTok{ shifted }\KeywordTok{not} \KeywordTok{in}\NormalTok{ codeword\_set:}
+            \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  X }\SpecialCharTok{\{}\NormalTok{cw}\SpecialCharTok{\}}\SpecialStringTok{ → }\SpecialCharTok{\{}\NormalTok{s}\SpecialCharTok{\}}\SpecialStringTok{칸 이동 → }\SpecialCharTok{\{}\NormalTok{shifted}\SpecialCharTok{\}}\SpecialStringTok{ : 부호어 아님!"}\NormalTok{)}
+\NormalTok{            cyclic\_ok }\OperatorTok{=} \VariableTok{False}
+
+\ControlFlowTok{if}\NormalTok{ cyclic\_ok:}
+    \BuiltInTok{print}\NormalTok{(}\StringTok{"  OK 모든 부호어의 모든 순환 이동이 부호어 집합에 포함된다."}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\StringTok{"  → 순환 부호(Cyclic Code) 확인!"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 8. 신드롬 테이블 (예제 9.3)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"8. 단일 비트 오류 신드롬 테이블"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\StringTok{\textquotesingle{}오류 위치 i\textquotesingle{}}\SpecialCharTok{:\textless{}14\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}e(X)\textquotesingle{}}\SpecialCharTok{:\textless{}12\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}s(X) = e(X) mod g(X)\textquotesingle{}}\SpecialCharTok{:\textless{}24\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}신드롬 벡터\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{65}\NormalTok{)}
+
+\NormalTok{syndrome\_table }\OperatorTok{=}\NormalTok{ \{\}}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
+\NormalTok{    e\_poly }\OperatorTok{=}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{i}
+\NormalTok{    s\_poly }\OperatorTok{=}\NormalTok{ e\_poly }\OperatorTok{\%}\NormalTok{ g}
+\NormalTok{    s\_vec }\OperatorTok{=} \BuiltInTok{tuple}\NormalTok{(F(s\_poly[j]) }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k))}
+\NormalTok{    syndrome\_table[s\_vec] }\OperatorTok{=}\NormalTok{ i}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{i}\SpecialCharTok{:\textless{}14\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{str}\NormalTok{(e\_poly)}\SpecialCharTok{:\textless{}12\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{str}\NormalTok{(s\_poly)}\SpecialCharTok{:\textless{}24\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{s\_vec}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{서로 다른 신드롬 수: }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(syndrome\_table)}\SpecialCharTok{\}}\SpecialStringTok{ (기대값: }\SpecialCharTok{\{}\NormalTok{n}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+\NormalTok{all\_distinct }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(syndrome\_table) }\OperatorTok{==}\NormalTok{ n}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"모든 단일 오류 정정 가능: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}OK\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ all\_distinct }\ControlFlowTok{else} \StringTok{\textquotesingle{}X\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 9. 신드롬 기반 오류 정정 시뮬레이션 (예제 9.4)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"9. 신드롬 기반 오류 검출 및 정정 시뮬레이션"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\CommentTok{\# 원본 메시지 인코딩}
+\NormalTok{m\_orig }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}  \CommentTok{\# m = (1,0,1,1)}
+\NormalTok{c\_poly\_orig, \_, c\_vec\_orig }\OperatorTok{=}\NormalTok{ systematic\_encode(m\_orig, g, n, k)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"원본 메시지: m = (1,0,1,1)"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"부호어:      c = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec\_orig)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 각 위치에 단일 비트 오류 주입 후 정정}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"단일 비트 오류 주입 → 신드롬 계산 → 정정:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{65}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ err\_pos }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
+    \CommentTok{\# 오류 주입}
+\NormalTok{    e\_poly }\OperatorTok{=}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{err\_pos}
+\NormalTok{    v\_poly }\OperatorTok{=}\NormalTok{ c\_poly\_orig }\OperatorTok{+}\NormalTok{ e\_poly}
+\NormalTok{    v\_vec }\OperatorTok{=}\NormalTok{ vector(F, [v\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+
+    \CommentTok{\# 신드롬 계산}
+\NormalTok{    s\_poly }\OperatorTok{=}\NormalTok{ v\_poly }\OperatorTok{\%}\NormalTok{ g}
+\NormalTok{    s\_vec }\OperatorTok{=} \BuiltInTok{tuple}\NormalTok{(F(s\_poly[j]) }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k))}
+
+    \CommentTok{\# 오류 위치 추정}
+    \ControlFlowTok{if}\NormalTok{ s\_vec }\KeywordTok{in}\NormalTok{ syndrome\_table:}
+\NormalTok{        est\_pos }\OperatorTok{=}\NormalTok{ syndrome\_table[s\_vec]}
+\NormalTok{        corrected\_poly }\OperatorTok{=}\NormalTok{ v\_poly }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{est\_pos}
+\NormalTok{        corrected\_vec }\OperatorTok{=}\NormalTok{ vector(F, [corrected\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+\NormalTok{        success }\OperatorTok{=}\NormalTok{ (corrected\_vec }\OperatorTok{==}\NormalTok{ c\_vec\_orig)}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  오류 위치=}\SpecialCharTok{\{}\NormalTok{err\_pos}\SpecialCharTok{\}}\SpecialStringTok{, 수신=}\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(v\_vec)}\SpecialCharTok{\}}\SpecialStringTok{, "}
+              \SpecialStringTok{f"신드롬=}\SpecialCharTok{\{}\NormalTok{s\_vec}\SpecialCharTok{\}}\SpecialStringTok{, 추정 위치=}\SpecialCharTok{\{}\NormalTok{est\_pos}\SpecialCharTok{\}}\SpecialStringTok{, "}
+              \SpecialStringTok{f"정정=}\SpecialCharTok{\{}\StringTok{\textquotesingle{}OK\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ success }\ControlFlowTok{else} \StringTok{\textquotesingle{}X\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \ControlFlowTok{else}\NormalTok{:}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  오류 위치=}\SpecialCharTok{\{}\NormalTok{err\_pos}\SpecialCharTok{\}}\SpecialStringTok{, 신드롬=}\SpecialCharTok{\{}\NormalTok{s\_vec}\SpecialCharTok{\}}\SpecialStringTok{, 테이블에 없음!"}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 10. 2비트 오류 시 오정정 확인 (예제 9.5)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"10. 2비트 오류 시 오정정(Miscorrection) 확인"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\NormalTok{e\_poly\_2bit }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X  }\CommentTok{\# 위치 0, 1에 동시 오류}
+\NormalTok{v\_poly\_2bit }\OperatorTok{=}\NormalTok{ c\_poly\_orig }\OperatorTok{+}\NormalTok{ e\_poly\_2bit}
+\NormalTok{v\_vec\_2bit }\OperatorTok{=}\NormalTok{ vector(F, [v\_poly\_2bit[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+\NormalTok{s\_poly\_2bit }\OperatorTok{=}\NormalTok{ v\_poly\_2bit }\OperatorTok{\%}\NormalTok{ g}
+\NormalTok{s\_vec\_2bit }\OperatorTok{=} \BuiltInTok{tuple}\NormalTok{(F(s\_poly\_2bit[j]) }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k))}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"원본 부호어: }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec\_orig)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"오류 패턴:   e(X) = 1 + X (위치 0, 1)"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"수신 벡터:   }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(v\_vec\_2bit)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"신드롬:      }\SpecialCharTok{\{}\NormalTok{s\_vec\_2bit}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\ControlFlowTok{if}\NormalTok{ s\_vec\_2bit }\KeywordTok{in}\NormalTok{ syndrome\_table:}
+\NormalTok{    est\_pos }\OperatorTok{=}\NormalTok{ syndrome\_table[s\_vec\_2bit]}
+\NormalTok{    corrected }\OperatorTok{=}\NormalTok{ v\_poly\_2bit }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{est\_pos}
+\NormalTok{    corrected\_vec }\OperatorTok{=}\NormalTok{ vector(F, [corrected[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+\NormalTok{    is\_correct }\OperatorTok{=}\NormalTok{ (corrected\_vec }\OperatorTok{==}\NormalTok{ c\_vec\_orig)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"추정 오류 위치: }\SpecialCharTok{\{}\NormalTok{est\_pos}\SpecialCharTok{\}}\SpecialStringTok{ (실제: 0과 1)"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"정정 결과: }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(corrected\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"정정 성공 여부: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}OK\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ is\_correct }\ControlFlowTok{else} \StringTok{\textquotesingle{}X 오정정(Miscorrection) 발생!\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 11. 패리티 검사 다항식을 이용한 부호어 유효성 검사}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"11. h(X)를 이용한 부호어 유효성 검사: c(X)*h(X) ≡ 0 mod (X\^{}7+1)"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\NormalTok{h }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\DecValTok{7} \OperatorTok{+} \DecValTok{1}\NormalTok{) }\OperatorTok{//}\NormalTok{ g}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"h(X) = }\SpecialCharTok{\{}\NormalTok{h}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 모든 부호어에 대해 검사}
+\NormalTok{all\_valid }\OperatorTok{=} \VariableTok{True}
+\ControlFlowTok{for}\NormalTok{ cw }\KeywordTok{in}\NormalTok{ codeword\_set:}
+\NormalTok{    c\_poly\_check }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(F(cw[i]) }\OperatorTok{*}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{i }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n))}
+\NormalTok{    product }\OperatorTok{=}\NormalTok{ (c\_poly\_check }\OperatorTok{*}\NormalTok{ h) }\OperatorTok{\%}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{n }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ product }\OperatorTok{!=} \DecValTok{0}\NormalTok{:}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  X c = }\SpecialCharTok{\{}\NormalTok{cw}\SpecialCharTok{\}}\SpecialStringTok{: c(X)*h(X) mod (X\^{}7+1) = }\SpecialCharTok{\{}\NormalTok{product}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\NormalTok{        all\_valid }\OperatorTok{=} \VariableTok{False}
+
+\ControlFlowTok{if}\NormalTok{ all\_valid:}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  OK 모든 }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(codeword\_set)}\SpecialCharTok{\}}\SpecialStringTok{개 부호어에 대해 c(X)*h(X) ≡ 0 (mod X\^{}7+1) 성립"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 12. 다른 생성 다항식으로 순환 부호 생성 (예제 3.1)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"12. X\^{}7+1의 다양한 인수로 만드는 순환 부호들"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\NormalTok{generators }\OperatorTok{=}\NormalTok{ [}
+\NormalTok{    (}\StringTok{"1+X"}\NormalTok{,                    }\DecValTok{1} \OperatorTok{+}\NormalTok{ X),}
+\NormalTok{    (}\StringTok{"1+X+X\^{}3"}\NormalTok{,                }\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+\NormalTok{    (}\StringTok{"1+X\^{}2+X\^{}3"}\NormalTok{,              }\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+\NormalTok{    (}\StringTok{"(1+X)(1+X+X\^{}3)"}\NormalTok{,         (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X) }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{)),}
+\NormalTok{    (}\StringTok{"(1+X)(1+X\^{}2+X\^{}3)"}\NormalTok{,       (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X) }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{)),}
+\NormalTok{    (}\StringTok{"(1+X+X\^{}3)(1+X\^{}2+X\^{}3)"}\NormalTok{,   (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{) }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{)),}
+\NormalTok{]}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\StringTok{\textquotesingle{}g(X)\textquotesingle{}}\SpecialCharTok{:\textless{}30\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}deg\textquotesingle{}}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}(n,k)\textquotesingle{}}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}d\_min\textquotesingle{}}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}부호어 수\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ label, gen }\KeywordTok{in}\NormalTok{ generators:}
+    \ControlFlowTok{try}\NormalTok{:}
+\NormalTok{        C\_test }\OperatorTok{=}\NormalTok{ codes.CyclicCode(generator\_pol}\OperatorTok{=}\NormalTok{gen, length}\OperatorTok{=}\DecValTok{7}\NormalTok{)}
+\NormalTok{        d\_min }\OperatorTok{=}\NormalTok{ C\_test.minimum\_distance()}
+\NormalTok{        dim }\OperatorTok{=}\NormalTok{ C\_test.dimension()}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{label}\SpecialCharTok{:\textless{}30\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{gen}\SpecialCharTok{.}\NormalTok{degree()}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ (7,}\SpecialCharTok{\{}\NormalTok{dim}\SpecialCharTok{\}}\SpecialStringTok{)}\SpecialCharTok{\{}\StringTok{\textquotesingle{}\textquotesingle{}}\SpecialCharTok{:\textless{}5\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{d\_min}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\DecValTok{2}\OperatorTok{\^{}}\NormalTok{dim}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+    \ControlFlowTok{except} \PreprocessorTok{Exception} \ImportTok{as}\NormalTok{ e:}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{label}\SpecialCharTok{:\textless{}30\}}\SpecialStringTok{ 오류: }\SpecialCharTok{\{}\NormalTok{e}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 13. LFSR 시뮬레이션 — 체계적 인코딩}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"13. LFSR 시뮬레이션: g(X) = 1+X+X\^{}3 체계적 인코딩"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\KeywordTok{def}\NormalTok{ lfsr\_systematic\_encode(message\_bits, g\_coeffs, n, k):}
+    \CommentTok{"""}
+\CommentTok{    LFSR을 이용한 체계적 인코딩 시뮬레이션.}
+\CommentTok{    message\_bits: 길이 k의 메시지 비트 리스트 (m\_0, m\_1, ..., m\_\{k{-}1\})}
+\CommentTok{    g\_coeffs: g(X)의 계수 리스트 [g\_0, g\_1, ..., g\_\{n{-}k\}]}
+\CommentTok{    높은 차수 비트부터 입력 (m\_\{k{-}1\}, m\_\{k{-}2\}, ..., m\_0)}
+\CommentTok{    """}
+\NormalTok{    r }\OperatorTok{=}\NormalTok{ n }\OperatorTok{{-}}\NormalTok{ k  }\CommentTok{\# 레지스터 수}
+\NormalTok{    reg }\OperatorTok{=}\NormalTok{ [F(}\DecValTok{0}\NormalTok{)] }\OperatorTok{*}\NormalTok{ r  }\CommentTok{\# 레지스터 초기화}
+
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\StringTok{\textquotesingle{}클럭\textquotesingle{}}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}입력\textquotesingle{}}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}피드백\textquotesingle{}}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}레지스터\textquotesingle{}}\SpecialCharTok{:\}}\SpecialStringTok{"}\NormalTok{)}
+    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\StringTok{\textquotesingle{}초기\textquotesingle{}}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}{-}\textquotesingle{}}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}{-}\textquotesingle{}}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{reg}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+    \CommentTok{\# 높은 차수부터 입력}
+    \ControlFlowTok{for}\NormalTok{ clk }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k):}
+\NormalTok{        input\_bit }\OperatorTok{=}\NormalTok{ F(message\_bits[k }\OperatorTok{{-}} \DecValTok{1} \OperatorTok{{-}}\NormalTok{ clk])}
+\NormalTok{        feedback }\OperatorTok{=}\NormalTok{ input\_bit }\OperatorTok{+}\NormalTok{ reg[r }\OperatorTok{{-}} \DecValTok{1}\NormalTok{]  }\CommentTok{\# 입력 XOR 최상위 레지스터}
+
+        \CommentTok{\# 레지스터 시프트 + 피드백 적용}
+\NormalTok{        new\_reg }\OperatorTok{=}\NormalTok{ [F(}\DecValTok{0}\NormalTok{)] }\OperatorTok{*}\NormalTok{ r}
+\NormalTok{        new\_reg[}\DecValTok{0}\NormalTok{] }\OperatorTok{=}\NormalTok{ feedback }\OperatorTok{*}\NormalTok{ F(g\_coeffs[}\DecValTok{0}\NormalTok{])  }\CommentTok{\# g\_0 계수}
+        \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, r):}
+\NormalTok{            new\_reg[j] }\OperatorTok{=}\NormalTok{ reg[j }\OperatorTok{{-}} \DecValTok{1}\NormalTok{] }\OperatorTok{+}\NormalTok{ feedback }\OperatorTok{*}\NormalTok{ F(g\_coeffs[j])}
+
+\NormalTok{        reg }\OperatorTok{=}\NormalTok{ new\_reg}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{clk}\OperatorTok{+}\DecValTok{1}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{int}\NormalTok{(input\_bit)}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{int}\NormalTok{(feedback)}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{[}\BuiltInTok{int}\NormalTok{(x) }\ControlFlowTok{for}\NormalTok{ x }\KeywordTok{in}\NormalTok{ reg]}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+    \ControlFlowTok{return}\NormalTok{ [}\BuiltInTok{int}\NormalTok{(x) }\ControlFlowTok{for}\NormalTok{ x }\KeywordTok{in}\NormalTok{ reg]}
+
+\CommentTok{\# g(X) = 1 + X + X\^{}3 → 계수 [1, 1, 0] (g\_0=1, g\_1=1, g\_2=0; g\_3=1은 최고차항)}
+\NormalTok{g\_coeffs }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{]  }\CommentTok{\# g\_0, g\_1, g\_2 (g\_3=1은 피드백 경로 자체)}
+\NormalTok{message }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{]  }\CommentTok{\# m = (1, 0, 1, 1)}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"메시지: }\SpecialCharTok{\{}\NormalTok{message}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"g(X) = 1 + X + X\^{}3, 피드백 계수: g\_0=}\SpecialCharTok{\{}\NormalTok{g\_coeffs[}\DecValTok{0}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{, g\_1=}\SpecialCharTok{\{}\NormalTok{g\_coeffs[}\DecValTok{1}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{, g\_2=}\SpecialCharTok{\{}\NormalTok{g\_coeffs[}\DecValTok{2}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\NormalTok{parity\_lfsr }\OperatorTok{=}\NormalTok{ lfsr\_systematic\_encode(message, g\_coeffs, n, k)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{LFSR 결과 (레지스터 상태): }\SpecialCharTok{\{}\NormalTok{parity\_lfsr}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\CommentTok{\# 다항식 나눗셈으로 구한 패리티와 비교}
+\NormalTok{m\_poly\_check }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}
+\NormalTok{\_, p\_check }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\DecValTok{3} \OperatorTok{*}\NormalTok{ m\_poly\_check).quo\_rem(g)}
+\NormalTok{p\_check\_vec }\OperatorTok{=}\NormalTok{ [}\BuiltInTok{int}\NormalTok{(p\_check[i]) }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{3}\NormalTok{)]}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"다항식 나눗셈 패리티:       }\SpecialCharTok{\{}\NormalTok{p\_check\_vec}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 14. (7,3) 순환 부호 예제 (예제 5.3)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"14. (7, 3) 순환 부호: g(X) = 1 + X\^{}2 + X\^{}3 + X\^{}4"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\NormalTok{g73 }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{4}
+\NormalTok{C73 }\OperatorTok{=}\NormalTok{ codes.CyclicCode(generator\_pol}\OperatorTok{=}\NormalTok{g73, length}\OperatorTok{=}\DecValTok{7}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"부호 파라미터: [}\SpecialCharTok{\{}\NormalTok{C73}\SpecialCharTok{.}\NormalTok{length()}\SpecialCharTok{\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{C73}\SpecialCharTok{.}\NormalTok{dimension()}\SpecialCharTok{\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{C73}\SpecialCharTok{.}\NormalTok{minimum\_distance()}\SpecialCharTok{\}}\SpecialStringTok{]"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"생성 다항식: g(X) = }\SpecialCharTok{\{}\NormalTok{g73}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 생성 행렬}
+\NormalTok{G73 }\OperatorTok{=}\NormalTok{ Matrix(F, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{3}\NormalTok{):}
+\NormalTok{    poly }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{i }\OperatorTok{*}\NormalTok{ g73) }\OperatorTok{\%}\NormalTok{ (X}\OperatorTok{\^{}}\DecValTok{7} \OperatorTok{+} \DecValTok{1}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{7}\NormalTok{):}
+\NormalTok{        G73[i, j] }\OperatorTok{=}\NormalTok{ poly[j]}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"생성 행렬 G:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(G73)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 인코딩 예제: m = (1, 1, 0)}
+\NormalTok{m73 }\OperatorTok{=}\NormalTok{ vector(F, [}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{])}
+\NormalTok{c73 }\OperatorTok{=}\NormalTok{ m73 }\OperatorTok{*}\NormalTok{ G73}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"m = (1,1,0) → c = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c73)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 15. SageMath 내장 CyclicCode와의 비교 검증}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"15. SageMath 내장 CyclicCode와 수동 계산 비교"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\NormalTok{C\_builtin }\OperatorTok{=}\NormalTok{ codes.CyclicCode(generator\_pol}\OperatorTok{=}\NormalTok{g, length}\OperatorTok{=}\DecValTok{7}\NormalTok{)}
+\NormalTok{G\_builtin }\OperatorTok{=}\NormalTok{ C\_builtin.systematic\_generator\_matrix()}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"SageMath 체계적 생성 행렬:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(G\_builtin)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 수동 체계적 인코딩 결과와 비교}
+\NormalTok{match\_count }\OperatorTok{=} \DecValTok{0}
+\NormalTok{total }\OperatorTok{=} \DecValTok{2}\OperatorTok{\^{}}\NormalTok{k}
+\ControlFlowTok{for}\NormalTok{ m\_vec }\KeywordTok{in}\NormalTok{ VectorSpace(F, k):}
+    \CommentTok{\# SageMath 내장}
+\NormalTok{    c\_builtin }\OperatorTok{=}\NormalTok{ m\_vec }\OperatorTok{*}\NormalTok{ G\_builtin}
+
+    \CommentTok{\# 수동 체계적 인코딩}
+\NormalTok{    m\_poly }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(F(m\_vec[i]) }\OperatorTok{*}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{i }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k))}
+\NormalTok{    \_, \_, c\_manual }\OperatorTok{=}\NormalTok{ systematic\_encode(m\_poly, g, n, k)}
+
+    \ControlFlowTok{if} \BuiltInTok{list}\NormalTok{(c\_builtin) }\OperatorTok{==} \BuiltInTok{list}\NormalTok{(c\_manual):}
+\NormalTok{        match\_count }\OperatorTok{+=} \DecValTok{1}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"일치하는 부호어 수: }\SpecialCharTok{\{}\NormalTok{match\_count}\SpecialCharTok{\}}\SpecialStringTok{/}\SpecialCharTok{\{}\NormalTok{total}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"수동 인코딩과 SageMath 내장 결과 }\SpecialCharTok{\{}\StringTok{\textquotesingle{}완전 일치 OK\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ match\_count }\OperatorTok{==}\NormalTok{ total }\ControlFlowTok{else} \StringTok{\textquotesingle{}불일치 존재 X\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 16. 준순환 행렬 블록 구조 확인 (예제 16.1)}
+\CommentTok{\# ============================================================}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"16. 순환 행렬(Circulant Matrix) 블록 구조"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+
+\KeywordTok{def}\NormalTok{ circulant\_matrix(first\_row, field}\OperatorTok{=}\NormalTok{F):}
+    \CommentTok{"""첫 번째 행으로부터 순환 행렬 생성"""}
+\NormalTok{    m }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(first\_row)}
+\NormalTok{    M }\OperatorTok{=}\NormalTok{ Matrix(field, m, m)}
+    \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(m):}
+        \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(m):}
+\NormalTok{            M[i, j] }\OperatorTok{=}\NormalTok{ first\_row[(j }\OperatorTok{{-}}\NormalTok{ i) }\OperatorTok{\%}\NormalTok{ m]}
+    \ControlFlowTok{return}\NormalTok{ M}
+
+\NormalTok{first\_row }\OperatorTok{=}\NormalTok{ [F(}\DecValTok{1}\NormalTok{), F(}\DecValTok{0}\NormalTok{), F(}\DecValTok{1}\NormalTok{), F(}\DecValTok{1}\NormalTok{)]}
+\NormalTok{C\_circ }\OperatorTok{=}\NormalTok{ circulant\_matrix(first\_row)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"첫 번째 행: }\SpecialCharTok{\{}\NormalTok{first\_row}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"순환 행렬:"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(C\_circ)}
+\BuiltInTok{print}\NormalTok{()}
+
+\CommentTok{\# 각 행이 이전 행의 순환 이동인지 확인}
+\NormalTok{circ\_ok }\OperatorTok{=} \VariableTok{True}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{):}
+\NormalTok{    prev\_row }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(C\_circ[i }\OperatorTok{{-}} \DecValTok{1}\NormalTok{])}
+\NormalTok{    expected }\OperatorTok{=}\NormalTok{ [prev\_row[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]] }\OperatorTok{+}\NormalTok{ prev\_row[:}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}
+\NormalTok{    actual }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(C\_circ[i])}
+    \ControlFlowTok{if}\NormalTok{ actual }\OperatorTok{!=}\NormalTok{ expected:}
+\NormalTok{        circ\_ok }\OperatorTok{=} \VariableTok{False}
+        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  X 행 }\SpecialCharTok{\{}\NormalTok{i}\SpecialCharTok{\}}\SpecialStringTok{: 기대 }\SpecialCharTok{\{}\NormalTok{expected}\SpecialCharTok{\}}\SpecialStringTok{, 실제 }\SpecialCharTok{\{}\NormalTok{actual}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\ControlFlowTok{if}\NormalTok{ circ\_ok:}
+    \BuiltInTok{print}\NormalTok{(}\StringTok{"  OK 모든 행이 이전 행의 오른쪽 순환 이동 → 순환 행렬 확인!"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{()}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"모든 검증 완료!"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{참고문헌}\label{uxcc38uxace0uxbb38uxd5cc}
+
+{[}1{]} C. E. Shannon, ``A Mathematical Theory of Communication,''
+\emph{Bell System Technical Journal}, vol.~27, no. 3, pp.~379--423,
+1948.
+
+{[}2{]} R. W. Hamming, ``Error Detecting and Error Correcting Codes,''
+\emph{Bell System Technical Journal}, vol.~29, no. 2, pp.~147--160,
+1950.
+
+{[}3{]} D. E. Muller, ``Application of Boolean Algebra to Switching
+Circuit Design and to Error Detection,'' \emph{IRE Transactions on
+Electronic Computers}, vol.~EC-3, no. 3, pp.~6--12, 1954.
+
+{[}4{]} I. S. Reed, ``A Class of Multiple-Error-Correcting Codes and the
+Decoding Scheme,'' \emph{IRE Transactions on Information Theory},
+vol.~4, no. 4, pp.~38--49, 1954.
+
+{[}5{]} E. Prange, ``Cyclic Error-Correcting Codes in Two Symbols,'' Air
+Force Cambridge Research Center, AFCRC-TN-57-103, 1957.
+
+{[}6{]} A. Hocquenghem, ``Codes correcteurs d'erreurs,''
+\emph{Chiffres}, vol.~2, pp.~147--156, 1959.
+
+{[}7{]} R. C. Bose and D. K. Ray-Chaudhuri, ``On a Class of Error
+Correcting Binary Group Codes,'' \emph{Information and Control}, vol.~3,
+no. 1, pp.~68--79, 1960.
+
+{[}8{]} I. S. Reed and G. Solomon, ``Polynomial Codes Over Certain
+Finite Fields,'' \emph{Journal of the Society for Industrial and Applied
+Mathematics}, vol.~8, no. 2, pp.~300--304, 1960.
+
+{[}9{]} W. W. Peterson, \emph{Error-Correcting Codes}. Cambridge, MA:
+MIT Press, 1961.
+
+{[}10{]} E. R. Berlekamp, \emph{Algebraic Coding Theory}. New York:
+McGraw-Hill, 1968.
+
+{[}11{]} J. L. Massey, ``Shift-Register Synthesis and BCH Decoding,''
+\emph{IEEE Transactions on Information Theory}, vol.~IT-15, no. 1,
+pp.~122--127, 1969.
+
+{[}12{]} V. D. Goppa, ``Codes on Algebraic Curves,'' \emph{Soviet
+Mathematics Doklady}, vol.~24, pp.~170--172, 1981.
+
+{[}13{]} R. J. McEliece, ``A Public-Key Cryptosystem Based on Algebraic
+Coding Theory,'' \emph{DSN Progress Report}, vol.~42-44, pp.~114--116,
+Jet Propulsion Laboratory, 1978.
+
+{[}14{]} C. Berrou, A. Glavieux, and P. Thitimajshima, ``Near Shannon
+Limit Error-Correcting Coding and Decoding: Turbo-Codes,''
+\emph{Proceedings of ICC '93}, pp.~1064--1070, 1993.
+
+{[}15{]} D. J. C. MacKay and R. M. Neal, ``Near Shannon Limit
+Performance of Low Density Parity Check Codes,'' \emph{Electronics
+Letters}, vol.~32, no. 18, pp.~1645--1646, 1996.
+
+\end{document}
