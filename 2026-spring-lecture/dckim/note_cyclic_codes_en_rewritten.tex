@@ -1,0 +1,2691 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{DejaVu Serif}
+  \setsansfont[]{DejaVu Sans}
+  \setmonofont[]{DejaVu Sans Mono}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{3}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\section{Cyclic Codes}\label{cyclic-codes}
+
+This note presents an introduction to cyclic codes in a style intended to be closer to a mathematical monograph than to informal lecture notes. The exposition emphasizes precise definitions, structural results, representative examples, and computational practice.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Historical Development of Cyclic Codes}\label{historical-development-of-cyclic-codes}
+
+We begin by recording several principal milestones in the historical development of cyclic codes.
+
+\renewcommand{\arraystretch}{1.1}
+\begin{longtable}{@{}p{1.8cm}p{3.9cm}>{\raggedright\arraybackslash}p{8.5cm}@{}}
+\toprule
+\textbf{Year} & \textbf{Milestone} & \textbf{Description} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Year} & \textbf{Milestone} & \textbf{Description} \\
+\midrule
+\endhead
+
+\bottomrule
+\endfoot
+
+1948
+& Foundation of Coding Theory
+& Shannon established information theory and proved the existence of reliable codes for noisy channels {[}1{]}. \\
+
+1950
+& Hamming Codes
+& Hamming introduced the first systematic linear codes capable of correcting a single error {[}2{]}. \\
+
+1954
+& Reed--Muller Codes
+& Reed and Muller introduced a family of multiple-error-correcting codes arising from Boolean functions {[}3{]}{[}4{]}. \\
+
+1957
+& Algebraic Formulation of Cyclic Codes
+& Prange showed that cyclic codes may be identified with ideals in the quotient ring \(\mathbb{F}_q[X]/\langle X^n-1\rangle\) {[}5{]}. \\
+
+1959--1960
+& BCH Codes
+& Hocquenghem, Bose, and Ray-Chaudhuri introduced BCH codes, providing a systematic algebraic construction with prescribed designed distance {[}6{]}{[}7{]}. \\
+
+1960
+& Reed--Solomon Codes
+& Reed and Solomon introduced an important class of nonbinary cyclic codes with strong symbol-level correction capability {[}8{]}. \\
+
+1961
+& Algebraic Decoding
+& Peterson developed an algebraic decoding method for BCH codes and published a foundational text on error-correcting codes {[}9{]}. \\
+
+1968
+& Berlekamp--Massey Algorithm
+& Berlekamp and Massey introduced an efficient iterative procedure for determining the error-locator polynomial {[}10{]}{[}11{]}. \\
+
+1970s
+& Standardization of CRC
+& Cyclic redundancy check became a standard method of error detection because cyclic codes admit efficient LFSR-based implementation. \\
+
+1977
+& Goppa Codes and Code-Based Cryptography
+& Goppa introduced algebraic geometry codes, and McEliece employed Goppa codes in a fundamental public-key cryptosystem {[}12{]}{[}13{]}. \\
+
+Since the 1990s
+& Modern Developments
+& Despite the emergence of turbo codes and LDPC codes, cyclic codes have remained important because of their algebraic transparency, implementation efficiency, and cryptographic relevance {[}14{]}{[}15{]}. \\
+
+\end{longtable}
+\subsubsection{Shift in Research
+Perspective}\label{shift-in-research-perspective}
+
+A noteworthy feature of the subject is that its dominant point of view has changed over time.
+
+\textbf{Early stage (1950s): engineering needs -\textgreater{} discovery
+of algebraic structure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{"If we build codes that remain valid under cyclic shifts, they can be implemented with LFSRs"}
+\NormalTok{    {-}\textgreater{} search for linear codes closed under cyclic shift (Prange, 1957)}
+\NormalTok{    {-}\textgreater{} mathematical analysis reveals equivalence with ideals of F\_q[X]/\textless{}X\^{}n{-}1\textgreater{}}
+\NormalTok{    {-}\textgreater{} existing algebra (ideal theory) becomes immediately applicable}
+\end{Highlighting}
+\end{Shaded}
+
+In this period, the desired engineering property came first, and the
+ideal structure was discovered in the process of formalizing it.
+
+\textbf{Transition period (from 1959): algebraic structure
+-\textgreater{} code design with target performance}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{"If we prescribe roots of the generator polynomial over an extension field, we can guarantee a minimum distance"}
+\NormalTok{    {-}\textgreater{} BCH codes (Hocquenghem 1959, Bose{-}Ray{-}Chaudhuri 1960)}
+\NormalTok{    {-}\textgreater{} Reed{-}Solomon codes (Reed{-}Solomon 1960)}
+\NormalTok{    {-}\textgreater{} the designed distance delta can be chosen in advance to control t{-}error{-}correction capability}
+\end{Highlighting}
+\end{Shaded}
+
+From this point on, algebraic structure was actively exploited to design
+codes with desired error-correcting performance.
+
+\textbf{Modern stage (since the 1970s): bidirectional interaction}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{algebraic structure \textless{}{-}\textgreater{} engineering applications}
+\NormalTok{    {-}\textgreater{} CRC: exploit cyclic structure for hardware{-}efficient error detection}
+\NormalTok{    {-}\textgreater{} Goppa/McEliece: coding theory {-}\textgreater{} public{-}key cryptography}
+\NormalTok{    {-}\textgreater{} HQC: quasi{-}cyclic structure {-}\textgreater{} smaller keys in post{-}quantum cryptography}
+\end{Highlighting}
+\end{Shaded}
+
+Today, algebraic structure and engineering applications continue to
+influence one another in both directions.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Cyclic Codes}\label{what-is-a-cyclic-code}
+
+A cyclic code is a special subclass of linear block codes that satisfies
+two key properties simultaneously: \textbf{linearity} and
+\textbf{invariance under cyclic shift}.
+
+A linear code \(\mathcal{C}\) of length \(n\) is called a cyclic code if
+it satisfies both of the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Linearity}: for any two codewords
+  \(\mathbf{c}_1, \mathbf{c}_2 \in \mathcal{C}\), we have
+  \(\mathbf{c}_1 + \mathbf{c}_2 \in \mathcal{C}\).
+\item
+  \textbf{Cyclic shift property}: if
+  \(\mathbf{c} = (c_0, c_1, \dots, c_{n-1}) \in \mathcal{C}\), then the
+  vector obtained by a one-step cyclic right shift,
+  \[\mathbf{c}^{\ggg 1} = (c_{n-1}, c_0, c_1, \dots, c_{n-2}),\] must
+  also belong to \(\mathcal{C}\).
+\end{enumerate}
+
+Therefore any cyclic shift by two steps, three steps, or in fact any
+number of steps also yields a valid codeword.
+
+\subsubsection{Example 1.1: Checking a Cyclic
+Shift}\label{example-1.1-checking-a-cyclic-shift}
+
+In a binary \([7,4]_2\) cyclic code, suppose
+\[\mathbf{c} = (1,0,0,1,0,1,1)\] is a codeword. Then:
+
+\begin{itemize}
+\tightlist
+\item
+  1-step shift: \(\mathbf{c}^{\ggg 1} = (1,1,0,0,1,0,1)\)
+  -\textgreater{} codeword
+\item
+  2-step shift: \(\mathbf{c}^{\ggg 2} = (1,1,1,0,0,1,0)\)
+  -\textgreater{} codeword
+\item
+  3-step shift: \(\mathbf{c}^{\ggg 3} = (0,1,1,1,0,0,1)\)
+  -\textgreater{} codeword
+\end{itemize}
+
+All of these vectors must belong to the code space \(\mathcal{C}\).
+
+\subsubsection{Example 1.2: Deciding Whether a Code Is
+Cyclic}\label{example-1.2-deciding-whether-a-code-is-cyclic}
+
+Let \(n=4\) and consider the set
+\[\mathcal{C} = \{(0,0,0,0),\ (1,0,1,0),\ (0,1,0,1),\ (1,1,1,1)\}.\]
+
+\begin{itemize}
+\tightlist
+\item
+  Linearity check:
+  \((1,0,1,0) \oplus (0,1,0,1) = (1,1,1,1) \in \mathcal{C}\).
+\item
+  Cyclic-shift check:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \((1,0,1,0)\) shifted once gives \((0,1,0,1) \in \mathcal{C}\).
+  \item
+    \((0,1,0,1)\) shifted once gives \((1,0,1,0) \in \mathcal{C}\).
+  \item
+    \((1,1,1,1)\) shifted once gives \((1,1,1,1) \in \mathcal{C}\).
+  \end{itemize}
+\end{itemize}
+
+Hence this is a cyclic code.
+
+\subsubsection{Example 1.3: A Linear Code That Is Not
+Cyclic}\label{example-1.3-a-linear-code-that-is-not-cyclic}
+
+Let
+\[\mathcal{C}' = \{(0,0,0,0),\ (1,1,0,0),\ (0,0,1,1),\ (1,1,1,1)\}.\]
+
+Shifting \((1,1,0,0)\) one step cyclically gives \((0,1,1,0)\), which is
+not in \(\mathcal{C}'\). Therefore \(\mathcal{C}'\) is linear, but
+\textbf{not} cyclic.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Cyclic-Shift Invariance and Implementation}\label{why-is-cyclic-shift-invariance-useful-for-implementation}
+
+Cyclic codes were originally studied not because of abstract algebra,
+but because of \textbf{hardware efficiency}. Prange's key observation in
+the 1950s was that if a code is closed under cyclic shift, then encoding
+and error detection can be implemented using nothing more than shift
+registers.
+
+\subsubsection{The Drawback of General Linear
+Codes}\label{the-drawback-of-general-linear-codes}
+
+For a general linear \([n,k]_q\) code, encoding is done by matrix
+multiplication: \[\mathbf{c} = \mathbf{m} \cdot G.\] This means:
+
+\begin{itemize}
+\tightlist
+\item
+  the \(k \times n\) generator matrix \(G\) must be stored in memory,
+\item
+  \(k \cdot n\) additions and multiplications are needed,
+\item
+  computation cannot begin until the whole message block has arrived.
+\end{itemize}
+
+For example, for a \([31,21]_2\) code, one must store
+\(21 \times 31 = 651\) matrix entries and perform 651 binary operations
+for every block.
+
+\subsubsection{The Cyclic-Code Alternative: Shift
+Registers}\label{the-cyclic-code-alternative-shift-registers}
+
+For cyclic codes, every codeword is a multiple of the generator
+polynomial \(g(X)\), and encoding reduces to polynomial multiplication
+or polynomial division with remainder. These operations can be
+implemented using an LFSR (linear feedback shift register):
+
+\begin{itemize}
+\tightlist
+\item
+  only \(r=n-k\) one-bit registers are required,
+\item
+  the input stream is processed one bit per clock,
+\item
+  after the last bit passes through the circuit, the register contents
+  are exactly the parity bits or syndrome.
+\end{itemize}
+
+For a \([31,21]_2\) code, 10 registers plus a few XOR gates are enough.
+
+\subsubsection{\texorpdfstring{Example: Matrix Multiplication vs.~LFSR
+for a \([7,4]_2\)
+Code}{Example: Matrix Multiplication vs.~LFSR for a {[}7,4{]}\_2 Code}}\label{example-matrix-multiplication-vs.-lfsr-for-a-74_2-code}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+General linear code (matrix multiplication)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cyclic code (LFSR)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Storage & \(G \in GF(2)^{4 \times 7}\) -\textgreater{} 28 bits &
+\(g(X)=1+X+X^3\) -\textgreater{} 4 bits (coefficients \([1,1,0,1]\)) \\
+Operations per block & \(4 \times 7 = 28\) AND/XOR operations & 7 clocks
+(roughly one XOR per bit) \\
+Processing mode & Batch processing after full block arrival & Real-time,
+bit-by-bit \\
+Latency & Proportional to block length & Almost zero \\
+Circuit complexity & \(n\) XOR trees driven by \(k\) inputs & \(r\)
+flip-flops plus XOR gates \\
+\end{longtable}
+
+\subsubsection{Why the Encoder Requires Seven Clock Cycles
+(Non-Systematic
+Encoding)}\label{detailed-analysis-why-does-it-take-7-clocks-non-systematic-encoding}
+
+Non-systematic encoding \(c(X)=m(X)g(X)\) is, mathematically, a
+convolution of two polynomials. For a \([7,4]_2\) code the message has 4
+bits, the generator polynomial has degree 3, and the codeword has length
+7.
+
+\paragraph{1. Coefficient Expansion of the Polynomial
+Product}\label{coefficient-expansion-of-the-polynomial-product}
+
+Let \[m(X)=m_0+m_1X+m_2X^2+m_3X^3,\] \[g(X)=g_0+g_1X+g_2X^2+g_3X^3.\]
+Then in \[c(X)=\sum_{k=0}^{6} c_k X^k,\] we have:
+
+\begin{itemize}
+\tightlist
+\item
+  \(c_0 = m_0 g_0\)
+\item
+  \(c_1 = m_0 g_1 + m_1 g_0\)
+\item
+  \(c_2 = m_0 g_2 + m_1 g_1 + m_2 g_0\)
+\item
+  \(c_3 = m_0 g_3 + m_1 g_2 + m_2 g_1 + m_3 g_0\)
+\item
+  \(c_4 = m_1 g_3 + m_2 g_2 + m_3 g_1\)
+\item
+  \(c_5 = m_2 g_3 + m_3 g_2\)
+\item
+  \(c_6 = m_3 g_3\)
+\end{itemize}
+
+\paragraph{2. Clock-by-Clock Operation (Serial
+Processing)}\label{clock-by-clock-operation-serial-processing}
+
+In a serial implementation, one message bit enters per clock, and one
+codeword bit is emitted per clock.
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2778}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2778}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2778}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1667}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+Clock
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Input
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Output
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Explanation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & \(m_0\) & \(c_0\) & The first codeword bit appears immediately \\
+2 & \(m_1\) & \(c_1\) & Contributions of \(m_0\) and \(m_1\) combine \\
+3 & \(m_2\) & \(c_2\) & \\
+4 & \(m_3\) & \(c_3\) & Message input finishes, but the tail has not
+flushed out yet \\
+5 & \(0\) & \(c_4\) & Feed zeros to flush the remaining state \\
+6 & \(0\) & \(c_5\) & \\
+7 & \(0\) & \(c_6\) & Final output bit \\
+\end{longtable}
+
+\paragraph{3. Hardware Structure (ASCII
+Art)}\label{hardware-structure-ascii-art}
+
+For \(g(X)=1+X+X^3\):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{       Message input m\_k}
+\NormalTok{        |}
+\NormalTok{        +{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}+}
+\NormalTok{        |               |               |               |}
+\NormalTok{       (x) g0=1        (x) g1=1        (x) g2=0        (x) g3=1}
+\NormalTok{        |               |               |               |}
+\NormalTok{        v               v               v               v}
+\NormalTok{ 0 {-}{-}\textgreater{}(+){-}{-}{-}{-}[ D0 ]{-}{-}{-}{-}(+){-}{-}{-}{-}[ D1 ]{-}{-}{-}{-}(+){-}{-}{-}{-}[ D2 ]{-}{-}{-}{-}(+){-}{-}{-}{-}\textgreater{} Codeword output c\_k}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{How it works:} 1. \textbf{Input phase (clocks 1-4):} message
+bits \(m_0,m_1,m_2,m_3\) are fed in sequence. At each clock the current
+input bit is multiplied by each coefficient of \(g(X)\) and combined
+with delayed values stored in the registers. 2. \textbf{Flush phase
+(clocks 5-7):} after the message bits are exhausted, zeros are shifted
+in. The intermediate values stored in \(D_0,D_1,D_2\) are flushed out,
+yielding \(c_4,c_5,c_6\). 3. \textbf{Result:} after 7 clocks all
+registers are cleared and the 7-bit codeword has been fully emitted.
+
+Hence the total number of clocks is \[4 + 3 = 7,\] which equals the
+codeword length \(n\).
+
+\paragraph{4. Step-by-Step
+Visualization}\label{step-by-step-visualization}
+
+Let the message be \(\mathbf{m}=(1,1,0,1)\) and let \(g(X)=1+X+X^3\).
+
+\textbf{Initial state:} all registers are zero.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Input m\_k: {-}}
+\NormalTok{Registers: [ D0:0 ] [ D1:0 ] [ D2:0 ]}
+\NormalTok{Output c\_k: {-}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Clock 1:} input \(m_0=1\)
+
+\begin{itemize}
+\tightlist
+\item
+  \(c_0 = 1 \cdot 1 \oplus 0 = 1\)
+\item
+  New state: \(D_0 \leftarrow 1\), \(D_1 \leftarrow 0\),
+  \(D_2 \leftarrow 1\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Input m\_k: 1}
+\NormalTok{     |}
+\NormalTok{     v (x1)   (x1)   (x0)   (x1)}
+\NormalTok{     |   |      |      |      |}
+\NormalTok{0 {-}{-}(+){-}{-}[ D0 ]{-}{-}(+){-}{-}[ D1 ]{-}{-}(+){-}{-}[ D2 ]{-}{-}(+){-}{-}\textgreater{} Output c\_0: 1}
+\NormalTok{         (New:1)      (New:0)      (New:1)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Clock 2:} input \(m_1=1\)
+
+\begin{itemize}
+\tightlist
+\item
+  \(c_1 = 1 \cdot 1 \oplus D_0 = 1 \oplus 1 = 0\)
+\item
+  New state: \(D_0 \leftarrow 1\), \(D_1 \leftarrow 1\),
+  \(D_2 \leftarrow 1\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Input m\_k: 1}
+\NormalTok{     |}
+\NormalTok{     v}
+\NormalTok{0 {-}{-}(+){-}{-}[ D0:1 ]{-}{-}(+){-}{-}[ D1:0 ]{-}{-}(+){-}{-}[ D2:1 ]{-}{-}(+){-}{-}\textgreater{} Output c\_1: 0}
+\NormalTok{         (New:1)        (New:1)        (New:1)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Clock 3:} input \(m_2=0\)
+
+\begin{itemize}
+\tightlist
+\item
+  \(c_2 = 0 \cdot 1 \oplus D_0 = 1\)
+\item
+  New state: \(D_0 \leftarrow 1\), \(D_1 \leftarrow 1\),
+  \(D_2 \leftarrow 0\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Input m\_k: 0}
+\NormalTok{     |}
+\NormalTok{     v}
+\NormalTok{0 {-}{-}(+){-}{-}[ D0:1 ]{-}{-}(+){-}{-}[ D1:1 ]{-}{-}(+){-}{-}[ D2:1 ]{-}{-}(+){-}{-}\textgreater{} Output c\_2: 1}
+\NormalTok{         (New:1)        (New:1)        (New:0)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Clock 4:} input \(m_3=1\)
+
+\begin{itemize}
+\tightlist
+\item
+  \(c_3 = 1 \cdot 1 \oplus D_0 = 0\)
+\item
+  New state: \(D_0 \leftarrow 0\), \(D_1 \leftarrow 0\),
+  \(D_2 \leftarrow 1\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Input m\_k: 1}
+\NormalTok{     |}
+\NormalTok{     v}
+\NormalTok{0 {-}{-}(+){-}{-}[ D0:1 ]{-}{-}(+){-}{-}[ D1:1 ]{-}{-}(+){-}{-}[ D2:0 ]{-}{-}(+){-}{-}\textgreater{} Output c\_3: 0}
+\NormalTok{         (New:0)        (New:0)        (New:1)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Clock 5:} flush with input 0
+
+\begin{itemize}
+\tightlist
+\item
+  \(c_4 = 0 \cdot g_0 \oplus D_0 = 0\)
+\item
+  New state: \(D_0 \leftarrow 0\), \(D_1 \leftarrow 1\),
+  \(D_2 \leftarrow 0\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Input m\_k: 0}
+\NormalTok{     |}
+\NormalTok{     v}
+\NormalTok{0 {-}{-}(+){-}{-}[ D0:0 ]{-}{-}(+){-}{-}[ D1:0 ]{-}{-}(+){-}{-}[ D2:1 ]{-}{-}(+){-}{-}\textgreater{} Output c\_4: 0}
+\NormalTok{         (New:0)        (New:1)        (New:0)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Clock 6:} flush again
+
+\begin{itemize}
+\tightlist
+\item
+  \(c_5 = 0 \cdot g_0 \oplus D_0 = 0\)
+\item
+  New state: \(D_0 \leftarrow 1\), \(D_1 \leftarrow 0\),
+  \(D_2 \leftarrow 0\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Input m\_k: 0}
+\NormalTok{     |}
+\NormalTok{     v}
+\NormalTok{0 {-}{-}(+){-}{-}[ D0:0 ]{-}{-}(+){-}{-}[ D1:1 ]{-}{-}(+){-}{-}[ D2:0 ]{-}{-}(+){-}{-}\textgreater{} Output c\_5: 0}
+\NormalTok{         (New:1)        (New:0)        (New:0)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Clock 7:} final output
+
+\begin{itemize}
+\tightlist
+\item
+  \(c_6 = 0 \cdot g_0 \oplus D_0 = 1\)
+\item
+  All registers return to zero.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Input m\_k: 0}
+\NormalTok{     |}
+\NormalTok{     v}
+\NormalTok{0 {-}{-}(+){-}{-}[ D0:1 ]{-}{-}(+){-}{-}[ D1:0 ]{-}{-}(+){-}{-}[ D2:0 ]{-}{-}(+){-}{-}\textgreater{} Output c\_6: 1}
+\NormalTok{         (New:0)        (New:0)        (New:0)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Final result:} \[\mathbf{c}=(1,0,1,0,0,0,1).\] This matches the
+polynomial product \[c(X)=(1+X+X^3)(1+X+X^3)=1+X^2+X^6.\]
+
+\subsubsection{Why Does ``Cyclic'' Enable Shift
+Registers?}\label{why-does-cyclic-enable-shift-registers}
+
+The key correspondence is
+\[\text{cyclic shift} \longleftrightarrow X \cdot c(X) \pmod{X^n-1}.\]
+
+The basic action of a shift register - moving all bits by one position
+and injecting feedback - is exactly multiplication by \(X\) followed by
+reduction modulo \(X^n-1\). This is why cyclic codes admit LFSR
+implementations, whereas general linear codes do not.
+
+In summary:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cyclic{-}shift invariance}
+\NormalTok{    {-}\textgreater{} codewords are multiples of g(X)}
+\NormalTok{    {-}\textgreater{} encoding becomes polynomial division / multiplication}
+\NormalTok{    {-}\textgreater{} implementable by LFSR}
+\NormalTok{    {-}\textgreater{} storage O(n{-}k), computation O(n), real{-}time processing}
+\end{Highlighting}
+\end{Shaded}
+
+This is the fundamental reason cyclic codes became so important, and why
+CRC remains the standard error-detection mechanism in protocols such as
+Ethernet and USB.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Polynomial Representation of Cyclic Codes}\label{how-do-we-represent-cyclic-codes-using-polynomials}
+
+A vector of length \(n\), \[\mathbf{c}=(c_0,c_1,\dots,c_{n-1}),\] can be
+mapped to a polynomial of degree at most \(n-1\):
+
+\[c(X)=c_0 + c_1 X + c_2 X^2 + \dots + c_{n-1}X^{n-1}.\]
+
+Under this representation, a one-step cyclic right shift corresponds
+exactly to \[X \cdot c(X) \pmod{X^n-1}.\]
+
+Therefore all algebraic operations on a cyclic code naturally live in
+the quotient ring \[R_n = \mathbb{F}_q[X]/\langle X^n-1 \rangle.\]
+
+\subsubsection{Example 2.1: Vector \textless-\textgreater{} Polynomial
+Conversion}\label{example-2.1-vector---polynomial-conversion}
+
+For \(n=7\):
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Vector & Polynomial \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\((1,0,1,1,0,0,0)\) & \(1+X^2+X^3\) \\
+\((0,1,0,0,1,1,0)\) & \(X+X^4+X^5\) \\
+\((1,1,1,1,1,1,1)\) & \(1+X+X^2+X^3+X^4+X^5+X^6\) \\
+\end{longtable}
+
+\subsubsection{Example 2.2: Cyclic Shift as a Polynomial
+Operation}\label{example-2.2-cyclic-shift-as-a-polynomial-operation}
+
+Let \(n=7\) and \(c(X)=1+X^2+X^3\). Then \[Xc(X)=X+X^3+X^4.\] Since the
+degree is still below 7, reduction modulo \(X^7-1\) changes nothing. The
+corresponding vector is \((0,1,0,1,1,0,0)\), which is exactly the
+one-step cyclic shift of \((1,0,1,1,0,0,0)\).
+
+\subsubsection{Example 2.3: When the Highest-Degree Term Wraps
+Around}\label{example-2.3-when-the-highest-degree-term-wraps-around}
+
+Let \(n=7\) and \(c(X)=X^4+X^5+X^6\). Then \[Xc(X)=X^5+X^6+X^7.\] Since
+\(X^7 \equiv 1 \pmod{X^7-1}\), \[Xc(X) \bmod (X^7-1)=1+X^5+X^6.\] Thus
+\[(0,0,0,0,1,1,1) \xrightarrow{\text{1-step shift}} (1,0,0,0,0,1,1).\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Generator Polynomials and Their Properties}\label{what-is-a-generator-polynomial-and-what-properties-does-it-have}
+
+Every cyclic code is completely determined by a unique monic polynomial
+\(g(X)\) of \textbf{smallest degree} in the code. This polynomial is
+called the \textbf{generator polynomial}.
+
+\textbf{Key properties:}
+
+\begin{itemize}
+\tightlist
+\item
+  \(g(X)\) must divide \(X^n-1\): \[X^n-1 = g(X)h(X).\]
+\item
+  If \(\deg g = r = n-k\), then the code dimension is \(k\).
+\item
+  Every codeword is a multiple of \(g(X)\): \[c(X)=m(X)g(X).\]
+\end{itemize}
+
+For \textbf{non-systematic encoding}, one simply multiplies the message
+polynomial by the generator polynomial: \[c(X)=m(X)g(X).\]
+
+\subsubsection{\texorpdfstring{Example 3.1: Factorization of \(X^7-1\)
+and Possible Generator
+Polynomials}{Example 3.1: Factorization of X\^{}7-1 and Possible Generator Polynomials}}\label{example-3.1-factorization-of-x7-1-and-possible-generator-polynomials}
+
+Over \(GF(2)\), we have \(-1=1\), so \(X^7-1 = X^7+1\), and it factors
+as
+
+\[X^7+1 = (1+X)(1+X+X^3)(1+X^2+X^3).\]
+
+Any divisor of this polynomial can serve as a generator polynomial:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3103}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1724}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3103}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2069}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\(g(X)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\deg(g)=n-k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\([n,k]_2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of codewords \(2^k\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(1 + X\) & 1 & \([7,6]_2\) & 64 \\
+\(1 + X + X^3\) & 3 & \([7,4]_2\) & 16 \\
+\(1 + X^2 + X^3\) & 3 & \([7,4]_2\) & 16 \\
+\((1+X)(1+X+X^3) = 1 + X^2 + X^3 + X^4\) & 4 & \([7,3]_2\) & 8 \\
+\((1+X)(1+X^2+X^3) = 1 + X + X^2 + X^4\) & 4 & \([7,3]_2\) & 8 \\
+\((1+X+X^3)(1+X^2+X^3) = 1 + X + X^2 + X^3 + X^4 + X^5 + X^6\) & 6 &
+\([7,1]_2\) & 2 \\
+\(X^7 + 1\) & 7 & \([7,0]_2\) & 1 (trivial) \\
+\end{longtable}
+
+\subsubsection{\texorpdfstring{Example 3.2: Non-Systematic Encoding for
+a \([7,4]_2\)
+Code}{Example 3.2: Non-Systematic Encoding for a {[}7,4{]}\_2 Code}}\label{example-3.2-non-systematic-encoding-for-a-74_2-code}
+
+Let \(g(X)=1+X+X^3\) and let the message be
+\[\mathbf{m}=(1,1,0,1), \qquad m(X)=1+X+X^3.\] Then
+
+\[\begin{aligned}
+c(X)
+&= m(X)g(X) \\
+&= (1+X+X^3)(1+X+X^3) \\
+&= 1+X+X^3 + X+X^2+X^4 + X^3+X^4+X^6 \\
+&= 1 + (1+1)X + X^2 + (1+1)X^3 + (1+1)X^4 + X^6 \\
+&= 1 + X^2 + X^6.
+\end{aligned}\]
+
+Thus the codeword vector is \[\mathbf{c}=(1,0,1,0,0,0,1).\]
+
+\subsubsection{Example 3.3: Another Non-Systematic Encoding
+Example}\label{example-3.3-another-non-systematic-encoding-example}
+
+With the same generator polynomial, let the message be
+\[\mathbf{m}=(0,1,0,0), \qquad m(X)=X.\] Then
+\[c(X)=X(1+X+X^3)=X+X^2+X^4.\] So the codeword is
+\[\mathbf{c}=(0,1,1,0,1,0,0).\] This is exactly the coefficient vector
+of \(Xg(X)\), i.e.~the second row of the generator matrix.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Parity-Check Polynomials}\label{what-is-a-parity-check-polynomial}
+
+The quotient obtained by dividing \(X^n-1\) by the generator polynomial
+is called the \textbf{parity-check polynomial}:
+
+\[h(X)=\frac{X^n-1}{g(X)}.\]
+
+Its degree is \(k\). To check whether a polynomial \(v(X)\) is a valid
+codeword, one tests \[v(X)h(X) \equiv 0 \pmod{X^n-1}.\]
+
+\subsubsection{\texorpdfstring{Example 4.1: Parity-Check Polynomial for
+a \([7,4]_2\)
+Code}{Example 4.1: Parity-Check Polynomial for a {[}7,4{]}\_2 Code}}\label{example-4.1-parity-check-polynomial-for-a-74_2-code}
+
+If \(g(X)=1+X+X^3\), then \[h(X)=\frac{X^7+1}{1+X+X^3}=1+X+X^2+X^4.\]
+
+Verification: \[g(X)h(X)=(1+X+X^3)(1+X+X^2+X^4)=X^7+1.\] Indeed,
+term-by-term cancellation in \(GF(2)\) leaves only \(1+X^7\).
+
+\subsubsection{Example 4.2: Validating a
+Codeword}\label{example-4.2-validating-a-codeword}
+
+Consider the codeword \[c(X)=X+X^2+X^4.\] Then
+\[c(X)h(X) = (X+X^2+X^4)(1+X+X^2+X^4).\] Expanding and reducing modulo
+\(X^7+1\) yields 0, so \(c(X)\) is a valid codeword.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Generator Matrices}\label{how-do-we-construct-a-generator-matrix}
+
+Let \[g(X)=g_0+g_1X+\dots+g_{n-k}X^{n-k}.\] Then the generator matrix
+\(G\) is built by taking the coefficient vector of \(g(X)\) and shifting
+it one position to the right in each row:
+
+\[G = \begin{bmatrix}
+g_0 & g_1 & g_2 & \dots & g_{n-k} & 0 & \dots & 0 \\
+0 & g_0 & g_1 & \dots & g_{n-k-1} & g_{n-k} & \dots & 0 \\
+\vdots & & \ddots & & & & \ddots & \vdots \\
+0 & \dots & 0 & g_0 & g_1 & \dots & \dots & g_{n-k}
+\end{bmatrix}.\]
+
+The \(i\)-th row corresponds to the coefficient vector of \(X^i g(X)\).
+
+\begin{quote}
+\textbf{Why is this a valid generator matrix?} 1. \(g(X)\) is a
+codeword, and by cyclic-shift invariance so are
+\(Xg(X),X^2g(X),\dots,X^{k-1}g(X)\). 2. These vectors are linearly
+independent because their highest nonzero terms occur in different
+positions. 3. A \(k\)-dimensional code containing \(k\) linearly
+independent codewords has found a basis.
+\end{quote}
+
+\subsubsection{\texorpdfstring{Example 5.1: Generator Matrix for a
+\([7,4]_2\) Cyclic
+Code}{Example 5.1: Generator Matrix for a {[}7,4{]}\_2 Cyclic Code}}\label{example-5.1-generator-matrix-for-a-74_2-cyclic-code}
+
+Let \(g(X)=1+X+X^3\), whose coefficient vector is \((1,1,0,1)\). Then
+
+\[G = \begin{bmatrix}
+1 & 1 & 0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 & 1 & 0 & 1
+\end{bmatrix}.\]
+
+Interpretation of the rows:
+
+\begin{itemize}
+\tightlist
+\item
+  Row 0: \(g(X)=1+X+X^3\)
+\item
+  Row 1: \(Xg(X)=X+X^2+X^4\)
+\item
+  Row 2: \(X^2g(X)=X^2+X^3+X^5\)
+\item
+  Row 3: \(X^3g(X)=X^3+X^4+X^6\)
+\end{itemize}
+
+\subsubsection{Example 5.2: Encoding with the Generator
+Matrix}\label{example-5.2-encoding-with-the-generator-matrix}
+
+Let \(\mathbf{m}=(1,0,1,1)\). Then
+
+\[\mathbf{c} = \mathbf{m}G = (1,0,1,1)
+\begin{bmatrix}
+1 & 1 & 0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 & 1 & 0 & 1
+\end{bmatrix}.\]
+
+Carrying out the multiplication over \(GF(2)\) gives
+\[\mathbf{c}=(1,1,1,1,1,1,1).\] Thus \[c(X)=1+X+X^2+X^3+X^4+X^5+X^6,\]
+and this is divisible by \(g(X)\).
+
+\subsubsection{\texorpdfstring{Example 5.3: A \((7,3)\) Cyclic
+Code}{Example 5.3: A (7,3) Cyclic Code}}\label{example-5.3-a-73-cyclic-code}
+
+Let \(g(X)=1+X^2+X^3+X^4\). Then \(k=3\) and
+
+\[G = \begin{bmatrix}
+1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+0 & 1 & 0 & 1 & 1 & 1 & 0 \\
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\end{bmatrix}.\]
+
+For message \(\mathbf{m}=(1,1,0)\),
+\[\mathbf{c}=(1,1,0)G=(1,1,1,0,0,1,0).\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Parity-Check Matrices}\label{how-do-we-construct-a-parity-check-matrix}
+
+Let \[h(X)=h_0+h_1X+\dots+h_kX^k.\] To construct the parity-check matrix
+\(H\), reverse the coefficient order of \(h(X)\) and shift that reversed
+vector across the rows:
+
+\[H = \begin{bmatrix}
+h_k & h_{k-1} & \dots & h_0 & 0 & \dots & 0 \\
+0 & h_k & h_{k-1} & \dots & h_0 & \dots & 0 \\
+\vdots & & \ddots & & & \ddots & \vdots \\
+0 & \dots & 0 & h_k & h_{k-1} & \dots & h_0
+\end{bmatrix}.\]
+
+This matrix satisfies the orthogonality relation \[GH^T=0.\]
+
+\begin{quote}
+\textbf{Why reverse the coefficients?}
+
+Since \(g(X)h(X)=X^n-1 \equiv 0 \pmod{X^n-1}\) and every codeword has
+the form \(c(X)=m(X)g(X)\), we have \[c(X)h(X) \equiv 0.\] Writing this
+condition as inner products of coefficient vectors leads precisely to
+the reversed-coefficient construction of \(H\).
+\end{quote}
+
+\subsubsection{\texorpdfstring{Example 6.1: Parity-Check Matrix for a
+\([7,4]_2\) Cyclic
+Code}{Example 6.1: Parity-Check Matrix for a {[}7,4{]}\_2 Cyclic Code}}\label{example-6.1-parity-check-matrix-for-a-74_2-cyclic-code}
+
+For \[h(X)=1+X+X^2+X^4,\] its coefficient vector is \((1,1,1,0,1)\) and
+the reversed vector is \((1,0,1,1,1)\). Therefore
+
+\[H = \begin{bmatrix}
+1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+0 & 1 & 0 & 1 & 1 & 1 & 0 \\
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\end{bmatrix}.\]
+
+\subsubsection{Example 6.2: Verifying
+Orthogonality}\label{example-6.2-verifying-orthogonality}
+
+Take the first row of \(G\), \((1,1,0,1,0,0,0)\), and the first row of
+\(H\), \((1,0,1,1,1,0,0)\). Their inner product is
+\[1\cdot 1 + 1\cdot 0 + 0\cdot 1 + 1\cdot 1 = 1+1=0 \pmod 2.\] Likewise,
+the first row of \(G\) is orthogonal to the second and third rows of
+\(H\), and similarly for all remaining rows.
+
+\subsubsection{Example 6.3: Error Detection with the Parity-Check
+Matrix}\label{example-6.3-error-detection-with-the-parity-check-matrix}
+
+For \[\mathbf{v}=(1,1,1,1,1,1,1),\] we get
+\[H\mathbf{v}^T = \mathbf{0},\] so no error is detected.
+
+If instead \[\mathbf{v}'=(0,1,1,1,1,1,1),\] then
+\[H\mathbf{v}'^T = \begin{bmatrix}1\\0\\0\end{bmatrix} \neq \mathbf{0},\]
+so the error is detected.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Systematic and Non-Systematic Encoding}\label{what-is-the-difference-between-non-systematic-and-systematic-encoding}
+
+Both methods produce valid codewords, but they place the original
+message differently inside the codeword.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1132}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4906}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3962}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Category
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Non-systematic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Systematic
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Encoding rule & \(c(X)=m(X)g(X)\) & \(c(X)=p(X)+X^{n-k}m(X)\) \\
+Message position & Mixed throughout the codeword & Preserved explicitly
+in fixed positions \\
+Ease of decoding & Requires division & Message bits can be read
+directly \\
+Typical practical use & Rare & Common in real systems \\
+\end{longtable}
+
+\subsubsection{Example 7.1: Two Encodings of the Same
+Message}\label{example-7.1-two-encodings-of-the-same-message}
+
+Let \(g(X)=1+X+X^3\) and let the message be \(\mathbf{m}=(1,0,1,1)\).
+
+\textbf{Non-systematic encoding:}
+\[c(X)=m(X)g(X)=(1+X^2+X^3)(1+X+X^3)=1+X+X^2+X^3+X^4+X^5+X^6.\] The
+codeword is \((1,1,1,1,1,1,1)\), and the message is not visibly
+preserved as a contiguous block.
+
+\textbf{Systematic encoding:} the resulting codeword has the form
+\[(1,0,0,\mathbf{1,0,1,1}),\] so the last four bits are exactly the
+original message.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Systematic Encoding}\label{how-is-systematic-encoding-performed-in-practice}
+
+Systematic encoding proceeds in three steps.
+
+\textbf{Step 1. Shift the message polynomial} \[X^{n-k}m(X).\]
+
+\textbf{Step 2. Compute the remainder} \[p(X)=X^{n-k}m(X) \bmod g(X).\]
+
+\textbf{Step 3. Form the codeword} \[c(X)=p(X)+X^{n-k}m(X).\]
+
+Thus the codeword has the structure
+\[[\text{parity }(n-k)\text{ bits} \mid \text{message }k\text{ bits}].\]
+
+\begin{quote}
+\textbf{Why is this a valid codeword?} Since \(p(X)\) is the remainder
+of \(X^{n-k}m(X)\) modulo \(g(X)\), \[X^{n-k}m(X)-p(X)\] is divisible by
+\(g(X)\). Over \(GF(2)\), subtraction equals addition, so \(c(X)\) is
+also divisible by \(g(X)\).
+\end{quote}
+
+\subsubsection{\texorpdfstring{Example 8.1: Systematic Encoding of
+\((1,0,1,1)\)}{Example 8.1: Systematic Encoding of (1,0,1,1)}}\label{example-8.1-systematic-encoding-of-1011}
+
+Let \(g(X)=1+X+X^3\), \(n-k=3\), and \(m(X)=1+X^2+X^3\).
+
+\textbf{Step 1:} \[X^3m(X)=X^3+X^5+X^6.\]
+
+\textbf{Step 2:} Divide \(X^6+X^5+X^3\) by \(X^3+X+1\).
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Step & Dividend & Quotient term \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & \(X^6 + X^5 + X^3\) & \(X^3\) \\
+& \(-(X^6 + X^4 + X^3)\) & \\
+& \(= X^5 + X^4\) & \\
+2 & \(X^5 + X^4\) & \(X^2\) \\
+& \(-(X^5 + X^3 + X^2)\) & \\
+& \(= X^4 + X^3 + X^2\) & \\
+3 & \(X^4 + X^3 + X^2\) & \(X\) \\
+& \(-(X^4 + X^2 + X)\) & \\
+& \(= X^3 + X\) & \\
+4 & \(X^3 + X\) & \(1\) \\
+& \(-(X^3 + X + 1)\) & \\
+& \(= 1\) & \\
+\end{longtable}
+
+So the quotient is \(X^3+X^2+X+1\), and the remainder is \[p(X)=1.\]
+
+\textbf{Step 3:} \[c(X)=1+X^3+X^5+X^6.\] Thus
+\[\mathbf{c}=(\underbrace{1,0,0}_{\text{parity}},\ \underbrace{1,0,1,1}_{\text{message}}).\]
+
+\subsubsection{\texorpdfstring{Example 8.2: Systematic Encoding of
+\((1,1,0,0)\)}{Example 8.2: Systematic Encoding of (1,1,0,0)}}\label{example-8.2-systematic-encoding-of-1100}
+
+Here \(m(X)=1+X\).
+
+\textbf{Step 1:} \[X^3m(X)=X^3+X^4.\]
+
+\textbf{Step 2:} Divide by \(X^3+X+1\) to obtain remainder
+\[p(X)=X^2+1,\] which corresponds to parity vector \((1,0,1)\).
+
+\textbf{Step 3:} \[c(X)=1+X^2+X^3+X^4.\] So
+\[\mathbf{c}=(\underbrace{1,0,1}_{\text{parity}},\ \underbrace{1,1,0,0}_{\text{message}}).\]
+
+\subsubsection{\texorpdfstring{Example 8.3: Systematic Encoding of
+\((0,0,0,1)\)}{Example 8.3: Systematic Encoding of (0,0,0,1)}}\label{example-8.3-systematic-encoding-of-0001}
+
+Here \(m(X)=X^3\).
+
+\textbf{Step 1:} \[X^3m(X)=X^6.\]
+
+\textbf{Step 2:} Dividing by \(X^3+X+1\) again yields \[p(X)=X^2+1,\] so
+the parity bits are \((1,0,1)\).
+
+\textbf{Step 3:} \[c(X)=1+X^2+X^6.\] Hence
+\[\mathbf{c}=(\underbrace{1,0,1}_{\text{parity}},\ \underbrace{0,0,0,1}_{\text{message}}).\]
+
+\subsubsection{\texorpdfstring{Example 8.4: Full Table of Systematic
+Codewords for the \([7,4]_2\)
+Code}{Example 8.4: Full Table of Systematic Codewords for the {[}7,4{]}\_2 Code}}\label{example-8.4-full-table-of-systematic-codewords-for-the-74_2-code}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Message \((m_0m_1m_2m_3)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(m(X)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Parity \((p_0p_1p_2)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Codeword \((p_0p_1p_2m_0m_1m_2m_3)\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(0000\) & \(0\) & \(000\) & \(0000000\) \\
+\(1000\) & \(1\) & \(110\) & \(1101000\) \\
+\(0100\) & \(X\) & \(011\) & \(0110100\) \\
+\(1100\) & \(1+X\) & \(101\) & \(1011100\) \\
+\(0010\) & \(X^2\) & \(111\) & \(1110010\) \\
+\(1010\) & \(1+X^2\) & \(001\) & \(0011010\) \\
+\(0110\) & \(X+X^2\) & \(100\) & \(1000110\) \\
+\(1110\) & \(1+X+X^2\) & \(010\) & \(0101110\) \\
+\(0001\) & \(X^3\) & \(101\) & \(1010001\) \\
+\(1001\) & \(1+X^3\) & \(011\) & \(0111001\) \\
+\(0101\) & \(X+X^3\) & \(110\) & \(1100101\) \\
+\(1101\) & \(1+X+X^3\) & \(000\) & \(0001101\) \\
+\(0011\) & \(X^2+X^3\) & \(010\) & \(0100011\) \\
+\(1011\) & \(1+X^2+X^3\) & \(100\) & \(1001011\) \\
+\(0111\) & \(X+X^2+X^3\) & \(001\) & \(0010111\) \\
+\(1111\) & \(1+X+X^2+X^3\) & \(111\) & \(1111111\) \\
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Syndromes and Error Detection}\label{what-is-the-syndrome-and-how-is-error-detection-performed}
+
+The \textbf{remainder} obtained by dividing the received polynomial
+\(v(X)\) by the generator polynomial \(g(X)\) is called the
+\textbf{syndrome}:
+
+\[s(X)=v(X) \bmod g(X).\]
+
+\begin{itemize}
+\tightlist
+\item
+  If \(s(X)=0\), no error is detected.
+\item
+  If \(s(X)\neq 0\), an error is detected.
+\end{itemize}
+
+\begin{quote}
+\textbf{Core principle:} if \(v(X)=c(X)+e(X)\) and \(c(X)\) is a
+multiple of \(g(X)\), then \[s(X)=v(X) \bmod g(X)=e(X) \bmod g(X).\]
+Thus the syndrome depends only on the error pattern, not on the original
+message.
+\end{quote}
+
+\subsubsection{Example 9.1: Error-Free
+Reception}\label{example-9.1-error-free-reception}
+
+Suppose the codeword \[c(X)=1+X^3+X^5+X^6\] is received without error.
+Dividing by \(X^3+X+1\) yields remainder 0.
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Step & Dividend & Quotient term \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & \(X^6 + X^5 + X^3 + 1\) & \(X^3\) \\
+& \(-(X^6 + X^4 + X^3)\) & \\
+& \(= X^5 + X^4 + 1\) & \\
+2 & \(X^5 + X^4 + 1\) & \(X^2\) \\
+& \(-(X^5 + X^3 + X^2)\) & \\
+& \(= X^4 + X^3 + X^2 + 1\) & \\
+3 & \(X^4 + X^3 + X^2 + 1\) & \(X\) \\
+& \(-(X^4 + X^2 + X)\) & \\
+& \(= X^3 + X + 1\) & \\
+4 & \(X^3 + X + 1\) & \(1\) \\
+& \(-(X^3 + X + 1)\) & \\
+& \(= 0\) & \\
+\end{longtable}
+
+So the syndrome is 0.
+
+\subsubsection{\texorpdfstring{Example 9.2: A Single-Bit Error at
+Position
+\(X^2\)}{Example 9.2: A Single-Bit Error at Position X\^{}2}}\label{example-9.2-a-single-bit-error-at-position-x2}
+
+Suppose the received polynomial is \[v(X)=1+X^2+X^3+X^5+X^6,\] so the
+error polynomial is \(e(X)=X^2\).
+
+Then \[s(X)=X^2,\] whose vector representation is \((0,0,1)\). Since the
+syndrome is nonzero, the error is detected.
+
+\subsubsection{\texorpdfstring{Example 9.3: Complete Syndrome Table for
+Single-Bit Errors in the \([7,4]_2\)
+Code}{Example 9.3: Complete Syndrome Table for Single-Bit Errors in the {[}7,4{]}\_2 Code}}\label{example-9.3-complete-syndrome-table-for-single-bit-errors-in-the-74_2-code}
+
+For a single-bit error \(e(X)=X^i\), the syndrome is
+\(s(X)=X^i \bmod g(X)\).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Error position \(i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(e(X)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(s(X)=e(X) \bmod (1+X+X^3)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Syndrome vector
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & \(1\) & \(1\) & \((1,0,0)\) \\
+1 & \(X\) & \(X\) & \((0,1,0)\) \\
+2 & \(X^2\) & \(X^2\) & \((0,0,1)\) \\
+3 & \(X^3\) & \(1+X\) & \((1,1,0)\) \\
+4 & \(X^4\) & \(X+X^2\) & \((0,1,1)\) \\
+5 & \(X^5\) & \(1+X+X^2\) & \((1,1,1)\) \\
+6 & \(X^6\) & \(1+X^2\) & \((1,0,1)\) \\
+\end{longtable}
+
+Since all 7 syndromes are distinct, the code can correct \textbf{any
+single-bit error}.
+
+\subsubsection{Example 9.4: Error Correction Using the
+Syndrome}\label{example-9.4-error-correction-using-the-syndrome}
+
+Suppose the received vector is \[\mathbf{v}=(1,0,1,1,0,1,1).\]
+
+\textbf{Step 1.} Compute the syndrome: with \[v(X)=1+X^2+X^3+X^5+X^6,\]
+we obtain \[s(X)=X^2,\] so the syndrome vector is \((0,0,1)\).
+
+\textbf{Step 2.} Look up the syndrome table: \((0,0,1)\) corresponds to
+error position \(i=2\).
+
+\textbf{Step 3.} Correct the error:
+\[\hat{c}(X)=v(X)+X^2 = 1+X^3+X^5+X^6.\] Therefore the corrected
+codeword is \[\hat{\mathbf{c}}=(1,0,0,1,0,1,1).\]
+
+\textbf{Step 4.} Extract the message: for a systematic code, the last
+four bits are the message, \[\mathbf{m}=(1,0,1,1).\]
+
+\subsubsection{Example 9.5: The Case of a Two-Bit
+Error}\label{example-9.5-the-case-of-a-two-bit-error}
+
+Suppose the received vector is \[\mathbf{v}=(0,1,0,1,0,1,1),\] which
+corresponds to simultaneous errors at positions 0 and 1. Then
+\[e(X)=1+X,\] and the syndrome is \[s(X)=1+X,\] with vector \((1,1,0)\).
+
+But \((1,1,0)\) corresponds in the syndrome table to a \emph{single}
+error at position 3. A decoder designed only for single-error correction
+will therefore flip the wrong bit, causing a \textbf{miscorrection}.
+
+This is exactly the limitation of the \([7,4]_2\) code: since its
+minimum distance is \(d_{\min}=3\), it can correct 1 bit or detect 2
+bits, but it cannot reliably correct arbitrary 2-bit errors.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Decoding of Cyclic Codes}\label{what-is-the-decoding-process-for-a-cyclic-code}
+
+The details of decoding depend on the specific family of cyclic code
+(simple cyclic code, BCH code, RS code, and so on), but the overall
+structure is usually the same.
+
+\subsubsection{Step 1: Syndrome
+Calculation}\label{step-1-syndrome-calculation}
+
+Given the received polynomial \[v(X)=c(X)+e(X),\] compute
+\[s(X)=v(X) \bmod g(X).\] This can be done very efficiently in hardware
+by feeding the received stream into an LFSR.
+
+\subsubsection{Step 2: Error-Pattern
+Search}\label{step-2-error-pattern-search}
+
+Using the syndrome \(s(X)\), determine the actual error polynomial
+\(e(X)\).
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Syndrome lookup table:} for short block codes (such as small
+  Hamming codes or Golay codes), the syndrome can be mapped directly to
+  an error pattern.
+\item
+  \textbf{Meggitt decoder:} especially hardware-friendly. The syndrome
+  register is shifted one clock at a time while logic checks whether the
+  current pattern indicates an error in the most significant position.
+\item
+  \textbf{Algebraic decoding:} for BCH and Reed-Solomon codes, lookup
+  tables are impractical. One instead computes the error-locator
+  polynomial using methods such as the Berlekamp-Massey algorithm,
+  locates roots by Chien search, and recovers magnitudes via the Forney
+  algorithm.
+\end{itemize}
+
+\subsubsection{Step 3: Error Correction}\label{step-3-error-correction}
+
+Once an estimated error pattern \(\hat{e}(X)\) has been found, subtract
+it from the received vector: \[\hat{c}(X)=v(X)-\hat{e}(X).\] For binary
+codes, subtraction and addition are the same, so this is just XOR.
+
+\subsubsection{Step 4: Message
+Extraction}\label{step-4-message-extraction}
+
+Finally, recover the original message.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Systematic codes:} simply read the designated message
+  positions in the codeword.
+\item
+  \textbf{Non-systematic codes:} divide the corrected codeword by
+  \(g(X)\) and take the quotient.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{How Is the Error-Correcting Capability of a Cyclic Code
+Determined?}\label{how-is-the-error-correcting-capability-of-a-cyclic-code-determined}
+
+A cyclic code is still a linear code, so its error-correcting capability
+is determined by its \textbf{minimum distance} \(d_{\min}\). There is no
+special correction formula unique to cyclic codes; the same general
+relationship for linear codes applies:
+
+\subsubsection{\texorpdfstring{\(t\)-Error-Correcting
+Capability}{t-Error-Correcting Capability}}\label{core-result-t-error-correcting-capability}
+
+A code with minimum distance \(d_{\min}\) can correct up to
+\[t = \left\lfloor \frac{d_{\min}-1}{2} \right\rfloor\] errors.
+
+If one is interested only in error \textbf{detection}, then up to
+\(d_{\min}-1\) errors can be detected.
+
+\subsubsection{Example 11.1: Error-Correcting Capability of
+Representative Cyclic
+Codes}\label{example-11.1-error-correcting-capability-of-representative-cyclic-codes}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1132}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1887}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2264}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2642}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2075}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\([n,k]\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(d_{\min}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Correction capability \(t\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Detection capability
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\([7,4]\) cyclic code (Hamming) & \([7,4]_2\) & \(3\) & \(1\) & \(2\) \\
+\([15,7]\) BCH code & \([15,7]\) & \(5\) & \(2\) & \(4\) \\
+\([23,12]\) Golay code & \([23,12]\) & \(7\) & \(3\) & \(6\) \\
+\([15,5]\) BCH code & \([15,5]\) & \(7\) & \(3\) & \(6\) \\
+\([31,21]\) BCH code & \([31,21]\) & \(5\) & \(2\) & \(4\) \\
+\end{longtable}
+
+\subsubsection{Limitation of a General Cyclic
+Code}\label{limitation-of-a-general-cyclic-code}
+
+For a general cyclic code, there is usually no simple closed-form
+formula that gives \(d_{\min}\) directly from \(g(X)\). One must compute
+it either by enumerating codewords or by a deeper algebraic analysis.
+
+\subsubsection{BCH Bound: Guaranteed Designed
+Distance}\label{bch-bound-guaranteed-designed-distance}
+
+A famous theorem does exist for the important subclass of \textbf{BCH
+codes}.
+
+\begin{quote}
+\textbf{BCH bound:} Let \(\alpha\) be a primitive \(n\)th root of unity
+satisfying \(X^n-1=0\) in \(GF(q^m)\). If the generator polynomial
+\(g(X)\) has the consecutive roots
+\[\alpha^b,\ \alpha^{b+1},\ \dots,\ \alpha^{b+\delta-2},\] then the
+minimum distance satisfies \[d_{\min} \ge \delta.\]
+\end{quote}
+
+The parameter \(\delta\) is called the \textbf{designed distance}.
+Because of this theorem, one can choose a target correction capability
+\(t\) in advance by setting \[\delta = 2t+1.\]
+
+\subsubsection{Example 11.2: Applying the BCH
+Bound}\label{example-11.2-applying-the-bch-bound}
+
+For the binary \((15,7)\) BCH code, let \(\alpha\) be a primitive 15th
+root of unity in \(GF(2^4)\). If the generator polynomial has roots
+\[\alpha, \alpha^2, \alpha^3, \alpha^4,\] then there are 4 consecutive
+roots, so \[\delta = 4+1 = 5.\] Therefore
+\[d_{\min} \ge 5 \quad \Rightarrow \quad t \ge 2.\] In fact, this code
+attains \(d_{\min}=5\), so the BCH bound is tight here.
+
+\subsubsection{Example 11.3: General Cyclic Code vs.~BCH
+Code}\label{example-11.3-general-cyclic-code-vs.-bch-code}
+
+For the \([7,4]_2\) cyclic code with \[g(X)=1+X+X^3,\] let \(\alpha\) be
+a primitive root of \(X^7+1\) in \(GF(2^3)\). Since
+\[g(\alpha)=0, \qquad g(\alpha^2)=0,\] there are two consecutive roots.
+Hence the BCH bound gives
+\[\delta=3 \quad \Rightarrow \quad d_{\min} \ge 3.\] The actual minimum
+distance is exactly 3. In fact this code is both the \([7,4]_2\) Hamming
+code and a BCH code.
+
+This ability to design error-correcting performance at the construction
+stage is one of the main reasons BCH and Reed-Solomon codes are favored
+in practice over arbitrary cyclic codes.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Algebraic Structure of Cyclic Codes}\label{what-is-the-algebraic-structure-of-a-cyclic-code}
+
+A cyclic code is a \textbf{principal ideal} of the quotient ring
+\[R_n = \mathbb{F}_q[X]/\langle X^n-1 \rangle.\]
+
+This means two things:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The cyclic code \(\mathcal{C}\) is an ideal of the ring \(R_n\).
+\item
+  This ideal is generated by a single element \(g(X)\):
+  \[\mathcal{C}=\langle g(X) \rangle.\]
+\end{enumerate}
+
+\subsubsection{Proof}\label{proof-sketch}
+
+\textbf{Step 1: Show that \(\mathcal{C}\) is an ideal.}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Closed under addition:} by linearity, if
+  \(a(X),b(X)\in\mathcal{C}\) then \(a(X)+b(X)\in\mathcal{C}\).
+\item
+  \textbf{Absorption:} for any \(r(X)\in R_n\) and
+  \(c(X)\in\mathcal{C}\), \[r(X)c(X)\in \mathcal{C}.\] This follows
+  because cyclic-shift invariance implies \(Xc(X)\in\mathcal{C}\),
+  repeated shifts give \(X^2c(X),X^3c(X),\dots\), and linearity then
+  gives closure under any polynomial multiple.
+\end{itemize}
+
+\textbf{Step 2: Show that the ideal is principal.}
+
+\begin{itemize}
+\tightlist
+\item
+  Let \(g(X)\) be the monic polynomial of smallest degree in
+  \(\mathcal{C}\).
+\item
+  For any \(c(X)\in\mathcal{C}\), divide:
+  \[c(X)=q(X)g(X)+r(X), \qquad \deg r < \deg g.\]
+\item
+  Since \(r(X)=c(X)-q(X)g(X)\in\mathcal{C}\) and \(g(X)\) has minimal
+  degree, we must have \(r(X)=0\).
+\item
+  Hence every codeword is a multiple of \(g(X)\), so
+  \[\mathcal{C}=\langle g(X) \rangle.\]
+\end{itemize}
+
+\subsubsection{Example 10.1: Checking the Ideal
+Structure}\label{example-10.1-checking-the-ideal-structure}
+
+For the \([7,4]_2\) code with \(g(X)=1+X+X^3\):
+
+\begin{itemize}
+\tightlist
+\item
+  \(g(X)\in\mathcal{C}\)
+\item
+  \(Xg(X)=X+X^2+X^4\in\mathcal{C}\)
+\item
+  \((1+X)g(X)=1+X^2+X^3+X^4\in\mathcal{C}\)
+\end{itemize}
+
+This illustrates both cyclic closure and absorption.
+
+\subsubsection{\texorpdfstring{Example 10.2: Why Must \(g(X)\) Divide
+\(X^n-1\)?}{Example 10.2: Why Must g(X) Divide X\^{}n-1?}}\label{example-10.2-why-must-gx-divide-xn-1}
+
+For \(g(X)=1+X+X^3\), \[X^7+1 = (1+X+X^3)(1+X+X^2+X^4)=g(X)h(X).\] Thus
+\(g(X)\) divides \(X^7+1\), which is a necessary condition for any
+generator polynomial.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Number of Ideals in the Quotient Ring and Determination of
+the Generator
+Polynomial}\label{number-of-ideals-in-the-quotient-ring-and-determination-of-the-generator-polynomial}
+
+From the previous section, cyclic codes correspond one-to-one with
+principal ideals of the quotient ring
+\[R_n = \mathbb{F}_q[X]/\langle X^n-1 \rangle.\] This naturally leads to
+two questions:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  How many ideals are there?
+\item
+  How is the generator polynomial that defines each ideal determined?
+\end{enumerate}
+
+\subsubsection{Main Theorem: Counting
+Ideals}\label{main-theorem-counting-ideals}
+
+Every ideal of \(R_n\) is a principal ideal generated by a monic divisor
+\(g(X)\) of \(X^n-1\): \[I = \langle g(X) \rangle.\]
+
+\begin{quote}
+\textbf{Proof.}
+
+Consider the canonical projection
+\[\pi: \mathbb{F}_q[X] \to R_n, \qquad f(X) \mapsto f(X)+\langle X^n-1 \rangle.\]
+This is a surjective ring homomorphism with kernel
+\(\langle X^n-1 \rangle\).
+
+By the correspondence theorem for rings, there is a one-to-one
+correspondence between ideals \(I\) of \(R_n\) and ideals \(J\) of
+\(\mathbb{F}_q[X]\) satisfying \[\langle X^n-1 \rangle \subseteq J.\]
+Specifically, \[I = J / \langle X^n-1 \rangle, \qquad J = \pi^{-1}(I).\]
+
+Since \(\mathbb{F}_q[X]\) is a PID (indeed a Euclidean domain), every
+ideal \(J\) is principal: \[J=\langle g(X) \rangle\] for a unique monic
+polynomial \(g(X)\).
+
+The inclusion \(\langle X^n-1 \rangle \subseteq \langle g(X) \rangle\)
+is equivalent to \[g(X) \mid (X^n-1).\]
+
+Conversely, every monic divisor \(g(X)\) of \(X^n-1\) generates an ideal
+of \(R_n\).
+
+Therefore there is a one-to-one correspondence:
+\[g(X) \mid (X^n-1) \quad \longleftrightarrow \quad \langle g(X) \rangle \text{ is an ideal of } R_n.\]
+\(\blacksquare\)
+\end{quote}
+
+Hence:
+
+\begin{quote}
+\textbf{Number of ideals of \(R_n\) = number of monic divisors of
+\(X^n-1\) over \(\mathbb{F}_q[X]\).}
+\end{quote}
+
+If \(\gcd(n,q)=1\), so that \(X^n-1\) has no repeated roots, and if
+\[X^n-1=f_1(X)f_2(X)\cdots f_s(X)\] is a product of \(s\) distinct
+irreducible polynomials, then each factor may be independently included
+or excluded from a divisor. Therefore the total number of monic divisors
+is \[2^s.\] This count includes both the whole ring (\(g(X)=1\)) and the
+zero ideal (\(g(X)=X^n-1\)).
+
+\begin{quote}
+\textbf{Why \(2^s\)?} Every monic divisor corresponds uniquely to a
+subset \(S \subseteq \{1,2,\dots,s\}\) through
+\[g_S(X)=\prod_{i\in S} f_i(X).\] Since the number of subsets is
+\(2^s\), the number of monic divisors is also \(2^s\).
+\end{quote}
+
+\subsubsection{Procedure for Determining Generator
+Polynomials}\label{procedure-for-determining-generator-polynomials}
+
+\textbf{Step 1.} Factor \(X^n-1\) completely into irreducible
+polynomials over \(\mathbb{F}_q[X]\).
+
+\textbf{Step 2.} Take products over all subsets of those irreducible
+factors.
+
+\textbf{Step 3.} For each generator polynomial \(g(X)\), the
+corresponding cyclic code has parameters \[(n,\ n-\deg g(X)).\]
+
+\subsubsection{\texorpdfstring{Example 13.1: Listing All Ideals for
+\(n=7\) over
+\(\mathbb{F}_2\)}{Example 13.1: Listing All Ideals for n=7 over \textbackslash mathbb\{F\}\_2}}\label{example-13.1-listing-all-ideals-for-n7-over-mathbbf_2}
+
+Since \[X^7+1=(1+X)(1+X+X^3)(1+X^2+X^3),\] there are \(s=3\) distinct
+irreducible factors, so the number of ideals is \[2^3=8.\]
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Subset \(S\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(g(X)=\prod_{i\in S} f_i(X)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\deg(g)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\([n,k]\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of codewords \(2^k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Remark
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(\emptyset\) & \(1\) & 0 & \((7,7)\) & 128 & Whole ring (trivial) \\
+\(\{1\}\) & \(1+X\) & 1 & \((7,6)\) & 64 & Simple parity-check code \\
+\(\{2\}\) & \(1+X+X^3\) & 3 & \([7,4]_2\) & 16 & Hamming \((7,4)\) \\
+\(\{3\}\) & \(1+X^2+X^3\) & 3 & \([7,4]_2\) & 16 & \\
+\(\{1,2\}\) & \(1+X^2+X^3+X^4\) & 4 & \((7,3)\) & 8 & \\
+\(\{1,3\}\) & \(1+X+X^2+X^4\) & 4 & \((7,3)\) & 8 & \\
+\(\{2,3\}\) & \(1+X+X^2+X^3+X^4+X^5+X^6\) & 6 & \((7,1)\) & 2 &
+Repetition code \\
+\(\{1,2,3\}\) & \(X^7+1\) & 7 & \((7,0)\) & 1 & Zero ideal (trivial) \\
+\end{longtable}
+
+These 8 ideals form a lattice under inclusion: if
+\[g_1(X) \mid g_2(X),\] then
+\[\langle g_2(X) \rangle \subseteq \langle g_1(X) \rangle.\] So larger
+generator-polynomial degree means smaller code dimension and a smaller
+ideal.
+
+\subsubsection{\texorpdfstring{Example 13.2: Number of Ideals for
+\(n=15\) over
+\(\mathbb{F}_2\)}{Example 13.2: Number of Ideals for n=15 over \textbackslash mathbb\{F\}\_2}}\label{example-13.2-number-of-ideals-for-n15-over-mathbbf_2}
+
+From Exercise 2,
+\[X^{15}+1 = (1+X)(1+X+X^2)(1+X+X^4)(1+X^3+X^4)(1+X+X^2+X^3+X^4).\]
+There are \(s=5\) irreducible factors, so the number of ideals is
+\[2^5=32.\] Among these 32 ideals, there are already several \((15,11)\)
+cyclic codes, depending on which degree-4 factor or combination of
+factors is selected.
+
+\subsubsection{Example 13.3: Ideal Lattice and Inclusion
+Relations}\label{example-13.3-ideal-lattice-and-inclusion-relations}
+
+For \(n=7\), the inclusion lattice looks like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{        \textless{}1\textgreater{} = R7  (whole ring, k=7)}
+\NormalTok{       / |  \textbackslash{}}
+\NormalTok{   \textless{}f1\textgreater{} \textless{}f2\textgreater{} \textless{}f3\textgreater{}   (k=6,4,4)}
+\NormalTok{     |\textbackslash{} / \textbackslash{} /|}
+\NormalTok{  \textless{}f1f2\textgreater{} \textless{}f1f3\textgreater{} \textless{}f2f3\textgreater{}  (k=3,3,1)}
+\NormalTok{       \textbackslash{}  |  /}
+\NormalTok{      \textless{}f1f2f3\textgreater{} = \textless{}0\textgreater{}  (zero ideal, k=0)}
+\end{Highlighting}
+\end{Shaded}
+
+As you move upward, the ideals get larger and contain more codewords. As
+you move downward, the ideals get smaller, the code dimension decreases,
+and the error-correcting capability generally improves.
+
+\subsubsection{\texorpdfstring{A Caution Concerning
+\(\gcd(n,q) \neq 1\)}{A Caution Concerning \textbackslash gcd(n,q) \textbackslash neq 1}}\label{caution-when-gcdnq-neq-1}
+
+If \(\gcd(n,q) \neq 1\), then \(X^n-1\) has repeated roots over
+\(\mathbb{F}_q[X]\). For example, over \(\mathbb{F}_2\),
+\[X^6+1=(1+X)^2(1+X+X^2)^2,\] since \(\gcd(6,2)=2\).
+
+In that case, one may independently choose exponents
+\[0 \le e_i' \le e_i\] for each repeated factor \(f_i(X)^{e_i}\), and
+the number of monic divisors becomes \[\prod_{i=1}^s (e_i+1).\] For the
+example above, that is \[(2+1)(2+1)=9,\] which is larger than \(2^s=4\).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Why Are Cyclic Codes Important in
+Practice?}\label{why-are-cyclic-codes-important-in-practice}
+
+The main practical strength of cyclic codes is that they admit
+\textbf{ultra-fast real-time hardware implementations} using LFSRs.
+
+\subsubsection{The Principle of the LFSR
+Structure}\label{principle-of-the-lfsr-structure}
+
+Whereas a general linear block code requires large matrix
+multiplications, a cyclic code reduces to lightweight polynomial
+division implemented by:
+
+\begin{itemize}
+\tightlist
+\item
+  \(r=\deg g(X)\) flip-flops,
+\item
+  a few XOR gates matching the nonzero coefficients of the polynomial,
+\item
+  and nothing more.
+\end{itemize}
+
+\subsubsection{Advantage of Real-Time Processing}\label{advantage-of-real-time-processing}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+General linear code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cyclic code (LFSR)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Buffer the whole block, then multiply by a matrix & Bit-by-bit real-time
+processing \\
+Large memory required & Only \(r\) registers required \\
+High latency & Near-zero latency \\
+Complex parallel arithmetic & Simple serial XOR circuit \\
+\end{longtable}
+
+\subsubsection{CRC in Network
+Transmission}\label{real-example-crc-in-network-transmission}
+
+When checking the integrity of gigabit data streams in USB or Ethernet:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{No large memory is needed:} data can be processed as it
+  arrives.
+\item
+  \textbf{On-the-fly computation:} one bit per clock is fed into the
+  LFSR.
+\item
+  \textbf{Immediate result:} when the last bit passes, the remaining
+  register contents are the parity bits or syndrome.
+\end{enumerate}
+
+\subsubsection{\texorpdfstring{Example 11.1: LFSR Encoder for
+\(g(X)=1+X+X^3\)}{Example 11.1: LFSR Encoder for g(X)=1+X+X\^{}3}}\label{example-11.1-lfsr-encoder-for-gx1xx3}
+
+For systematic encoding with \(g(X)=1+X+X^3\), use three flip-flops
+\([R_0,R_1,R_2]\). The feedback is the XOR of the incoming bit and the
+most significant register \(R_2\). Since the coefficients of \(X^0\) and
+\(X^1\) are 1, the feedback is XORed into \(R_0\) and \(R_1\).
+
+Feed the message bits \((1,0,1,1)\) in order from highest degree to
+lowest, i.e.~\(m_3,m_2,m_1,m_0\):
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1304}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2391}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1522}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1522}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1522}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Clock
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Input bit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Feedback \(= \text{input} \oplus R_2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R_0\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R_1\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(R_2\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Initial & - & - & 0 & 0 & 0 \\
+1 & \(m_3=1\) & \(1 \oplus 0 = 1\) & 1 & 0 & 0 \\
+2 & \(m_2=1\) & \(1 \oplus 0 = 1\) & 1 & 1 & 0 \\
+3 & \(m_1=0\) & \(0 \oplus 0 = 0\) & 0 & 1 & 1 \\
+4 & \(m_0=1\) & \(1 \oplus 1 = 0\) & 0 & 0 & 1 \\
+\end{longtable}
+
+After 4 clocks the register state is \((R_0,R_1,R_2)=(0,0,1)\).
+
+\begin{quote}
+\textbf{Verification:} In Example 8.1, the remainder for systematic
+encoding of \(m(X)=1+X^2+X^3\) was \(p(X)=1\), i.e.~parity vector
+\((1,0,0)\). Depending on whether the circuit is interpreted MSB-first
+or LSB-first, the register output order may be reversed. Reading
+\((0,0,1)\) backward gives \((1,0,0)\).
+\end{quote}
+
+\begin{quote}
+\textbf{Remark:} The exact behavior of an LFSR depends on the feedback
+topology and the bit-input convention. The essential point is that
+polynomial division can be executed in real time using only \(n-k\)
+registers and a few XOR gates.
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Representative Families of Cyclic Codes}\label{what-are-representative-cyclic-codes}
+
+Important code families with cyclic structure include:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2609}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2609}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4783}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Characteristic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Main applications
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{CRC} (Cyclic Redundancy Check) & Error detection only, many
+standard generator polynomials & Ethernet, USB, ZIP, storage media \\
+\textbf{BCH codes} & Root-based construction guaranteeing
+error-correction capability & Flash memory, satellite communication \\
+\textbf{Reed-Solomon (RS) codes} & Nonbinary cyclic code, symbol-level
+error correction & CD/DVD/Blu-ray, QR codes, deep-space communication \\
+\textbf{Some Hamming codes} & Cyclic form for certain parameters & ECC
+memory \\
+\end{longtable}
+
+\subsubsection{Example 15.1: CRC-8 Generator
+Polynomial}\label{example-15.1-crc-8-generator-polynomial}
+
+A standard CRC-8 polynomial is \[g(X)=X^8+X^2+X+1.\]
+
+\begin{itemize}
+\tightlist
+\item
+  Code length: variable (depends on the message length)
+\item
+  Parity length: 8 bits
+\item
+  Typical use: sensor networks and embedded systems
+\end{itemize}
+
+\subsubsection{Example 15.2: CRC-32 Used in
+Ethernet}\label{example-15.2-crc-32-used-in-ethernet}
+
+\[g(X)=X^{32} + X^{26} + X^{23} + X^{22} + X^{16} + X^{12} + X^{11} + X^{10} + X^8 + X^7 + X^5 + X^4 + X^2 + X + 1.\]
+
+\begin{itemize}
+\tightlist
+\item
+  32 parity bits
+\item
+  Protects frames up to length \(2^{32}-1\) in theory
+\item
+  Used for the FCS (Frame Check Sequence) in Ethernet
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{What Are Quasi-Cyclic Codes and the Post-Quantum
+Cryptosystem
+HQC?}\label{what-are-quasi-cyclic-codes-and-the-post-quantum-cryptosystem-hqc}
+
+The algebraic structure of cyclic codes plays an important role in
+modern cryptography, especially in \textbf{post-quantum cryptography
+(PQC)}.
+
+\subsubsection{Quasi-Cyclic Codes (QC)}\label{quasi-cyclic-codes-qc}
+
+If a cyclic code is closed under a 1-step shift, then a
+\textbf{quasi-cyclic code} is closed under an \(\ell\)-step shift.
+
+\begin{itemize}
+\tightlist
+\item
+  If the code length is \(n=m\ell\), then shifting any codeword by
+  \(\ell\) positions preserves membership in the code.
+\item
+  If \(\ell=1\), we recover an ordinary cyclic code.
+\item
+  Generator and parity-check matrices are built from \(m \times m\)
+  \textbf{circulant blocks}.
+\end{itemize}
+
+\subsubsection{Use in HQC (Hamming
+Quasi-Cyclic)}\label{use-in-hqc-hamming-quasi-cyclic}
+
+HQC is a code-based key encapsulation mechanism designed to remain
+secure against quantum computers, including attacks based on Shor's
+algorithm. It uses quasi-cyclic structure in a central way.
+
+\textbf{The classical problem:} the McEliece cryptosystem is highly
+secure but suffers from very large public keys, typically around the
+megabyte scale.
+
+\textbf{The HQC idea:} adopt a quasi-cyclic structure in order to
+obtain:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Smaller public keys:} a circulant matrix is determined
+  entirely by its first row, so one polynomial can represent a full
+  matrix block.
+\item
+  \textbf{Faster arithmetic:} operations are performed in a polynomial
+  ring such as \(\mathbb{F}_2[X]/\langle X^n-1 \rangle\), enabling
+  efficient algorithms.
+\item
+  \textbf{Provable security reductions:} the scheme is related to hard
+  syndrome-decoding problems believed to remain difficult even for
+  quantum computers.
+\end{enumerate}
+
+\subsubsection{Example 16.1: Structure of a Circulant
+Block}\label{example-16.1-structure-of-a-circulant-block}
+
+Consider the \(4 \times 4\) circulant matrix whose first row is
+\((1,0,1,1)\):
+
+\[C = \begin{bmatrix}
+1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 0 \\
+0 & 1 & 1 & 1
+\end{bmatrix}.\]
+
+Each row is obtained from the previous one by a one-step cyclic right
+shift. Therefore storing only the first row is enough to reconstruct the
+entire matrix. This is precisely why quasi-cyclic structure can reduce
+public-key size so dramatically.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Exercises}\label{exercises}
+
+\subsubsection{Exercise 1. Determining Whether a Code Is
+Cyclic}\label{exercise-1.-determining-whether-a-code-is-cyclic}
+
+Decide whether the following code is cyclic. (\(n=5\))
+
+\[\mathcal{C} = \{00000,\ 10110,\ 01011,\ 11101,\ 01101,\ 10011,\ 00111,\ 11010,\ 11001,\ 00101, \dots\}\]
+
+\textbf{Hint:} apply a one-step cyclic shift to each codeword and check
+whether the result is still in the set.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Exercise 2. Finding Generator
+Polynomials}\label{exercise-2.-finding-generator-polynomials}
+
+Suppose that over \(GF(2)\),
+
+\[X^{15} + 1 = (1+X)(1+X+X^2)(1+X+X^4)(1+X^3+X^4)(1+X+X^2+X^3+X^4).\]
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  List all degree-4 generator polynomials that can define a \((15,11)\)
+  cyclic code.
+\item
+  If \(g(X)=1+X+X^4\), compute the corresponding parity-check polynomial
+  \(h(X)\).
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Exercise 3. Practice with Systematic
+Encoding}\label{exercise-3.-practice-with-systematic-encoding}
+
+For the \([7,4]_2\) cyclic code with \(g(X)=1+X+X^3\), systematically
+encode the following messages:
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  \(\mathbf{m}=(0,1,1,0)\)
+\item
+  \(\mathbf{m}=(1,1,1,1)\)
+\item
+  Check that your results agree with the codeword table in Example 8.4.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Exercise 4. Syndrome Computation and Error
+Correction}\label{exercise-4.-syndrome-computation-and-error-correction}
+
+For the \([7,4]_2\) cyclic code, compute the syndrome of each received
+vector and correct it if it contains a single-bit error:
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  \(\mathbf{v}=(1,1,0,1,0,0,0)\)
+\item
+  \(\mathbf{v}=(0,1,1,0,1,0,1)\)
+\item
+  \(\mathbf{v}=(1,0,1,1,1,0,0)\)
+\end{enumerate}
+
+\textbf{Hint:} use the syndrome table of Example 9.3.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Exercise 5. Generator and Parity-Check
+Matrices}\label{exercise-5.-generator-and-parity-check-matrices}
+
+Consider the \([7,4]_2\) cyclic code with generator polynomial
+\[g(X)=1+X^2+X^3.\]
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  Find the non-systematic generator matrix \(G\).
+\item
+  Compute the parity-check polynomial \(h(X)\).
+\item
+  Construct the parity-check matrix \(H\).
+\item
+  Verify that \(GH^T=0\).
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Exercise 6. Understanding the Algebraic
+Structure}\label{exercise-6.-understanding-the-algebraic-structure}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item
+  Factor \(X^6+1\) over \(GF(2)\).
+\end{enumerate}
+
+\begin{quote}
+\textbf{Caution:} since \(\gcd(6,2)=2 \neq 1\), the polynomial \(X^6+1\)
+has repeated roots over \(GF(2)\), so some standard results of
+cyclic-code theory do not apply in their usual form. Confirm from the
+factorization that repeated factors occur.
+\end{quote}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{1}
+\item
+  Based on that factorization, list the divisors of \(X^6+1\) and
+  determine the corresponding \([n,k]\) parameters.
+\item
+  Find the generator polynomial of the code with largest dimension, and
+  determine its minimum distance.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Exercise 7. Comprehensive
+Problem}\label{exercise-7.-comprehensive-problem}
+
+Let the generator polynomial of a \((15,7)\) BCH code be
+\[g(X)=1+X^4+X^6+X^7+X^8.\]
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  Verify that this is a cyclic code by checking that \(g(X)\) divides
+  \(X^{15}+1\).
+\item
+  Systematically encode the message \[\mathbf{m}=(1,0,0,0,0,0,1).\]
+\item
+  Verify that the syndrome of the encoded codeword is 0.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{SageMath Code}\label{sagemath-practice-code}
+
+Running the following SageMath script allows you to verify the main
+concepts discussed in this document directly.
+
+%\begin{Shaded}
+%\begin{Highlighting}[]
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# Cyclic Codes {-} SageMath practice code}
+%\CommentTok{\# Verifies the examples discussed in this document.}
+%\CommentTok{\# ============================================================}
+%
+%\NormalTok{F }\OperatorTok{=}\NormalTok{ GF(}\DecValTok{2}\NormalTok{)}
+%\NormalTok{R.}\OperatorTok{\textless{}}\NormalTok{X}\OperatorTok{\textgreater{}} \OperatorTok{=}\NormalTok{ PolynomialRing(F)}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 1. Factorization of X\^{}7 + 1 (Example 3.1)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"1. Factorization of X\^{}7 + 1 over GF(2)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{f }\OperatorTok{=}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{7} \OperatorTok{+} \DecValTok{1}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"X\^{}7 + 1 = }\SpecialCharTok{\{}\NormalTok{factor(f)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# Three irreducible polynomials}
+%\NormalTok{p1 }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}
+%\NormalTok{p2 }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}
+%\NormalTok{p3 }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}
+%
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"Check of irreducible factorization:"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  (1+X)(1+X+X\^{}3)(1+X\^{}2+X\^{}3) = }\SpecialCharTok{\{}\NormalTok{p1 }\OperatorTok{*}\NormalTok{ p2 }\OperatorTok{*}\NormalTok{ p3}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Matches X\^{}7 + 1: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}✓\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ p1 }\OperatorTok{*}\NormalTok{ p2 }\OperatorTok{*}\NormalTok{ p3 }\OperatorTok{==}\NormalTok{ f }\ControlFlowTok{else} \StringTok{\textquotesingle{}✗\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# List all possible generator polynomials}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"Possible generator polynomials g(X) and corresponding [n, k]:"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{50}\NormalTok{)}
+%\NormalTok{irreducibles }\OperatorTok{=}\NormalTok{ [p1, p2, p3]}
+%\ImportTok{from}\NormalTok{ itertools }\ImportTok{import}\NormalTok{ combinations}
+%\NormalTok{all\_divisors }\OperatorTok{=}\NormalTok{ [R(}\DecValTok{1}\NormalTok{)]}
+%\ControlFlowTok{for}\NormalTok{ r }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{):}
+%    \ControlFlowTok{for}\NormalTok{ combo }\KeywordTok{in}\NormalTok{ combinations(irreducibles, r):}
+%\NormalTok{        prod }\OperatorTok{=}\NormalTok{ R(}\DecValTok{1}\NormalTok{)}
+%        \ControlFlowTok{for}\NormalTok{ p }\KeywordTok{in}\NormalTok{ combo:}
+%\NormalTok{            prod }\OperatorTok{*=}\NormalTok{ p}
+%\NormalTok{        all\_divisors.append(prod)}
+%\NormalTok{all\_divisors.append(f)}
+%\NormalTok{all\_divisors.sort(key}\OperatorTok{=}\KeywordTok{lambda}\NormalTok{ p: p.degree())}
+%
+%\ControlFlowTok{for}\NormalTok{ g }\KeywordTok{in}\NormalTok{ all\_divisors:}
+%\NormalTok{    deg }\OperatorTok{=}\NormalTok{ g.degree()}
+%\NormalTok{    k }\OperatorTok{=} \DecValTok{7} \OperatorTok{{-}}\NormalTok{ deg}
+%    \ControlFlowTok{if} \DecValTok{0} \OperatorTok{\textless{}=}\NormalTok{ k }\OperatorTok{\textless{}=} \DecValTok{7}\NormalTok{:}
+%        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  g(X) = }\SpecialCharTok{\{}\NormalTok{g}\SpecialCharTok{\}}\SpecialStringTok{,  deg = }\SpecialCharTok{\{}\NormalTok{deg}\SpecialCharTok{\}}\SpecialStringTok{,  (7, }\SpecialCharTok{\{}\NormalTok{k}\SpecialCharTok{\}}\SpecialStringTok{),  number of codewords = }\SpecialCharTok{\{}\DecValTok{2}\OperatorTok{\^{}}\NormalTok{k}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 2. Constructing the (7,4) cyclic code {-} g(X) = 1 + X + X\^{}3}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"2. [7, 4]\_2 cyclic code: g(X) = 1 + X + X\^{}3"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{g }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}
+%\NormalTok{n }\OperatorTok{=} \DecValTok{7}
+%\NormalTok{k }\OperatorTok{=}\NormalTok{ n }\OperatorTok{{-}}\NormalTok{ g.degree()}
+%
+%\NormalTok{C }\OperatorTok{=}\NormalTok{ codes.CyclicCode(generator\_pol}\OperatorTok{=}\NormalTok{g, length}\OperatorTok{=}\NormalTok{n)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Code parameters: [}\SpecialCharTok{\{}\NormalTok{C}\SpecialCharTok{.}\NormalTok{length()}\SpecialCharTok{\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{C}\SpecialCharTok{.}\NormalTok{dimension()}\SpecialCharTok{\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{C}\SpecialCharTok{.}\NormalTok{minimum\_distance()}\SpecialCharTok{\}}\SpecialStringTok{]"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Generator polynomial: g(X) = }\SpecialCharTok{\{}\NormalTok{g}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# Parity{-}check polynomial (Example 4.1)}
+%\NormalTok{h }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\DecValTok{7} \OperatorTok{+} \DecValTok{1}\NormalTok{) }\OperatorTok{//}\NormalTok{ g}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Parity{-}check polynomial: h(X) = }\SpecialCharTok{\{}\NormalTok{h}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Verification: g(X) * h(X) = }\SpecialCharTok{\{}\NormalTok{g }\OperatorTok{*}\NormalTok{ h}\SpecialCharTok{\}}\SpecialStringTok{  (== X\^{}7+1: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}✓\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ g }\OperatorTok{*}\NormalTok{ h }\OperatorTok{==}\NormalTok{ f }\ControlFlowTok{else} \StringTok{\textquotesingle{}✗\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 3. Generator matrix and parity{-}check matrix}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"3. Generator matrix G and parity{-}check matrix H"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{G }\OperatorTok{=}\NormalTok{ Matrix(F, k, n)}
+%\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k):}
+%\NormalTok{    poly }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{i }\OperatorTok{*}\NormalTok{ g) }\OperatorTok{\%}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{n }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
+%    \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
+%\NormalTok{        G[i, j] }\OperatorTok{=}\NormalTok{ poly[j]}
+%
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"Non{-}systematic generator matrix G:"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(G)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\NormalTok{h\_coeffs }\OperatorTok{=}\NormalTok{ [h[k }\OperatorTok{{-}}\NormalTok{ j] }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k }\OperatorTok{+} \DecValTok{1}\NormalTok{)]  }\CommentTok{\# reversed coefficients}
+%\NormalTok{H }\OperatorTok{=}\NormalTok{ Matrix(F, n }\OperatorTok{{-}}\NormalTok{ k, n)}
+%\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k):}
+%    \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k }\OperatorTok{+} \DecValTok{1}\NormalTok{):}
+%\NormalTok{        H[i, i }\OperatorTok{+}\NormalTok{ j] }\OperatorTok{=}\NormalTok{ h\_coeffs[j]}
+%
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"Parity{-}check matrix H:"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(H)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\NormalTok{product }\OperatorTok{=}\NormalTok{ G }\OperatorTok{*}\NormalTok{ H.transpose()}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Verification that G * H\^{}T = 0: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}✓\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ product }\OperatorTok{==} \DecValTok{0} \ControlFlowTok{else} \StringTok{\textquotesingle{}✗\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(G }\OperatorTok{*}\NormalTok{ H.transpose())}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 4. Non{-}systematic encoding (Examples 3.2 and 3.3)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"4. Non{-}systematic encoding: c(X) = m(X) * g(X)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{test\_messages\_nonsys }\OperatorTok{=}\NormalTok{ [}
+%\NormalTok{    (}\StringTok{"(1,1,0,1)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+%\NormalTok{    (}\StringTok{"(0,1,0,0)"}\NormalTok{, X),}
+%\NormalTok{    (}\StringTok{"(1,0,1,1)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+%\NormalTok{]}
+%
+%\ControlFlowTok{for}\NormalTok{ label, m\_poly }\KeywordTok{in}\NormalTok{ test\_messages\_nonsys:}
+%\NormalTok{    c\_poly }\OperatorTok{=}\NormalTok{ (m\_poly }\OperatorTok{*}\NormalTok{ g) }\OperatorTok{\%}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{n }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
+%\NormalTok{    c\_vec }\OperatorTok{=}\NormalTok{ vector(F, [c\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  m = }\SpecialCharTok{\{}\NormalTok{label}\SpecialCharTok{\}}\SpecialStringTok{,  m(X) = }\SpecialCharTok{\{}\NormalTok{m\_poly}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  c(X) = }\SpecialCharTok{\{}\NormalTok{c\_poly}\SpecialCharTok{\}}\SpecialStringTok{,  c = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\NormalTok{    remainder }\OperatorTok{=}\NormalTok{ c\_poly }\OperatorTok{\%}\NormalTok{ g}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  c(X) mod g(X) = }\SpecialCharTok{\{}\NormalTok{remainder}\SpecialCharTok{\}}\SpecialStringTok{  (}\SpecialCharTok{\{}\StringTok{\textquotesingle{}✓ multiple of g(X)\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ remainder }\OperatorTok{==} \DecValTok{0} \ControlFlowTok{else} \StringTok{\textquotesingle{}✗\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 5. Systematic encoding (Examples 8.1{-}8.3)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"5. Systematic encoding: c(X) = X\^{}(n{-}k)*m(X) + [X\^{}(n{-}k)*m(X) mod g(X)]"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\KeywordTok{def}\NormalTok{ systematic\_encode(m\_poly, g, n, k):}
+%    \CommentTok{"""Perform systematic encoding."""}
+%\NormalTok{    r }\OperatorTok{=}\NormalTok{ n }\OperatorTok{{-}}\NormalTok{ k}
+%\NormalTok{    shifted }\OperatorTok{=}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{r }\OperatorTok{*}\NormalTok{ m\_poly}
+%\NormalTok{    \_, p }\OperatorTok{=}\NormalTok{ shifted.quo\_rem(g)}
+%\NormalTok{    c\_poly }\OperatorTok{=}\NormalTok{ shifted }\OperatorTok{+}\NormalTok{ p}
+%\NormalTok{    c\_vec }\OperatorTok{=}\NormalTok{ vector(F, [c\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+%    \ControlFlowTok{return}\NormalTok{ c\_poly, p, c\_vec}
+%
+%\NormalTok{test\_messages }\OperatorTok{=}\NormalTok{ [}
+%\NormalTok{    (}\StringTok{"(1,0,1,1)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+%\NormalTok{    (}\StringTok{"(1,1,0,0)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X),}
+%\NormalTok{    (}\StringTok{"(0,0,0,1)"}\NormalTok{, X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+%\NormalTok{    (}\StringTok{"(0,1,1,0)"}\NormalTok{, X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2}\NormalTok{),}
+%\NormalTok{    (}\StringTok{"(1,1,1,1)"}\NormalTok{, }\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+%\NormalTok{]}
+%
+%\ControlFlowTok{for}\NormalTok{ label, m\_poly }\KeywordTok{in}\NormalTok{ test\_messages:}
+%\NormalTok{    c\_poly, p, c\_vec }\OperatorTok{=}\NormalTok{ systematic\_encode(m\_poly, g, n, k)}
+%\NormalTok{    p\_vec }\OperatorTok{=}\NormalTok{ vector(F, [p[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k)])}
+%\NormalTok{    m\_vec }\OperatorTok{=}\NormalTok{ vector(F, [m\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k)])}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  m = }\SpecialCharTok{\{}\NormalTok{label}\SpecialCharTok{\}}\SpecialStringTok{,  m(X) = }\SpecialCharTok{\{}\NormalTok{m\_poly}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  parity p(X) = }\SpecialCharTok{\{}\NormalTok{p}\SpecialCharTok{\}}\SpecialStringTok{,  p = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(p\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  codeword c = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  structure [parity|message] = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(p\_vec)}\SpecialCharTok{\}}\SpecialStringTok{|}\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(m\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\NormalTok{    remainder }\OperatorTok{=}\NormalTok{ c\_poly }\OperatorTok{\%}\NormalTok{ g}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  c(X) mod g(X) = }\SpecialCharTok{\{}\NormalTok{remainder}\SpecialCharTok{\}}\SpecialStringTok{  (}\SpecialCharTok{\{}\StringTok{\textquotesingle{}✓\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ remainder }\OperatorTok{==} \DecValTok{0} \ControlFlowTok{else} \StringTok{\textquotesingle{}✗\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 6. Full systematic codeword table (Example 8.4)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"6. Full systematic codeword table for the (7,4) code (16 codewords)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\StringTok{\textquotesingle{}message\textquotesingle{}}\SpecialCharTok{:\textless{}12\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}m(X)\textquotesingle{}}\SpecialCharTok{:\textless{}20\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}parity\textquotesingle{}}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}codeword\textquotesingle{}}\SpecialCharTok{:\textless{}16\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}wH\textquotesingle{}}\SpecialCharTok{:\textgreater{}4\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{65}\NormalTok{)}
+%
+%\NormalTok{V4 }\OperatorTok{=}\NormalTok{ VectorSpace(F, }\DecValTok{4}\NormalTok{)}
+%\NormalTok{codeword\_set }\OperatorTok{=} \BuiltInTok{set}\NormalTok{()}
+%
+%\ControlFlowTok{for}\NormalTok{ m\_vec }\KeywordTok{in}\NormalTok{ V4:}
+%\NormalTok{    m\_poly }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(F(m\_vec[i]) }\OperatorTok{*}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{i }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k))}
+%\NormalTok{    c\_poly, p, c\_vec }\OperatorTok{=}\NormalTok{ systematic\_encode(m\_poly, g, n, k)}
+%\NormalTok{    p\_vec }\OperatorTok{=}\NormalTok{ [p[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k)]}
+%\NormalTok{    wH }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(}\BuiltInTok{int}\NormalTok{(c\_vec[i]) }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n))}
+%\NormalTok{    codeword\_set.add(}\BuiltInTok{tuple}\NormalTok{(c\_vec))}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(m\_vec)}\SpecialCharTok{!s:\textless{}12\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{str}\NormalTok{(m\_poly)}\SpecialCharTok{:\textless{}20\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{str}\NormalTok{(p\_vec)}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec)}\SpecialCharTok{!s:\textless{}16\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{wH}\SpecialCharTok{:\textgreater{}4\}}\SpecialStringTok{"}\NormalTok{)}
+%
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{Total number of codewords: }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(codeword\_set)}\SpecialCharTok{\}}\SpecialStringTok{ (expected: }\SpecialCharTok{\{}\DecValTok{2}\OperatorTok{\^{}}\NormalTok{k}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 7. Verification of cyclic{-}shift invariance}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"7. Verification of cyclic{-}shift invariance"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\KeywordTok{def}\NormalTok{ cyclic\_shift(v, n):}
+%    \CommentTok{"""Shift vector v one step cyclically to the right."""}
+%\NormalTok{    v }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(v)}
+%    \ControlFlowTok{return} \BuiltInTok{tuple}\NormalTok{([v[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]] }\OperatorTok{+}\NormalTok{ v[:}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
+%
+%\NormalTok{cyclic\_ok }\OperatorTok{=} \VariableTok{True}
+%\ControlFlowTok{for}\NormalTok{ cw }\KeywordTok{in}\NormalTok{ codeword\_set:}
+%\NormalTok{    shifted }\OperatorTok{=}\NormalTok{ cw}
+%    \ControlFlowTok{for}\NormalTok{ s }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, n):}
+%\NormalTok{        shifted }\OperatorTok{=}\NormalTok{ cyclic\_shift(shifted, n)}
+%        \ControlFlowTok{if}\NormalTok{ shifted }\KeywordTok{not} \KeywordTok{in}\NormalTok{ codeword\_set:}
+%            \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  ✗ }\SpecialCharTok{\{}\NormalTok{cw}\SpecialCharTok{\}}\SpecialStringTok{ {-}\textgreater{} shift by }\SpecialCharTok{\{}\NormalTok{s}\SpecialCharTok{\}}\SpecialStringTok{ {-}\textgreater{} }\SpecialCharTok{\{}\NormalTok{shifted}\SpecialCharTok{\}}\SpecialStringTok{ : not a codeword!"}\NormalTok{)}
+%\NormalTok{            cyclic\_ok }\OperatorTok{=} \VariableTok{False}
+%
+%\ControlFlowTok{if}\NormalTok{ cyclic\_ok:}
+%    \BuiltInTok{print}\NormalTok{(}\StringTok{"  ✓ Every cyclic shift of every codeword is still in the code."}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{(}\StringTok{"  {-}\textgreater{} Confirmed: this is a cyclic code."}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 8. Syndrome table (Example 9.3)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"8. Syndrome table for single{-}bit errors"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\StringTok{\textquotesingle{}error position i\textquotesingle{}}\SpecialCharTok{:\textless{}16\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}e(X)\textquotesingle{}}\SpecialCharTok{:\textless{}12\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}s(X) = e(X) mod g(X)\textquotesingle{}}\SpecialCharTok{:\textless{}24\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}syndrome vector\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{syndrome\_table }\OperatorTok{=}\NormalTok{ \{\}}
+%\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
+%\NormalTok{    e\_poly }\OperatorTok{=}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{i}
+%\NormalTok{    s\_poly }\OperatorTok{=}\NormalTok{ e\_poly }\OperatorTok{\%}\NormalTok{ g}
+%\NormalTok{    s\_vec }\OperatorTok{=} \BuiltInTok{tuple}\NormalTok{(F(s\_poly[j]) }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k))}
+%\NormalTok{    syndrome\_table[s\_vec] }\OperatorTok{=}\NormalTok{ i}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{i}\SpecialCharTok{:\textless{}16\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{str}\NormalTok{(e\_poly)}\SpecialCharTok{:\textless{}12\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{str}\NormalTok{(s\_poly)}\SpecialCharTok{:\textless{}24\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{s\_vec}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{Number of distinct syndromes: }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(syndrome\_table)}\SpecialCharTok{\}}\SpecialStringTok{ (expected: }\SpecialCharTok{\{}\NormalTok{n}\SpecialCharTok{\}}\SpecialStringTok{)"}\NormalTok{)}
+%\NormalTok{all\_distinct }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(syndrome\_table) }\OperatorTok{==}\NormalTok{ n}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"All single{-}bit errors are correctable: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}✓\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ all\_distinct }\ControlFlowTok{else} \StringTok{\textquotesingle{}✗\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 9. Syndrome{-}based error{-}correction simulation (Example 9.4)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"9. Syndrome{-}based error detection and correction simulation"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{m\_orig }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}  \CommentTok{\# m = (1,0,1,1)}
+%\NormalTok{c\_poly\_orig, \_, c\_vec\_orig }\OperatorTok{=}\NormalTok{ systematic\_encode(m\_orig, g, n, k)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Original message: m = (1,0,1,1)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Codeword:         c = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec\_orig)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"Inject a single{-}bit error {-}\textgreater{} compute syndrome {-}\textgreater{} correct:"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\ControlFlowTok{for}\NormalTok{ err\_pos }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
+%\NormalTok{    e\_poly }\OperatorTok{=}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{err\_pos}
+%\NormalTok{    v\_poly }\OperatorTok{=}\NormalTok{ c\_poly\_orig }\OperatorTok{+}\NormalTok{ e\_poly}
+%\NormalTok{    v\_vec }\OperatorTok{=}\NormalTok{ vector(F, [v\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+%
+%\NormalTok{    s\_poly }\OperatorTok{=}\NormalTok{ v\_poly }\OperatorTok{\%}\NormalTok{ g}
+%\NormalTok{    s\_vec }\OperatorTok{=} \BuiltInTok{tuple}\NormalTok{(F(s\_poly[j]) }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k))}
+%
+%    \ControlFlowTok{if}\NormalTok{ s\_vec }\KeywordTok{in}\NormalTok{ syndrome\_table:}
+%\NormalTok{        est\_pos }\OperatorTok{=}\NormalTok{ syndrome\_table[s\_vec]}
+%\NormalTok{        corrected\_poly }\OperatorTok{=}\NormalTok{ v\_poly }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{est\_pos}
+%\NormalTok{        corrected\_vec }\OperatorTok{=}\NormalTok{ vector(F, [corrected\_poly[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+%\NormalTok{        success }\OperatorTok{=}\NormalTok{ (corrected\_vec }\OperatorTok{==}\NormalTok{ c\_vec\_orig)}
+%        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  error position=}\SpecialCharTok{\{}\NormalTok{err\_pos}\SpecialCharTok{\}}\SpecialStringTok{, received=}\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(v\_vec)}\SpecialCharTok{\}}\SpecialStringTok{, "}
+%              \SpecialStringTok{f"syndrome=}\SpecialCharTok{\{}\NormalTok{s\_vec}\SpecialCharTok{\}}\SpecialStringTok{, estimated position=}\SpecialCharTok{\{}\NormalTok{est\_pos}\SpecialCharTok{\}}\SpecialStringTok{, "}
+%              \SpecialStringTok{f"corrected=}\SpecialCharTok{\{}\StringTok{\textquotesingle{}✓\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ success }\ControlFlowTok{else} \StringTok{\textquotesingle{}✗\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%    \ControlFlowTok{else}\NormalTok{:}
+%        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  error position=}\SpecialCharTok{\{}\NormalTok{err\_pos}\SpecialCharTok{\}}\SpecialStringTok{, syndrome=}\SpecialCharTok{\{}\NormalTok{s\_vec}\SpecialCharTok{\}}\SpecialStringTok{, not in table!"}\NormalTok{)}
+%
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 10. Miscorrection under a 2{-}bit error (Example 9.5)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"10. Miscorrection under a 2{-}bit error"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{e\_poly\_2bit }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}
+%\NormalTok{v\_poly\_2bit }\OperatorTok{=}\NormalTok{ c\_poly\_orig }\OperatorTok{+}\NormalTok{ e\_poly\_2bit}
+%\NormalTok{v\_vec\_2bit }\OperatorTok{=}\NormalTok{ vector(F, [v\_poly\_2bit[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+%\NormalTok{s\_poly\_2bit }\OperatorTok{=}\NormalTok{ v\_poly\_2bit }\OperatorTok{\%}\NormalTok{ g}
+%\NormalTok{s\_vec\_2bit }\OperatorTok{=} \BuiltInTok{tuple}\NormalTok{(F(s\_poly\_2bit[j]) }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n }\OperatorTok{{-}}\NormalTok{ k))}
+%
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Original codeword: }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c\_vec\_orig)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Error pattern:     e(X) = 1 + X (positions 0 and 1)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Received vector:   }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(v\_vec\_2bit)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Syndrome:          }\SpecialCharTok{\{}\NormalTok{s\_vec\_2bit}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%
+%\ControlFlowTok{if}\NormalTok{ s\_vec\_2bit }\KeywordTok{in}\NormalTok{ syndrome\_table:}
+%\NormalTok{    est\_pos }\OperatorTok{=}\NormalTok{ syndrome\_table[s\_vec\_2bit]}
+%\NormalTok{    corrected }\OperatorTok{=}\NormalTok{ v\_poly\_2bit }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{est\_pos}
+%\NormalTok{    corrected\_vec }\OperatorTok{=}\NormalTok{ vector(F, [corrected[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n)])}
+%\NormalTok{    is\_correct }\OperatorTok{=}\NormalTok{ (corrected\_vec }\OperatorTok{==}\NormalTok{ c\_vec\_orig)}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Estimated error position: }\SpecialCharTok{\{}\NormalTok{est\_pos}\SpecialCharTok{\}}\SpecialStringTok{ (actual positions: 0 and 1)"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Correction result: }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(corrected\_vec)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Successful correction: }\SpecialCharTok{\{}\StringTok{\textquotesingle{}✓\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ is\_correct }\ControlFlowTok{else} \StringTok{\textquotesingle{}✗ miscorrection occurred!\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 11. Codeword validation using the parity{-}check polynomial}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"11. Validating codewords with h(X): c(X)*h(X) ≡ 0 mod (X\^{}7+1)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{h }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\DecValTok{7} \OperatorTok{+} \DecValTok{1}\NormalTok{) }\OperatorTok{//}\NormalTok{ g}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"h(X) = }\SpecialCharTok{\{}\NormalTok{h}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\NormalTok{all\_valid }\OperatorTok{=} \VariableTok{True}
+%\ControlFlowTok{for}\NormalTok{ cw }\KeywordTok{in}\NormalTok{ codeword\_set:}
+%\NormalTok{    c\_poly\_check }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(F(cw[i]) }\OperatorTok{*}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{i }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n))}
+%\NormalTok{    product }\OperatorTok{=}\NormalTok{ (c\_poly\_check }\OperatorTok{*}\NormalTok{ h) }\OperatorTok{\%}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{n }\OperatorTok{+} \DecValTok{1}\NormalTok{)}
+%    \ControlFlowTok{if}\NormalTok{ product }\OperatorTok{!=} \DecValTok{0}\NormalTok{:}
+%        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  ✗ c = }\SpecialCharTok{\{}\NormalTok{cw}\SpecialCharTok{\}}\SpecialStringTok{: c(X)*h(X) mod (X\^{}7+1) = }\SpecialCharTok{\{}\NormalTok{product}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\NormalTok{        all\_valid }\OperatorTok{=} \VariableTok{False}
+%
+%\ControlFlowTok{if}\NormalTok{ all\_valid:}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  ✓ For all }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(codeword\_set)}\SpecialCharTok{\}}\SpecialStringTok{ codewords, c(X)*h(X) ≡ 0 (mod X\^{}7+1)"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 12. Cyclic codes generated by different divisors of X\^{}7+1}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"12. Cyclic codes generated by various divisors of X\^{}7+1"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{generators }\OperatorTok{=}\NormalTok{ [}
+%\NormalTok{    (}\StringTok{"1+X"}\NormalTok{,                    }\DecValTok{1} \OperatorTok{+}\NormalTok{ X),}
+%\NormalTok{    (}\StringTok{"1+X+X\^{}3"}\NormalTok{,                }\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+%\NormalTok{    (}\StringTok{"1+X\^{}2+X\^{}3"}\NormalTok{,              }\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{),}
+%\NormalTok{    (}\StringTok{"(1+X)(1+X+X\^{}3)"}\NormalTok{,         (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X) }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{)),}
+%\NormalTok{    (}\StringTok{"(1+X)(1+X\^{}2+X\^{}3)"}\NormalTok{,       (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X) }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{)),}
+%\NormalTok{    (}\StringTok{"(1+X+X\^{}3)(1+X\^{}2+X\^{}3)"}\NormalTok{,   (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X }\OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{) }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}\NormalTok{)),}
+%\NormalTok{]}
+%
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\SpecialCharTok{\{}\StringTok{\textquotesingle{}g(X)\textquotesingle{}}\SpecialCharTok{:\textless{}30\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}deg\textquotesingle{}}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}(n,k)\textquotesingle{}}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}d\_min\textquotesingle{}}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}\# codewords\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"{-}"} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\ControlFlowTok{for}\NormalTok{ label, gen }\KeywordTok{in}\NormalTok{ generators:}
+%    \ControlFlowTok{try}\NormalTok{:}
+%\NormalTok{        C\_test }\OperatorTok{=}\NormalTok{ codes.CyclicCode(generator\_pol}\OperatorTok{=}\NormalTok{gen, length}\OperatorTok{=}\DecValTok{7}\NormalTok{)}
+%\NormalTok{        d\_min }\OperatorTok{=}\NormalTok{ C\_test.minimum\_distance()}
+%\NormalTok{        dim }\OperatorTok{=}\NormalTok{ C\_test.dimension()}
+%        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{label}\SpecialCharTok{:\textless{}30\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{gen}\SpecialCharTok{.}\NormalTok{degree()}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ (7,}\SpecialCharTok{\{}\NormalTok{dim}\SpecialCharTok{\}}\SpecialStringTok{)}\SpecialCharTok{\{}\StringTok{\textquotesingle{}\textquotesingle{}}\SpecialCharTok{:\textless{}5\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{d\_min}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\DecValTok{2}\OperatorTok{\^{}}\NormalTok{dim}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%    \ControlFlowTok{except} \PreprocessorTok{Exception} \ImportTok{as}\NormalTok{ e:}
+%        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{label}\SpecialCharTok{:\textless{}30\}}\SpecialStringTok{ error: }\SpecialCharTok{\{}\NormalTok{e}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 13. LFSR simulation for systematic encoding}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"13. LFSR simulation: systematic encoding with g(X)=1+X+X\^{}3"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\KeywordTok{def}\NormalTok{ lfsr\_systematic\_encode(message\_bits, g\_coeffs, n, k):}
+%    \CommentTok{"""}
+%\CommentTok{    Simulate systematic encoding using an LFSR.}
+%\CommentTok{    message\_bits: list of k message bits [m\_0, m\_1, ..., m\_\{k{-}1\}]}
+%\CommentTok{    g\_coeffs: coefficients [g\_0, g\_1, ..., g\_\{n{-}k{-}1\}]}
+%\CommentTok{    Bits are fed in from highest degree to lowest.}
+%\CommentTok{    """}
+%\NormalTok{    r }\OperatorTok{=}\NormalTok{ n }\OperatorTok{{-}}\NormalTok{ k}
+%\NormalTok{    reg }\OperatorTok{=}\NormalTok{ [F(}\DecValTok{0}\NormalTok{)] }\OperatorTok{*}\NormalTok{ r}
+%
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\StringTok{\textquotesingle{}clock\textquotesingle{}}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}input\textquotesingle{}}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}feedback\textquotesingle{}}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}registers\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\StringTok{\textquotesingle{}init\textquotesingle{}}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}{-}\textquotesingle{}}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\StringTok{\textquotesingle{}{-}\textquotesingle{}}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{reg}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%
+%    \ControlFlowTok{for}\NormalTok{ clk }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k):}
+%\NormalTok{        input\_bit }\OperatorTok{=}\NormalTok{ F(message\_bits[k }\OperatorTok{{-}} \DecValTok{1} \OperatorTok{{-}}\NormalTok{ clk])}
+%\NormalTok{        feedback }\OperatorTok{=}\NormalTok{ input\_bit }\OperatorTok{+}\NormalTok{ reg[r }\OperatorTok{{-}} \DecValTok{1}\NormalTok{]}
+%
+%\NormalTok{        new\_reg }\OperatorTok{=}\NormalTok{ [F(}\DecValTok{0}\NormalTok{)] }\OperatorTok{*}\NormalTok{ r}
+%\NormalTok{        new\_reg[}\DecValTok{0}\NormalTok{] }\OperatorTok{=}\NormalTok{ feedback }\OperatorTok{*}\NormalTok{ F(g\_coeffs[}\DecValTok{0}\NormalTok{])}
+%        \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, r):}
+%\NormalTok{            new\_reg[j] }\OperatorTok{=}\NormalTok{ reg[j }\OperatorTok{{-}} \DecValTok{1}\NormalTok{] }\OperatorTok{+}\NormalTok{ feedback }\OperatorTok{*}\NormalTok{ F(g\_coeffs[j])}
+%
+%\NormalTok{        reg }\OperatorTok{=}\NormalTok{ new\_reg}
+%        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  }\SpecialCharTok{\{}\NormalTok{clk}\OperatorTok{+}\DecValTok{1}\SpecialCharTok{:\textless{}6\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{int}\NormalTok{(input\_bit)}\SpecialCharTok{:\textless{}8\}}\SpecialStringTok{ }\SpecialCharTok{\{}\BuiltInTok{int}\NormalTok{(feedback)}\SpecialCharTok{:\textless{}10\}}\SpecialStringTok{ }\SpecialCharTok{\{}\NormalTok{[}\BuiltInTok{int}\NormalTok{(x) }\ControlFlowTok{for}\NormalTok{ x }\KeywordTok{in}\NormalTok{ reg]}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%
+%    \ControlFlowTok{return}\NormalTok{ [}\BuiltInTok{int}\NormalTok{(x) }\ControlFlowTok{for}\NormalTok{ x }\KeywordTok{in}\NormalTok{ reg]}
+%
+%\NormalTok{g\_coeffs }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{]}
+%\NormalTok{message }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{]}
+%
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Message: }\SpecialCharTok{\{}\NormalTok{message}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"g(X) = 1 + X + X\^{}3, feedback coefficients: g\_0=}\SpecialCharTok{\{}\NormalTok{g\_coeffs[}\DecValTok{0}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{, g\_1=}\SpecialCharTok{\{}\NormalTok{g\_coeffs[}\DecValTok{1}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{, g\_2=}\SpecialCharTok{\{}\NormalTok{g\_coeffs[}\DecValTok{2}\NormalTok{]}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\NormalTok{parity\_lfsr }\OperatorTok{=}\NormalTok{ lfsr\_systematic\_encode(message, g\_coeffs, n, k)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{LFSR output (register state): }\SpecialCharTok{\{}\NormalTok{parity\_lfsr}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%
+%\NormalTok{m\_poly\_check }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3}
+%\NormalTok{\_, p\_check }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\DecValTok{3} \OperatorTok{*}\NormalTok{ m\_poly\_check).quo\_rem(g)}
+%\NormalTok{p\_check\_vec }\OperatorTok{=}\NormalTok{ [}\BuiltInTok{int}\NormalTok{(p\_check[i]) }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{3}\NormalTok{)]}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Parity from polynomial division: }\SpecialCharTok{\{}\NormalTok{p\_check\_vec}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 14. Example of a (7,3) cyclic code (Example 5.3)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"14. (7,3) cyclic code: g(X) = 1 + X\^{}2 + X\^{}3 + X\^{}4"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{g73 }\OperatorTok{=} \DecValTok{1} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{2} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{3} \OperatorTok{+}\NormalTok{ X}\OperatorTok{\^{}}\DecValTok{4}
+%\NormalTok{C73 }\OperatorTok{=}\NormalTok{ codes.CyclicCode(generator\_pol}\OperatorTok{=}\NormalTok{g73, length}\OperatorTok{=}\DecValTok{7}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Code parameters: [}\SpecialCharTok{\{}\NormalTok{C73}\SpecialCharTok{.}\NormalTok{length()}\SpecialCharTok{\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{C73}\SpecialCharTok{.}\NormalTok{dimension()}\SpecialCharTok{\}}\SpecialStringTok{, }\SpecialCharTok{\{}\NormalTok{C73}\SpecialCharTok{.}\NormalTok{minimum\_distance()}\SpecialCharTok{\}}\SpecialStringTok{]"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Generator polynomial: g(X) = }\SpecialCharTok{\{}\NormalTok{g73}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\NormalTok{G73 }\OperatorTok{=}\NormalTok{ Matrix(F, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{)}
+%\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{3}\NormalTok{):}
+%\NormalTok{    poly }\OperatorTok{=}\NormalTok{ (X}\OperatorTok{\^{}}\NormalTok{i }\OperatorTok{*}\NormalTok{ g73) }\OperatorTok{\%}\NormalTok{ (X}\OperatorTok{\^{}}\DecValTok{7} \OperatorTok{+} \DecValTok{1}\NormalTok{)}
+%    \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{7}\NormalTok{):}
+%\NormalTok{        G73[i, j] }\OperatorTok{=}\NormalTok{ poly[j]}
+%
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"Generator matrix G:"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(G73)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\NormalTok{m73 }\OperatorTok{=}\NormalTok{ vector(F, [}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{])}
+%\NormalTok{c73 }\OperatorTok{=}\NormalTok{ m73 }\OperatorTok{*}\NormalTok{ G73}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"m = (1,1,0) {-}\textgreater{} c = }\SpecialCharTok{\{}\BuiltInTok{list}\NormalTok{(c73)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 15. Comparison with SageMath\textquotesingle{}s built{-}in CyclicCode}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"15. Comparing manual computation with SageMath\textquotesingle{}s built{-}in CyclicCode"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\NormalTok{C\_builtin }\OperatorTok{=}\NormalTok{ codes.CyclicCode(generator\_pol}\OperatorTok{=}\NormalTok{g, length}\OperatorTok{=}\DecValTok{7}\NormalTok{)}
+%\NormalTok{G\_builtin }\OperatorTok{=}\NormalTok{ C\_builtin.systematic\_generator\_matrix()}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"Systematic generator matrix from SageMath:"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(G\_builtin)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\NormalTok{match\_count }\OperatorTok{=} \DecValTok{0}
+%\NormalTok{total }\OperatorTok{=} \DecValTok{2}\OperatorTok{\^{}}\NormalTok{k}
+%\ControlFlowTok{for}\NormalTok{ m\_vec }\KeywordTok{in}\NormalTok{ VectorSpace(F, k):}
+%\NormalTok{    c\_builtin }\OperatorTok{=}\NormalTok{ m\_vec }\OperatorTok{*}\NormalTok{ G\_builtin}
+%\NormalTok{    m\_poly }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(F(m\_vec[i]) }\OperatorTok{*}\NormalTok{ X}\OperatorTok{\^{}}\NormalTok{i }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k))}
+%\NormalTok{    \_, \_, c\_manual }\OperatorTok{=}\NormalTok{ systematic\_encode(m\_poly, g, n, k)}
+%
+%    \ControlFlowTok{if} \BuiltInTok{list}\NormalTok{(c\_builtin) }\OperatorTok{==} \BuiltInTok{list}\NormalTok{(c\_manual):}
+%\NormalTok{        match\_count }\OperatorTok{+=} \DecValTok{1}
+%
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Matching codewords: }\SpecialCharTok{\{}\NormalTok{match\_count}\SpecialCharTok{\}}\SpecialStringTok{/}\SpecialCharTok{\{}\NormalTok{total}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Manual encoding and SageMath built{-}in result }\SpecialCharTok{\{}\StringTok{\textquotesingle{}match perfectly ✓\textquotesingle{}} \ControlFlowTok{if}\NormalTok{ match\_count }\OperatorTok{==}\NormalTok{ total }\ControlFlowTok{else} \StringTok{\textquotesingle{}do not fully match ✗\textquotesingle{}}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\CommentTok{\# ============================================================}
+%\CommentTok{\# 16. Structure of a circulant block (Example 16.1)}
+%\CommentTok{\# ============================================================}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"16. Circulant{-}matrix block structure"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%
+%\KeywordTok{def}\NormalTok{ circulant\_matrix(first\_row, field}\OperatorTok{=}\NormalTok{F):}
+%    \CommentTok{"""Construct a circulant matrix from its first row."""}
+%\NormalTok{    m }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(first\_row)}
+%\NormalTok{    M }\OperatorTok{=}\NormalTok{ Matrix(field, m, m)}
+%    \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(m):}
+%        \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(m):}
+%\NormalTok{            M[i, j] }\OperatorTok{=}\NormalTok{ first\_row[(j }\OperatorTok{{-}}\NormalTok{ i) }\OperatorTok{\%}\NormalTok{ m]}
+%    \ControlFlowTok{return}\NormalTok{ M}
+%
+%\NormalTok{first\_row }\OperatorTok{=}\NormalTok{ [F(}\DecValTok{1}\NormalTok{), F(}\DecValTok{0}\NormalTok{), F(}\DecValTok{1}\NormalTok{), F(}\DecValTok{1}\NormalTok{)]}
+%\NormalTok{C\_circ }\OperatorTok{=}\NormalTok{ circulant\_matrix(first\_row)}
+%\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"First row: }\SpecialCharTok{\{}\NormalTok{first\_row}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"Circulant matrix:"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(C\_circ)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\NormalTok{circ\_ok }\OperatorTok{=} \VariableTok{True}
+%\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{):}
+%\NormalTok{    prev\_row }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(C\_circ[i }\OperatorTok{{-}} \DecValTok{1}\NormalTok{])}
+%\NormalTok{    expected }\OperatorTok{=}\NormalTok{ [prev\_row[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]] }\OperatorTok{+}\NormalTok{ prev\_row[:}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}
+%\NormalTok{    actual }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(C\_circ[i])}
+%    \ControlFlowTok{if}\NormalTok{ actual }\OperatorTok{!=}\NormalTok{ expected:}
+%\NormalTok{        circ\_ok }\OperatorTok{=} \VariableTok{False}
+%        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  ✗ row }\SpecialCharTok{\{}\NormalTok{i}\SpecialCharTok{\}}\SpecialStringTok{: expected }\SpecialCharTok{\{}\NormalTok{expected}\SpecialCharTok{\}}\SpecialStringTok{, got }\SpecialCharTok{\{}\NormalTok{actual}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+%
+%\ControlFlowTok{if}\NormalTok{ circ\_ok:}
+%    \BuiltInTok{print}\NormalTok{(}\StringTok{"  ✓ Every row is a cyclic right shift of the previous row."}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{()}
+%
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"All checks completed!"}\NormalTok{)}
+%\BuiltInTok{print}\NormalTok{(}\StringTok{"="} \OperatorTok{*} \DecValTok{70}\NormalTok{)}
+%\end{Highlighting}
+%\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{References}\label{references}
+
+{[}1{]} C. E. Shannon, ``A Mathematical Theory of Communication,''
+\emph{Bell System Technical Journal}, vol.~27, no. 3, pp.~379-423, 1948.
+
+{[}2{]} R. W. Hamming, ``Error Detecting and Error Correcting Codes,''
+\emph{Bell System Technical Journal}, vol.~29, no. 2, pp.~147-160, 1950.
+
+{[}3{]} D. E. Muller, ``Application of Boolean Algebra to Switching
+Circuit Design and to Error Detection,'' \emph{IRE Transactions on
+Electronic Computers}, vol.~EC-3, no. 3, pp.~6-12, 1954.
+
+{[}4{]} I. S. Reed, ``A Class of Multiple-Error-Correcting Codes and the
+Decoding Scheme,'' \emph{IRE Transactions on Information Theory},
+vol.~4, no. 4, pp.~38-49, 1954.
+
+{[}5{]} E. Prange, ``Cyclic Error-Correcting Codes in Two Symbols,''
+\emph{AFCRC-TN-57-103}, Air Force Cambridge Research Center, 1957.
+
+{[}6{]} A. Hocquenghem, ``Codes correcteurs d'erreurs,''
+\emph{Chiffres}, vol.~2, pp.~147-156, 1959.
+
+{[}7{]} R. C. Bose and D. K. Ray-Chaudhuri, ``On a Class of Error
+Correcting Binary Group Codes,'' \emph{Information and Control}, vol.~3,
+no. 1, pp.~68-79, 1960.
+
+{[}8{]} I. S. Reed and G. Solomon, ``Polynomial Codes Over Certain
+Finite Fields,'' \emph{Journal of the Society for Industrial and Applied
+Mathematics}, vol.~8, no. 2, pp.~300-304, 1960.
+
+{[}9{]} W. W. Peterson, \emph{Error-Correcting Codes}, MIT Press, 1961.
+
+{[}10{]} E. R. Berlekamp, \emph{Algebraic Coding Theory}, McGraw-Hill,
+1968.
+
+{[}11{]} J. L. Massey, ``Shift-Register Synthesis and BCH Decoding,''
+\emph{IEEE Transactions on Information Theory}, vol.~15, no. 1,
+pp.~122-127, 1969.
+
+{[}12{]} V. D. Goppa, ``Geometry and Codes,'' \emph{Mathematics and its
+Applications}, vol.~24, Kluwer, 1988.
+
+{[}13{]} R. J. McEliece, ``A Public-Key Cryptosystem Based on Algebraic
+Coding Theory,'' \emph{DSN Progress Report}, Jet Propulsion Laboratory,
+1978.
+
+{[}14{]} C. Berrou, A. Glavieux, and P. Thitimajshima, ``Near Shannon
+Limit Error-Correcting Coding and Decoding: Turbo Codes,'' in
+\emph{Proceedings of ICC '93}, 1993.
+
+{[}15{]} D. J. C. MacKay and R. M. Neal, ``Near Shannon Limit
+Performance of Low Density Parity Check Codes,'' \emph{Electronics
+Letters}, vol.~32, no. 18, pp.~1645-1646, 1996.
+
+\end{document}
