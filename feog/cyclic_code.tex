@@ -549,3 +549,625 @@ not in \(\mathcal{C}'\). Therefore \(\mathcal{C}'\) is linear, but
 \textbf{not} cyclic.
 
 \newpage
+
+\subsection{Implementation Advantage of Cyclic-Shift Invariance}
+
+Cyclic codes were originally studied not because of abstract algebra, but because of \textbf{hardware efficiency}. Prange's key observation in the 1950s was that if a code is closed under cyclic shift, then encoding and error detection can be implemented using nothing more than shift registers.
+
+\subsubsection*{The Drawback of General Linear Codes}
+
+For a general linear \([n,k]_q\) code, encoding is done by matrix multiplication:
+\[\mathbf{c} = \mathbf{m} \cdot G.\]
+This means:
+\begin{itemize}
+	\item the \(k \times n\) generator matrix \(G\) must be stored in memory,
+	\item \(k \cdot n\) additions and multiplications are needed,
+	\item computation cannot begin until the whole message block has arrived.
+\end{itemize}
+For example, for a \([31,21]_2\) code, one must store \(21 \times 31 = 651\) matrix entries and perform 651 binary operations for every block.
+
+\subsubsection*{The Cyclic-Code Alternative: Shift Registers}
+
+For cyclic codes, every codeword is a multiple of the generator polynomial \(g(X)\), and encoding reduces to polynomial multiplication or polynomial division with remainder. These operations can be implemented using an LFSR (linear feedback shift register):
+\begin{itemize}
+	\item only \(r=n-k\) one-bit registers are required,
+	\item the input stream is processed one bit per clock,
+	\item after the last bit passes through the circuit, the register contents are exactly the parity bits or syndrome.
+\end{itemize}
+For a \([31,21]_2\) code, 10 registers plus a few XOR gates are enough.
+
+\begin{example}[Matrix multiplication vs.\ LFSR for a {$[7,4]_2$} code]
+\renewcommand{\arraystretch}{1.2}
+\begin{center}
+\begin{tabular}{@{}p{3cm}p{5.5cm}p{5.5cm}@{}}
+	\toprule
+	\textbf{Item} & \textbf{General linear code} & \textbf{Cyclic code (LFSR)} \\
+	\midrule
+	Storage & \(G \in \F_2^{4 \times 7}\) $\to$ 28 bits & \(g(X)=1+X+X^3\) $\to$ 4 bits \\
+	Operations per block & \(4 \times 7 = 28\) AND/XOR & 7 clocks (one XOR per bit) \\
+	Processing mode & Batch (full block first) & Real-time, bit-by-bit \\
+	Latency & Proportional to block length & Almost zero \\
+	Circuit complexity & \(n\) XOR trees, \(k\) inputs & \(r\) flip-flops plus XOR gates \\
+	\bottomrule
+\end{tabular}
+\end{center}
+\end{example}
+
+\begin{remark}
+The key correspondence is
+\[\text{cyclic shift} \longleftrightarrow X \cdot c(X) \pmod{X^n-1}.\]
+The basic action of a shift register---moving all bits by one position and injecting feedback---is exactly multiplication by \(X\) followed by reduction modulo \(X^n-1\). This is why cyclic codes admit LFSR implementations, whereas general linear codes do not. This is the fundamental reason cyclic codes became so important, and why CRC remains the standard error-detection mechanism in protocols such as Ethernet and USB.
+\end{remark}
+
+\newpage
+\subsection{Polynomial Representation of Cyclic Codes}
+
+A vector of length \(n\),
+\[\mathbf{c}=(c_0,c_1,\dots,c_{n-1}),\]
+can be mapped to a polynomial of degree at most \(n-1\):
+\[c(X)=c_0 + c_1 X + c_2 X^2 + \dots + c_{n-1}X^{n-1}.\]
+Under this representation, a one-step cyclic right shift corresponds exactly to
+\[X \cdot c(X) \pmod{X^n-1}.\]
+Therefore all algebraic operations on a cyclic code naturally live in the quotient ring
+\[R_n = \F_q[X]/\ideal{X^n-1}.\]
+
+\begin{example}[Vector $\leftrightarrow$ Polynomial conversion, $n=7$]
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+	\toprule
+	\textbf{Vector} & \textbf{Polynomial} \\
+	\midrule
+	\((1,0,1,1,0,0,0)\) & \(1+X^2+X^3\) \\
+	\((0,1,0,0,1,1,0)\) & \(X+X^4+X^5\) \\
+	\((1,1,1,1,1,1,1)\) & \(1+X+X^2+X^3+X^4+X^5+X^6\) \\
+	\bottomrule
+\end{tabular}
+\end{center}
+\end{example}
+
+\begin{example}[Cyclic shift as a polynomial operation]
+Let \(n=7\) and \(c(X)=1+X^2+X^3\). Then \(Xc(X)=X+X^3+X^4\). Since the degree is still below 7, reduction modulo \(X^7-1\) changes nothing. The corresponding vector is \((0,1,0,1,1,0,0)\), which is exactly the one-step cyclic shift of \((1,0,1,1,0,0,0)\).
+\end{example}
+
+\begin{example}[When the highest-degree term wraps around]
+Let \(n=7\) and \(c(X)=X^4+X^5+X^6\). Then \(Xc(X)=X^5+X^6+X^7\). Since \(X^7 \equiv 1 \pmod{X^7-1}\),
+\[Xc(X) \bmod (X^7-1)=1+X^5+X^6.\]
+Thus
+\[(0,0,0,0,1,1,1) \xrightarrow{\text{1-step shift}} (1,0,0,0,0,1,1).\]
+\end{example}
+
+\newpage
+\subsection{Generator Polynomials}
+
+\defbox[Generator Polynomial]{\begin{definition}
+Every cyclic code is completely determined by a unique monic polynomial \(g(X)\) of \textbf{smallest degree} in the code. This polynomial is called the \textbf{generator polynomial} of the code.
+\end{definition}}
+
+\textbf{Key properties:}
+\begin{itemize}
+	\item \(g(X)\) must divide \(X^n-1\): \[X^n-1 = g(X)h(X).\]
+	\item If \(\deg g = r = n-k\), then the code dimension is \(k\).
+	\item Every codeword is a multiple of \(g(X)\): \[c(X)=m(X)g(X).\]
+\end{itemize}
+For \textbf{non-systematic encoding}, one simply multiplies the message polynomial by the generator polynomial: \(c(X)=m(X)g(X)\).
+
+\begin{example}[Factorization of \(X^7-1\) and possible generator polynomials]
+Over \(\F_2\), we have \(-1=1\), so \(X^7-1 = X^7+1\), and it factors as
+\[X^7+1 = (1+X)(1+X+X^3)(1+X^2+X^3).\]
+Any divisor of this polynomial can serve as a generator polynomial:
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}p{6cm}lll@{}}
+	\toprule
+	\(g(X)\) & \(\deg g\) & \([n,k]_2\) & \(2^k\) \\
+	\midrule
+	\(1 + X\) & 1 & \([7,6]_2\) & 64 \\
+	\(1 + X + X^3\) & 3 & \([7,4]_2\) & 16 \\
+	\(1 + X^2 + X^3\) & 3 & \([7,4]_2\) & 16 \\
+	\((1+X)(1+X+X^3) = 1 + X^2 + X^3 + X^4\) & 4 & \([7,3]_2\) & 8 \\
+	\((1+X)(1+X^2+X^3) = 1 + X + X^2 + X^4\) & 4 & \([7,3]_2\) & 8 \\
+	\((1+X+X^3)(1+X^2+X^3) = 1 + X + \cdots + X^6\) & 6 & \([7,1]_2\) & 2 \\
+	\(X^7 + 1\) & 7 & \([7,0]_2\) & 1 (trivial) \\
+	\bottomrule
+\end{tabular}
+\end{center}
+\end{example}
+
+\begin{example}[Non-systematic encoding for a {$[7,4]_2$} code]
+Let \(g(X)=1+X+X^3\) and \(\mathbf{m}=(1,1,0,1)\), \(m(X)=1+X+X^3\). Then
+\begin{align*}
+c(X)
+&= m(X)g(X) = (1+X+X^3)(1+X+X^3) \\
+&= 1+X+X^3 + X+X^2+X^4 + X^3+X^4+X^6 \\
+&= 1 + X^2 + X^6.
+\end{align*}
+Thus the codeword vector is \(\mathbf{c}=(1,0,1,0,0,0,1)\).
+\end{example}
+
+\newpage
+\subsection{Parity-Check Polynomials}
+
+\defbox[Parity-Check Polynomial]{\begin{definition}
+The quotient obtained by dividing \(X^n-1\) by the generator polynomial is called the \textbf{parity-check polynomial}:
+\[h(X)=\frac{X^n-1}{g(X)}.\]
+Its degree is \(k\). A polynomial \(v(X)\) is a valid codeword if and only if \(v(X)h(X) \equiv 0 \pmod{X^n-1}\).
+\end{definition}}
+
+\begin{example}[Parity-check polynomial for a {$[7,4]_2$} code]
+If \(g(X)=1+X+X^3\), then
+\[h(X)=\frac{X^7+1}{1+X+X^3}=1+X+X^2+X^4.\]
+Verification: \(g(X)h(X)=(1+X+X^3)(1+X+X^2+X^4)=X^7+1\). Indeed, term-by-term cancellation in \(\F_2\) leaves only \(1+X^7\).
+\end{example}
+
+\begin{example}[Validating a codeword]
+Consider \(c(X)=X+X^2+X^4\). Then
+\[c(X)h(X) = (X+X^2+X^4)(1+X+X^2+X^4).\]
+Expanding and reducing modulo \(X^7+1\) yields 0, so \(c(X)\) is a valid codeword.
+\end{example}
+
+\newpage
+\subsection{Generator Matrices for Cyclic Codes}
+
+Let \(g(X)=g_0+g_1X+\dots+g_{n-k}X^{n-k}\). The generator matrix \(G\) is built by taking the coefficient vector of \(g(X)\) and shifting it one position to the right in each row:
+\[G = \begin{bmatrix}
+g_0 & g_1 & g_2 & \dots & g_{n-k} & 0 & \dots & 0 \\
+0 & g_0 & g_1 & \dots & g_{n-k-1} & g_{n-k} & \dots & 0 \\
+\vdots & & \ddots & & & & \ddots & \vdots \\
+0 & \dots & 0 & g_0 & g_1 & \dots & \dots & g_{n-k}
+\end{bmatrix}.\]
+The \(i\)-th row corresponds to the coefficient vector of \(X^i g(X)\).
+
+\begin{remark}
+Why is this a valid generator matrix?
+\begin{enumerate}[(1)]
+	\item \(g(X)\) is a codeword, and by cyclic-shift invariance so are \(Xg(X),X^2g(X),\dots,X^{k-1}g(X)\).
+	\item These vectors are linearly independent because their highest nonzero terms occur in different positions.
+	\item A \(k\)-dimensional code containing \(k\) linearly independent codewords has found a basis.
+\end{enumerate}
+\end{remark}
+
+\begin{example}[Generator matrix for a {$[7,4]_2$} cyclic code]
+Let \(g(X)=1+X+X^3\), whose coefficient vector is \((1,1,0,1)\). Then
+\[G = \begin{bmatrix}
+1 & 1 & 0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 & 1 & 0 & 1
+\end{bmatrix}.\]
+Rows correspond to \(g(X), Xg(X), X^2g(X), X^3g(X)\) respectively.
+\end{example}
+
+\begin{example}[Encoding with the generator matrix]
+Let \(\mathbf{m}=(1,0,1,1)\). Then
+\[\mathbf{c} = \mathbf{m}G = (1,0,1,1)
+\begin{bmatrix}
+1 & 1 & 0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 & 1 & 0 & 1
+\end{bmatrix}=(1,1,1,1,1,1,1).\]
+Thus \(c(X)=1+X+X^2+X^3+X^4+X^5+X^6\), which is divisible by \(g(X)\).
+\end{example}
+
+\newpage
+\subsection{Parity-Check Matrices for Cyclic Codes}
+
+Let \(h(X)=h_0+h_1X+\dots+h_kX^k\). To construct the parity-check matrix \(H\), reverse the coefficient order of \(h(X)\) and shift that reversed vector across the rows:
+\[H = \begin{bmatrix}
+h_k & h_{k-1} & \dots & h_0 & 0 & \dots & 0 \\
+0 & h_k & h_{k-1} & \dots & h_0 & \dots & 0 \\
+\vdots & & \ddots & & & \ddots & \vdots \\
+0 & \dots & 0 & h_k & h_{k-1} & \dots & h_0
+\end{bmatrix}.\]
+This matrix satisfies the orthogonality relation \(GH^T=0\).
+
+\begin{remark}
+Why reverse the coefficients? Since \(g(X)h(X)=X^n-1 \equiv 0 \pmod{X^n-1}\) and every codeword has the form \(c(X)=m(X)g(X)\), we have \(c(X)h(X) \equiv 0\). Writing this condition as inner products of coefficient vectors leads precisely to the reversed-coefficient construction of \(H\).
+\end{remark}
+
+\begin{example}[Parity-check matrix for a {$[7,4]_2$} cyclic code]
+For \(h(X)=1+X+X^2+X^4\), the coefficient vector is \((1,1,1,0,1)\) and the reversed vector is \((1,0,1,1,1)\). Therefore
+\[H = \begin{bmatrix}
+1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+0 & 1 & 0 & 1 & 1 & 1 & 0 \\
+0 & 0 & 1 & 0 & 1 & 1 & 1
+\end{bmatrix}.\]
+\end{example}
+
+\begin{example}[Verifying orthogonality]
+Take the first row of \(G\), \((1,1,0,1,0,0,0)\), and the first row of \(H\), \((1,0,1,1,1,0,0)\). Their inner product is
+\[1\cdot 1 + 1\cdot 0 + 0\cdot 1 + 1\cdot 1 = 1+1=0 \pmod{2},\]
+and similarly for all other row pairs, confirming \(GH^T=0\).
+\end{example}
+
+\begin{example}[Error detection with the parity-check matrix]
+For \(\mathbf{v}=(1,1,1,1,1,1,1)\), we get \(H\mathbf{v}^T = \mathbf{0}\), so no error is detected.
+
+If instead \(\mathbf{v}'=(0,1,1,1,1,1,1)\), then \(H\mathbf{v}'^T \neq \mathbf{0}\), so an error is detected.
+\end{example}
+
+\newpage
+\subsection{Systematic and Non-Systematic Encoding}
+
+Both methods produce valid codewords, but they place the original message differently inside the codeword.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}p{2.5cm}p{5.5cm}p{5.5cm}@{}}
+	\toprule
+	\textbf{Category} & \textbf{Non-systematic} & \textbf{Systematic} \\
+	\midrule
+	Encoding rule & \(c(X)=m(X)g(X)\) & \(c(X)=p(X)+X^{n-k}m(X)\) \\
+	Message position & Mixed throughout the codeword & Preserved explicitly in fixed positions \\
+	Ease of decoding & Requires division & Message bits read directly \\
+	Typical use & Rare & Common in real systems \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{example}[Two encodings of the same message]
+Let \(g(X)=1+X+X^3\) and \(\mathbf{m}=(1,0,1,1)\).
+
+\textbf{Non-systematic:} \(c(X)=(1+X^2+X^3)(1+X+X^3)=1+X+X^2+X^3+X^4+X^5+X^6\), so \(\mathbf{c}=(1,1,1,1,1,1,1)\); the message is not visibly preserved.
+
+\textbf{Systematic:} the codeword has the form \((1,0,0,\mathbf{1,0,1,1})\), so the last four bits are exactly the original message.
+\end{example}
+
+\newpage
+\subsection{Practical Systematic Encoding}
+
+Systematic encoding proceeds in three steps.
+
+\medskip
+\textbf{Step 1.} Shift the message polynomial: \(X^{n-k}m(X)\).
+
+\textbf{Step 2.} Compute the remainder: \(p(X)=X^{n-k}m(X) \bmod g(X)\).
+
+\textbf{Step 3.} Form the codeword: \(c(X)=p(X)+X^{n-k}m(X)\).
+
+Thus the codeword has the structure
+\[[\underbrace{\text{parity}}_{n-k\text{ bits}} \mid \underbrace{\text{message}}_{k\text{ bits}}].\]
+
+\begin{remark}
+Since \(p(X)\) is the remainder of \(X^{n-k}m(X)\) modulo \(g(X)\), the polynomial \(X^{n-k}m(X)-p(X)\) is divisible by \(g(X)\). Over \(\F_2\), subtraction equals addition, so \(c(X)=p(X)+X^{n-k}m(X)\) is also divisible by \(g(X)\), hence a valid codeword.
+\end{remark}
+
+\begin{example}[Systematic encoding of \((1,0,1,1)\)]
+Let \(g(X)=1+X+X^3\), \(n-k=3\), \(m(X)=1+X^2+X^3\).
+
+\textbf{Step 1:} \(X^3m(X)=X^3+X^5+X^6\).
+
+\textbf{Step 2:} Divide \(X^6+X^5+X^3\) by \(X^3+X+1\):
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lll@{}}
+	\toprule
+	Step & Dividend & Quotient term \\
+	\midrule
+	1 & \(X^6 + X^5 + X^3\) & \(X^3\) \\
+	  & \(-(X^6 + X^4 + X^3)\ =\ X^5 + X^4\) & \\
+	2 & \(X^5 + X^4\) & \(X^2\) \\
+	  & \(-(X^5 + X^3 + X^2)\ =\ X^4 + X^3 + X^2\) & \\
+	3 & \(X^4 + X^3 + X^2\) & \(X\) \\
+	  & \(-(X^4 + X^2 + X)\ =\ X^3 + X\) & \\
+	4 & \(X^3 + X\) & \(1\) \\
+	  & \(-(X^3 + X + 1)\ =\ 1\) & \\
+	\bottomrule
+\end{tabular}
+\end{center}
+So \(p(X)=1\).
+
+\textbf{Step 3:} \(c(X)=1+X^3+X^5+X^6\). Thus
+\[\mathbf{c}=(\underbrace{1,0,0}_{\text{parity}},\ \underbrace{1,0,1,1}_{\text{message}}).\]
+\end{example}
+
+\begin{example}[Full table of systematic codewords for the {$[7,4]_2$} code]
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}p{3cm}lp{2.5cm}l@{}}
+	\toprule
+	Message \((m_0m_1m_2m_3)\) & \(m(X)\) & Parity \((p_0p_1p_2)\) & Codeword \\
+	\midrule
+	\(0000\) & \(0\) & \(000\) & \(0000000\) \\
+	\(1000\) & \(1\) & \(110\) & \(1101000\) \\
+	\(0100\) & \(X\) & \(011\) & \(0110100\) \\
+	\(1100\) & \(1+X\) & \(101\) & \(1011100\) \\
+	\(0010\) & \(X^2\) & \(111\) & \(1110010\) \\
+	\(1010\) & \(1+X^2\) & \(001\) & \(0011010\) \\
+	\(0110\) & \(X+X^2\) & \(100\) & \(1000110\) \\
+	\(1110\) & \(1+X+X^2\) & \(010\) & \(0101110\) \\
+	\(0001\) & \(X^3\) & \(101\) & \(1010001\) \\
+	\(1001\) & \(1+X^3\) & \(011\) & \(0111001\) \\
+	\(0101\) & \(X+X^3\) & \(110\) & \(1100101\) \\
+	\(1101\) & \(1+X+X^3\) & \(000\) & \(0001101\) \\
+	\(0011\) & \(X^2+X^3\) & \(010\) & \(0100011\) \\
+	\(1011\) & \(1+X^2+X^3\) & \(100\) & \(1001011\) \\
+	\(0111\) & \(X+X^2+X^3\) & \(001\) & \(0010111\) \\
+	\(1111\) & \(1+X+X^2+X^3\) & \(111\) & \(1111111\) \\
+	\bottomrule
+\end{tabular}
+\end{center}
+\end{example}
+
+\newpage
+\subsection{Syndromes and Error Detection}
+
+\defbox[Syndrome]{\begin{definition}
+The \textbf{remainder} obtained by dividing the received polynomial \(v(X)\) by the generator polynomial \(g(X)\) is called the \textbf{syndrome}:
+\[s(X)=v(X) \bmod g(X).\]
+\begin{itemize}
+	\item If \(s(X)=0\), no error is detected.
+	\item If \(s(X)\neq 0\), an error is detected.
+\end{itemize}
+\end{definition}}
+
+\begin{note}
+If \(v(X)=c(X)+e(X)\) and \(c(X)\) is a multiple of \(g(X)\), then
+\[s(X)=v(X) \bmod g(X)=e(X) \bmod g(X).\]
+Thus the syndrome depends only on the error pattern, not on the original message.
+\end{note}
+
+\begin{example}[Error-free reception]
+Suppose \(c(X)=1+X^3+X^5+X^6\) is received without error. Dividing by \(X^3+X+1\) yields remainder 0, so the syndrome is 0.
+\end{example}
+
+\begin{example}[Single-bit error at position \(X^2\)]
+Suppose the received polynomial is \(v(X)=1+X^2+X^3+X^5+X^6\), so \(e(X)=X^2\). Then \(s(X)=X^2\), vector \((0,0,1)\). Since the syndrome is nonzero, the error is detected.
+\end{example}
+
+\begin{example}[Syndrome table for single-bit errors in the {$[7,4]_2$} code]
+For a single-bit error \(e(X)=X^i\), the syndrome is \(s(X)=X^i \bmod g(X)\).
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}p{2.5cm}lp{4cm}l@{}}
+	\toprule
+	Error position \(i\) & \(e(X)\) & \(s(X)\bmod (1+X+X^3)\) & Syndrome vector \\
+	\midrule
+	0 & \(1\) & \(1\) & \((1,0,0)\) \\
+	1 & \(X\) & \(X\) & \((0,1,0)\) \\
+	2 & \(X^2\) & \(X^2\) & \((0,0,1)\) \\
+	3 & \(X^3\) & \(1+X\) & \((1,1,0)\) \\
+	4 & \(X^4\) & \(X+X^2\) & \((0,1,1)\) \\
+	5 & \(X^5\) & \(1+X+X^2\) & \((1,1,1)\) \\
+	6 & \(X^6\) & \(1+X^2\) & \((1,0,1)\) \\
+	\bottomrule
+\end{tabular}
+\end{center}
+Since all 7 syndromes are distinct, the code can correct \textbf{any single-bit error}.
+\end{example}
+
+\begin{example}[Error correction using the syndrome]
+Suppose the received vector is \(\mathbf{v}=(1,0,1,1,0,1,1)\).
+
+\textbf{Step 1.} With \(v(X)=1+X^2+X^3+X^5+X^6\), we obtain \(s(X)=X^2\), syndrome vector \((0,0,1)\).
+
+\textbf{Step 2.} From the syndrome table, \((0,0,1)\) corresponds to error position \(i=2\).
+
+\textbf{Step 3.} \(\hat{c}(X)=v(X)+X^2 = 1+X^3+X^5+X^6\), so \(\hat{\mathbf{c}}=(1,0,0,1,0,1,1)\).
+
+\textbf{Step 4.} For a systematic code, the last four bits give \(\mathbf{m}=(1,0,1,1)\).
+\end{example}
+
+\begin{example}[The case of a two-bit error]
+Suppose \(\mathbf{v}=(0,1,0,1,0,1,1)\), with errors at positions 0 and 1. Then \(e(X)=1+X\) and \(s(X)=1+X\), vector \((1,1,0)\). This matches the syndrome for a single error at position 3, so a single-error-correction decoder will miscorrect. This illustrates that the \([7,4]_2\) code can correct 1 bit or detect 2 bits, but not correct arbitrary 2-bit errors.
+\end{example}
+
+\newpage
+\subsection{Decoding of Cyclic Codes}
+
+The details of decoding depend on the specific family of cyclic code, but the overall structure is:
+
+\begin{enumerate}[(1)]
+	\item \textbf{Syndrome computation.} Given \(v(X)=c(X)+e(X)\), compute \(s(X)=v(X) \bmod g(X)\) using an LFSR.
+	\item \textbf{Error-pattern search.} Using \(s(X)\), determine \(e(X)\) via one of:
+	\begin{itemize}
+		\item \textit{Syndrome lookup table}: for short codes, map syndrome directly to error pattern.
+		\item \textit{Meggitt decoder}: the syndrome register is shifted one clock at a time; hardware-friendly.
+		\item \textit{Algebraic decoding}: for BCH/RS codes, compute the error-locator polynomial (Berlekamp--Massey), locate roots (Chien search), and recover magnitudes (Forney algorithm).
+	\end{itemize}
+	\item \textbf{Error correction.} Compute \(\hat{c}(X)=v(X)-\hat{e}(X)\) (XOR for binary codes).
+	\item \textbf{Message extraction.} For systematic codes, read the message positions; for non-systematic codes, divide \(\hat{c}(X)\) by \(g(X)\).
+\end{enumerate}
+
+\newpage
+\subsection{Error-Correcting Capability}
+
+A cyclic code is still a linear code, so its error-correcting capability is determined by its \textbf{minimum distance} \(d_{\min}\).
+
+\thmbox[Error-Correcting Capability]{\begin{theorem}
+A code with minimum distance \(d_{\min}\) can correct up to
+\[t = \left\lfloor \frac{d_{\min}-1}{2} \right\rfloor\]
+errors. If one is interested only in error \textbf{detection}, then up to \(d_{\min}-1\) errors can be detected.
+\end{theorem}}
+
+\begin{example}[Error-correcting capability of representative cyclic codes]
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lllll@{}}
+	\toprule
+	Code & \([n,k]\) & \(d_{\min}\) & Correction \(t\) & Detection \\
+	\midrule
+	\([7,4]_2\) cyclic (Hamming) & \([7,4]_2\) & 3 & 1 & 2 \\
+	\([15,7]\) BCH code & \([15,7]\) & 5 & 2 & 4 \\
+	\([23,12]\) Golay code & \([23,12]\) & 7 & 3 & 6 \\
+	\([15,5]\) BCH code & \([15,5]\) & 7 & 3 & 6 \\
+	\([31,21]\) BCH code & \([31,21]\) & 5 & 2 & 4 \\
+	\bottomrule
+\end{tabular}
+\end{center}
+\end{example}
+
+\begin{remark}
+For a general cyclic code there is usually no simple closed-form formula for \(d_{\min}\) from \(g(X)\). One must compute it by enumerating codewords or by deeper algebraic analysis.
+\end{remark}
+
+\medskip
+\thmbox[BCH Bound]{\begin{theorem}
+Let \(\alpha\) be a primitive \(n\)-th root of unity in \(\F_{q^m}\). If the generator polynomial \(g(X)\) has the consecutive roots
+\[\alpha^b,\ \alpha^{b+1},\ \dots,\ \alpha^{b+\delta-2},\]
+then the minimum distance satisfies \(d_{\min} \ge \delta\). The parameter \(\delta\) is called the \textbf{designed distance}.
+\end{theorem}}
+
+\begin{remark}
+Because of the BCH bound, one can choose a target correction capability \(t\) in advance by setting \(\delta = 2t+1\). This is one of the main reasons BCH and Reed--Solomon codes are favored in practice over arbitrary cyclic codes.
+\end{remark}
+
+\begin{example}[Applying the BCH bound]
+For the binary \([15,7]\) BCH code, let \(\alpha\) be a primitive 15th root of unity in \(\F_{2^4}\). If \(g(\alpha)=g(\alpha^2)=g(\alpha^3)=g(\alpha^4)=0\), then there are 4 consecutive roots, so \(\delta=5\) and \(d_{\min}\ge 5\), giving \(t\ge 2\). This code attains \(d_{\min}=5\), so the BCH bound is tight.
+\end{example}
+
+\newpage
+\subsection{Algebraic Structure of Cyclic Codes}
+
+\thmbox[Cyclic Codes Are Ideals]{\begin{theorem}
+A cyclic code \(\mathcal{C}\) of length \(n\) over \(\F_q\) is a \textbf{principal ideal} of the quotient ring \(R_n = \F_q[X]/\ideal{X^n-1}\). That is, \(\mathcal{C}=\ideal{g(X)}\) for some polynomial \(g(X)\).
+\end{theorem}}
+
+\begin{proof}
+\textbf{Step 1:} \(\mathcal{C}\) is an ideal.
+\begin{itemize}
+	\item \textit{Closed under addition:} by linearity, \(a(X)+b(X)\in\mathcal{C}\) whenever \(a(X),b(X)\in\mathcal{C}\).
+	\item \textit{Absorption:} cyclic-shift invariance gives \(Xc(X)\in\mathcal{C}\) for any \(c(X)\in\mathcal{C}\), hence \(X^ic(X)\in\mathcal{C}\) for all \(i\), and by linearity \(r(X)c(X)\in\mathcal{C}\) for all \(r(X)\in R_n\).
+\end{itemize}
+
+\textbf{Step 2:} The ideal is principal. Let \(g(X)\) be the monic polynomial of smallest degree in \(\mathcal{C}\). For any \(c(X)\in\mathcal{C}\), write \(c(X)=q(X)g(X)+r(X)\) with \(\deg r<\deg g\). Since \(r(X)=c(X)-q(X)g(X)\in\mathcal{C}\) and \(g(X)\) has minimal degree, \(r(X)=0\). Hence \(\mathcal{C}=\ideal{g(X)}\).
+\end{proof}
+
+\begin{example}[Checking the ideal structure for {$[7,4]_2$} with $g(X)=1+X+X^3$]
+\begin{itemize}
+	\item \(g(X)\in\mathcal{C}\)
+	\item \(Xg(X)=X+X^2+X^4\in\mathcal{C}\)
+	\item \((1+X)g(X)=1+X^2+X^3+X^4\in\mathcal{C}\)
+\end{itemize}
+This illustrates both cyclic closure and absorption.
+\end{example}
+
+\begin{example}[Why must \(g(X)\) divide \(X^n-1\)?]
+For \(g(X)=1+X+X^3\):
+\[X^7+1 = (1+X+X^3)(1+X+X^2+X^4)=g(X)h(X).\]
+Thus \(g(X)\mid X^7+1\), a necessary condition for any generator polynomial.
+\end{example}
+
+\newpage
+\subsection{Classification of Cyclic Codes via Ideals}
+
+Cyclic codes correspond one-to-one with principal ideals of the quotient ring \(R_n = \F_q[X]/\ideal{X^n-1}\).
+
+\thmbox[Classification Theorem]{\begin{theorem}
+Every ideal of \(R_n\) is a principal ideal generated by a monic divisor \(g(X)\) of \(X^n-1\):
+\[I = \ideal{g(X)}.\]
+Hence there is a one-to-one correspondence:
+\[g(X) \mid (X^n-1) \quad \longleftrightarrow \quad \ideal{g(X)} \text{ is a cyclic code of length } n \text{ over } \F_q.\]
+\end{theorem}}
+
+\begin{proof}
+The canonical projection \(\pi: \F_q[X] \to R_n\) has kernel \(\ideal{X^n-1}\). By the correspondence theorem for rings, ideals of \(R_n\) correspond bijectively to ideals \(J\) of \(\F_q[X]\) satisfying \(\ideal{X^n-1}\subseteq J\). Since \(\F_q[X]\) is a PID, every such \(J=\ideal{g(X)}\) for a unique monic \(g(X)\), and \(\ideal{X^n-1}\subseteq\ideal{g(X)}\) iff \(g(X)\mid(X^n-1)\).
+\end{proof}
+
+\begin{remark}[Counting cyclic codes]
+If \(\gcd(n,q)=1\) and \(X^n-1=f_1(X)\cdots f_s(X)\) is a product of \(s\) distinct irreducible factors over \(\F_q\), then every monic divisor corresponds to a subset \(S\subseteq\{1,\dots,s\}\) via \(g_S(X)=\prod_{i\in S}f_i(X)\). Therefore the \textbf{number of cyclic codes of length \(n\) over \(\F_q\) is \(2^s\).}
+\end{remark}
+
+\subsubsection*{Procedure for Determining Generator Polynomials}
+\begin{enumerate}[(1)]
+	\item Factor \(X^n-1\) completely into irreducible polynomials over \(\F_q\).
+	\item Form all products over subsets of those irreducible factors.
+	\item Each generator polynomial \(g(X)\) gives a cyclic code with parameters \([n,\ n-\deg g(X)]\).
+\end{enumerate}
+
+\begin{example}[All cyclic codes of length 7 over \(\F_2\)]
+Since \(X^7+1=(1+X)(1+X+X^3)(1+X^2+X^3)\), there are \(s=3\) irreducible factors, giving \(2^3=8\) cyclic codes:
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}p{1.5cm}p{5.5cm}cllp{2.5cm}@{}}
+	\toprule
+	Subset \(S\) & \(g(X)\) & \(\deg g\) & \([n,k]\) & \(2^k\) & Remark \\
+	\midrule
+	\(\emptyset\) & \(1\) & 0 & \([7,7]\) & 128 & Whole ring \\
+	\(\{1\}\) & \(1+X\) & 1 & \([7,6]\) & 64 & Parity-check \\
+	\(\{2\}\) & \(1+X+X^3\) & 3 & \([7,4]\) & 16 & Hamming \\
+	\(\{3\}\) & \(1+X^2+X^3\) & 3 & \([7,4]\) & 16 & \\
+	\(\{1,2\}\) & \(1+X^2+X^3+X^4\) & 4 & \([7,3]\) & 8 & \\
+	\(\{1,3\}\) & \(1+X+X^2+X^4\) & 4 & \([7,3]\) & 8 & \\
+	\(\{2,3\}\) & \(1+X+X^2+X^3+X^4+X^5+X^6\) & 6 & \([7,1]\) & 2 & Repetition \\
+	\(\{1,2,3\}\) & \(X^7+1\) & 7 & \([7,0]\) & 1 & Zero ideal \\
+	\bottomrule
+\end{tabular}
+\end{center}
+The ideals form a lattice under inclusion: \(g_1(X)\mid g_2(X)\) implies \(\ideal{g_2(X)}\subseteq\ideal{g_1(X)}\).
+\end{example}
+
+\begin{example}[Number of ideals for \(n=15\) over \(\F_2\)]
+Since
+\[X^{15}+1 = (1+X)(1+X+X^2)(1+X+X^4)(1+X^3+X^4)(1+X+X^2+X^3+X^4),\]
+there are \(s=5\) irreducible factors, so the number of cyclic codes is \(2^5=32\).
+\end{example}
+
+\begin{remark}[Caution when \(\gcd(n,q)\neq 1\)]
+If \(\gcd(n,q)\neq 1\), then \(X^n-1\) has repeated roots. For example, over \(\F_2\),
+\[X^6+1=(1+X)^2(1+X+X^2)^2,\]
+since \(\gcd(6,2)=2\). The number of monic divisors becomes \(\prod(e_i+1)=(2+1)(2+1)=9\), larger than \(2^s=4\).
+\end{remark}
+
+\newpage
+\subsection{Representative Families of Cyclic Codes}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}p{3.5cm}p{5cm}p{5cm}@{}}
+	\toprule
+	\textbf{Code} & \textbf{Characteristic} & \textbf{Main applications} \\
+	\midrule
+	\textbf{CRC} & Error detection only; many standard polynomials & Ethernet, USB, ZIP, storage \\
+	\textbf{BCH codes} & Root-based construction; guaranteed designed distance & Flash memory, satellite comm. \\
+	\textbf{Reed--Solomon (RS)} & Nonbinary cyclic; symbol-level correction & CD/DVD/Blu-ray, QR codes, deep-space \\
+	\textbf{Hamming codes (cyclic)} & Cyclic form for certain parameters & ECC memory \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{example}[CRC-8 generator polynomial]
+A standard CRC-8 polynomial is \(g(X)=X^8+X^2+X+1\).
+\begin{itemize}
+	\item Parity length: 8 bits.
+	\item Typical use: sensor networks and embedded systems.
+\end{itemize}
+\end{example}
+
+\begin{example}[CRC-32 used in Ethernet]
+\[g(X)=X^{32}+X^{26}+X^{23}+X^{22}+X^{16}+X^{12}+X^{11}+X^{10}+X^8+X^7+X^5+X^4+X^2+X+1.\]
+32 parity bits protect the FCS (Frame Check Sequence) in Ethernet frames.
+\end{example}
+
+\newpage
+\subsection{Quasi-Cyclic Codes and Post-Quantum Cryptography}
+
+\defbox[Quasi-Cyclic Code]{\begin{definition}
+A linear code is called \textbf{quasi-cyclic} with index \(\ell\) if it is closed under a cyclic shift by \(\ell\) positions. If the code length is \(n=m\ell\), then shifting any codeword by \(\ell\) positions preserves membership. When \(\ell=1\), this reduces to an ordinary cyclic code.
+\end{definition}}
+
+Generator and parity-check matrices of quasi-cyclic codes are built from \(m\times m\) \textbf{circulant blocks}. A circulant matrix is completely determined by its first row: each subsequent row is the previous row cyclically shifted right by one.
+
+\begin{example}[Structure of a circulant block]
+The \(4\times 4\) circulant matrix with first row \((1,0,1,1)\) is:
+\[C = \begin{bmatrix}
+1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 0 \\
+0 & 1 & 1 & 1
+\end{bmatrix}.\]
+Storing only the first row suffices to reconstruct the entire matrix.
+\end{example}
+
+\subsubsection*{Use in HQC (Hamming Quasi-Cyclic)}
+
+HQC is a code-based key encapsulation mechanism designed to remain secure against quantum computers, including Shor's algorithm.
+
+\textbf{The classical problem:} the McEliece cryptosystem is highly secure but has very large public keys (megabyte scale).
+
+\textbf{The HQC idea:} adopt a quasi-cyclic structure to achieve:
+\begin{enumerate}[(1)]
+	\item \textbf{Smaller public keys:} a circulant matrix is determined by one polynomial, reducing key size dramatically.
+	\item \textbf{Faster arithmetic:} operations in \(\F_2[X]/\ideal{X^n-1}\) admit efficient algorithms.
+	\item \textbf{Provable security:} the scheme reduces to hard syndrome-decoding problems believed to be quantum-resistant.
+\end{enumerate}

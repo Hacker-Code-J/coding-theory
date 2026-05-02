@@ -1,0 +1,27 @@
+\textbf{\large Algorithm}
+\begin{enumerate}
+	\item[]
+	\item \textbf{Montgomery Ladder}:
+	
+	X25519 employs the Montgomery ladder algorithm for scalar multiplication. 
+%	This algorithm provides:
+	\begin{itemize}
+		\item[$\bullet$] Constant-time execution to resist side-channel attacks.
+		\item[$\bullet$] Efficient computation using only $x$-coordinates of points.
+	\end{itemize}
+	\item[]
+	\item \textbf{Compressed Representation}:
+		
+	X25519 avoids the $y$-coordinate, reducing storage and computational complexity.
+	\item[]
+	\item \textbf{Key Agreement}:
+	\begin{itemize}
+		\item[$\bullet$] Alice and Bob generate their private keys $k_A,k_B\in\F_p$.​
+		\item[$\bullet$] They compute their public keys \[
+		P_A=[k_A]G\quad\text{and}\quad P_B=[k_B]G,
+		\] where $G$ is the base point of Curve25519. 
+		\item[$\bullet$] The shared secret is derived as: \[
+		S=x([k_A]P_B)=x([k_B]P_A).
+		\]
+	\end{itemize}
+\end{enumerate}

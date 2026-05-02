@@ -1,0 +1,11 @@
+\colorbox{-red}{\textbf{Curve25519}} is a specific \underline{\textit{elliptic curve defined over the finite field}} $\F_p$, where \begin{align*}
+&p\\
+=&\ \colorbox{-red}{$2^{255}-19$}\\
+=&\ \small\texttt{0x}\underbrace{\texttt{7FFFFFFF}}_8:\underbrace{\texttt{FFFFFFFF}}_7
+:\underbrace{\texttt{FFFFFFFF}}_6:\underbrace{\texttt{FFFFFFFF}}_5:\underbrace{\texttt{FFFFFFFF}}_4
+:\underbrace{\texttt{FFFFFFFF}}_3:\underbrace{\texttt{FFFFFFFF}}_2:\underbrace{\texttt{FFFFFFED}}_1
+\end{align*} is a Mersenne-like prime\footnote{A Mersenne prime is a prime number of the form $2^n-1$.}, providing efficient modular reduction. It is defined in \textbf{Montgomery form}: \[
+By^2=x^3+Ax^2+x,
+\] where $A=486662$ and $B=1$. Thus, we obtain Curve25519: \[
+y^2=x^3+486662x^2+x\quad\text{over}\quad\F_p.
+\]

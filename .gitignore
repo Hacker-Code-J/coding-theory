@@ -1,3 +1,7 @@
+.codex
+.claude/
+.omx/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

@@ -1,0 +1,121 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usetikzlibrary{arrows.meta}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+%\begin{tikzpicture}[>=Stealth, line cap=round, scale=2]
+%	% -------- Tunables --------
+%	\def\R{1}            % half-width of view (plots from -R..R)
+%	\def\step{0.25}       % grid spacing (arrow density)
+%	\def\arrowlen{1}   % arrow-length scale (true |F| ~ 1/r)
+%	
+%	% Axes (optional)
+%	\draw[thin,->] (-\R-1,0) -- (\R+1,0) node[below right] {};
+%	\draw[thin,->] (0,-\R-1) -- (0,\R+1) node[above left] {};
+%	
+%	% Visual cue: boundary of the excluded region x^2 + y^2 < 1
+%	\draw[very thick, red] (0,0) circle[radius=1];
+%	
+%	% Normalization for colormap (cool: cyan->magenta)
+%	% We'll map magnitude m = 1/sqrt(x^2+y^2) from [m_min, 1] to t in [0,1],
+%	% where m_min corresponds to the farthest grid corner (r ~ sqrt(2)*R).
+%	\pgfmathsetmacro{\mmin}{1/(sqrt(2)*\R)}  % lower bound of m over the square
+%	
+%	% Integer loop bounds
+%	\pgfmathtruncatemacro{\N}{\R/\step}
+%	
+%	% -------- Vector field on R^2 \ {(x,y): x^2+y^2 < 1} --------
+%	\foreach \i in {-\N,...,\N}{
+%		\foreach \j in {-\N,...,\N}{
+%			\pgfmathsetmacro{\X}{\i*\step}
+%			\pgfmathsetmacro{\Y}{\j*\step}
+%			\pgfmathsetmacro{\rsq}{\X*\X + \Y*\Y}  % r^2
+%			
+%			% Skip inside the unit disk
+%			\ifdim \dimexpr\rsq pt\relax < 1pt\relax
+%			% do nothing
+%			\else
+%			% Field components (scaled): F = (-y/(x^2+y^2), x/(x^2+y^2))
+%			\pgfmathsetmacro{\dx}{(-\Y/\rsq)*\arrowlen}
+%			\pgfmathsetmacro{\dy}{( \X/\rsq)*\arrowlen}
+%			
+%			% Magnitude and colormap parameter t in [0,1]
+%			\pgfmathsetmacro{\mag}{1/sqrt(\rsq)}                          % |F| = 1/r
+%			\pgfmathsetmacro{\tval}{(\mag - \mmin)/(1 - \mmin)}           % normalize
+%			\pgfmathsetmacro{\t}{min(1,max(0,\tval))}                     % clamp
+%			
+%			% "cool" colormap = linear from cyan (0,1,1) to magenta (1,0,1):
+%			%   R = t,  G = 1 - t,  B = 1
+%			\pgfmathsetmacro{\colR}{\t}
+%			\pgfmathsetmacro{\colG}{1-\t}
+%			\pgfmathsetmacro{\colB}{1}
+%			
+%			% ----- Draw the arrow (same API you wanted) -----
+%			\draw[->, line width=.25mm,
+%			draw={rgb,1:red,\colR; green,\colG; blue,\colB}]
+%			(\X,\Y) -- ++(\dx,\dy);
+%			\fi
+%		}
+%	}
+%%	\node[] at (8,0) {$\mathbf{F}(x,y)=\begin{bmatrix}
+%%			\displaystyle\frac{-y}{x^2+y^2}\\ \\ \displaystyle\frac{x}{x^2+y^2}
+%%		\end{bmatrix}\overset{\theta(x,y)=\arctan(y/x)}{=}\begin{bmatrix}
+%%		\displaystyle \frac{\partial}{\partial x}\theta\\ \\ \displaystyle\frac{x}{x^2+y^2}
+%%	\end{bmatrix}$};
+%	% (Optional) tiny legend: a short cool gradient bar
+%%	\foreach \k in {0,...,20}{
+%%		\pgfmathsetmacro{\t}{\k/20}
+%%		\pgfmathsetmacro{\colR}{\t}
+%%		\pgfmathsetmacro{\colG}{1-\t}
+%%		\pgfmathsetmacro{\colB}{1}
+%%		\fill[draw=none, fill={rgb,1:red,\colR; green,\colG; blue,\colB}]
+%%		(5.5,-5.7) ++(0.15*\k,0) rectangle ++(0.15,0.4);
+%%	}
+%%	\node[below] at (7,-5.7) {\small low $|\mathbf F|$ \hspace{1.5em} high};
+%	
+%\end{tikzpicture}
+
+\begin{tikzpicture}[>=Stealth, line cap=round, scale=2]
+	%	\draw[dashed, gray!20] (-4,-4) grid (4,4);
+	% Axes
+	\draw[->] (-2,0) -- (2,0) node[right] {$x$};
+	\draw[->] (0,-2) -- (0,2) node[above] {$y$};
+	\fill[white,draw=black] (0,0) circle (1.5pt);
+	\def\arrowlen{1}
+	\pgfmathsetmacro{\mmin}{1/(sqrt(2)*1)}  % lower bound of m over the square
+	\foreach \t in {0,10,...,350}{
+		\pgfmathsetmacro\x{cos(\t)}
+		\pgfmathsetmacro\y{sin(\t)}
+		% On r=1, F = (-y,x)
+		\pgfmathsetmacro\dx{(-\y)*\arrowlen}
+		\pgfmathsetmacro\dy{(\x)*\arrowlen}
+		
+		\pgfmathsetmacro{\tval}{(1 - \mmin)/(1 - \mmin)}           % normalize
+		\pgfmathsetmacro{\t}{min(1,max(0,\tval))}                     % clamp
+		
+		% "cool" colormap = linear from cyan (0,1,1) to magenta (1,0,1):
+		%   R = t,  G = 1 - t,  B = 1
+		\pgfmathsetmacro{\colR}{\t}
+		\pgfmathsetmacro{\colG}{1-\t}
+		\pgfmathsetmacro{\colB}{1}
+		
+		\draw[->, line width=.25mm,
+		draw={rgb,1:red,\colR; green,\colG; blue,\colB}] 
+		(\x,\y) -- ++(\dx,\dy);
+	}
+%	\foreach \t in {0,90,180,270}{
+%		\pgfmathsetmacro\x{cos(\t)}
+%		\pgfmathsetmacro\y{sin(\t)}
+%		% On r=1, F = (-y,x)
+%		\pgfmathsetmacro\dx{(-\y)*\arrowlen}
+%		\pgfmathsetmacro\dy{(\x)*\arrowlen}
+%		\draw[->, line width=.5mm, magenta] 
+%		(\x,\y) -- ++(\dx,\dy);
+%	}
+	%--- Draw contour C with orientation --------------------
+	\draw[red, line width=1mm]
+	(0,0) circle (1)
+	node[above right=2cm] {};
+%	\draw[] (1,0) circle (1.5pt) node[left] {(1,0)};
+\end{tikzpicture}
+\end{document}

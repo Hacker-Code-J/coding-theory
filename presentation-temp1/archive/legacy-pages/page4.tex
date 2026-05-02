@@ -1,0 +1,64 @@
+\begin{minipage}{.4\textwidth}
+\resizebox{\textwidth}{!}{\begin{tikzpicture}[
+	block/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=2.5cm, align=center, fill=blue!10},
+	property/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=2.5cm, align=center, fill=yellow!10},
+	process/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=3cm, align=center, fill=green!10},
+	result/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=3cm, align=center, fill=red!10},
+	arrow/.style={->, line width=.5mm},
+	every node/.style={align=center}
+	]
+	
+	% Nodes
+	\node[block] (system) {\bf System};
+	\node[property, below=of system] (model) {\bf Model ({\bf\texttt{.c}\ $\xrightarrow{clang}$\texttt{.bc}})};
+	\node[block, right=of system, xshift=4cm] (spec) {\bf Specification};
+	\node[property, below=of spec] (pro) {\bf Properties ({\bf\texttt{.cry}})};
+	\node[process, below right=1cm and 1cm of system] (checker) {\bf SAWScript};
+	\node[result, below=2cm of checker] (result) {\bf Result\\ (Proved / Counterexample)};
+	
+	% Arrows
+	\draw[arrow, blue] (system) -- (model) node[midway, right] {\it Modeling};
+	\draw[arrow, blue] (model) -- (checker);
+	\draw[arrow, blue] (spec) -- (pro) node[midway, right] {\it Formalize};
+	\draw[arrow, blue] (model) -- (checker);
+	\draw[arrow, blue] (pro) -- (checker);
+	\draw[arrow, blue] (checker) -- (result);
+	
+	\draw[->, red, dotted, line width=.5mm, out=0, in=-90] (result) to (pro);
+	\draw[->, red, dotted, line width=.5mm, out=180, in=-90] (result) to (model);
+	
+	% Labels for clarity
+	\node[red,above right=.5cm and 2cm of result] {\textit{feedback}};
+	\node[red,above left=.5cm and 2cm of result] {\textit{feedback}};
+\end{tikzpicture}}	
+\end{minipage}\hspace{.5cm}
+\begin{minipage}{.55\textwidth}\centering
+\resizebox{\textwidth}{!}{\begin{tikzpicture}[
+	block/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=2.5cm, align=center, fill=blue!10},
+	property/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=2.5cm, align=center, fill=yellow!10},
+	process/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=3cm, align=center, fill=green!10},
+	result/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=3cm, align=center, fill=red!10},
+	arrow/.style={->, line width=.5mm},
+	every node/.style={align=center}
+	]
+	
+	% Nodes
+	\node[block] (c) {\bf C};
+	\node[block, right=of c, xshift=3cm] (cryptol) {\bf Cryptol};
+	\node[property, below=of c] (imperative) {\bf Imperative Programming \\ Procedural Programming};
+	\node[property, below=of cryptol] (declarative) {\bf Declarative Programming\\ Functional Programming};
+	\node[process, below=1cm and 1cm of imperative] (tm) {\bf Turing Machine (TM) \\ Von Neumann Model};
+	\node[process, below=1cm of declarative] (lc) {\bf Lambda Calculus (LC) \\ Assembly Lang. of F.P.};
+	\node[result] (toc) at (3,-6) {\bf Theory of Computation};
+	
+	% Arrows
+	\draw[arrow, blue] (c) -- (imperative);
+	\draw[arrow, blue] (cryptol) -- (declarative);
+	\draw[arrow, blue] (imperative) -- (tm);
+	\draw[arrow, blue] (declarative) -- (lc);
+	\draw[arrow, red, out=-90, in=180] (tm) to (toc);
+	\draw[arrow, red, out=-90, in=0] (lc) to (toc);
+\end{tikzpicture}}	
+
+%Imperative Programming vs Declarative Programming
+\end{minipage}

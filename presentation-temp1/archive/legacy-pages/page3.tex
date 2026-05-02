@@ -1,0 +1,56 @@
+\begin{minipage}{.5\textwidth}\centering
+\resizebox{\textwidth}{!}{\begin{tikzpicture}[
+	block/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=2.5cm, align=center, fill=blue!10},
+	property/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=2.5cm, align=center, fill=yellow!10},
+	process/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=3cm, align=center, fill=green!10},
+	result/.style={rectangle, draw, thick, rounded corners, minimum height=1.2cm, minimum width=3cm, align=center, fill=red!10},
+	arrow/.style={->, line width=.5mm},
+	every node/.style={align=center}
+	]
+	
+	% Nodes
+	\node[block] (system) {\bf System};
+	\node[property, below=of system] (model) {\bf Model ({\bf\texttt{.c}\ $\xrightarrow{clang}$\texttt{.bc}})};
+	\node[block, right=of system, xshift=4cm] (spec) {\bf Specification};
+	\node[property, below=of spec] (pro) {\bf Properties ({\bf\texttt{.cry}})};
+	\node[process, below right=1cm and 1cm of system] (checker) {\bf SAWScript};
+	\node[result, below=2cm of checker] (result) {\bf Result\\ (Proved / Counterexample)};
+	
+	% rectangle
+	\draw[dashed, color=teal, pattern=north east lines,pattern color=teal, opacity=.5] (1,-1) rectangle (6.5,-6.5);
+	
+	% Arrows
+	\draw[arrow, blue] (system) -- (model) node[midway, right] {\it Modeling};
+	\draw[arrow, blue] (model) -- (checker);
+	\draw[arrow, blue] (spec) -- (pro) node[midway, right] {\it Formalize};
+	\draw[arrow, blue] (model) -- (checker);
+	\draw[arrow, blue] (pro) -- (checker);
+	\draw[arrow, blue] (checker) -- (result);
+	
+	\draw[->, red, dotted, line width=.5mm, out=0, in=-90] (result) to (pro);
+	\draw[->, red, dotted, line width=.5mm, out=180, in=-90] (result) to (model);
+	
+	% Labels for clarity
+	\node[red,above right=.5cm and 2cm of result] {\textit{feedback}};
+	\node[red,above left=.5cm and 2cm of result] {\textit{feedback}};
+	
+%	\def \xMax{10}
+%	\def \xMin{-2}
+%	\def \yMax{1}
+%	\def \yMin{-7}
+%	\draw[very thin,color=gray!15,step=.5] (\xMin,\yMin) grid (\xMax,\yMax);
+%	
+%	\foreach \i in {\xMin,...,-2,-1,1,2,...,10}
+%	\draw[gray] (\i,.1)--(\i,-.1) node[below] {$\i$};%x-axis
+%	\foreach \i in {-6,...,-1,1,1,\yMax}
+%	\draw[gray] (.1,\i)--(-.1,\i) node[left] {$\i$};%y-axis
+\end{tikzpicture}}
+\begin{itemize}
+	\item Key Schedule: \texttt{0.19s}
+	\item Encryption: \texttt{22689.5s} (\texttt{6.30h})
+	\item Decryption: \texttt{31544.6s} (\texttt{8.76h})
+\end{itemize}
+\end{minipage}
+\begin{minipage}{.45\textwidth}\centering
+\includegraphics[scale=.255]{images/saw-result}
+\end{minipage}

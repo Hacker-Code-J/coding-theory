@@ -1,0 +1,282 @@
+% This is the outer theme file of the CodingTeal theme.
+% Copyright (c) 2014 by Lilyana Vaskova Vankova <lilqna.v@gmail.com>
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You can find the GNU General Public License at <http://www.gnu.org/licenses/>.
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerouterthemeCodingTeal}[2014/04/08 v1.0.0 The CodingTeal Beamer Theme]
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% load required packages
+
+\RequirePackage{tikz}
+\RequirePackage{calc}
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theme options, definitions and templates.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% options for the progress bar/circle
+
+               \def\beamer@progressmovingCircCnt{movingCircCnt} % moving circular counter
+               \def\beamer@progressfixedCircCnt{fixedCircCnt} % fixed circular counter
+               \def\beamer@progresscorner{corner} % a counter
+               \def\beamer@progressstyle{movingCircCnt} % default
+               \DeclareOptionBeamer{progressstyle}{\def\beamer@progressstyle{#1}}
+               \DeclareOptionBeamer{rotationcw}{\def\beamer@rotationcw{true}}
+               \DeclareOptionBeamer{shownavsym}{\def\beamer@shownavsym{true}}
+               \ProcessOptionsBeamer
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% the height of the header is 2.5 times the lineheight of the frame title
+
+               \newlength{\beamer@height}
+               \usebeamerfont{frametitle} %use the frame title font
+               \setlength{\beamer@height}{2.5\baselineskip}
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% reset fonts
+
+               \reset@font
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% radius of the logo
+
+               \newlength{\beamer@logoradius}
+               \setlength{\beamer@logoradius}{0.95\beamer@height/2}
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% width of the border
+
+               \newlength{\beamer@borderwidth}
+               \setlength{\beamer@borderwidth}{1.05mm}  % as small is the thickness of the border the whole circle goes up
+ 
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% inner radius of border of the logo frame
+
+               \newlength{\beamer@logoinnerradius}
+               \setlength{\beamer@logoinnerradius}{0.85\beamer@logoradius} 
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% radius of the outer border of the logo frame
+
+               \newlength{\beamer@logoouterradius}
+               \setlength{\beamer@logoouterradius}{\beamer@logoinnerradius+\beamer@borderwidth}
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% radius of the counters
+
+               \newlength{\beamer@counterradius}
+               \setlength{\beamer@counterradius}{\beamer@logoinnerradius/2+\beamer@logoouterradius/2}
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% beamer specific options
+
+               \mode<presentation> % refers to the first four modes (beamer,handout,second and trans). That is, to all modes except the article mode
+{
+               \ifbeamercolorempty[fg]{CodingTeal}
+   {
+               \setbeamercolor{CodingTeal}{use={structure,palette sidebar primary},fg=palette sidebar primary.fg,bg=structure.fg}
+    }
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+ % headline
+
+               \setbeamertemplate{headline}
+    {
+                 \leavevmode%
+                 \hbox{%
+                   \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=3.125ex,left]{palette quaternary}%
+                     \hspace*{2ex}{\usebeamerfont{section in head/foot}\insertsectionhead}
+                   \end{beamercolorbox}%
+                 }
+                 \codingtealheaderbackground
+     }
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% footline  
+
+               \setbeamertemplate{footline}
+    {
+        \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{headfoot}
+                \usebeamercolor[fg]{frametitle}\usebeamerfont{section in head/foot}%
+                \makebox[.27\paperwidth][l]{\hspace*{2ex}\textbf{\insertshortauthor} \ |\ \textbf{CSE}}%
+                \makebox[.46\paperwidth][c]{\textbf{\insertshorttitle}}%
+                \makebox[.27\paperwidth][r]{\textbf{\insertshortdate}\hspace*{2ex}}%
+        \end{beamercolorbox}       
+     }
+
+%----------------------------------------------------------------------------------------------------------------------------------
+  
+% frame title
+
+                \setbeamertemplate{frametitle}
+    {
+        \begin{minipage}[c][0.6\beamer@height][c]{\textwidth}
+                {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle\par}
+                {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\insertframesubtitle\par}
+        \end{minipage}
+     }
+                \ifx\beamer@shownavsym\undefined % insert navigation symbols
+                \setbeamertemplate{navigation symbols}{}
+
+                \fi
+}
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% macros used in the theme 
+%% coordinate the fancy header background
+
+                \newcommand{\codingtealheaderbackground}[0]
+{
+        \begin{tikzpicture}[overlay]
+
+                \coordinate (UL) at (0,0); %upper left corner of the slide
+                \coordinate (HLR) at (\paperwidth,-0.6\beamer@height); %lower right of the header
+
+                \coordinate (ULL) at (0,-0.55\beamer@height); % upper left corner of the line 
+                \coordinate (LLR) at (\paperwidth,-0.6\beamer@height); % lower right corner of the line 
+
+                \coordinate (ULL1) at (0,0.025\beamer@height); % upper left corner of the line 
+                \coordinate (LLR1) at (\paperwidth,-0.025\beamer@height); % lower right corner of the line 
+
+                \coordinate (ULF1) at (0.02\paperwidth,-5.8\beamer@height); % upper left corner of the footline 
+                \coordinate (LFR1) at (0.2\paperwidth,-6.0\beamer@height); % lower right corner of the footline 
+                
+                \coordinate (ULF2) at (0.3\paperwidth,-5.8\beamer@height); % upper left corner of the footline 
+                \coordinate (LFR2) at (0.7\paperwidth,-6.00\beamer@height); % lower right corner of the footline 
+                
+                \coordinate (ULF3) at (0.8\paperwidth,-5.8\beamer@height); % upper left corner of the footline 
+                \coordinate (LFR3) at (0.98\paperwidth,-6.00\beamer@height); % lower right corner of the footline
+
+                \coordinate (logopos) at ([shift={(-\beamer@logoouterradius-2.05\beamer@borderwidth,\beamer@height-\beamer@logoouterradius-5.5\beamer@borderwidth)}] HLR); % coordinate of the logo and the circ position
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%%draw the background of the header, the circle and the logo
+
+     {
+                \usebeamercolor{CodingTeal}
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%% draw the blue background rectangle of the header and the line below it
+
+                \draw[draw=none,fill=CodingTeal.bg] (UL) rectangle (HLR); % background rectangle
+                \draw[draw=none,fill=CodingTeal.fg] (ULL1) rectangle (LLR1); % line below the background rectangle                
+                \draw[draw=none,fill=TealDarkCyan!90] (ULF1) rectangle (LFR1); % footline 
+                \draw[draw=none,fill=AccentCyan] (ULF2) rectangle (LFR2); % footline       
+                \draw[draw=none,fill=TealDarkCyan!90] (ULF3) rectangle (LFR3); % footline             
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%% draw the outer circle
+
+                \fill[fill=CodingTeal.fg!20] (logopos) circle (\beamer@logoouterradius);
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%% draw the inner circle
+
+                \fill[fill=normal text.bg] (logopos) circle (\beamer@logoinnerradius);
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%% place the logo in the circle
+
+                \node at (logopos) {\includegraphics[width=1.6\beamer@logoradius]{assets/branding/circle_logo.pdf}};
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%% draw long-deck-safe progress bar and slide dots
+
+                \ifx\beamer@progressstyle\beamer@progressmovingCircCnt% the circular counter with a moving counter
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+                \pgfmathsetmacro{\codingteal@totalframes}{max(1,\inserttotalframenumber)}
+                \pgfmathsetmacro{\codingteal@currentframe}{max(1,\insertframenumber)}
+                \pgfmathsetmacro{\codingteal@progress}{min(1,\codingteal@currentframe/\codingteal@totalframes)}
+                \pgfmathtruncatemacro{\codingteal@dotcount}{min(120,\codingteal@totalframes)}
+                \pgfmathtruncatemacro{\codingteal@activedots}{max(1,ceil(\codingteal@dotcount*\codingteal@progress))}
+
+                \fill[draw=none,fill=white!18!CodingTeal.fg,rounded corners=0.4pt]
+                    (0.18\paperwidth,-0.48\beamer@height) rectangle (0.78\paperwidth,-0.43\beamer@height);
+                \fill[draw=none,fill=normal text.bg,rounded corners=0.4pt]
+                    (0.18\paperwidth,-0.48\beamer@height) rectangle
+                    ({(0.18+0.60*\codingteal@progress)*\paperwidth},-0.43\beamer@height);
+                \foreach \codingteal@dot in {1,...,\codingteal@dotcount}
+                {
+                    \pgfmathsetmacro{\codingteal@dotx}{0.18+0.60*(\codingteal@dot-1)/max(1,\codingteal@dotcount-1)}
+                    \ifnum\codingteal@dot>\codingteal@activedots\relax
+                        \fill[white!35!CodingTeal.fg] (\codingteal@dotx\paperwidth,-0.455\beamer@height) circle (0.35pt);
+                    \else
+                        \fill[normal text.bg] (\codingteal@dotx\paperwidth,-0.455\beamer@height) circle (0.45pt);
+                    \fi
+                }
+                \fill[fill=CodingTeal.fg,draw=normal text.bg,line width=0.35pt]
+                    ({(0.18+0.60*\codingteal@progress)*\paperwidth},-0.455\beamer@height) circle (1.05pt);
+
+%% place the current frame number
+
+                \node[fill=normal text.bg,draw=CodingTeal.fg,thick,circle,inner sep=1.2pt] at ([xshift=\beamer@counterradius]logopos) {{\scriptsize\usebeamercolor[fg]{normal text}\insertframenumber}};
+                \fi      
+                \ifx\beamer@progressstyle\beamer@progressfixedCircCnt % the circular counter with a fixed counter
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+                \pgfmathsetmacro{\codingteal@totalframes}{max(1,\inserttotalframenumber)}
+                \pgfmathsetmacro{\codingteal@currentframe}{max(1,\insertframenumber)}
+                \pgfmathsetmacro{\codingteal@progress}{min(1,\codingteal@currentframe/\codingteal@totalframes)}
+
+                \fill[draw=none,fill=white!18!CodingTeal.fg,rounded corners=0.4pt]
+                    (0.18\paperwidth,-0.48\beamer@height) rectangle (0.78\paperwidth,-0.43\beamer@height);
+                \fill[draw=none,fill=normal text.bg,rounded corners=0.4pt]
+                    (0.18\paperwidth,-0.48\beamer@height) rectangle
+                    ({(0.18+0.60*\codingteal@progress)*\paperwidth},-0.43\beamer@height);
+
+%% place the current frame number
+
+                \node[fill=normal text.bg,draw=CodingTeal.fg,circle,thick,inner sep=1.2pt] at ([xshift=\beamer@counterradius] logopos) {{\scriptsize\usebeamercolor[fg]{normal text}\insertframenumber}};
+                \fi
+    }
+        \end{tikzpicture}
+}
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%%setting the blocks
+
+                \setbeamertemplate{blocks}[rounded][shadow=true]
+                \setbeamercolor{block title}{fg=frametitle.fg, bg=frametitle.bg} 
+                \setbeamercolor{block body}{parent=normal text, use=block title,bg=CodingTeal.fg!30}
+
+\mode<all>

@@ -1,0 +1,11 @@
+\textbf{X25519} is a \underline{\textit{key exchange protocol}} based on Curve25519. It employs scalar multiplication to derive a shared secret between two parties.
+
+\begin{itemize}
+	\item \textbf{Core Mathematical Operation:}
+	Given a scalar $k\in\F_p$ (a private key) and a public key $P=(x,y)$ on the curve, X25519 computes: \[
+	x([k]P),
+	\] where \begin{itemize}
+		\item[$\bullet$] $[k]P$ denotes scalar multiplication of the point $P$ by the scalar $k$, defined iteratively using the group law.
+		\item[$\bullet$] $x([k]P)$ extracts only the $x$-coordinate of the resulting point.
+	\end{itemize}
+\end{itemize}

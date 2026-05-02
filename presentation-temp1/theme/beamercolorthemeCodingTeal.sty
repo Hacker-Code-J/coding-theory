@@ -1,0 +1,67 @@
+% This is the color theme file of the CodingTeal theme.
+% Copyright (c) 2014 by Lilyana Vaskova Vankova <lilqna.v@gmail.com>
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You can find the GNU General Public License at <http://www.gnu.org/licenses/>.
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamercolorthemeCodingTeal}[2014/04/08 v1.0.0 The CodingTeal Beamer Theme]
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theme options and definitions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% beamer specific options
+
+               \mode<presentation>%refers to the first four modes (beamer,handout,second and trans). That is, to all modes except the article mode
+{
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+% colors
+%% defining colors 
+
+               \definecolor{TealDarkCyan}{HTML}{003F46}
+               \definecolor{AccentCyan}{HTML}{007575}
+
+               \definecolor{beamer@barcolor}{HTML}{007575}
+               \definecolor{beamer@normaltextcolor}{RGB}{0,0,0}% black
+               \definecolor{beamer@headercolor}{HTML}{003F46}
+
+
+%% setting the above deffinitions
+
+               \setbeamercolor{structure}{fg=beamer@headercolor}
+               \setbeamercolor{normal text}{fg=beamer@normaltextcolor}
+               \setbeamercolor{frametitle}{fg=white,bg=beamer@headercolor}
+               \setbeamercolor{framesubtitle}{fg=white,bg=beamer@headercolor}
+               \setbeamercolor{headfoot}{fg=white,bg=beamer@headercolor}
+               \setbeamercolor{palette quaternary}{fg=white,bg=beamer@headercolor}
+               \setbeamercolor{section in head/foot}{fg=white,bg=beamer@headercolor}
+               \setbeamercolor{section in head/foot shaded}{fg=white!70!beamer@headercolor,bg=beamer@headercolor}
+               \setbeamercolor{subsection in head/foot}{fg=white,bg=beamer@headercolor}
+               \setbeamercolor{subsection in head/foot shaded}{fg=white!70!beamer@headercolor,bg=beamer@headercolor}
+               \setbeamercolor{alerted text}{fg=beamer@barcolor}
+               \setbeamercolor{block title alerted}{fg=white,bg=beamer@barcolor}
+               \setbeamercolor{block body alerted}{fg=beamer@normaltextcolor,bg=beamer@barcolor!8}
+               \setbeamercolor{title}{fg=beamer@headercolor}
+               \setbeamercolor{subtitle}{fg=beamer@barcolor}
+               \setbeamercolor{CodingTeal}{fg=beamer@barcolor,bg=beamer@headercolor}
+}
+
+\mode<all>

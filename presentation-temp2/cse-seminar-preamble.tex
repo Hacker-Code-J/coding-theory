@@ -1,0 +1,72 @@
+\usetheme[
+%%% option passed to the outer theme
+%    progressstyle=fixedCircCnt,   % fixedCircCnt, movingCircCnt (moving is deault)
+]{Feather}
+
+% If you want to change the colors of the various elements in the theme, edit and uncomment the following lines
+
+% Change the bar colors:
+%\setbeamercolor{Feather}{fg=red!20,bg=red}
+
+% Change the color of the structural elements:
+%\setbeamercolor{structure}{fg=red}
+
+% Change the frame title text color:
+%\setbeamercolor{frametitle}{fg=blue}
+
+% Change the normal text color background:
+%\setbeamercolor{normal text}{fg=black,bg=gray!10}
+
+%-------------------------------------------------------
+% INCLUDE PACKAGES
+%-------------------------------------------------------
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[spanish,es-tabla]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage{helvet}
+
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage{newpxtext}
+%\usepackage{newpxmath}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\renewcommand{\ttdefault}{lmtt} % 
+%-------------------------------------------------------
+% DEFFINING AND REDEFINING COMMANDS
+%-------------------------------------------------------
+% colored hyperlinks
+\newcommand{\chref}[2]{
+	\href{#1}{{\usebeamercolor[bg]{Feather} #2}}
+}
+
+\makeatletter
+\def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+\makeatother
+
+%-------------------------------------------------------
+% THE BODY OF THE PRESENTATION
+%-------------------------------------------------------
+
+\usepackage{listings} % For code highlighting with lstlisting
+
+\usepackage{tikz}
+\usepackage{pgfplots, pgfplotstable}
+\usetikzlibrary{positioning, shapes.geometric, arrows}
+\usetikzlibrary{patterns} % Load the patterns library
+\usetikzlibrary{positioning} % Load the positioning library
+\usetikzlibrary{decorations.markings, arrows.meta}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{bending, shadows.blur}
+\usetikzlibrary{fit, calc, shapes}
+\usetikzlibrary {mindmap}
+
+\usepackage{multicol}
+\renewcommand{\lstlistingname}{Code}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{kotex}

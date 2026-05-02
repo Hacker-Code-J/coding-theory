@@ -1,0 +1,497 @@
+\documentclass[10pt,aspectratio=1610,compress,dvipsnames]{beamer}
+
+\usepackage{kotex}
+\input{cse-seminar-preamble}
+\usepackage{commath}
+\input{title-page}
+\input{tcolorbox}
+\input{listing}
+\input{algorithm}
+\input{cse-seminar-commands}
+
+\usepackage{soul}
+\usepackage{colortbl}
+\usetikzlibrary{tikzmark}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\begin{document}
+
+%-------------------------------------------------------
+% THE TITLEPAGE
+%-------------------------------------------------------
+
+{\1% % this is the name of the PDF file for the background
+\begin{frame}[plain,noframenumbering] % the plain option removes the header from the title page, noframenumbering removes the numbering of this frame only
+  \titlepage % call the title page information from above
+\end{frame}}
+
+%-------------------------------------------------------
+\section*{Contents}
+\begin{frame}{\textbf{Contents}}
+\tableofcontents
+\end{frame}
+%-------------------------------------------------------
+
+%-------------------------------------------------------
+% SECTION 1 What is a Vector Field?
+%-------------------------------------------------------
+\section{I. What is a Vector Field?}
+\input{chapters/chap1_vector_field}
+
+%-------------------------------------------------------
+% SECTION 1 What is a Vector Field?
+%-------------------------------------------------------
+\section{II. Cotangent Space}
+\input{chapters/chap2_cotangent_space}
+
+%-------------------------------------------------------
+% SECTION 1 What is a Vector Field?
+%-------------------------------------------------------
+\section{III. Conclusion}
+\begin{frame}{\textbf{III. Conclusion}}
+Vectors live in $TM$; 1-forms live in $T^*M$ and pair with vectors (duality).
+\end{frame}
+
+%\section{Integer Factorization Problem (IFP)}
+%\begin{frame}[fragile]{\textbf{Integer Factorization Problem}}{}
+%Let
+%
+%$$
+%S^{1}:=\{(x,y)\in\mathbb R^{2}:x^{2}+y^{2}=1\},\qquad
+%TS^{1}:=\big\{(p,v)\in S^{1}\times\mathbb R^{2}:\langle p,v\rangle=0\big\}.
+%$$
+%
+%Define $X:S^{1}\to TS^{1}$ by
+%
+%$$
+%\boxed{\quad X(A)\;:=\;\{\,\big(p,\;(-y,x)\big)\;:\;p=(x,y)\in A\,\}\subset TS^{1}\quad}\qquad(A\subset S^{1}).
+%$$
+%
+%Equivalently, $X$ is the section whose **graph** is
+%
+%$$
+%\operatorname{Graph}(X)=\{\,((x,y),(-y,x))\in TS^{1}:(x,y)\in S^{1}\,\}.
+%$$
+%
+%One checks $X(A)\subset TS^{1}$ since $\langle(x,y),(-y,x)\rangle=-xy+xy=0$.
+%
+%For each $p=(x,y)\in S^{1}$,
+%
+%$$
+%\boxed{\quad X:\ p=(x,y)\ \longmapsto\ \big(p,\;(-y,x)\big)\ \in\ T_{p}S^{1}\subset TS^{1}. \quad}
+%$$
+%
+%Thus $X$ is a smooth section with $\pi\circ X=\mathrm{id}_{S^{1}}$ for the bundle projection $\pi:TS^{1}\to S^{1}$.
+%
+%%Two equivalent concrete avatars (useful cross-checks)
+%%
+%%1. **Angle chart.** With $c:\mathbb R/2\pi\mathbb Z\to S^{1}$, $c(\theta)=(\cos\theta,\sin\theta)$, and $c_{*}(\partial_{\theta})=(-\sin\theta,\cos\theta)$,
+%%
+%%$$
+%%\boxed{\ X\big(c(\theta)\big)\;=\;\big(c(\theta),\;c_{*}(\partial_{\theta})\big)\;=\;\big((\cos\theta,\sin\theta),\;(-\sin\theta,\cos\theta)\big). \ }
+%%$$
+%%
+%%2. **Global trivialization by the unit tangent.** Let $T(p):=(-y,x)$ and
+%%$\Phi:TS^{1}\to S^{1}\times\mathbb R$, $\Phi(v_{p})=(p,\langle v_{p},T(p)\rangle)$. Then
+%%
+%%$$
+%%\boxed{\ \Phi\circ X:\ p\ \longmapsto\ (p,1)\,,\ }
+%%$$
+%%
+%%i.e. in the $(S^{1}\times\mathbb R)$-model, this section is the constant function $1$ along the fiber.
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Integer Factorization Problem}}{Hard Problem and Easy Problem}
+%Let $p,q\in\Z$ are distinct primes. {\Huge \[
+%	\tikzmarknode{n}{N} \;=\; \tikzmarknode{m}{p\cdot q}.
+%\]}
+%\begin{tikzpicture}[remember picture, overlay, font=\sffamily]
+%	\node[draw=white, thick, fit=(n), inner xsep=1pt](box1){};
+%	\draw[-Stealth, thick, red] (box1)--++(0,.6)-- node[above, scale=.75]{HARD} ++(2.75,0) -- ++(0,-.3) ;
+%	\node[draw=white, thick, fit=(m), inner xsep=1pt](box2){};
+%	\draw[-Stealth, thick, green!70!black] (box2)--++(0,-.6)-- node[below, scale=.75]{EASY} ++(-2.75,0) -- ++(0,.4) ;
+%%	\node[draw=orange, thick, fit=(m2), inner xsep=1pt](box2){};
+%%	\draw[thick, orange] (box2)--++(0,-.6)--++(1,0) node[right, scale=.75]{$e$ is an identity of $G$};
+%\end{tikzpicture}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Integer Factorization Problem}}{Trapdoor}
+%Let $p,q\in\Z$ are distinct primes. {\Huge \[
+%	\tikzmarknode{n}{N} \;=\; \tikzmarknode{m}{\textcolor{cyan}{p}\cdot q}.
+%	\]}
+%\begin{tikzpicture}[remember picture, overlay, font=\sffamily]
+%	\node[draw=white, thick, fit=(n), inner xsep=1pt](box1){};
+%	\draw[-Stealth, thick, red] (box1)--++(0,.6)-- node[above, scale=.75]{\st{HARD}\; \textcolor{cyan}{EASY}} ++(2.75,0) -- ++(0,-.3) ;
+%	\node[draw=white, thick, fit=(m), inner xsep=1pt](box2){};
+%	\draw[-Stealth, thick, green!70!black] (box2)--++(0,-.6)-- node[below, scale=.75]{EASY} ++(-2.75,0) -- ++(0,.4) ;
+%	\draw[-Latex, thick, cyan] (7.3,.5) -- ++(0,-1) node[below] {Trapdoor};
+%\end{tikzpicture}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Integer Factorization Problem}}{}
+%Let $p,q\in\Z$ are distinct primes. {\Huge \[
+%	\tikzmarknode{n}{N} \;=\; \tikzmarknode{m}{\textcolor{cyan}{p}\cdot q}.
+%	\]}
+%\begin{tikzpicture}[remember picture, overlay, font=\sffamily]
+%	\node[draw=white, thick, fit=(n), inner xsep=1pt](box1){};
+%	\draw[-Stealth, thick, red] (box1)--++(0,.6)-- node[above, scale=.75]{\st{HARD}\; \textcolor{cyan}{EASY}} ++(2.75,0) -- ++(0,-.3) ;
+%	\node[draw=white, thick, fit=(m), inner xsep=1pt](box2){};
+%	\draw[-Stealth, thick, green!70!black] (box2)--++(0,-.6)-- node[below, scale=.75]{EASY} ++(-2.75,0) -- ++(0,.4) ;
+%	\draw[-Latex, thick, cyan] (7.3,.5) -- ++(0,-1) node[below] {Trapdoor};
+%\end{tikzpicture}
+%\vspace{40pt}
+%\begin{itemize}
+%	\item Integer Factorization Problem (IFP): Given $n=pq$ where $p$ and $q$ are primes, the IFP is to find a $p\in\Z$ (or $q\in\Z$) such that \[
+%	1<p\ (\text{or}\ q) < n.
+%	\]
+%\end{itemize}
+%\end{frame}
+%
+%%-------------------------------------------------------
+%% SECTION 2 Discrete Logarithm Problem (DLP)
+%%-------------------------------------------------------
+%\section{Discrete Logarithm Problem (DLP)}
+%\begin{frame}[fragile]{\textbf{Discrete Logarithm Problem}}{}
+%Consider \[
+%g,g^2,g^3,\cdots, g^n=1.
+%\] and {\Huge \[
+%g^x=h.
+%\]}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Discrete Logarithm Problem}}{Hard Problem and Easy Problem}
+%Consider \[
+%g,g^2,g^3,\cdots, g^n=1.
+%\] and {\Huge \[
+%	\tikzmarknode{n}{h}=\tikzmarknode{m}{g^x}.
+%\]}
+%\begin{tikzpicture}[remember picture, overlay, font=\sffamily]
+%	\node[draw=white, thick, fit=(n), inner xsep=1pt](box1){};
+%	\draw[-Stealth, thick, red] (box1)--++(0,1)-- node[above, scale=.75]{HARD} ++(1.75,0) -- ++(0,-.4) ;
+%	\node[draw=white, thick, fit=(m), inner xsep=1pt](box2){};
+%	\draw[-Stealth, thick, green!70!black] (box2)--++(0,-1)-- node[below, scale=.75]{EASY} ++(-1.75,0) -- ++(0,.4) ;
+%\end{tikzpicture}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Discrete Logarithm Problem}}{Trapdoor}
+%Consider \[
+%g,g^2,g^3,\cdots, g^n=1.
+%\] and {\Huge \[
+%	\tikzmarknode{n}{h}=\tikzmarknode{m}{g^{\textcolor{cyan}{x}}}.
+%\]}
+%\begin{tikzpicture}[remember picture, overlay, font=\sffamily]
+%	\node[draw=white, thick, fit=(n), inner xsep=1pt](box1){};
+%	\draw[-Stealth, thick, red] (box1)--++(0,1)-- node[above, scale=.75]{\st{HARD}\; \textcolor{cyan}{EASY}} ++(1.75,0) -- ++(0,-.4) ;
+%	\node[draw=white, thick, fit=(m), inner xsep=1pt](box2){};
+%	\draw[-Stealth, thick, green!70!black] (box2)--++(0,-1)-- node[below, scale=.75]{EASY} ++(-1.75,0) -- ++(0,.4) ;
+%	\draw[-Latex, thick, cyan] (7.8,.75) -- ++(0,-1) node[below] {Trapdoor};
+%\end{tikzpicture}
+%\end{frame}
+%
+%\begin{frame}[fragile]{\textbf{Discrete Logarithm Problem}}{}
+%Consider \[
+%g,g^2,g^3,\cdots, g^n=1.
+%\] and {\Huge \[
+%	\tikzmarknode{n}{h}=\tikzmarknode{m}{g^{\textcolor{cyan}{x}}}.
+%	\]}
+%\begin{tikzpicture}[remember picture, overlay, font=\sffamily]
+%	\node[draw=white, thick, fit=(n), inner xsep=1pt](box1){};
+%	\draw[-Stealth, thick, red] (box1)--++(0,1)-- node[above, scale=.75]{\st{HARD}\; \textcolor{cyan}{EASY}} ++(1.75,0) -- ++(0,-.4) ;
+%	\node[draw=white, thick, fit=(m), inner xsep=1pt](box2){};
+%	\draw[-Stealth, thick, green!70!black] (box2)--++(0,-1)-- node[below, scale=.75]{EASY} ++(-1.75,0) -- ++(0,.4) ;
+%	\draw[-Latex, thick, cyan] (7.8,.75) -- ++(0,-1) node[below] {Trapdoor};
+%\end{tikzpicture}
+%\vspace{40pt}
+%\begin{itemize}
+%	\item Discrete Logarithm Problem (DLP): Let $G=\langle g\rangle$ be a cyclic group of finite order $n$, i.e., $g^n=1$. Given $h\in G$, the DLP is to find $x\in\{1,2,\dots, n-1\}$ s.t. \[
+%	g^x=h.
+%	\]
+%\end{itemize}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Discrete Logarithm Problem}}{Cyclic Group}
+%{\Huge \[
+%\tikzmarknode{cyclic}{G=\langle g\rangle}
+%\]}
+%\begin{tikzpicture}[remember picture, overlay, font=\sffamily]
+%%	\node[rectangle, above right=of cyclic] {a}; 
+%	\node[draw=white, thick, fit=(cyclic), inner xsep=1pt](box1){};
+%	\draw[-Stealth, thick, orange] (box1)--++(0,1)-- node[above, scale=.75]{Engineering (Computer Science)} ++(5,0) node[right, scale=.75]{\Huge ???};
+%	\node[draw=white, thick, fit=(cyclic), inner xsep=1pt](box2){};
+%	\draw[-Stealth, thick, teal] (box2)--++(0,-1)-- node[below, scale=.75]{Mathematics + Cryptography} ++(-5,0) node[left, scale=.75]{\Huge ???};
+%%	\draw[-Latex, thick, cyan] (7.8,.75) -- ++(0,-1) node[below] {Trapdoor};
+%\end{tikzpicture}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Discrete Logarithm Problem}}{Security Parameter}
+%\begin{table}[h!]
+%\begin{tabular}{c|c|c}
+%	\toprule[1.2pt]
+%	\textbf{Parameter} & \textbf{RSA} (IFP-based) & \textbf{ECC} (DLP-based)\\ \midrule
+%	80-bit & 1024-bit & 160-bit \\
+%	112-bit & 2048-bit & 224-bit \\
+%	128-bit & 3072-bit & 256-bit \\
+%	192-bit & 7680-bit & 384-bit \\
+%	256-bit & 15360-bit & 512-bit \\
+%	\bottomrule[1.2pt]
+%\end{tabular}
+%\end{table}
+%\end{frame}
+%
+%%-------------------------------------------------------
+%% SECTION 3 Number Theory
+%%-------------------------------------------------------
+%\section{Number Theory}
+%\begin{frame}[fragile]{\textbf{Number Theory}}{Bit String as Positive Integers}
+%Let a message be given as a bit string \[
+%b=b_{k-1}b_{k-2}\cdots b_0=\sum_{i=0}^{k-1}b_i2^i\in\Z_{\geq 0}.
+%\]
+%\ \\
+%\vspace{20pt}
+%\textbf{Example.} \begin{align*}
+%2^3-1&\;=\textcolor{blue}{7} &\;=\; 4 + 2 + 1&\;=\;(111)_2 \\
+%2^5-1&\;=\textcolor{blue}{31} &\;=\; 16 + 8 + 4 + 2 + 1&\;=\;(11111)_2 \\
+%2^7-1&\;=\textcolor{blue}{127} & \;=\; 64+32+16 + 8 + 4 + 2 + 1&\;=\;(1111111)_2 \\
+%\end{align*}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Number Theory}}{Binary Digit (Bit)}
+%\textbf{Example.} \[\begin{array}{lclll}
+%	 && \text{Decimal} & \text{Binary Digit} & \text{Hexa-decimal} \\ \\
+%	10^0=0 && 2^0=0 & (0)_2 & \texttt{0x0}\\
+%	10^1=10 && 2^1=2 & (10)_2 & \texttt{0x1}\\
+%	10^2=100 && 2^2=4 & (100)_2 & \texttt{0x4}\\
+%	10^3=1000 && 2^3=8 & (1000)_2 & \texttt{0x8}\\
+%	10^4=10000 && 2^4=16 & (10000)_2 & \texttt{0x10}\\
+%	10^5=100000 & \;\hspace{2cm}\; & 2^5=32 \;\hspace{1cm}\; & (100000)_2 \;\hspace{1cm}\; & \texttt{0x20} \;\hspace{1cm}\; \\
+%	\vdots && \vdots &\vdots & \vdots \\
+%\end{array}\]
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Number Theory}}{Binary Digit (Bit)}
+%\textbf{Example.} A number $x\in\Z$ is 3-bit if and only if \[
+%0\leq x< 2^3.
+%\]
+%\begin{table}[h!]\centering
+%\begin{tabular}{cc}
+%	Integer & Bit Representation \\
+%	0 & \texttt{000} \\
+%	1 & \texttt{001} \\
+%	2 & \texttt{010} \\
+%	3 & \texttt{011} \\
+%	4 & \texttt{100} \\
+%	5 & \texttt{101} \\
+%	6 & \texttt{110} \\
+%	7 & \texttt{111}
+%\end{tabular}
+%\end{table}
+%\end{frame}
+%
+%\begin{frame}[fragile]{\textbf{Number Theory}}{Mersenne Prime}
+%A \textbf{Mersenne prime} is a prime number of the form \[
+%M_p=2^p-1
+%\] where $p$ itself is a prime.\\
+%\vspace{40pt}
+%\textbf{Remark.} \[
+%2^{ab}-1=(2^a-1)(2^{a(b-1)}+2^{a(b-2)}+\cdots+2^a+1).
+%\]
+%\end{frame}
+%
+%%-------------------------------------------------------
+%% SECTION 4 Linear Algebra
+%%-------------------------------------------------------
+%\section{Linear Algebra}
+%\begin{frame}[fragile]{\textbf{Linear Algebra}}{The Structure of Finite-dimensional Vector Spaces}
+%\[
+%\colorbox{-red}{\text{Bit = $\{0,1\}=\F_2$}}.
+%\]\vspace{10pt}
+%\ \\
+%\end{frame}
+%
+%\begin{frame}[fragile]{\textbf{Linear Algebra}}{The Structure of Finite-dimensional Vector Spaces}
+%\[
+%\texttt{11001010}\quad\longrightarrow\quad\colorbox{-red}{\text{Byte = $\{0,1\}^8=\F_2^8$}}.
+%\]\vspace{10pt}
+%\ \\
+%\begin{itemize}
+%	\item $\mathbb{R}$ : 1-dimensional Real Number
+%	\item $\mathbb{R}\times\mathbb{R}=\mathbb{R}^2$ : 2-dimensional Real Number
+%	\item $\mathbb{R}\times\mathbb{R}\times\mathbb{R}=\mathbb{R}^3$ : 3-dimensional Real Number
+%	\item $\mathbb{R}^n$ : $n$-dimensional Real Number
+%\end{itemize}
+%\vspace{10pt}
+%\begin{itemize}
+%\item $\mathbb{F}_2$ : 1-bit
+%\item $\mathbb{F}_2\times\mathbb{F}_2=\mathbb{F}_2^2$ : 2-bit
+%\item $\mathbb{F}_2^8$ : 8-bit = 1-byte
+%\item $\mathbb{F}_2^n$ : $n$-bit
+%\end{itemize}
+%\end{frame}
+%
+%%-------------------------------------------------------
+%% SECTION 5 Abstract Algebra
+%%-------------------------------------------------------
+%\section{Abstract Algebra}
+%\begin{frame}[fragile]{\textbf{Abstract Algebra}}{Galois Field}
+%\[
+%\underset{\text{Bit Representation (Integer)}}{\Huge\text{11001010}}\iff\underset{\text{Vector}}{\Huge \text{(0,1,0,1,0,0,1,1)}}
+%\]
+%\begin{itemize}
+%	\item Value: $0$ or $1$
+%	\item Position: 0 - 7
+%\end{itemize}
+%\vspace{10pt}
+%\ \\
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Abstract Algebra}}{Galois Field}
+%\[
+%\underset{\text{Bit Representation (Integer)}}{\Huge\text{11001010}}\iff\underset{\text{Vector}}{\Huge \text{(0,1,0,1,0,0,1,1)}}
+%\]
+%\begin{itemize}
+%	\item Value: $0$ or $1$\quad\textcolor{blue}{$\implies$ Coefficient}
+%	\item Position: 0 - 7\quad\textcolor{red}{$\implies$ Degree}
+%\end{itemize}
+%\vspace{10pt}
+%\ \\
+%\[
+%\textcolor{blue}{1}\cdot x^{\textcolor{red}{7}} + \textcolor{blue}{1}\cdot x^{\textcolor{red}{6}} + \textcolor{blue}{0}\cdot x^{\textcolor{red}{5}} + \textcolor{blue}{0}\cdot x^{\textcolor{red}{4}} + \textcolor{blue}{1}\cdot x^{\textcolor{red}{3}} + \textcolor{blue}{0}\cdot x^{\textcolor{red}{2}} +\textcolor{blue}{1}\cdot x^{\textcolor{red}{1}} + \textcolor{blue}{0}\cdot x^{\textcolor{red}{0}} = x^7+x^6+x^3+x^1.
+%\]
+%\begin{itemize}
+%	\item $x^7+x^6+x^3+x^1\in \mathbb{F}_2[x]$.
+%	\item $x^7\cdot x = x^8$ ??
+%\end{itemize}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{Abstract Algebra}}{Galois Field}
+%\[
+%\mathbb{F}_2[x]/\langle\text{irreducible polynomial}\rangle
+%\]
+%\begin{itemize}
+%	\item We want to find ``\textbf{Monic irreducible polynomials of degree 8 over the field field $\F_2$}''
+%\end{itemize}
+%\begin{table}[h!]
+%\begin{tabular}{c||lcc}
+%No & Irreducible Polynomial & Binary & Decimal \\ \hline
+%1 & $x^8+x^4+x^3+x+1$ & \texttt{100011011} & 283 \\
+%2 & $x^8+x^4+x^3+x^2+1$ & \texttt{100011101} & 285 \\
+%\vdots & \vdots & \vdots & \vdots \\
+%30 & $x^8+x^7+x^6+x^5+x^4+x^3+1$ & \texttt{111111001} & 505 
+%\end{tabular}
+%\end{table}
+%\begin{itemize}
+%	\item $\F_2[x]/\langle x^8+x^4+x^3+x+1\rangle=\{a_7x^7+a_6x^6+\cdots +a_0:a_i\in\F_2[x]\}=\F_{2^8}=GF(2^8)$
+%	\item $x^7\cdot x=x^8=x^4+x^3+x+1$ over $GF(2^8)$
+%\end{itemize}
+%\end{frame}
+%%-------------------------------------------------------
+%% SECTION 6 Cryptography
+%%-------------------------------------------------------
+%\section{Cryptography}
+%\begin{frame}{\textbf{Cryptography}}{}\centering
+%\includegraphics[scale=.9]{tikzs/bit_string1.pdf}	
+%\end{frame}
+%\begin{frame}{\textbf{Cryptography}}{}\centering
+%\includegraphics[scale=.9]{tikzs/bit_string2.pdf}	
+%\end{frame}
+%\begin{frame}{\textbf{Cryptography}}{}\centering
+%\includegraphics[scale=.9]{tikzs/bit_string3.pdf}	
+%\end{frame}
+%\begin{frame}{\textbf{Cryptography}}{}\centering
+%\includegraphics[scale=.9]{tikzs/bit_string4.pdf}	
+%\end{frame}
+%\begin{frame}{\textbf{Cryptography}}{}\centering
+%\includegraphics[scale=.9]{tikzs/bit_string.pdf}	
+%\end{frame}
+%\begin{frame}{\textbf{Cryptography}}{Example}
+%\[
+%\{0,1\}^{128}\to\{0,1\}^{128}
+%\]\vspace{20pt}
+%\adjustbox{width=\textwidth, center}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+%	\cellcolor{red!20} $X_0$ & \cellcolor{red!20}$X_1$ & \cellcolor{red!20}$X_2$ & \cellcolor{red!20}$X_3$ & \cellcolor{green!20} $X_4$ & \cellcolor{green!20}$X_5$ & \cellcolor{green!20}$X_6$ & \cellcolor{green!20} $X_7$ & \cellcolor{blue!20} $X_8$ & \cellcolor{blue!20} $X_9$ & \cellcolor{blue!20} $X_{10}$ & \cellcolor{blue!20} $X_{11}$ & \cellcolor{yellow!20} $X_{12}$ & \cellcolor{yellow!20} $X_{13}$ & \cellcolor{yellow!20} $X_{14}$ & \cellcolor{yellow!20} $X_{15}$ \\ \hline
+%\end{tabular}}
+%\begin{center}
+%	$\Downarrow$
+%\end{center}\adjustbox{width=\textwidth, center}{
+%\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+%	\cellcolor{red!20} $X_0'$ & \cellcolor{red!20}$X_1'$ & \cellcolor{red!20}$X_2'$ & \cellcolor{red!20}$X_3'$ & \cellcolor{green!20} $X_4'$ & \cellcolor{green!20}$X_5'$ & \cellcolor{green!20}$X_6'$ & \cellcolor{green!20} $X_7'$ & \cellcolor{blue!20} $X_8'$ & \cellcolor{blue!20} $X_9'$ & \cellcolor{blue!20} $X_{10}'$ & \cellcolor{blue!20} $X_{11}'$ & \cellcolor{yellow!20} $X_{12}'$ & \cellcolor{yellow!20} $X_{13}'$ & \cellcolor{yellow!20} $X_{14}'$ & \cellcolor{yellow!20} $X_{15}'$ \\ \hline
+%\end{tabular}}
+%\begin{itemize}
+%\item $X_i\in\{0,1\}^8$ for all $i=0,1,\dots, 15$
+%\item $X_i'\in\{0,1\}^8$ for all $i=0,1,\dots, 15$
+%\end{itemize}	
+%\end{frame}
+%
+%\begin{frame}{\textbf{Cryptography}}{Example}
+%\begin{center}
+%\begin{minipage}{.4\textwidth}\centering
+%$A=$\quad\begin{tabular}{|c|c|c|c|}
+%	\hline
+%	\cellcolor{red!20}$X_0$ & \cellcolor{green!20}$X_4$ & \cellcolor{blue!20}$X_8$ & \cellcolor{yellow!20}$X_{12}$ \\ \hline
+%	\cellcolor{red!20}$X_1$ & \cellcolor{green!20}$X_5$ & \cellcolor{blue!20}$X_9$ & \cellcolor{yellow!20}$X_{13}$ \\ \hline
+%	\cellcolor{red!20}$X_2$ & \cellcolor{green!20}$X_6$ & \cellcolor{blue!20}$X_{10}$ & \cellcolor{yellow!20}$X_{14}$ \\ \hline
+%	\cellcolor{red!20}$X_3$ & \cellcolor{green!20}$X_7$ & \cellcolor{blue!20}$X_{11}$ & \cellcolor{yellow!20}$X_{15}$ \\ \hline
+%\end{tabular}
+%\end{minipage}$\overset{T}{\longrightarrow}$\begin{minipage}{.4\textwidth}\centering
+%$B=$\quad\begin{tabular}{|c|c|c|c|}
+%	\hline
+%	\cellcolor{red!20}$X_0'$ & \cellcolor{green!20}$X_4'$ & \cellcolor{blue!20}$X_8'$ & \cellcolor{yellow!20}$X_{12}'$ \\ \hline
+%	\cellcolor{red!20}$X_1'$ & \cellcolor{green!20}$X_5'$ & \cellcolor{blue!20}$X_9'$ & \cellcolor{yellow!20}$X_{13}'$ \\ \hline
+%	\cellcolor{red!20}$X_2'$ & \cellcolor{green!20}$X_6'$ & \cellcolor{blue!20}$X_{10}'$ & \cellcolor{yellow!20}$X_{14}'$ \\ \hline
+%	\cellcolor{red!20}$X_3'$ & \cellcolor{green!20}$X_7'$ & \cellcolor{blue!20}$X_{11}'$ & \cellcolor{yellow!20}$X_{15}'$ \\ \hline
+%\end{tabular}
+%\end{minipage}
+%\end{center}
+%\vspace{10pt}\ \\
+%\begin{itemize}
+%	\item $A,B\in M_{4\times 4}(\mathbb{F}_{2^8})$ (or $\mathbb{F}_{2^8}^{4\times 4}$)
+%	\item $T:\{0,1\}^{128}\to\{0,1\}^{128}$ is \[
+%	T:\mathbb{F}_{2^8}^{4\times 4}\to\mathbb{F}_{2^8}^{4\times 4}.
+%	\]
+%\end{itemize}
+%\end{frame}
+
+%-------------------------------------------------------
+\begin{frame}[plain] % The optional argument 'plain' hides the headline and footline
+	\begin{center}\bfseries\centering
+		
+		\includegraphics[scale=1]{Feathergraphics/cse_logo_opa0}
+		\vspace{-6cm} \\
+		{\Huge The End}
+		
+		\bigskip\bigskip % Vertical whitespace
+		
+		{\LARGE \textcolor{co2blue}{Questions?} \textcolor{co2orange}{Comments?}}\vspace{4cm}\\
+		
+		\bigskip
+	\end{center}
+\end{frame}
+
+%\appendix
+%%\addcontentsline{toc}{section}{Appendices}
+%\section{A}
+%\begin{frame}{\textbf{A.1}\ Key Characteristics of Curve25519}{}
+%\begin{itemize}
+%	\item \textbf{Montgomery Form}:
+%	\item[]
+%	\begin{itemize}
+%		\item The Montgomery form enables efficient computation of scalar multiplications.
+%		\item %Compared to the traditional Weierstrass form of elliptic curves, 
+%		Montgomery form simplifies arithmetic operations like point doubling and addition.
+%	\end{itemize}
+%	\item[]
+%	\item \textbf{Prime Order Subgroup}:
+%	\item[]
+%	\begin{itemize}
+%		\item[$\bullet$] The total number of points (the curve's order) is \[
+%		\#E(\F_p)=2^3\cdot\ell,
+%		\] where $\ell=2^{252}+27742317777372353535851937790883648493$ is a prime number.%, and the cofactor $h=8$.
+%		\item[$\bullet$] Cryptographic operations are restricted to the prime-order subgroup of size 
+%		$\ell$.
+%%		, eliminating vulnerabilities to small subgroup attacks.
+%	\end{itemize}
+%	\item[]
+%	\item \textbf{Field Parameters}:
+%	
+%	The field $\F_p$ is defined by $2^{255}-19$, a prime chosen for efficient modular arithmetic using the Barrett or Montgomery reduction techniques.
+%	\item[]
+%	\item \textbf{Base Point}:
+%	
+%	A predefined base point $G=(x_G,y_G)$ generates the prime-order subgroup, where: \[
+%	x_G=9,\quad y_G=\sqrt{9^3+486662\cdot 9^2+9}\ \bmod p.
+%	\]
+%\end{itemize}
+%\end{frame}
+%\begin{frame}[fragile]{\textbf{A.2}\ Algorithmic Implementation of X25519}
+%\input{appendices/impl-x25519}
+%\end{frame}
+
+\end{document}

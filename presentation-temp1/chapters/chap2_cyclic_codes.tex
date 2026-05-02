@@ -1,0 +1,256 @@
+%=======================================================
+% CHAPTER 2: CYCLIC CODES
+%=======================================================
+
+%--- Section Title Frame ---
+\begin{frame}[plain]
+  \begin{center}\bfseries\centering
+    \includegraphics[scale=1]{assets/branding/opa0}
+    \vspace{-5.75cm}\\
+    {\adjustbox{scale=2.3}{\color{TealDarkCyan}\;III.\;Cyclic Codes}}
+    \bigskip\bigskip
+    {\ }\vspace{4cm}\\
+    \bigskip
+  \end{center}
+\end{frame}
+
+%--- Slide: Definition ---
+\begin{frame}{\textbf{III. Cyclic Codes}}{Definition and Examples}
+
+\defbox[Cyclic Code]{
+A linear code $\code\leq\F_q^n$ is \textbf{cyclic} if for every codeword
+\[(c_0,c_1,\dots,c_{n-1})\in\code \;\implies\; (c_{n-1},c_0,c_1,\dots,c_{n-2})\in\code.\]
+}
+
+\medskip
+\begin{columns}[T]
+  \begin{column}{.50\textwidth}
+    \textcolor{TealDarkCyan}{\textbf{Cyclic code} ($n=4$)}
+    \[\code = \{0000,\;1010,\;0101,\;1111\}\]
+    \begin{itemize}\small
+      \item $(1,0,1,0)\xrightarrow{\text{shift}}(0,1,0,1)\in\code$ \checkmark
+      \item $(0,1,0,1)\xrightarrow{\text{shift}}(1,0,1,0)\in\code$ \checkmark
+    \end{itemize}
+  \end{column}
+  \begin{column}{.47\textwidth}
+    \textcolor{red!70!black}{\textbf{Linear but not cyclic} ($n=4$)}
+    \[\code'=\{0000,\;1100,\;0011,\;1111\}\]
+    \begin{itemize}\small
+      \item $(1,1,0,0)\xrightarrow{\text{shift}}(0,1,1,0)\notin\code'$ \texttimes
+    \end{itemize}
+  \end{column}
+\end{columns}
+
+\medskip
+\begin{block}{Why cyclic?}
+\small Cyclic symmetry enables \textbf{LFSR-based encoding and decoding} — efficient hardware with only $r = n-k$ flip-flops, processing one bit per clock.
+\end{block}
+\end{frame}
+
+%--- Slide: Polynomial Representation ---
+\begin{frame}{\textbf{III. Cyclic Codes}}{Polynomial Representation}
+
+\defbox[Polynomial Representation]{
+Map vectors to polynomials of degree $< n$ over $\F_q$:
+\[(c_0,c_1,\dots,c_{n-1})\;\longleftrightarrow\;
+  c(X) = c_0 + c_1X + \cdots + c_{n-1}X^{n-1}.\]
+Under this identification, the \textbf{one-step cyclic shift} is exactly
+\[X\cdot c(X)\pmod{X^n-1}.\]
+}
+
+\medskip
+\begin{columns}[T]
+  \begin{column}{.55\textwidth}
+    \textbf{Verification ($n=7$):}\; $c(X) = 1 + X^2 + X^3$
+    \begin{align*}
+      X\cdot c(X) &= X + X^3 + X^4 \\
+      &\longleftrightarrow (0,1,0,1,1,0,0)
+    \end{align*}
+    This is the 1-step cyclic shift of $(1,0,1,1,0,0,0)$.\;\checkmark
+  \end{column}
+  \begin{column}{.42\textwidth}
+    \textbf{Wrap-around:}\; $c(X) = X^4+X^5+X^6$
+    \begin{align*}
+      X c(X) &= X^5+X^6+\textcolor{red}{X^7}\\
+      &\equiv 1+X^5+X^6
+    \end{align*}
+    since $X^7\equiv 1\pmod{X^7-1}$.
+  \end{column}
+\end{columns}
+
+\medskip
+\defbox[Quotient Ring $R_n$]{
+All algebraic operations on cyclic codes live in $\;R_n = \F_q[X]/\ideal{X^n-1}.$
+}
+\end{frame}
+
+%--- Slide: Generator Polynomial ---
+\begin{frame}{\textbf{III. Cyclic Codes}}{Generator Polynomial}
+
+\thmbox[Generator Polynomial]{
+Every nonzero cyclic code $\code\leq R_n$ contains a unique monic polynomial $g(X)$ of \emph{smallest} degree, called the \textbf{generator polynomial}. It satisfies:
+\begin{enumerate}[(i)]\small
+  \item $g(X)\mid X^n-1$ \hfill (divisibility condition)
+  \item $\deg g(X) = n-k$, where $k = \dim\code$ \hfill (dimension formula)
+  \item Every codeword: $c(X) = m(X)\,g(X)$ \hfill (non-systematic encoding)
+\end{enumerate}
+}
+
+\medskip
+\begin{columns}[T]
+  \begin{column}{.50\textwidth}
+    \textbf{Parity-check polynomial:}
+    \[h(X)=\frac{X^n-1}{g(X)},\qquad \deg h = k\]
+    A polynomial $v(X)$ is a codeword iff
+    \[v(X)h(X)\equiv 0\pmod{X^n-1}.\]
+  \end{column}
+  \begin{column}{.47\textwidth}
+    \textbf{Key consequence:}\\[4pt]
+    The number of cyclic codes of length $n$ over $\F_q$ equals the number of \emph{monic divisors} of $X^n-1$ in $\F_q[X]$.
+    \[\text{If }X^n-1 = \prod_{i=1}^s f_i(X),\text{ then }2^s\text{ codes}.\]
+  \end{column}
+\end{columns}
+\end{frame}
+
+%--- Slide: Factoring X^7+1 ---
+\begin{frame}{\textbf{III. Cyclic Codes}}{Classification: Factoring $X^7+1$ over $\F_2$}
+
+\[X^7+1 = \underbrace{(1+X)}_{f_1}\;\underbrace{(1+X+X^3)}_{f_2}\;\underbrace{(1+X^2+X^3)}_{f_3}\]
+
+Three irreducible factors $\Rightarrow$ $2^3 = 8$ cyclic codes of length 7:
+
+\medskip
+\renewcommand{\arraystretch}{1.25}
+\begin{center}
+\begin{tabular}{@{}p{1.4cm}p{5.3cm}ccc@{}}
+  \toprule
+  Subset $S$ & Generator polynomial $g(X)$ & $\deg g$ & $[n,k]$ & Remark\\
+  \midrule
+  $\emptyset$     & $1$                               & 0 & $[7,7]$ & whole space\\
+  $\{1\}$         & $1+X$                             & 1 & $[7,6]$ & parity-check\\
+  $\{2\}$         & $1+X+X^3$                         & 3 & $[7,4]$ & \textcolor{TealDarkCyan}{\textbf{Hamming}}\\
+  $\{3\}$         & $1+X^2+X^3$                       & 3 & $[7,4]$ & \\
+  $\{1,2\}$       & $1+X^2+X^3+X^4$                   & 4 & $[7,3]$ & \\
+  $\{1,3\}$       & $1+X+X^2+X^4$                     & 4 & $[7,3]$ & \\
+  $\{2,3\}$       & $1+X+X^2+X^3+X^4+X^5+X^6$        & 6 & $[7,1]$ & repetition\\
+  $\{1,2,3\}$     & $X^7+1$                           & 7 & $[7,0]$ & zero code\\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{2pt}
+{\small Larger $g(X)$ (more factors) $\Rightarrow$ smaller code $\Rightarrow$ higher correction ability.}
+\end{frame}
+
+%--- Slide: The [7,4] Cyclic Code ---
+\begin{frame}{\textbf{III. Cyclic Codes}}{The $[7,4,3]_2$ Cyclic Hamming Code}
+
+\textbf{Generator polynomial:} $g(X) = 1+X+X^3$
+
+\medskip
+\begin{columns}[T]
+  \begin{column}{.50\textwidth}
+    \textbf{Generator matrix} (rows $= g,Xg,X^2g,X^3g$):
+    \[\small
+    G = \begin{bmatrix}
+    1 & 1 & 0 & 1 & 0 & 0 & 0\\
+    0 & 1 & 1 & 0 & 1 & 0 & 0\\
+    0 & 0 & 1 & 1 & 0 & 1 & 0\\
+    0 & 0 & 0 & 1 & 1 & 0 & 1
+    \end{bmatrix}
+    \]
+    \textbf{Encoding} $\mathbf{m}=(1,1,0,1)$:
+    \begin{align*}
+      c(X) &= m(X)g(X)\\
+           &= (1+X+X^3)(1+X+X^3)\\
+           &= 1+X^2+X^6
+    \end{align*}
+  \end{column}
+  \begin{column}{.47\textwidth}
+    \textbf{Parity-check polynomial:}
+    \[h(X)=\frac{X^7+1}{1+X+X^3}=1+X+X^2+X^4\]
+
+    \medskip
+    \textbf{Systematic encoding} of $\mathbf{m}=(1,0,1,1)$:
+    \begin{enumerate}\small
+      \item $X^3 m(X) = X^3+X^5+X^6$
+      \item $p(X) = X^3m(X)\bmod g(X) = 1$
+      \item $c(X) = 1+X^3+X^5+X^6$
+      \item $\mathbf{c} = (\underbrace{1,0,0}_{\text{parity}},\underbrace{1,0,1,1}_{\text{message}})$
+    \end{enumerate}
+  \end{column}
+\end{columns}
+\end{frame}
+
+%--- Slide: Cyclic Codes are Ideals ---
+\begin{frame}{\textbf{III. Cyclic Codes}}{Cyclic Codes are Ideals}
+
+\thmbox[Cyclic Codes $=$ Ideals of $R_n$]{
+Under the identification $\F_q^n \cong R_n = \F_q[X]/\ideal{X^n-1}$, a linear code $\code$ is cyclic if and only if $\code$ is an \textbf{ideal} of $R_n$.
+
+\medskip
+Equivalently: $\code = \ideal{g(X)}$ for a unique monic divisor $g(X)$ of $X^n-1$.
+}
+
+\medskip
+\begin{columns}[T]
+  \begin{column}{.52\textwidth}
+    \textbf{Proof sketch:}
+    \begin{enumerate}\small
+      \item Cyclic shift $=$ multiply by $X$ in $R_n$
+      \item $\code$ cyclic $\Rightarrow$ $\code$ closed under $\times X$ $\Rightarrow$ closed under $\times r(X)$ for any $r(X)$ $\Rightarrow$ $\code$ is an ideal
+      \item $\F_q[X]$ is a PID; by correspondence theorem every ideal of $R_n$ is principal: $\code = \ideal{g(X)}$ with $g(X)\mid X^n-1$
+    \end{enumerate}
+  \end{column}
+  \begin{column}{.45\textwidth}
+    \textbf{Correspondence Theorem:}
+    \[\begin{array}{ccc}
+      \text{cyclic codes} & \longleftrightarrow & \text{ideals of }R_n\\[3pt]
+      \Updownarrow & & \Updownarrow\\[3pt]
+      \multicolumn{3}{c}{\text{monic divisors of }X^n-1}
+    \end{array}\]
+    \medskip
+    \textbf{Ideal lattice} ($n=7,q=2$):
+    \[\ideal{1}\supset\ideal{f_1}\supset\ideal{f_1f_2}\supset\ideal{f_1f_2f_3}=\ideal{0}\]
+    (and similarly for other chains)
+  \end{column}
+\end{columns}
+\end{frame}
+
+%--- Slide: BCH Bound ---
+\begin{frame}{\textbf{III. Cyclic Codes}}{Designed Distance: the BCH Bound}
+
+\thmbox[BCH Bound]{
+Let $\alpha$ be a primitive $n$-th root of unity in $\F_{q^m}$. If $g(X)$ has $\delta-1$ consecutive roots
+\[\alpha^b,\;\alpha^{b+1},\;\dots,\;\alpha^{b+\delta-2},\]
+then the cyclic code with generator $g(X)$ satisfies $d_{\min}\geq\delta$.
+}
+
+\medskip
+\begin{columns}[T]
+  \begin{column}{.50\textwidth}
+    \textbf{Design principle:}
+    \begin{itemize}\small
+      \item Choose target $t$ (errors to correct)
+      \item Set designed distance $\delta = 2t+1$
+      \item Pick $g(X)$ with $2t$ consecutive roots
+      \item $\Rightarrow$ guaranteed $d_{\min}\geq 2t+1$
+    \end{itemize}
+  \end{column}
+  \begin{column}{.47\textwidth}
+    \textbf{Example: $[15,7]_2$ BCH code}
+    \begin{itemize}\small
+      \item $\alpha$ = primitive 15th root in $\F_{2^4}$
+      \item $g(\alpha)=g(\alpha^2)=g(\alpha^3)=g(\alpha^4)=0$
+      \item 4 consecutive roots $\Rightarrow\delta=5$
+      \item $d_{\min}\geq 5$,\; $t\geq 2$
+      \item Actual $d_{\min}=5$ (BCH bound is tight)
+    \end{itemize}
+  \end{column}
+\end{columns}
+
+\medskip
+\begin{block}{}
+\small The BCH bound allows \textbf{provable error-correction capability at the design stage} — not available for general cyclic codes.
+\end{block}
+\end{frame}

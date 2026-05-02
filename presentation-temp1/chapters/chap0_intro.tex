@@ -1,0 +1,132 @@
+%=======================================================
+% CHAPTER 0: INTRODUCTION
+%=======================================================
+
+%--- Section Title Frame ---
+\begin{frame}[plain]
+  \begin{center}\bfseries\centering
+    \includegraphics[scale=1]{assets/branding/opa0}
+    \vspace{-5.75cm}\\
+    {\adjustbox{scale=2.5}{\color{TealDarkCyan}\;I.\;Introduction}}
+    \bigskip\bigskip
+    {\ }\vspace{4cm}\\
+    \bigskip
+  \end{center}
+\end{frame}
+
+%--- Slide: The Communication Problem ---
+\begin{frame}{\textbf{I. Introduction}}{The Communication Problem}
+\begin{center}
+\begin{tikzpicture}[
+  cbox/.style   = {draw, thick, rounded corners=4pt, minimum height=.85cm,
+                   minimum width=1.8cm, align=center},
+  arr/.style    = {-Stealth, thick, color=TealDarkCyan},
+  noise/.style  = {-Stealth, thick, color=AccentCyan!80!black},
+  lbl/.style    = {font=\small}
+]
+  \node[cbox, fill=TealDarkCyan!15] (src) {\small Source\\[-2pt]$\mathbf{m}$};
+  \node[cbox, fill=TealDarkCyan!25, right=1.1cm of src]  (enc) {\small Encoder};
+  \node[cbox, fill=AccentCyan!18,    right=1.1cm of enc]  (ch)  {\small Noisy\\[-2pt]\small Channel};
+  \node[cbox, fill=TealDarkCyan!25, right=1.1cm of ch]   (dec) {\small Decoder};
+  \node[cbox, fill=TealDarkCyan!15, right=1.1cm of dec]  (dst) {\small Receiver\\[-2pt]$\hat{\mathbf{m}}$};
+  \node[above=.55cm of ch, AccentCyan!80!black]    (err) {\small $\mathbf{e}$\; (noise)};
+
+  \draw[arr] (src) -- (enc) node[midway,above,lbl]{$\mathbf{m}$};
+  \draw[arr] (enc) -- (ch)  node[midway,above,lbl]{$\mathbf{c}$};
+  \draw[arr] (ch)  -- (dec) node[midway,above,lbl]{$\mathbf{v}=\mathbf{c}+\mathbf{e}$};
+  \draw[arr] (dec) -- (dst) node[midway,above,lbl]{$\hat{\mathbf{m}}$};
+  \draw[noise] (err) -- (ch);
+\end{tikzpicture}
+\end{center}
+\bigskip
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{.48\textwidth}
+    \textbf{Setup}
+    \begin{itemize}\small
+      \item Message $\mathbf{m}\in\F_q^k$
+      \item Encoder adds redundancy: $\mathbf{m}\mapsto\mathbf{c}\in\F_q^n$,\; $n>k$
+      \item Channel corrupts: $\mathbf{v}=\mathbf{c}+\mathbf{e}$
+    \end{itemize}
+  \end{column}
+  \begin{column}{.48\textwidth}
+    \textbf{Goal}
+    \begin{itemize}\small
+      \item Recover $\hat{\mathbf{m}}=\mathbf{m}$ even when $\mathbf{e}\neq\mathbf{0}$
+      \item Keep rate $R = k/n$ as large as possible
+    \end{itemize}
+  \end{column}
+\end{columns}
+\end{frame}
+
+%--- Slide: Shannon's Theorem ---
+\begin{frame}{\textbf{I. Introduction}}{Shannon's Channel Coding Theorem (1948)}
+
+\defbox[Shannon's Channel Coding Theorem]{
+For any discrete memoryless channel with capacity $C$ and any rate $R<C$, there exists a sequence of codes of rate $\to R$ whose block error probability $\to 0$.
+}
+
+\bigskip
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{.48\textwidth}
+    \textcolor{TealDarkCyan}{\textbf{What it guarantees}}
+    \begin{itemize}\small
+      \item Reliable communication \emph{is} possible below capacity
+      \item Error probability can be made arbitrarily small
+    \end{itemize}
+  \end{column}
+  \begin{column}{.48\textwidth}
+    \textcolor{AccentCyan!80!black}{\textbf{What it does not provide}}
+    \begin{itemize}\small
+      \item \emph{How} to construct such codes explicitly
+      \item \emph{How} to decode efficiently
+    \end{itemize}
+  \end{column}
+\end{columns}
+
+\bigskip
+\begin{alertblock}{The Central Challenge of Coding Theory}
+\centering
+Construct \textbf{explicit algebraic codes} that are both \textbf{efficient} (high rate) and \textbf{powerful} (correct many errors).
+\end{alertblock}
+\end{frame}
+
+%--- Slide: Roadmap ---
+\begin{frame}{\textbf{I. Introduction}}{Roadmap}
+
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{.48\textwidth}
+    \defbox[II.\;Linear Codes]{
+    \small Structure via \textbf{linear algebra}
+    \begin{itemize}
+      \item[$\bullet$] Subspaces of $\F_q^n$
+      \item[$\bullet$] Generator $G$, parity-check $H$
+      \item[$\bullet$] Hamming distance \& error correction
+    \end{itemize}
+    }
+    \medskip
+	    \defbox[III.\;Hamming Codes]{
+	    \small Perfect codes via \textbf{projective geometry}
+	    \begin{itemize}
+	      \item[$\bullet$] Parity checks from projective points
+	      \item[$\bullet$] Syndrome decoding as geometry
+	      \item[$\bullet$] Perfect single-error correction
+	    \end{itemize}
+	    }
+	  \end{column}
+	  \begin{column}{.48\textwidth}
+	    \defbox[IV.\;Cyclic Codes]{
+	    \small
+	    Structure via \textbf{polynomial rings}
+	    \begin{itemize}
+	      \item[$\bullet$] Quotient $\F_q[X]/(X^n-1)$
+	      \item[$\bullet$] Ideals and generator polynomials
+	      \item[$\bullet$] BCH design and cyclic Hamming codes
+	    \end{itemize}
+	    }
+	    \bigskip
+	    \begin{block}{Key Observation}
+	    \small Coding theory is a meeting point of \textbf{linear algebra}, \textbf{finite geometry}, and \textbf{polynomial algebra}.
+	    \end{block}
+  \end{column}
+\end{columns}
+\end{frame}

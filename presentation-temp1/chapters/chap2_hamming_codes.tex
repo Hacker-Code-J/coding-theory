@@ -1,0 +1,539 @@
+%=======================================================
+% CHAPTER 2: HAMMING CODES
+%=======================================================
+
+\begin{frame}[plain]
+  \begin{center}\bfseries\centering
+    \includegraphics[scale=1]{assets/branding/opa0}
+    \vspace{-5.75cm}\\
+    {\adjustbox{scale=2.15}{\color{TealDarkCyan}\;III.\;Hamming Codes}}
+    \bigskip\bigskip
+    {\ }\vspace{4cm}\\
+    \bigskip
+  \end{center}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{The design problem}
+\small
+\begin{block}{Goal}
+Construct binary linear codes that correct exactly one error and use all possible syndromes.
+\end{block}
+\begin{itemize}
+  \item A received word has either no error or one error in position $i$.
+  \item Thus there are $1+n$ elementary cases.
+  \item With $r$ parity checks, there are $2^r$ syndromes.
+\end{itemize}
+\[
+  1+n=2^r
+  \quad\Rightarrow\quad
+  n=2^r-1.
+\]
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{The parity-check matrix}
+\small
+\defbox[Binary Hamming matrix]{
+For $r\ge2$, let $H_r$ be the $r\times(2^r-1)$ matrix whose columns are all nonzero vectors of $\F_2^r$.
+}
+\[
+  H_3=
+  \begin{bmatrix}
+  1&0&1&0&1&0&1\\
+  0&1&1&0&0&1&1\\
+  0&0&0&1&1&1&1
+  \end{bmatrix}.
+\]
+\begin{itemize}
+  \item Column labels are nonzero binary syndromes.
+  \item Every nonzero syndrome identifies a unique column.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Definition}
+\small
+\defbox[Binary Hamming code]{
+The binary Hamming code of order $r$ is
+\[
+  \operatorname{Ham}(r,2)=\ker(H_r)\le\F_2^{2^r-1}.
+\]
+}
+\begin{itemize}
+  \item Length: $n=2^r-1$.
+  \item Redundancy: $r$.
+  \item Dimension: $k=n-r=2^r-1-r$.
+\end{itemize}
+\[
+  \operatorname{Ham}(r,2)\text{ has parameters }[2^r-1,2^r-1-r,3]_2.
+\]
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Dimension}
+\small
+\thmbox[Dimension count]{
+The matrix $H_r$ has rank $r$, hence
+\[
+  \dim\ker(H_r)=2^r-1-r.
+\]
+}
+\begin{proof}
+The standard basis vectors $e_1,\ldots,e_r$ occur among the nonzero columns of $H_r$, so the row rank is $r$.
+\end{proof}
+\begin{block}{Interpretation}
+The parity checks are independent; no check is redundant.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Minimum distance}
+\small
+\thmbox[Distance]{
+The binary Hamming code $\operatorname{Ham}(r,2)$ has minimum distance $3$.
+}
+\begin{proof}
+No column of $H_r$ is zero, so $d\ge2$. No two columns are equal over $\F_2$, so no two are dependent, hence $d\ge3$. But $u+v+(u+v)=0$, so three suitable columns are dependent.
+\end{proof}
+\begin{itemize}
+  \item Therefore Hamming codes correct one error.
+  \item They detect two errors.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Perfectness}
+\small
+\thmbox[Hamming codes are perfect]{
+The binary Hamming code satisfies equality in the Hamming bound for $t=1$.
+}
+\[
+  2^k(1+n)=2^{2^r-1-r}(1+2^r-1)=2^{2^r-1}=2^n.
+\]
+\begin{itemize}
+  \item Every word of $\F_2^n$ is at distance at most $1$ from exactly one codeword.
+  \item The syndrome is not merely a diagnostic: it is a complete decoder.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Syndrome decoding}
+\small
+\defbox[Decoder]{
+Given $v\in\F_2^n$, compute $s=H_rv^T$.
+}
+\begin{itemize}
+  \item If $s=0$, accept $v$.
+  \item If $s\ne0$, find the unique column $H_i=s$.
+  \item Correct by flipping coordinate $i$.
+\end{itemize}
+\begin{block}{Reason}
+For a single error $e_i$, the syndrome is $H_re_i^T=H_i$.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Binary index convention}
+\small
+\defbox[Indexed columns]{
+If the $i$-th column of $H_r$ is the binary expansion of $i$, then the nonzero syndrome is literally the error position.
+}
+\[
+  s=(1,0,1)^T\quad\leadsto\quad i=5
+\]
+depending on the chosen bit order.
+\begin{itemize}
+  \item This is a notational convention, not an invariant.
+  \item It explains the classical parity-bit positions $1,2,4,\ldots$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{The classical [7,4,3] code}
+\small
+\[
+H=
+\begin{bmatrix}
+1&0&1&0&1&0&1\\
+0&1&1&0&0&1&1\\
+0&0&0&1&1&1&1
+\end{bmatrix}.
+\]
+\begin{itemize}
+  \item There are $7$ nonzero syndromes.
+  \item Each syndrome names one error coordinate.
+  \item The kernel has dimension $4$.
+\end{itemize}
+\[
+  \operatorname{Ham}(3,2)=[7,4,3]_2.
+\]
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{A systematic generator matrix}
+\small
+One systematic form for the $[7,4,3]$ Hamming code is
+\[
+G=
+\begin{bmatrix}
+1&0&0&0&0&1&1\\
+0&1&0&0&1&0&1\\
+0&0&1&0&1&1&0\\
+0&0&0&1&1&1&1
+\end{bmatrix}.
+\]
+\begin{itemize}
+  \item The first four coordinates are message symbols.
+  \item The last three are parity symbols.
+  \item This $G$ is equivalent to the kernel of a suitable $H$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Encoding example}
+\small
+For $m=(1,0,1,1)$ and the systematic matrix $G$,
+\[
+  c=mG=(1,0,1,1,0,0,1).
+\]
+\begin{itemize}
+  \item The parity bits are linear forms in the message bits.
+  \item A single flipped bit changes the syndrome to the corresponding column.
+  \item The correction rule does not require knowing the transmitted message.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Projective geometry}
+\small
+\defbox[Projective interpretation]{
+The nonzero columns of $H_r$, modulo scalar multiplication, are the points of projective space
+\[
+  \mathbb{P}^{r-1}(\F_q).
+\]
+}
+\begin{itemize}
+  \item Over $\F_2$, each nonzero vector is its own projective point.
+  \item Over $\F_q$, scalar multiples define the same projective point.
+  \item Hamming codes are parity checks indexed by projective points.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{The Fano plane}
+\small
+For $r=3$, the projective space $\mathbb{P}^2(\F_2)$ has $7$ points and $7$ lines.
+\begin{itemize}
+  \item The $7$ columns of $H_3$ are the points.
+  \item A dependent triple of columns is a line of the Fano plane.
+  \item Weight-$3$ codewords are exactly these lines.
+\end{itemize}
+\begin{block}{Geometry}
+The minimum distance $3$ is the statement that the smallest projective line has three points.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Lines give codewords}
+\small
+In $\mathbb{P}^2(\F_2)$, if $a,b,c$ are the three points on a line, then
+\[
+  a+b+c=0.
+\]
+\begin{itemize}
+  \item The incidence vector of that line is a Hamming codeword.
+  \item The $7$ lines give the $7$ words of weight $3$.
+  \item Their complements give $7$ words of weight $4$.
+\end{itemize}
+\[
+  W_{\operatorname{Ham}(3,2)}(Y)=1+7Y^3+7Y^4+Y^7.
+\]
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{The simplex dual}
+\small
+\defbox[Simplex code]{
+The row space of $H_r$ is the binary simplex code:
+\[
+  \operatorname{Sim}(r,2)=\operatorname{rowspan}(H_r).
+\]
+}
+\begin{itemize}
+  \item It has parameters $[2^r-1,r,2^{r-1}]_2$.
+  \item Every nonzero word has weight $2^{r-1}$.
+  \item It is dual to the Hamming code.
+\end{itemize}
+\[
+  \operatorname{Ham}(r,2)^\perp=\operatorname{Sim}(r,2).
+\]
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{MacWilliams check}
+\small
+For $r=3$, the simplex code has weight enumerator
+\[
+  W_{\operatorname{Sim}}(X,Y)=X^7+7X^3Y^4.
+\]
+Applying MacWilliams gives
+\[
+  W_{\operatorname{Ham}}(X,Y)=X^7+7X^4Y^3+7X^3Y^4+Y^7.
+\]
+\begin{itemize}
+  \item The algebraic transform recovers the geometric weight distribution.
+  \item Duality is visible both in matrices and in enumerators.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Q-ary Hamming codes}
+\small
+\defbox[Q-ary construction]{
+Choose one nonzero representative from each one-dimensional subspace of $\F_q^r$ and use these vectors as columns of $H$.
+}
+\[
+  n=\frac{q^r-1}{q-1}.
+\]
+\begin{itemize}
+  \item The resulting code has parameters
+  \[
+    \left[\frac{q^r-1}{q-1},\frac{q^r-1}{q-1}-r,3\right]_q.
+  \]
+  \item It is again perfect for one-error correction.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Why projective representatives}
+\small
+Over $\F_q$, two proportional nonzero columns are linearly dependent.
+\begin{itemize}
+  \item To have $d\ge3$, no two columns may be proportional.
+  \item Therefore columns must be projective points, not raw nonzero vectors.
+  \item Taking all projective points uses the maximum possible number of columns.
+\end{itemize}
+\begin{block}{Conclusion}
+Hamming codes are the maximal parity-check configurations with no zero column and no repeated projective point.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Q-ary perfectness}
+\small
+For the $q$-ary Hamming code,
+\[
+  n=\frac{q^r-1}{q-1},\qquad k=n-r.
+\]
+The radius-one sphere has size
+\[
+  1+n(q-1)=1+q^r-1=q^r.
+\]
+Hence
+\[
+  q^k(1+n(q-1))=q^{n-r}q^r=q^n.
+\]
+\begin{block}{Perfect again}
+Every received word lies at distance at most one from a unique codeword.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Extended Hamming codes}
+\small
+\defbox[Extension]{
+Add one overall parity coordinate to force even total weight.
+}
+\begin{itemize}
+  \item The binary $[7,4,3]$ code becomes an $[8,4,4]$ code.
+  \item The new minimum distance is $4$.
+  \item It detects three errors and corrects one error.
+\end{itemize}
+\[
+  \widehat{\operatorname{Ham}}(3,2)=[8,4,4]_2.
+\]
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{The [8,4,4] code}
+\small
+The extended Hamming code has weight enumerator
+\[
+  W(X,Y)=X^8+14X^4Y^4+Y^8.
+\]
+\begin{itemize}
+  \item All codeword weights are divisible by $4$.
+  \item The code is self-dual.
+  \item It is the smallest doubly-even self-dual binary code.
+\end{itemize}
+\begin{block}{Connection}
+This code is the length-$8$ seed behind the $E_8$ lattice construction.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Automorphisms}
+\small
+\defbox[Symmetry group]{
+The automorphism group of the binary Hamming code is induced by invertible linear transformations of $\F_2^r$:
+\[
+  \Aut(\operatorname{Ham}(r,2))\cong \operatorname{GL}(r,2).
+\]
+}
+\begin{itemize}
+  \item A matrix in $\operatorname{GL}(r,2)$ permutes the nonzero columns of $H_r$.
+  \item Hence it permutes coordinates and preserves the kernel.
+  \item The code remembers the projective geometry.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Tanner graph}
+\small
+\begin{itemize}
+  \item The Tanner graph of $H_r$ has $n=2^r-1$ variable nodes and $r$ check nodes.
+  \item It is dense compared with modern LDPC codes.
+  \item But it has an exceptionally simple exact decoder.
+\end{itemize}
+\begin{block}{Interpretation}
+For Hamming codes, the syndrome is not iteratively refined; it is read directly as a projective point.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Failure modes}
+\small
+\begin{itemize}
+  \item A two-error pattern has syndrome equal to the sum of two columns.
+  \item In a binary Hamming matrix, that sum is another nonzero column.
+  \item Therefore a two-error pattern may be miscorrected as a one-error pattern.
+\end{itemize}
+\begin{block}{Moral}
+Minimum distance $3$ guarantees single-error correction, not reliable detection after attempting correction.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{SECDED}
+\small
+\defbox[SECDED]{
+Single-error correction, double-error detection is obtained by using the extended Hamming code.
+}
+\begin{itemize}
+  \item The extension raises the distance from $3$ to $4$.
+  \item One error is corrected by the Hamming syndrome.
+  \item Two errors are detected because parity and syndrome disagree in a recognizable way.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Shortened Hamming codes}
+\small
+\defbox[Shortening]{
+Shortened Hamming codes are obtained by fixing selected coordinates to zero and deleting them.
+}
+\begin{itemize}
+  \item They are useful when exact lengths $2^r-1$ are inconvenient.
+  \item The minimum distance remains at least $3$.
+  \item Perfectness is usually lost.
+\end{itemize}
+\begin{block}{Engineering}
+Many practical memory codes are shortened or extended Hamming codes.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Hamming codes as BCH codes}
+\small
+\defbox[Cyclic viewpoint]{
+When $n=2^r-1$, the binary Hamming code can be realized as a narrow-sense BCH code of designed distance $3$.
+}
+\begin{itemize}
+  \item Choose a primitive $n$-th root $\alpha\in\F_{2^r}$.
+  \item Let $g(X)$ be the minimal polynomial of $\alpha$ over $\F_2$.
+  \item Then the cyclic code generated by $g(X)$ is a Hamming code.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{The [7,4,3] cyclic form}
+\small
+Over $\F_2$,
+\[
+  X^7-1=(X+1)(X^3+X+1)(X^3+X^2+1).
+\]
+Taking
+\[
+  g(X)=X^3+X+1
+\]
+gives a cyclic $[7,4,3]$ Hamming code.
+\begin{itemize}
+  \item This is the bridge from projective checks to polynomial ideals.
+  \item The next chapter makes that bridge systematic.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Classification intuition}
+\small
+\begin{itemize}
+  \item Perfect one-error-correcting linear codes are essentially Hamming codes, apart from trivial cases.
+  \item The parity-check matrix must use every possible nonzero syndrome once.
+  \item Thus the construction is forced by the Hamming bound.
+\end{itemize}
+\begin{block}{Mathematical taste}
+Hamming codes are beautiful because optimality, decoding, and geometry are the same statement.
+\end{block}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Exercise: distance}
+\small
+\begin{block}{Problem}
+Let $H$ contain one representative of every point of $\mathbb{P}^{r-1}(\F_q)$. Prove that $\ker H$ has distance exactly $3$.
+\end{block}
+\textbf{Hint.}
+\begin{itemize}
+  \item No one or two columns are dependent.
+  \item Any projective line contains three dependent representatives after scaling.
+  \item Translate column dependence into a codeword support.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Exercise: perfectness}
+\small
+\begin{block}{Problem}
+Verify directly that the $q$-ary Hamming code meets the Hamming bound with equality for $t=1$.
+\end{block}
+\[
+  n=\frac{q^r-1}{q-1},\qquad k=n-r.
+\]
+\textbf{Computation.}
+\[
+  q^k(1+n(q-1))=q^{n-r}(1+q^r-1)=q^n.
+\]
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Exercise: dual weights}
+\small
+\begin{block}{Problem}
+Show that every nonzero word of the binary simplex code has weight $2^{r-1}$.
+\end{block}
+\textbf{Hint.}
+For a nonzero row vector $a\in\F_2^r$, the word $aH_r$ evaluates the nonzero linear functional $x\mapsto ax^T$ on every nonzero vector $x$.
+\begin{itemize}
+  \item Exactly half of all vectors of $\F_2^r$ evaluate to $1$.
+  \item The zero vector evaluates to $0$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Summary}
+\small
+\begin{columns}[T,onlytextwidth]
+  \begin{column}{.48\textwidth}
+    \defbox[Construction]{
+    \begin{itemize}\small
+      \item parity-check columns are projective points
+      \item no repeated projective column
+      \item all syndromes are used
+    \end{itemize}
+    }
+  \end{column}
+  \begin{column}{.48\textwidth}
+    \defbox[Consequences]{
+    \begin{itemize}\small
+      \item parameters $[2^r-1,2^r-1-r,3]_2$
+      \item perfect one-error correction
+      \item dual simplex code
+    \end{itemize}
+    }
+  \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{\textbf{III. Hamming Codes}}{Transition to cyclic codes}
+\small
+\begin{block}{New symmetry}
+Hamming codes are governed by projective geometry. Cyclic codes are governed by the cyclic shift operator.
+\end{block}
+\begin{itemize}
+  \item Linear code: subspace of $\F_q^n$.
+  \item Hamming code: subspace defined by projective parity checks.
+  \item Cyclic code: subspace stable under a cyclic permutation.
+\end{itemize}
+\[
+  \text{shift symmetry}\quad\Longleftrightarrow\quad\text{ideals in }\F_q[X]/(X^n-1).
+\]
+\end{frame}
+

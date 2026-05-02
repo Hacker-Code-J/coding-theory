@@ -1,0 +1,173 @@
+% Page 9 ==========================================================================================
+\begin{frame}[fragile]{Verification of Jasmin Programs}{Diagram for Verification of Jasmin Programs}
+	\begin{center}
+		\begin{tikzpicture}[scale=1, >=Stealth]
+			%	\def \x{7}
+			%	\def \y{3.5}
+			%	\draw[very thin,color=gray!15,step=.5] (-\x,-\y) grid (\x,\y);
+			%	
+			%	\foreach \i in {-\x,...,-2,-1,1,2,...,\x}
+			%	\draw[gray] (\i,.1)--(\i,-.1) node[below] {$\i$};%x-axis
+			%	\foreach \i in {-\y,-2,-1,1,1,2,\y}
+			%	\draw[gray] (.1,\i)--(-.1,\i) node[left] {$\i$};%y-axis
+			
+			\draw[] (-2.5,2) rectangle (2.5,3);
+			\draw (-2.5,2.5) to (2.5,2.5);
+			\node[cyan] at (0,2.75) {\bf Reference Implementation};
+			\node at (0,2.25) {Jasmin $\xrightarrow{extract}$ EasyCrypt};
+			\draw[dashed, red, line width=.5mm, opacity=.5] (1.1,2.15) ellipse (1cm and .5cm);
+			
+			\begin{scope}[shift={(0,-5)}]
+				\draw[] (-2.5,2) rectangle (2.5,3);
+				\draw (-2.5,2.5) to (2.5,2.5);
+				\node[magenta] at (0,2.75) {\bf Optimized Implementation};
+				\node at (0,2.25) {Jasmin $\xrightarrow{extract}$ EasyCrypt};
+				\draw[dashed, red, line width=.5mm, opacity=.5] (1.1,2.15) ellipse (1cm and .5cm);
+			\end{scope}
+			
+			\draw[<->, dashed, red, line width=.5mm, opacity=.5, align=right] (1.1, 2.15-.5) to (1.1, 2.15+.5-5) node[midway, opacity=1] {Equivalence\\ Proof};
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+
+% Page 10 ==========================================================================================
+\begin{frame}[fragile]{Verification of Jasmin Programs}{Diagram for Verification of Jasmin Programs}
+	\begin{center}
+		\begin{tikzpicture}[scale=1, >=Stealth]
+			%	\def \x{7}
+			%	\def \y{3.5}
+			%	\draw[very thin,color=gray!15,step=.5] (-\x,-\y) grid (\x,\y);
+			%	
+			%	\foreach \i in {-\x,...,-2,-1,1,2,...,\x}
+			%	\draw[gray] (\i,.1)--(\i,-.1) node[below] {$\i$};%x-axis
+			%	\foreach \i in {-\y,-2,-1,1,1,2,\y}
+			%	\draw[gray] (.1,\i)--(-.1,\i) node[left] {$\i$};%y-axis
+			
+			\begin{scope}[shift={(-2,0)}]
+				\draw[] (-2.5,2) rectangle (2.5,3);
+				\draw (-2.5,2.5) to (2.5,2.5);
+				\node[cyan] at (0,2.75) {\bf Reference Implementation};
+				\node at (0,2.25) {Jasmin $\xrightarrow{extract}$ EasyCrypt};
+				
+				\draw[dashed, teal, line width=.5mm] (-2,2) rectangle (-.75,2.5);
+				\draw[->, dashed, teal, line width=.5mm] (-2,2.25) -- ++(-2,0) node[left, align=center] {Reference\\ Assemly}; 
+				\node[teal, above] at (-3, 2.25) {\scriptsize Compile};
+				
+				\draw[dashed, orange, line width=.5mm] (.25,2) rectangle (2,2.5);
+				\draw[<->, dashed, orange, line width=.5mm] (2,2.25) -- ++(4,0) node[right, align=center] {\textbf{Refined}\\ \textbf{Specification}}; 
+				\node[orange, above] at (4, 2.25) {\scriptsize Equivalence Proof};
+				\draw[orange,->, line width=.5mm] (7, 1.5) -- ++(0,-1.5) node[below, align=center] {\textbf{EasyCrypt}\\ \textbf{Specification}};
+				\node[orange, right,align=center] at (7, .75) {\scriptsize Correctness\\ \scriptsize Proof};
+				\node[cloud, cloud puffs=15.7, cloud ignores aspect, minimum width=1cm, minimum height=1cm, align=left, draw, violet, line width=.5mm] (cloud) at (-2, 0) {Check:\\ \texttt{jasminc -safety} \\ \texttt{jasminc -CT}};
+				\draw[dotted, ->, violet, line width=.5mm] (cloud) to (-1.5, 2);
+				
+				
+				\begin{scope}[shift={(0,-5)}]\color{gray}
+					\draw[] (-2.5,2) rectangle (2.5,3);
+					\draw (-2.5,2.5) to (2.5,2.5);
+					\node[] at (0,2.75) {\bf Optimized Implementation};
+					\node at (0,2.25) {Jasmin $\xrightarrow{extract}$ EasyCrypt};
+				\end{scope}
+			\end{scope}
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+
+
+% Page 11 ==========================================================================================
+\begin{frame}[fragile]{Verification of Jasmin Programs}{Diagram for Verification of Jasmin Programs}
+	\begin{center}
+		\begin{tikzpicture}[scale=1, >=Stealth]
+			%	\def \x{7}
+			%	\def \y{3.5}
+			%	\draw[very thin,color=gray!15,step=.5] (-\x,-\y) grid (\x,\y);
+			%	
+			%	\foreach \i in {-\x,...,-2,-1,1,2,...,\x}
+			%	\draw[gray] (\i,.1)--(\i,-.1) node[below] {$\i$};%x-axis
+			%	\foreach \i in {-\y,-2,-1,1,1,2,\y}
+			%	\draw[gray] (.1,\i)--(-.1,\i) node[left] {$\i$};%y-axis
+			
+			\begin{scope}[shift={(-2,0)}]
+				\draw[] (-2.5,2) rectangle (2.5,3);
+				\draw (-2.5,2.5) to (2.5,2.5);
+				\node[cyan] at (0,2.75) {\bf Reference Implementation};
+				\node at (0,2.25) {Jasmin $\xrightarrow{extract}$ EasyCrypt};
+				
+				\draw[dashed, teal, line width=.5mm] (-2,2) rectangle (-.75,2.5);
+				\draw[->, dashed, teal, line width=.5mm] (-2,2.25) -- ++(-2,0) node[left, align=center] {Reference\\ Assemly}; 
+				\node[teal, above] at (-3, 2.25) {\scriptsize Compile};
+				
+				\draw[dashed, orange, line width=.5mm] (.25,2) rectangle (2,2.5);
+				\draw[<->, dashed, orange, line width=.5mm] (2,2.25) -- ++(4,0) node[right, align=center] {\textbf{Refined}\\ \textbf{Specification}}; 
+				\node[orange, above] at (4, 2.25) {\scriptsize Equivalence Proof};
+				\draw[orange,->, line width=.5mm] (7, 1.5) -- ++(0,-1.5) node[below, align=center] {\textbf{EasyCrypt}\\ \textbf{Specification}};
+				\node[orange, right,align=center] at (7, .75) {\scriptsize Correctness\\ \scriptsize Proof};
+				\node[cloud, cloud puffs=15.7, cloud ignores aspect, minimum width=1cm, minimum height=1cm, align=left, draw, violet, line width=.5mm] (cloud) at (-2, 0) {Check:\\ \texttt{jasminc -safety} \\ \texttt{jasminc -CT}};
+				\draw[dotted, ->, violet, line width=.5mm] (cloud) to (-1.5, 2);
+				
+				\draw[purple,->, line width=.5mm] (7, -1) -- ++(0,-1.5) node[below, align=center] {\textbf{Security}\\ \textbf{Goal}};
+				\node[purple, right,align=center] at (7, -1.75) {\scriptsize Security\\ \scriptsize Proof};
+				\draw[purple, dotted, line width=.5mm] (5.5, -3.5) rectangle (8.5, -.85);
+				\begin{scope}[shift={(0,-5)}]\color{gray}
+					\draw[] (-2.5,2) rectangle (2.5,3);
+					\draw (-2.5,2.5) to (2.5,2.5);
+					\node[] at (0,2.75) {\bf Optimized Implementation};
+					\node at (0,2.25) {Jasmin $\xrightarrow{extract}$ EasyCrypt};
+				\end{scope}
+			\end{scope}
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+
+% Page 12 ==========================================================================================
+\begin{frame}[fragile]{Verification of Jasmin Programs}{Diagram for Verification of Jasmin Programs}
+	\begin{center}
+		\begin{tikzpicture}[scale=1, >=Stealth]
+			%	\def \x{7}
+			%	\def \y{3.5}
+			%	\draw[very thin,color=gray!15,step=.5] (-\x,-\y) grid (\x,\y);
+			%	
+			%	\foreach \i in {-\x,...,-2,-1,1,2,...,\x}
+			%	\draw[gray] (\i,.1)--(\i,-.1) node[below] {$\i$};%x-axis
+			%	\foreach \i in {-\y,-2,-1,1,1,2,\y}
+			%	\draw[gray] (.1,\i)--(-.1,\i) node[left] {$\i$};%y-axis
+			
+			\begin{scope}[shift={(-2,0)}]
+				\draw[] (-2.5,2) rectangle (2.5,3);
+				\draw (-2.5,2.5) to (2.5,2.5);
+				\node[cyan] at (0,2.75) {\bf Reference Implementation};
+				\node at (0,2.25) {Jasmin $\xrightarrow{extract}$ EasyCrypt};
+				\draw[dashed, red, line width=.5mm, opacity=.5] (1.1,2.15) ellipse (1cm and .5cm);
+				
+				\draw[dashed, teal, line width=.5mm] (-2,2) rectangle (-.75,2.5);
+				\draw[->, dashed, teal, line width=.5mm] (-2,2.25) -- ++(-2,0) node[left, align=center] {Reference\\ Assemly}; 
+				\node[teal, above] at (-3, 2.25) {\scriptsize Compile};
+				
+				\draw[dashed, orange, line width=.5mm] (.25,2) rectangle (2,2.5);
+				\draw[<->, dashed, orange, line width=.5mm] (2,2.25) -- ++(4,0) node[right, align=center] {\textbf{Refined}\\ \textbf{Specification}}; 
+				\node[orange, above] at (4, 2.25) {\scriptsize Equivalence Proof};
+				\draw[orange,->, line width=.5mm] (7, 1.5) -- ++(0,-1.5) node[below, align=center] {\textbf{EasyCrypt}\\ \textbf{Specification}};
+				\node[orange, right,align=center] at (7, .75) {\scriptsize Correctness\\ \scriptsize Proof};
+				\node[cloud, cloud puffs=15.7, cloud ignores aspect, minimum width=1cm, minimum height=1cm, align=left, draw, violet, line width=.5mm] (cloud) at (-2, 0) {Check:\\ \texttt{jasminc -safety} \\ \texttt{jasminc -CT}};
+				\draw[dotted, ->, violet, line width=.5mm] (cloud) to (-1.5, 2);
+				\draw[dotted, ->, violet, line width=.5mm] (cloud) to (-1.5, -2.5);
+				
+				\draw[purple,->, line width=.5mm] (7, -1) -- ++(0,-1.5) node[below, align=center] {\textbf{Security}\\ \textbf{Goal}};
+				\node[purple, right,align=center] at (7, -1.75) {\scriptsize Security\\ \scriptsize Proof};
+				\begin{scope}[shift={(0,-5)}]
+					\draw[] (-2.5,2) rectangle (2.5,3);
+					\draw (-2.5,2.5) to (2.5,2.5);
+					\node[magenta] at (0,2.75) {\bf Optimized Implementation};
+					\node at (0,2.25) {Jasmin $\xrightarrow{extract}$ EasyCrypt};
+					\draw[dashed, red, line width=.5mm, opacity=.5] (1.1,2.15) ellipse (1cm and .5cm);
+					
+					\draw[dashed, teal, line width=.5mm] (-2,2) rectangle (-.75,2.5);
+					\draw[->, dashed, teal, line width=.5mm] (-2,2.25) -- ++(-2,0) node[left, align=center] {Optimized\\ Assemly}; 
+					\node[teal, above] at (-3, 2.25) {\scriptsize Compile};
+				\end{scope}
+				\draw[<->, dashed, red, line width=.5mm, opacity=.5] (1.1, 2.15-.5) to (1.1, 2.15+.5-5);
+				\node[red, right, align=center] at (1.1, -.5) {Equivalence\\ Proof};
+			\end{scope}
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
